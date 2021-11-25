@@ -15,7 +15,7 @@ namespace GameMaker {
 
 		private void ApplicationStartup(object sender, StartupEventArgs e) {
 
-
+			ApplicationManager.ApplicationStartup();
 
 			MainWindow = new();
 			MainWindow.Show();

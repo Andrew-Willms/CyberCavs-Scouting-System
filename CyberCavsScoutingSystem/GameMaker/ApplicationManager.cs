@@ -11,6 +11,10 @@ namespace GameMaker {
 
 		private static GameProject Project;
 
+		public static bool ApplicationStartup() {
+			return true;
+		}
+
 		public static void SaveGameProject() {
 
 		}
