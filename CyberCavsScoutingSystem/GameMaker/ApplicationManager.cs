@@ -9,9 +9,12 @@ namespace GameMaker {
 
 	public static class ApplicationManager {
 
-		private static GameProject Project;
+		private static GameProject GameProject;
 
 		public static bool ApplicationStartup() {
+
+			GameProject = new();
+
 			return true;
 		}
 
