@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameMaker", "GameMaker\GameMaker.csproj", "{54B71C94-8F0F-4607-994F-D51694BD5C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMaker", "GameMaker\GameMaker.csproj", "{54B71C94-8F0F-4607-994F-D51694BD5C0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSS-SharedClasses", "CCSS-SharedClasses\CCSS-SharedClasses.csproj", "{3FA1F987-8E1A-4387-8117-FC56E17A8477}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{54B71C94-8F0F-4607-994F-D51694BD5C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54B71C94-8F0F-4607-994F-D51694BD5C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54B71C94-8F0F-4607-994F-D51694BD5C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA1F987-8E1A-4387-8117-FC56E17A8477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA1F987-8E1A-4387-8117-FC56E17A8477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA1F987-8E1A-4387-8117-FC56E17A8477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA1F987-8E1A-4387-8117-FC56E17A8477}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

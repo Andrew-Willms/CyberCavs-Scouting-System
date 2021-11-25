@@ -6,4 +6,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CCSS-SharedClasses\CCSS-SharedClasses.csproj" />
+  </ItemGroup>
+
 </Project>
