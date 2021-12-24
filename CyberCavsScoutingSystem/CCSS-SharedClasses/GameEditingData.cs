@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CCSS_SharedClasses {
 
-	public class Game {
+	public class GameEditingData {
 
 		public string Version = "";
 		public string VersionDescription = "";
@@ -11,9 +14,8 @@ namespace CCSS_SharedClasses {
 		public DateTime VersionReleaseDate;
 
 		public string Name = "";
-		public int Year = 0;
-
-		public List<Alliance> Alliances = new();
+		public string Description = "";
+		
 
 	}
 

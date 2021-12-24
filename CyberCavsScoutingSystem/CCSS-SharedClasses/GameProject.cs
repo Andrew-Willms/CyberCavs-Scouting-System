@@ -10,6 +10,8 @@ namespace CCSS_SharedClasses {
 
 		public Game Game;
 
+		public GameEditingData EditingData;
+
 	}
 
 }
