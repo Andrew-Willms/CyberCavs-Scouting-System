@@ -8,14 +8,19 @@ namespace CCSS_SharedClasses {
 
 	public class GameEditingData {
 
-		public string Version = "";
+		public VersionNumber Version = new(0, 0, 0);
 		public string VersionDescription = "";
-
 		public DateTime VersionReleaseDate;
+
+		// Figure if/how to do version history later as it's not critical.
+		//public List<VersionNumber, string, DateTime> VersionHistory;
 
 		public string Name = "";
 		public string Description = "";
-		
+
+		public UserInputBindingData<int> Year = "0";
+
+
 
 	}
 
