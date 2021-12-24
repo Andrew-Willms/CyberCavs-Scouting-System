@@ -12,14 +12,24 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 
 namespace GameMaker {
+
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : Window {
+
 		public MainWindow() {
+
+			Trace.WriteLine("here 1");
+
 			InitializeComponent();
+
+			Trace.WriteLine("here 2");
 		}
+
 	}
+
 }

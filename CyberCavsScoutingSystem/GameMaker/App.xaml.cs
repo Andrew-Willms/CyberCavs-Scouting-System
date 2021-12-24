@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Diagnostics;
 
 namespace GameMaker {
 
@@ -17,7 +18,7 @@ namespace GameMaker {
 
 			ApplicationManager.ApplicationStartup();
 
-			MainWindow = new();
+			MainWindow = new MainWindow(); // If I use the condensed new() syntax it creates a blank window.
 			MainWindow.Show();
 
 		}
