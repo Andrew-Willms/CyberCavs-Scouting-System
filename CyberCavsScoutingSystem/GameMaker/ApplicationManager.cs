@@ -22,7 +22,7 @@ namespace GameMaker {
 
 		}
 
-		public static void LoadGameProject() {
+		public static void LoadGameProject(string path) {
 
 		}
 
