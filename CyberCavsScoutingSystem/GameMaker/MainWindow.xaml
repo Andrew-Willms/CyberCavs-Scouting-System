@@ -19,5 +19,28 @@
                 <MenuItem Header="_New"/>
             </MenuItem>
         </Menu>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Meta">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Alliances">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Data Fields">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Sidebar">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Field Image">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Field Buttons">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Timer">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
