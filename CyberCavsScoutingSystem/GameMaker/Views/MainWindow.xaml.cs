@@ -23,11 +23,8 @@ namespace GameMaker {
 
 		public MainWindow() {
 
-			Trace.WriteLine("here 1");
-
 			InitializeComponent();
 
-			Trace.WriteLine("here 2");
 		}
 
 	}
