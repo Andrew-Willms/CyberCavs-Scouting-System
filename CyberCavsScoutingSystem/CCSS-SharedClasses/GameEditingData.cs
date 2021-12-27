@@ -8,7 +8,7 @@ namespace CCSS_SharedClasses {
 
 	public class GameEditingData {
 
-		public VersionNumber Version = new(0, 0, 0);
+		public readonly UserInput<VersionNumber> Version = "0.0.0";
 		public string VersionDescription = "";
 		public DateTime VersionReleaseDate;
 
@@ -19,7 +19,7 @@ namespace CCSS_SharedClasses {
 		public string Description = "";
 
 		private readonly UserInput<int> Year = "0";
-		//public UserInputBindingData<int> Year { get => _Year; }
+		//public UserInputBindingData<int> Year { get => _Year; } // this is how to do readonly properties (they can't be auto implemented)
 
 
 
