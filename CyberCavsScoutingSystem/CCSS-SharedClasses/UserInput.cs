@@ -7,19 +7,6 @@ using System.Threading.Tasks;
 
 namespace CCSS_SharedClasses {
 
-
-	// I think these things need to be static
-	public record InputStringValidationError {
-
-		public string Name { get; init; }
-
-		public object Tooltip { get; init; }
-
-		//public sometingHere ToolTipStyle { get; init; }
-	}
-
-
-
 	public class UserInput<T> {
 
 		public string InputString { get; init; }
@@ -28,11 +15,11 @@ namespace CCSS_SharedClasses {
 
 		public bool IsValid { get; private set; }
 
-		public List<InputStringValidationError> ErrorsList { get; set; }
+		public List<UserInputValidationError> ErrorsList { get; set; }
 
 
 
-		public Func<string, List<InputStringValidationError>> InputValidator { get; set; }
+		public Func<string, List<UserInputValidationError>> InputValidator { get; set; }
 
 
 		public void ValidateInput() {
