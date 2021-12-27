@@ -13,7 +13,15 @@ namespace CCSS_SharedClasses {
 
 		public object Tooltip { get; init; }
 
+		public UserInputValidationErrorSeverity Severity { get; set; }
+
 		//public sometingHere ToolTipStyle { get; init; }
 	}
 
+	public enum UserInputValidationErrorSeverity {
+		Note = 0,
+		Advisory = 1,
+		Warning = 2,
+		Error = 3
+	}
 }
