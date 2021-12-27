@@ -20,7 +20,7 @@ namespace CCSS_SharedClasses {
 
 
 
-	public class UserInputBindingData<T> {
+	public class UserInput<T> {
 
 		public string InputString { get; init; }
 
@@ -47,7 +47,7 @@ namespace CCSS_SharedClasses {
 		}
 
 
-		public static implicit operator UserInputBindingData<T>(string inputString) {
+		public static implicit operator UserInput<T>(string inputString) {
 			return new() { InputString = inputString };
 		}
 

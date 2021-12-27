@@ -18,7 +18,8 @@ namespace CCSS_SharedClasses {
 		public string Name = "";
 		public string Description = "";
 
-		public UserInputBindingData<int> Year = "0";
+		private readonly UserInput<int> Year = "0";
+		//public UserInputBindingData<int> Year { get => _Year; }
 
 
 
