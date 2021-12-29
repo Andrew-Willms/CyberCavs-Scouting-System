@@ -9,7 +9,7 @@ namespace CCSS_SharedClasses {
 
 	public class UserInput<T> {
 
-		public string InputString { get; init; }
+		public string InputString { get; set; }
 
 		public T Value { get; private set; }
 
