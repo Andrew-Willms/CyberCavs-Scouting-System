@@ -11,6 +11,11 @@ namespace CCSS_SharedClasses {
 
 		public string Name { get; init; }
 
+		// This can be used to provide additional identifying information about the error.
+		// For example, if multi data binding is used to bind multiple View elements to a single UserMultiInput class
+		// the Identifier parameter can be used to indicate which of the multiple view elements the error relates to.
+		public string Identifier { get; init; }
+
 		public object Tooltip { get; init; }
 
 		public UserInputValidationErrorSeverity Severity { get; set; }

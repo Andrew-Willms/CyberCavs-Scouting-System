@@ -9,6 +9,12 @@ namespace CCSS_SharedClasses {
 
 	public class UserInput<T> {
 
+
+		public delegate T InputValidatorDelegate(string inputString, out List<UserInputValidationError> errors);
+
+
+		delegate void Del(string str);
+
 		public string InputString { get; set; }
 
 		public T Value { get; private set; }
@@ -19,16 +25,17 @@ namespace CCSS_SharedClasses {
 
 
 
-		public Func<string, List<UserInputValidationError>> InputValidator { get; set; }
+		public InputValidatorDelegate InputValidator { get; set; }
 
 
 		public void ValidateInput() {
 
 			if (InputValidator == null) {
-				throw new NullReferenceException("The InputValidator Func is null");
+				throw new ArgumentNullException("The InputValidator delegate is null");
 			}
 
-			ErrorsList = InputValidator.Invoke(InputString);
+			Value = InputValidator.Invoke(InputString, out List<UserInputValidationError> errorsList);
+			ErrorsList = errorsList;
 
 			IsValid = ErrorsList.Count == 0;
 		}
@@ -41,5 +48,7 @@ namespace CCSS_SharedClasses {
 		public override string ToString() {
 			return InputString;
 		}
+
 	}
+
 }
