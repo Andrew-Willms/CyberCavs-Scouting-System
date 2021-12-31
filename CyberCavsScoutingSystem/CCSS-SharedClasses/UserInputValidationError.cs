@@ -30,8 +30,6 @@ namespace CCSS_SharedClasses {
 
 	}
 
-	// A meaningless change
-
 	public enum UserInputValidationErrorSeverity {
 		Note = 0,
 		Advisory = 1,
