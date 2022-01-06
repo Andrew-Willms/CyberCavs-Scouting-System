@@ -22,7 +22,7 @@ namespace CCSS_SharedClasses {
 
 		//public sometingHere ToolTipStyle { get; init; }
 
-		public UserInputValidationError(string name, UserInputValidationErrorSeverity severity, string identifier) {
+		public UserInputValidationError(string name, string identifier, UserInputValidationErrorSeverity severity = UserInputValidationErrorSeverity.Error) {
 			Name = name;
 			Severity = severity;
 			Identifier = identifier;

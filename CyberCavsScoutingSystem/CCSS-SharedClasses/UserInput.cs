@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -7,21 +9,46 @@ using System.Reflection;
 namespace CCSS_SharedClasses {
 
 	// A custom delegate used as the type for the InputValidator.
-	// This is necessary so the InputValidator can have an out paremeter.
-	// targetObject is an "out" parameter so this function can change UserInput.TargetObject to a new instance of T if desired.
-	public delegate void ValueConverterDelegate<T>(ref T targetObject, Dictionary<string, string> inputStrings, out List<UserInputValidationError> errors);
+	// This is necessary so the InputValidator can have ref and out paremeters.
+	// targetObject is a ref parameter so this function can change UserInput.TargetObject to a new instance of T if desired.
+	// Consider making the inputStrings Dictionary immutable in some way.
+	// I guess just pass an empty string for propertyIdentifier if you want the whole object checked?
+	public delegate void ValueConverterDelegate<T>(ref T targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
+		out List<UserInputValidationError> errors);
 
 
 
-	public class UserInput<T> {
+	public class UserInput<T> : INotifyPropertyChanged {
+
+		#region Comments
+
+		/*
+		 *  I feel that it is necessary for me to list the various requirements of this class to help me make the correct design descisions.
+		 *  
+		 *  - TargetObjects of some types T may not be mutable and so it is necessary to pass a reference to the TargetObject to the ValueConverter
+		 *    (and every potential ValueConverter if I implement per-property ValueConverters) so that ValueConverts can replace TargetObject with a
+		 *    new instance of T if necessary.
+		 * 
+		 *  - It would be nice to be able to directly get errors for a single property (ie an indexer where you specify the property you want errors
+		 *    for and it returns the errors belonging to just that proeprty). This will make the presentation logic easier as I am probably going to have
+		 *    to generate tooltips and errors messages based on per property errors.
+		 *  
+		 *  - At some point I may want to separate the data converters from the GameEditingData class and I might want to move them to a static class.
+		 *  
+		 */
+
+		#endregion Comments
 
 		#region Properties
 
 		// This is not an auto implemented property because I need to be able to pass the object as an out parameter.
-		private T _TargetObject;
+		private T _TargetObject = default(T); // not sure if I should set it to default
 		public T TargetObject {
 			get => _TargetObject;
-			private set => _TargetObject = value;
+			private set {
+				_TargetObject = value;
+				OnPropertyChanged(""); // check to make sure this triggers all of them, even with [CallerMemberName] with the optional property
+			}
 		}
 
 		// I don't think this needs to be exposed publically in any way since if you know what property you are looking for
@@ -32,7 +59,7 @@ namespace CCSS_SharedClasses {
 
 		// Since strings are pointers to elements of a pool of strings copying Keys collection is probably safe.
 		// Editing, setting, or casting of the output array should not result in the mutation of the InputStrings dictionary.
-		private string[] PropertyNames {
+		public string[] PropertyNames {
 			get {
 				string[] output = new string[InputStrings.Count];
 				InputStrings.Keys.CopyTo(output, 0);
@@ -42,15 +69,19 @@ namespace CCSS_SharedClasses {
 
 		public ValueConverterDelegate<T> ValueConverter { get; private init; }
 
-		// The errors list is "private" instead of "init" because it seems easiser to create a totally
+		// The errors list is "private set" instead of "init" because it seems easiser to create a totally
 		// new list each time than it is to check each error remove errors from the list.
 		// Might be worth checking each error as it comes in to make sure the PropertyIdentifier is valid.
+		private List<UserInputValidationError> _ErrorsList;
 		public List<UserInputValidationError> ErrorsList { get; private set; }
 
 		#endregion Properties
 
 		#region Indexer
 
+
+		// Test if changing the name still works with data binding.
+		//[IndexerName("test indexer name")]
 		public string this[string propertyIdentifier] {
 
 			// I don't think this will make the InputStrings dictionary editable by outside code.
@@ -62,8 +93,10 @@ namespace CCSS_SharedClasses {
 				}
 
 				InputStrings[propertyIdentifier] = value;
-				ValueConverter(ref _TargetObject, InputStrings, out List<UserInputValidationError> errors);
+				ValueConverter(ref _TargetObject, propertyIdentifier, InputStrings, out List<UserInputValidationError> errors);
 				ErrorsList = errors;
+
+				OnPropertyChanged($"Item[{propertyIdentifier}]"); // Could try Binding.Indexer name and injecting the propertyIdentifier
 			}
 		}
 
@@ -93,9 +126,22 @@ namespace CCSS_SharedClasses {
 			for (int i = 0; i < propertyNames.Length; i++) {
 				InputStrings.Add(PropertyNames[i], initialStrings[i]);
 			}
+
+			ValueConverter(ref _TargetObject, "", InputStrings, out List<UserInputValidationError> errors);
+			ErrorsList = errors;
 		}
 
 		#endregion Constructors
+
+		#region PropertyChanged
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void OnPropertyChanged([CallerMemberName] string name = "") {
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+		}
+
+		#endregion PropertyChanged
 
 		// Try fancy stuff with sub properties by having generic and non generic implementations of a sub class?
 

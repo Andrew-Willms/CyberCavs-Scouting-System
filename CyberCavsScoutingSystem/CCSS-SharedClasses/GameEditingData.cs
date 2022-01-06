@@ -18,35 +18,65 @@ namespace CCSS_SharedClasses {
 
 		public readonly UserInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
 
-		public void VersionNumberValueConverter(ref VersionNumber targetObject, Dictionary<string, string> inputStrings,
+		public void VersionNumberValueConverter(ref VersionNumber targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
 			out List<UserInputValidationError> errors) {
 
-			errors = new();
-			Dictionary<string, int> versionComponents = new();
+			// If the propertyIdentifier string is empty than I am trying to set all properties.
+			if (propertyIdentifier == "") {
 
-			foreach (KeyValuePair<string, string> input in inputStrings) {
+				targetObject = new();
 
-				string invalidCharacteres = string.Concat(input.Value.Where(x => char.IsDigit(x) == false));
+				List<UserInputValidationError> majorNumberErrors = new();
+				List<UserInputValidationError> minorNumberErrors = new();
+				List<UserInputValidationError> patchNumberErrors = new();
 
-				if (invalidCharacteres.Length > 0) {
-					errors.Add(new("Invalid Characters", UserInputValidationErrorSeverity.Error, input.Key)); // somehow need to make a tooltip too
+				VersionNumberValueConverter(ref targetObject, "MajorNumber", inputStrings, out majorNumberErrors);
+				VersionNumberValueConverter(ref targetObject, "MinorNumber", inputStrings, out minorNumberErrors);
+				VersionNumberValueConverter(ref targetObject, "PatchNumber", inputStrings, out patchNumberErrors);
 
-				} else {
-					versionComponents.Add(input.Key, int.Parse(input.Value));
-				}
-			}
+				errors = majorNumberErrors.Concat(minorNumberErrors.Concat(patchNumberErrors)).ToList();
 
-			if (errors.Count == 0) {
-
-				// Since there is no other state attached to VersionNumber and since VersionNumber is a small class it's easiest just to
-				// instantiate a new object.
-				targetObject = new(versionComponents["MajorNumber"], versionComponents["MinorNumber"], versionComponents["PatchNumber"]);
+				return;
 
 			} else {
-				targetObject = null;
-			}
 
-			return;
+				int number = 0;
+				errors = new();
+
+				string invalidCharacteres = string.Concat(inputStrings[propertyIdentifier].Where(x => char.IsDigit(x) == false));
+
+				if (invalidCharacteres.Length > 0) {
+					errors.Add(new("Invalid Characters", propertyIdentifier)); // somehow need to make a tooltip too
+
+				} else {
+
+					try {
+						number = int.Parse(inputStrings[propertyIdentifier]);
+
+					} catch (Exception ex) {
+
+						// It really should be an overflow exception but check anyway.
+						if (ex is OverflowException) {
+							errors.Add(new("Number Too Large", propertyIdentifier));
+
+						} else {
+							errors.Add(new("Unknown Error", propertyIdentifier));
+						}
+					}
+					
+					// This is clunky. Try to Find a better way.
+					if (propertyIdentifier == "MajorNumber") {
+						targetObject.MajorNumber = number;
+
+					} else if (propertyIdentifier == "MinorNumber") {
+						targetObject.MinorNumber = number;
+
+					} else if (propertyIdentifier == "PatchNumber") {
+						targetObject.PatchNumber = number;
+					}
+
+				}
+			}
 		}
 
 		public string VersionDescription = "";
@@ -60,14 +90,14 @@ namespace CCSS_SharedClasses {
 
 		public readonly UserInput<int> Year;
 
-		public void YearValueConverter(ref int targetObject, Dictionary<string, string> inputStrings, out List<UserInputValidationError> errors) {
+		public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<UserInputValidationError> errors) {
 
 			errors = new();
 
 			string invalidCharacteres = string.Concat(inputStrings[""].Where(x => char.IsDigit(x) == false));
 
 			if (invalidCharacteres.Length > 0) {
-				errors.Add(new("Invalid Characters", UserInputValidationErrorSeverity.Error, "")); // somehow need to make a tooltip too
+				errors.Add(new("Invalid Characters", "")); // somehow need to make a tooltip too
 				targetObject = 0; // Since it is a value type that is not nullable the best I can do is return the default value.
 
 			} else {
