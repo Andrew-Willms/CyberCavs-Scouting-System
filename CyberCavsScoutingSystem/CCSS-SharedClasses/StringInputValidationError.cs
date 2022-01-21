@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace CCSS_SharedClasses {
 
 	// I think these things need to be static
-	public record UserInputValidationError {
+	public record StringInputValidationError {
 
 		public string Name { get; private init; }
 
-		public UserInputValidationErrorSeverity Severity { get; private init; }
+		public StringInputValidationErrorSeverity Severity { get; private init; }
 
 		// This can be used to provide additional identifying information about the error.
 		// For example, if multi data binding is used to bind multiple View elements to a single UserMultiInput class
@@ -22,7 +22,7 @@ namespace CCSS_SharedClasses {
 
 		//public sometingHere ToolTipStyle { get; init; }
 
-		public UserInputValidationError(string name, string identifier, UserInputValidationErrorSeverity severity = UserInputValidationErrorSeverity.Error) {
+		public StringInputValidationError(string name, string identifier, StringInputValidationErrorSeverity severity = StringInputValidationErrorSeverity.Error) {
 			Name = name;
 			Severity = severity;
 			Identifier = identifier;
@@ -30,7 +30,7 @@ namespace CCSS_SharedClasses {
 
 	}
 
-	public enum UserInputValidationErrorSeverity {
+	public enum StringInputValidationErrorSeverity {
 		Note = 0,
 		Advisory = 1,
 		Warning = 2,

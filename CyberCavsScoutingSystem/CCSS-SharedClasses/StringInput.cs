@@ -10,15 +10,15 @@ namespace CCSS_SharedClasses {
 
 	// A custom delegate used as the type for the InputValidator.
 	// This is necessary so the InputValidator can have ref and out paremeters.
-	// targetObject is a ref parameter so this function can change UserInput.TargetObject to a new instance of T if desired.
+	// targetObject is a ref parameter so this function can change StringInput.TargetObject to a new instance of T if desired.
 	// Consider making the inputStrings Dictionary immutable in some way.
 	// I guess just pass an empty string for propertyIdentifier if you want the whole object checked?
 	public delegate void ValueConverterDelegate<T>(ref T targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
-		out List<UserInputValidationError> errors);
+		out List<StringInputValidationError> errors);
 
 
 
-	public class UserInput<T> : INotifyPropertyChanged {
+	public class StringInput<T> : INotifyPropertyChanged {
 
 		#region Comments
 
@@ -42,9 +42,11 @@ namespace CCSS_SharedClasses {
 		#region Properties
 
 		// This is not an auto implemented property because I need to be able to pass the object as an out parameter.
-		private T _TargetObject = default(T); // not sure if I should set it to default
+		private T _TargetObject = default; // not sure if I should set it to default
 		public T TargetObject {
-			get => _TargetObject;
+
+			get => IsValid ? _TargetObject : default;
+
 			private set {
 				_TargetObject = value;
 				OnPropertyChanged(""); // check to make sure this triggers all of them, even with [CallerMemberName] with the optional property
@@ -67,13 +69,15 @@ namespace CCSS_SharedClasses {
 			}
 		}
 
-		public ValueConverterDelegate<T> ValueConverter { get; private init; }
+		private ValueConverterDelegate<T> ValueConverter { get; init; }
 
 		// The errors list is "private set" instead of "init" because it seems easiser to create a totally
 		// new list each time than it is to check each error remove errors from the list.
 		// Might be worth checking each error as it comes in to make sure the PropertyIdentifier is valid.
-		private List<UserInputValidationError> _ErrorsList;
-		public List<UserInputValidationError> ErrorsList { get; private set; }
+		// Might be worth checking each error as it comes in to make sure the PropertyIdentifier is valid.
+		// Might also be worth making the object we pass out from the get accessor is immutable (what the private member is for).
+		private List<StringInputValidationError> _ErrorsList;
+		public List<StringInputValidationError> ErrorsList { get; private set; }
 
 		#endregion Properties
 
@@ -89,11 +93,11 @@ namespace CCSS_SharedClasses {
 
 			set {
 				if (!PropertyNames.Contains(propertyIdentifier)) {
-					throw new ArgumentException($"This UserInput object does not contain the propertyIdentifier \"{propertyIdentifier}\"");
+					throw new ArgumentException($"This StringInput object does not contain the propertyIdentifier \"{propertyIdentifier}\"");
 				}
 
 				InputStrings[propertyIdentifier] = value;
-				ValueConverter(ref _TargetObject, propertyIdentifier, InputStrings, out List<UserInputValidationError> errors);
+				ValueConverter(ref _TargetObject, propertyIdentifier, InputStrings, out List<StringInputValidationError> errors);
 				ErrorsList = errors;
 
 				OnPropertyChanged($"Item[{propertyIdentifier}]"); // Could try Binding.Indexer name and injecting the propertyIdentifier
@@ -105,14 +109,14 @@ namespace CCSS_SharedClasses {
 		#region Constructors
 
 		// If an array of initial strings is not provided create an array of empty strings of the correct size.
-		public UserInput(ValueConverterDelegate<T> valueConverter, string[] propertyNames) :
+		public StringInput(ValueConverterDelegate<T> valueConverter, string[] propertyNames) :
 			this(valueConverter, propertyNames, Enumerable.Repeat("", propertyNames.Length).ToArray()) { }
 
 		// If a dictionary of the property names and initial strings split it into two arrays.
-		public UserInput(ValueConverterDelegate<T> valueConverter, Dictionary<string, string> propertyNamesAndInitialStrings) :
+		public StringInput(ValueConverterDelegate<T> valueConverter, Dictionary<string, string> propertyNamesAndInitialStrings) :
 			this(valueConverter, propertyNamesAndInitialStrings.Keys.ToArray(), propertyNamesAndInitialStrings.Values.ToArray()) { }
 
-		public UserInput(ValueConverterDelegate<T> valueConverter, string[] propertyNames, string[] initialStrings = null) {
+		public StringInput(ValueConverterDelegate<T> valueConverter, string[] propertyNames, string[] initialStrings) {
 
 			if (propertyNames.Length != initialStrings.Length) {
 				throw new ArgumentException("The length of the propertyNames array and the initialValues array must match.");
@@ -127,7 +131,7 @@ namespace CCSS_SharedClasses {
 				InputStrings.Add(PropertyNames[i], initialStrings[i]);
 			}
 
-			ValueConverter(ref _TargetObject, "", InputStrings, out List<UserInputValidationError> errors);
+			ValueConverter(ref _TargetObject, "", InputStrings, out List<StringInputValidationError> errors);
 			ErrorsList = errors;
 		}
 
@@ -137,8 +141,8 @@ namespace CCSS_SharedClasses {
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected void OnPropertyChanged([CallerMemberName] string name = "") {
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+		protected void OnPropertyChanged([CallerMemberName] string propertyName = "") {
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		#endregion PropertyChanged

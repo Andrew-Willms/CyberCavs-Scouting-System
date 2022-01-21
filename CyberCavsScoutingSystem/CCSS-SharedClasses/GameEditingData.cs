@@ -16,19 +16,19 @@ namespace CCSS_SharedClasses {
 
 		}
 
-		public readonly UserInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
+		public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
 
 		public void VersionNumberValueConverter(ref VersionNumber targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
-			out List<UserInputValidationError> errors) {
+			out List<StringInputValidationError> errors) {
 
 			// If the propertyIdentifier string is empty than I am trying to set all properties.
 			if (propertyIdentifier == "") {
 
 				targetObject = new();
 
-				List<UserInputValidationError> majorNumberErrors = new();
-				List<UserInputValidationError> minorNumberErrors = new();
-				List<UserInputValidationError> patchNumberErrors = new();
+				List<StringInputValidationError> majorNumberErrors = new();
+				List<StringInputValidationError> minorNumberErrors = new();
+				List<StringInputValidationError> patchNumberErrors = new();
 
 				VersionNumberValueConverter(ref targetObject, "MajorNumber", inputStrings, out majorNumberErrors);
 				VersionNumberValueConverter(ref targetObject, "MinorNumber", inputStrings, out minorNumberErrors);
@@ -88,9 +88,9 @@ namespace CCSS_SharedClasses {
 		public string Name = "";
 		public string Description = "";
 
-		public readonly UserInput<int> Year;
+		public readonly StringInput<int> Year;
 
-		public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<UserInputValidationError> errors) {
+		public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
 
 			errors = new();
 
