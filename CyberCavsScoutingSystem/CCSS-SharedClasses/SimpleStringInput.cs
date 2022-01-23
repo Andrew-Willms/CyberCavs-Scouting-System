@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace CCSS_SharedClasses {
 	// A custom delegate used as the type for the InputValidator.
 	// This is necessary so the InputValidator can have ref and out paremeters.
 	// targetObject is a ref parameter so this function can change SimpleStringInput.TargetObject to a new instance of T if desired.
-	public delegate void SimpleValueConverterDelegate<T>(ref T targetObject, string inputString, out List<StringInputValidationError> errors);
+	public delegate void SimpleStringInputConverter<T>(ref T targetObject, string inputString, out ReadOnlyCollection<StringInputValidationError> errors);
 
 	public class SimpleStringInput<T> : INotifyPropertyChanged {
 
@@ -25,7 +26,7 @@ namespace CCSS_SharedClasses {
 
 			private set {
 				_TargetObject = value;
-				OnInputStringChanged();
+				OnInputStringChanged(); // should this be here?
 			}
 		}
 
@@ -43,19 +44,17 @@ namespace CCSS_SharedClasses {
 
 		public bool IsValid { get => ErrorsList.Count == 0; }
 
-		private SimpleValueConverterDelegate<T> ValueConverter { get; init; }
+		private SimpleStringInputConverter<T> ValueConverter { get; init; }
 
+		// This property is a ReadOnlyCollection so that every time validation occurs a totally new list is created
+		// and the existing list is not eddited. This is desireable because it seems easier to create a totally new
+		// list each time than it is to check over each error in the existing collection. Since all validation must
+		// occur every time the ValueConverter is run there would be no performance benifit from not creating a new
+		// collection. In addition using a ReadOnlyCollection saves me from having to implement INotifyCollectionChanged.
+		private ReadOnlyCollection<StringInputValidationError> _ErrorsList;
+		public ReadOnlyCollection<StringInputValidationError> ErrorsList {
 
-
-		// !!!!!!!!! ErrorsList binding? PropertyChanged???? Maybe make it an unordered collection like HashSet????? Maybe not.
-
-		// The errors list is "private set" instead of "init" because it seems easiser to create a totally
-		// new list each time than it is to check each error remove errors from the list.
-		// Might be worth checking each error as it comes in to make sure the PropertyIdentifier is valid.
-		private List<StringInputValidationError> _ErrorsList;
-		public List<StringInputValidationError> ErrorsList {
-
-			get => _ErrorsList; // Find a way of guaranteeing the immutability of this.
+			get => _ErrorsList;
 			
 			private set {
 				_ErrorsList = value;
@@ -68,17 +67,25 @@ namespace CCSS_SharedClasses {
 		#region Functions
 
 		private void ConvertValue(string inputString) {
-			ValueConverter(ref _TargetObject, inputString, out List<StringInputValidationError> errors);
+			ValueConverter(ref _TargetObject, inputString, out ReadOnlyCollection<StringInputValidationError> errors);
 			ErrorsList = errors;
+		}
+
+		public void Validate() {
+
 		}
 
 		#endregion Functions
 
 		#region Constructors
 
-		public SimpleStringInput(SimpleValueConverterDelegate<T> valueConverter, string initialString = "") {
+		public SimpleStringInput(SimpleStringInputConverter<T> valueConverter, string initialString = "") {
 			ValueConverter = valueConverter;
 			InputString = initialString;
+
+			List<int> testest = new();
+
+			IReadOnlyList<int> test = testest;
 		}
 
 		#endregion Constructors
