@@ -17,9 +17,9 @@ namespace CCSS_SharedClasses {
 	public class SimpleStringInput<T> : INotifyPropertyChanged {
 
 		#region Properties
-
+		
 		// This is not an auto implemented property because I need to be able to pass the object as an out parameter.
-		private T _TargetObject = default; // not sure if I should set it to default
+		private T _TargetObject;
 		public T TargetObject {
 			get => IsValid ? _TargetObject : default;
 			private set => _TargetObject = value;
