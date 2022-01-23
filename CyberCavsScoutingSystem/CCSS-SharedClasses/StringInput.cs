@@ -13,7 +13,7 @@ namespace CCSS_SharedClasses {
 	// targetObject is a ref parameter so this function can change StringInput.TargetObject to a new instance of T if desired.
 	// Consider making the inputStrings Dictionary immutable in some way.
 	// I guess just pass an empty string for propertyIdentifier if you want the whole object checked?
-	public delegate void ValueConverterDelegate<T>(ref T targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
+	public delegate void StringInputConverter<T>(ref T targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
 		out List<StringInputValidationError> errors);
 
 
@@ -69,7 +69,7 @@ namespace CCSS_SharedClasses {
 			}
 		}
 
-		private ValueConverterDelegate<T> ValueConverter { get; init; }
+		private StringInputConverter<T> ValueConverter { get; init; }
 
 		// The errors list is "private set" instead of "init" because it seems easiser to create a totally
 		// new list each time than it is to check each error remove errors from the list.
@@ -109,14 +109,14 @@ namespace CCSS_SharedClasses {
 		#region Constructors
 
 		// If an array of initial strings is not provided create an array of empty strings of the correct size.
-		public StringInput(ValueConverterDelegate<T> valueConverter, string[] propertyNames) :
+		public StringInput(StringInputConverter<T> valueConverter, string[] propertyNames) :
 			this(valueConverter, propertyNames, Enumerable.Repeat("", propertyNames.Length).ToArray()) { }
 
 		// If a dictionary of the property names and initial strings split it into two arrays.
-		public StringInput(ValueConverterDelegate<T> valueConverter, Dictionary<string, string> propertyNamesAndInitialStrings) :
+		public StringInput(StringInputConverter<T> valueConverter, Dictionary<string, string> propertyNamesAndInitialStrings) :
 			this(valueConverter, propertyNamesAndInitialStrings.Keys.ToArray(), propertyNamesAndInitialStrings.Values.ToArray()) { }
 
-		public StringInput(ValueConverterDelegate<T> valueConverter, string[] propertyNames, string[] initialStrings) {
+		public StringInput(StringInputConverter<T> valueConverter, string[] propertyNames, string[] initialStrings) {
 
 			if (propertyNames.Length != initialStrings.Length) {
 				throw new ArgumentException("The length of the propertyNames array and the initialValues array must match.");
