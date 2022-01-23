@@ -21,12 +21,8 @@ namespace CCSS_SharedClasses {
 		// This is not an auto implemented property because I need to be able to pass the object as an out parameter.
 		private T _TargetObject = default; // not sure if I should set it to default
 		public T TargetObject {
-
 			get => IsValid ? _TargetObject : default;
-
-			private set {
-				_TargetObject = value;
-			}
+			private set => _TargetObject = value;
 		}
 
 		private string _InputString = "";
