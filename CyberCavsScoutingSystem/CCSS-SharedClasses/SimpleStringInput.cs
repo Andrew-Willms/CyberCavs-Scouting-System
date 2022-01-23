@@ -26,7 +26,6 @@ namespace CCSS_SharedClasses {
 
 			private set {
 				_TargetObject = value;
-				OnInputStringChanged(); // should this be here?
 			}
 		}
 
@@ -36,9 +35,16 @@ namespace CCSS_SharedClasses {
 			get => _InputString;
 
 			set {
-				_InputString = value;
-				ConvertValue(value);
-				OnInputStringChanged();
+				// Even if the strings match validate the input. I think this is the behavior I want.
+				// However, if the string is the same, the View doesn't need to be updated.
+				if (_InputString == value) {
+					ConvertValue(value);
+
+				} else {
+					_InputString = value;
+					ConvertValue(value);
+					OnInputStringChanged();
+				}
 			}
 		}
 
@@ -71,8 +77,9 @@ namespace CCSS_SharedClasses {
 			ErrorsList = errors;
 		}
 
+		// Use this function to force validation. Hopefully it will never need to be used but I will leave it here for now.
 		public void Validate() {
-
+			ConvertValue(InputString);
 		}
 
 		#endregion Functions
@@ -82,10 +89,6 @@ namespace CCSS_SharedClasses {
 		public SimpleStringInput(SimpleStringInputConverter<T> valueConverter, string initialString = "") {
 			ValueConverter = valueConverter;
 			InputString = initialString;
-
-			List<int> testest = new();
-
-			IReadOnlyList<int> test = testest;
 		}
 
 		#endregion Constructors
