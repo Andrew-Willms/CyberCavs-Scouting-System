@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMaker", "GameMaker\Game
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSS-SharedClasses", "CCSS-SharedClasses\CCSS-SharedClasses.csproj", "{3FA1F987-8E1A-4387-8117-FC56E17A8477}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asdf", "QuickTestingApplilcation\asdf.csproj", "{72F9BC51-99E2-4D73-80A4-84B7B8158249}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTestingApplication", "QuickTestingApplication\QuickTestingApplication.csproj", "{360B6DE3-E1B0-4692-8E66-F92D5422D893}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{3FA1F987-8E1A-4387-8117-FC56E17A8477}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FA1F987-8E1A-4387-8117-FC56E17A8477}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FA1F987-8E1A-4387-8117-FC56E17A8477}.Release|Any CPU.Build.0 = Release|Any CPU
-		{72F9BC51-99E2-4D73-80A4-84B7B8158249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72F9BC51-99E2-4D73-80A4-84B7B8158249}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72F9BC51-99E2-4D73-80A4-84B7B8158249}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72F9BC51-99E2-4D73-80A4-84B7B8158249}.Release|Any CPU.Build.0 = Release|Any CPU
 		{360B6DE3-E1B0-4692-8E66-F92D5422D893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{360B6DE3-E1B0-4692-8E66-F92D5422D893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{360B6DE3-E1B0-4692-8E66-F92D5422D893}.Release|Any CPU.ActiveCfg = Release|Any CPU

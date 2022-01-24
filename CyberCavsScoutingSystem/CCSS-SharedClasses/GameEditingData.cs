@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +11,11 @@ namespace CCSS_SharedClasses {
 
 		public GameEditingData() {
 
-			Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
+			//Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
 
-			Year = new(YearValueConverter, new string[] { "" }, new string[] { "0" });
+			//Year = new(YearValueConverter, new string[] { "" }, new string[] { "0" });
+
+			TestInt = new(TestIntValueConverter, "42");
 
 		}
 
@@ -87,6 +90,39 @@ namespace CCSS_SharedClasses {
 
 		public string Name = "";
 		public string Description = "";
+
+		public SimpleStringInput<int> TestInt { get; private init; }
+
+		public void TestIntValueConverter(ref int intValue, string inputString, out ReadOnlyCollection<StringInputValidationError> errors) {
+
+			List<StringInputValidationError> newErrors = new();
+			intValue = default;
+
+			string invalidCharacteres = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
+
+			if (invalidCharacteres.Length > 0) {
+				newErrors.Add(new("Invalid Characters"));
+
+			} else {
+
+				try {
+					intValue = int.Parse(inputString);
+
+				} catch (Exception ex) {
+
+					// It really should be an overflow exception but check anyway.
+					if (ex is OverflowException) {
+						newErrors.Add(new("Number Too Large"));
+
+					} else {
+						newErrors.Add(new("Unknown Error"));
+					}
+				}
+
+			}
+
+			errors = newErrors.AsReadOnly();
+		}
 
 		public readonly StringInput<int> Year;
 

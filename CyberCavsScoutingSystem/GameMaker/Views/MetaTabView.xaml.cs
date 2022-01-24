@@ -22,6 +22,8 @@ namespace GameMaker {
 
 		public MetaTabView() {
 
+			DataContext = new CCSS_SharedClasses.GameEditingData();
+
 			InitializeComponent();
 
 		}

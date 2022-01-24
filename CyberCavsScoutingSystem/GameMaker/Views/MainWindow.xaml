@@ -21,7 +21,9 @@
         </Menu>
         <TabControl Grid.Row="1">
             <TabItem Header="Meta">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <local:MetaTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Alliances">
                 <Grid Background="#FFE5E5E5"/>

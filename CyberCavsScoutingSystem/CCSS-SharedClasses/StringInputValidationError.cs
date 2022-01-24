@@ -22,7 +22,7 @@ namespace CCSS_SharedClasses {
 
 		//public sometingHere ToolTipStyle { get; init; }
 
-		public StringInputValidationError(string name, string identifier, StringInputValidationErrorSeverity severity = StringInputValidationErrorSeverity.Error) {
+		public StringInputValidationError(string name, string identifier = "", StringInputValidationErrorSeverity severity = StringInputValidationErrorSeverity.Error) {
 			Name = name;
 			Severity = severity;
 			Identifier = identifier;
@@ -30,6 +30,7 @@ namespace CCSS_SharedClasses {
 
 	}
 
+	// These are just placeholder for now. Change as needed.
 	public enum StringInputValidationErrorSeverity {
 		Note = 0,
 		Advisory = 1,
