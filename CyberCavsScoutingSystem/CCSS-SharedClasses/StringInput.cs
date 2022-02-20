@@ -22,22 +22,22 @@ public class StringInput<T> : INotifyPropertyChanged {
 
 	#region Comments
 
-		/*
-		 *  I feel that it is necessary for me to list the various requirements of this class to help me make the correct design descisions.
-		 *  
-		 *  - TargetObjects of some types T may not be mutable and so it is necessary to pass a reference to the TargetObject to the ValueConverter
-		 *    (and every potential ValueConverter if I implement per-property ValueConverters) so that ValueConverts can replace TargetObject with a
-		 *    new instance of T if necessary.
-		 * 
-		 *  - It would be nice to be able to directly get errors for a single property (ie an indexer where you specify the property you want errors
-		 *    for and it returns the errors belonging to just that proeprty). This will make the presentation logic easier as I am probably going to have
-		 *    to generate tooltips and errors messages based on per property errors.
-		 *  
-		 *  - At some point I may want to separate the data converters from the GameEditingData class and I might want to move them to a static class.
-		 *  
-		 */
+	/*
+	 *  I feel that it is necessary for me to list the various requirements of this class to help me make the correct design descisions.
+	 *  
+	 *  - TargetObjects of some types T may not be mutable and so it is necessary to pass a reference to the TargetObject to the ValueConverter
+	 *    (and every potential ValueConverter if I implement per-property ValueConverters) so that ValueConverts can replace TargetObject with a
+	 *    new instance of T if necessary.
+	 * 
+	 *  - It would be nice to be able to directly get errors for a single property (ie an indexer where you specify the property you want errors
+	 *    for and it returns the errors belonging to just that proeprty). This will make the presentation logic easier as I am probably going to have
+	 *    to generate tooltips and errors messages based on per property errors.
+	 *  
+	 *  - At some point I may want to separate the data converters from the GameEditingData class and I might want to move them to a static class.
+	 *  
+	 */
 
-		#endregion Comments
+	#endregion Comments
 
 	#region Properties
 
@@ -45,13 +45,13 @@ public class StringInput<T> : INotifyPropertyChanged {
 	private T _TargetObject = default; // not sure if I should set it to default
 	public T TargetObject {
 
-			get => IsValid ? _TargetObject : default;
+		get => IsValid ? _TargetObject : default;
 
-			private set {
-				_TargetObject = value;
-				OnPropertyChanged(""); // check to make sure this triggers all of them, even with [CallerMemberName] with the optional property
-			}
+		private set {
+			_TargetObject = value;
+			OnPropertyChanged(""); // check to make sure this triggers all of them, even with [CallerMemberName] with the optional property
 		}
+	}
 
 	// I don't think this needs to be exposed publically in any way since if you know what property you are looking for
 	// you should use the "this[string propertyIdentifier]" indexer.

@@ -21,28 +21,28 @@ public class SimpleStringInput<T> : INotifyPropertyChanged {
 	// This is not an auto implemented property because I need to be able to pass the object as an out parameter. (Also I now have logic in get).
 	private T _TargetObject;
 	public T TargetObject {
-			get => IsValid ? _TargetObject : default;
-			private set => _TargetObject = value;
-		}
+		get => IsValid ? _TargetObject : default;
+		private set => _TargetObject = value;
+	}
 
 	private string _InputString = "";
 	public string InputString {
 
-			get => _InputString;
+		get => _InputString;
 
-			set {
-				// Even if the strings match, validate the input. I think this is the behavior I want.
-				// However, if the string is the same, the View doesn't need to be updated.
-				if (_InputString == value) {
-					ConvertValue(value);
+		set {
+			// Even if the strings match, validate the input. I think this is the behavior I want.
+			// However, if the string is the same, the View doesn't need to be updated.
+			if (_InputString == value) {
+				ConvertValue(value);
 
-				} else {
-					_InputString = value;
-					ConvertValue(value);
-					OnInputStringChanged();
-				}
+			} else {
+				_InputString = value;
+				ConvertValue(value);
+				OnInputStringChanged();
 			}
 		}
+	}
 
 	public bool IsValid { get => ErrorsList.Count == 0; }
 
@@ -56,13 +56,13 @@ public class SimpleStringInput<T> : INotifyPropertyChanged {
 	private ReadOnlyCollection<StringInputValidationError> _ErrorsList;
 	public ReadOnlyCollection<StringInputValidationError> ErrorsList {
 
-			get => _ErrorsList;
+		get => _ErrorsList;
 
-			private set {
-				_ErrorsList = value;
-				OnErrorsListChanged();
-			}
+		private set {
+			_ErrorsList = value;
+			OnErrorsListChanged();
 		}
+	}
 
 	#endregion Properties
 

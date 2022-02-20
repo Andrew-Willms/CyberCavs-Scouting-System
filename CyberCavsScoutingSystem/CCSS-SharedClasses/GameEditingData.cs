@@ -26,63 +26,63 @@ public class GameEditingData {
 	public void VersionNumberValueConverter(ref VersionNumber targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
 		out List<StringInputValidationError> errors) {
 
-			// If the propertyIdentifier string is empty than I am trying to set all properties.
-			if (propertyIdentifier == "") {
+		// If the propertyIdentifier string is empty than I am trying to set all properties.
+		if (propertyIdentifier == "") {
 
-				targetObject = new();
+			targetObject = new();
 
-				List<StringInputValidationError> majorNumberErrors = new();
-				List<StringInputValidationError> minorNumberErrors = new();
-				List<StringInputValidationError> patchNumberErrors = new();
+			List<StringInputValidationError> majorNumberErrors = new();
+			List<StringInputValidationError> minorNumberErrors = new();
+			List<StringInputValidationError> patchNumberErrors = new();
 
-				VersionNumberValueConverter(ref targetObject, "MajorNumber", inputStrings, out majorNumberErrors);
-				VersionNumberValueConverter(ref targetObject, "MinorNumber", inputStrings, out minorNumberErrors);
-				VersionNumberValueConverter(ref targetObject, "PatchNumber", inputStrings, out patchNumberErrors);
+			VersionNumberValueConverter(ref targetObject, "MajorNumber", inputStrings, out majorNumberErrors);
+			VersionNumberValueConverter(ref targetObject, "MinorNumber", inputStrings, out minorNumberErrors);
+			VersionNumberValueConverter(ref targetObject, "PatchNumber", inputStrings, out patchNumberErrors);
 
-				errors = majorNumberErrors.Concat(minorNumberErrors.Concat(patchNumberErrors)).ToList();
+			errors = majorNumberErrors.Concat(minorNumberErrors.Concat(patchNumberErrors)).ToList();
 
-				return;
+			return;
+
+		} else {
+
+			int number = 0;
+			errors = new();
+
+			string invalidCharacteres = string.Concat(inputStrings[propertyIdentifier].Where(x => char.IsDigit(x) == false));
+
+			if (invalidCharacteres.Length > 0) {
+				errors.Add(new("Invalid Characters", propertyIdentifier)); // somehow need to make a tooltip too
 
 			} else {
 
-				int number = 0;
-				errors = new();
+				try {
+					number = int.Parse(inputStrings[propertyIdentifier]);
 
-				string invalidCharacteres = string.Concat(inputStrings[propertyIdentifier].Where(x => char.IsDigit(x) == false));
+				} catch (Exception ex) {
 
-				if (invalidCharacteres.Length > 0) {
-					errors.Add(new("Invalid Characters", propertyIdentifier)); // somehow need to make a tooltip too
+					// It really should be an overflow exception but check anyway.
+					if (ex is OverflowException) {
+						errors.Add(new("Number Too Large", propertyIdentifier));
 
-				} else {
-
-					try {
-						number = int.Parse(inputStrings[propertyIdentifier]);
-
-					} catch (Exception ex) {
-
-						// It really should be an overflow exception but check anyway.
-						if (ex is OverflowException) {
-							errors.Add(new("Number Too Large", propertyIdentifier));
-
-						} else {
-							errors.Add(new("Unknown Error", propertyIdentifier));
-						}
+					} else {
+						errors.Add(new("Unknown Error", propertyIdentifier));
 					}
-					
-					// This is clunky. Try to Find a better way.
-					if (propertyIdentifier == "MajorNumber") {
-						targetObject.MajorNumber = number;
-
-					} else if (propertyIdentifier == "MinorNumber") {
-						targetObject.MinorNumber = number;
-
-					} else if (propertyIdentifier == "PatchNumber") {
-						targetObject.PatchNumber = number;
-					}
-
 				}
+				
+				// This is clunky. Try to Find a better way.
+				if (propertyIdentifier == "MajorNumber") {
+					targetObject.MajorNumber = number;
+
+				} else if (propertyIdentifier == "MinorNumber") {
+					targetObject.MinorNumber = number;
+
+				} else if (propertyIdentifier == "PatchNumber") {
+					targetObject.PatchNumber = number;
+				}
+
 			}
 		}
+	}
 
 	public string VersionDescription = "";
 	public DateTime VersionReleaseDate;
@@ -97,51 +97,51 @@ public class GameEditingData {
 
 	public void TestIntValueConverter(ref int intValue, string inputString, out ReadOnlyCollection<StringInputValidationError> errors) {
 
-			List<StringInputValidationError> newErrors = new();
-			intValue = default;
+		List<StringInputValidationError> newErrors = new();
+		intValue = default;
 
-			string invalidCharacteres = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
+		string invalidCharacteres = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
 
-			if (invalidCharacteres.Length > 0) {
-				newErrors.Add(new("Invalid Characters"));
+		if (invalidCharacteres.Length > 0) {
+			newErrors.Add(new("Invalid Characters"));
 
-			} else {
+		} else {
 
-				try {
-					intValue = int.Parse(inputString);
+			try {
+				intValue = int.Parse(inputString);
 
-				} catch (Exception ex) {
+			} catch (Exception ex) {
 
-					// It really should be an overflow exception but check anyway.
-					if (ex is OverflowException) {
-						newErrors.Add(new("Number Too Large"));
+				// It really should be an overflow exception but check anyway.
+				if (ex is OverflowException) {
+					newErrors.Add(new("Number Too Large"));
 
-					} else {
-						newErrors.Add(new("Unknown Error"));
-					}
+				} else {
+					newErrors.Add(new("Unknown Error"));
 				}
-
 			}
 
-			errors = newErrors.AsReadOnly();
 		}
+
+		errors = newErrors.AsReadOnly();
+	}
 
 	public readonly StringInput<int> Year;
 
 	public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
 
-			errors = new();
+		errors = new();
 
-			string invalidCharacteres = string.Concat(inputStrings[""].Where(x => char.IsDigit(x) == false));
+		string invalidCharacteres = string.Concat(inputStrings[""].Where(x => char.IsDigit(x) == false));
 
-			if (invalidCharacteres.Length > 0) {
-				errors.Add(new("Invalid Characters", "")); // somehow need to make a tooltip too
-				targetObject = 0; // Since it is a value type that is not nullable the best I can do is return the default value.
+		if (invalidCharacteres.Length > 0) {
+			errors.Add(new("Invalid Characters", "")); // somehow need to make a tooltip too
+			targetObject = 0; // Since it is a value type that is not nullable the best I can do is return the default value.
 
-			} else {
-				targetObject = int.Parse(inputStrings[""]);
-			}
-
+		} else {
+			targetObject = int.Parse(inputStrings[""]);
 		}
+
+	}
 
 }
