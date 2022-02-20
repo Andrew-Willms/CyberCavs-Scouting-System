@@ -13,20 +13,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GameMaker {
+namespace GameMaker;
 
-	/// <summary>
-	/// Interaction logic for MetaTabView.xaml
-	/// </summary>
-	public partial class MetaTabView : UserControl {
+/// <summary>
+/// Interaction logic for MetaTabView.xaml
+/// </summary>
+public partial class MetaTabView : UserControl {
 
-		public MetaTabView() {
+	public MetaTabView() {
 
-			DataContext = new CCSS_SharedClasses.GameEditingData();
+		DataContext = new CCSS_SharedClasses.GameEditingData();
 
-			InitializeComponent();
-
-		}
+		InitializeComponent();
 
 	}
 

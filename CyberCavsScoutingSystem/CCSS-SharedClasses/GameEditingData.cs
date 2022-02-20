@@ -5,24 +5,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CCSS_SharedClasses {
+namespace CCSS_SharedClasses;
 
-	public class GameEditingData {
+public class GameEditingData {
 
-		public GameEditingData() {
+	public GameEditingData() {
 
-			//Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
+		//Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
 
-			//Year = new(YearValueConverter, new string[] { "" }, new string[] { "0" });
+		//Year = new(YearValueConverter, new string[] { "" }, new string[] { "0" });
 
-			TestInt = new(TestIntValueConverter, "42");
+		TestInt = new(TestIntValueConverter, "42");
 
-		}
+	}
 
-		public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
+	public int TestInt2 { get; set; }
 
-		public void VersionNumberValueConverter(ref VersionNumber targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
-			out List<StringInputValidationError> errors) {
+	public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
+
+	public void VersionNumberValueConverter(ref VersionNumber targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
+		out List<StringInputValidationError> errors) {
 
 			// If the propertyIdentifier string is empty than I am trying to set all properties.
 			if (propertyIdentifier == "") {
@@ -82,18 +84,18 @@ namespace CCSS_SharedClasses {
 			}
 		}
 
-		public string VersionDescription = "";
-		public DateTime VersionReleaseDate;
+	public string VersionDescription = "";
+	public DateTime VersionReleaseDate;
 
-		// Figure if/how to do version history later as it's not critical.
-		//public List<VersionNumber, string, DateTime> VersionHistory;
+	// Figure if/how to do version history later as it's not critical.
+	//public List<VersionNumber, string, DateTime> VersionHistory;
 
-		public string Name = "";
-		public string Description = "";
+	public string Name = "";
+	public string Description = "";
 
-		public SimpleStringInput<int> TestInt { get; private init; }
+	public SimpleStringInput<int> TestInt { get; private init; }
 
-		public void TestIntValueConverter(ref int intValue, string inputString, out ReadOnlyCollection<StringInputValidationError> errors) {
+	public void TestIntValueConverter(ref int intValue, string inputString, out ReadOnlyCollection<StringInputValidationError> errors) {
 
 			List<StringInputValidationError> newErrors = new();
 			intValue = default;
@@ -124,9 +126,9 @@ namespace CCSS_SharedClasses {
 			errors = newErrors.AsReadOnly();
 		}
 
-		public readonly StringInput<int> Year;
+	public readonly StringInput<int> Year;
 
-		public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
+	public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
 
 			errors = new();
 
@@ -141,7 +143,5 @@ namespace CCSS_SharedClasses {
 			}
 
 		}
-
-	}
 
 }

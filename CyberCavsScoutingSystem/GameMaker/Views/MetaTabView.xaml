@@ -6,8 +6,39 @@
              xmlns:local="clr-namespace:GameMaker"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding TestInt.InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+    
+    <UserControl.Resources>
 
-    </Grid>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding TestInt.InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <TextBox.ToolTip>
+                <StackPanel>
+                    <TextBlock Text="ur mom"/>
+                    <ItemsControl ItemsSource="{Binding TestInt.ErrorsList}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </TextBox.ToolTip>
+            <ToolTipService.IsEnabled>
+                True
+            </ToolTipService.IsEnabled>
+        </TextBox>
+        <TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding TestInt2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <!-- Placeholder for the TextBox itself -->
+                        <AdornedElementPlaceholder x:Name="textBox"/>
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
+    </StackPanel>
 </UserControl>

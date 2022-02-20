@@ -4,30 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CCSS_SharedClasses;
+using System.Windows.Data;
+using System.Globalization;
 
-namespace GameMaker {
+namespace GameMaker;
 
-	public static class ApplicationManager {
+public static class ApplicationManager {
 
-		private static GameProject GameProject;
+	private static GameProject GameProject;
 
-		public static bool ApplicationStartup() {
+	public static bool ApplicationStartup() {
 
-			GameProject = new();
+		GameProject = new();
 
-			return true;
-		}
+		return true;
+	}
 
-		public static void SaveGameProject() {
-
-		}
-
-		public static void LoadGameProject(string path) {
-
-		}
-
-
+	public static void SaveGameProject() {
 
 	}
+
+	public static void LoadGameProject(string path) {
+
+	}
+
+
 
 }

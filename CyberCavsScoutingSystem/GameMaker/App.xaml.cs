@@ -7,21 +7,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
 
-namespace GameMaker {
+namespace GameMaker;
 
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
-	public partial class App : Application {
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application {
 
-		private void ApplicationStartup(object sender, StartupEventArgs e) {
+	private void ApplicationStartup(object sender, StartupEventArgs e) {
 
-			ApplicationManager.ApplicationStartup();
+		ApplicationManager.ApplicationStartup();
 
-			MainWindow = new MainWindow(); // If I use the condensed new() syntax it creates a blank window.
-			MainWindow.Show();
-
-		}
+		MainWindow = new MainWindow(); // If I use the condensed new() syntax it creates a blank window.
+		MainWindow.Show();
 
 	}
 

@@ -1,9 +1,27 @@
 ﻿<Application x:Class="GameMaker.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameMaker"
              Startup="ApplicationStartup">
     <Application.Resources>
-         
+
+        <Canvas x:Key="Ampel" x:Shared="False">
+            <Rectangle Fill="Black" HorizontalAlignment="Left" Height="52" Stroke="Black" VerticalAlignment="Top" Width="50"/>
+            <Ellipse x:Name="RedGreen" Fill="Red" HorizontalAlignment="Left" Height="27" Margin="11,12,0,0" Stroke="Black" VerticalAlignment="Top" Width="28" />
+        </Canvas>
+
+        <TextBox x:Key="test" Text="asdf">
+            <ToolTipService.BetweenShowDelay>3</ToolTipService.BetweenShowDelay>
+
+        </TextBox>
+
+        <ToolTip x:Key="aasdfasdfsadf" ToolTipService.IsEnabled="False"/>
+
+        <ToolTipService x:Key="asdfasdf"/>
+
+
+
     </Application.Resources>
 </Application>

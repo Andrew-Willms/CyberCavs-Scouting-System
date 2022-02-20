@@ -14,18 +14,16 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 
-namespace GameMaker {
+namespace GameMaker;
 
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window {
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window {
 
-		public MainWindow() {
+	public MainWindow() {
 
-			InitializeComponent();
-
-		}
+		InitializeComponent();
 
 	}
 
