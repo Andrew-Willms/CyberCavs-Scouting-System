@@ -20,13 +20,13 @@ public record StringInputValidationError {
 
 	public object Tooltip { get; init; }
 
-	//public sometingHere ToolTipStyle { get; init; }
+	//public somethingHere ToolTipStyle { get; init; }
 
 	public StringInputValidationError(string name, string identifier = "", StringInputValidationErrorSeverity severity = StringInputValidationErrorSeverity.Error) {
 		Name = name;
 		Severity = severity;
 		Identifier = identifier;
-	}
+    }
 
 }
 

@@ -10,20 +10,28 @@ using System.Runtime.CompilerServices;
 namespace CCSS_SharedClasses;
 
 // A custom delegate used as the type for the InputValidator.
-// This is necessary so the InputValidator can have ref and out paremeters.
+// This is necessary so the InputValidator can have ref and out parameters.
 // targetObject is a ref parameter so this function can change SimpleStringInput.TargetObject to a new instance of T if desired.
 public delegate void SimpleStringInputConverter<T>(ref T targetObject, string inputString, out ReadOnlyCollection<StringInputValidationError> errors);
 
-public class SimpleStringInput<T> : INotifyPropertyChanged {
+public interface ISimpleStringInput {
+
+	public string InputString { get; }
+
+	public bool IsValid { get; }
+
+	public ReadOnlyCollection<StringInputValidationError> ErrorsList { get; }
+
+	public int GetErrorLevel => ErrorsList.Select(x => (int)x.Severity).Max();
+}
+
+public class SimpleStringInput<T> : ISimpleStringInput, INotifyPropertyChanged {
 
 	#region Properties
 
 	// This is not an auto implemented property because I need to be able to pass the object as an out parameter. (Also I now have logic in get).
 	private T _TargetObject;
-	public T TargetObject {
-		get => IsValid ? _TargetObject : default;
-		private set => _TargetObject = value;
-	}
+	public T TargetObject => IsValid ? _TargetObject : default;
 
 	private string _InputString = "";
 	public string InputString {
@@ -44,14 +52,14 @@ public class SimpleStringInput<T> : INotifyPropertyChanged {
 		}
 	}
 
-	public bool IsValid { get => ErrorsList.Count == 0; }
+	public bool IsValid => ErrorsList.Count == 0;
 
-	private SimpleStringInputConverter<T> ValueConverter { get; init; }
+	private SimpleStringInputConverter<T> ValueConverter { get; } // get only properties can be set from the constructor.
 
 	// This property is a ReadOnlyCollection so that every time validation occurs a totally new list is created
-	// and the existing list is not eddited. This is desireable because it seems easier to create a totally new
+	// and the existing list is not edited. This is desirable because it seems easier to create a totally new
 	// list each time than it is to check over each error in the existing collection. Since all validation must
-	// occur every time the ValueConverter is run there would be no performance benifit from not creating a new
+	// occur every time the ValueConverter is run there would be no performance benefit from not creating a new
 	// collection. In addition using a ReadOnlyCollection saves me from having to implement INotifyCollectionChanged.
 	private ReadOnlyCollection<StringInputValidationError> _ErrorsList;
 	public ReadOnlyCollection<StringInputValidationError> ErrorsList {

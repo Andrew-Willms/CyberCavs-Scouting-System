@@ -1,44 +1,37 @@
 ﻿<UserControl x:Class="GameMaker.MetaTabView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GameMaker"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    
-    <UserControl.Resources>
-
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:local="clr-namespace:GameMaker"
+			 xmlns:CCSS_SharedClasses="clr-namespace:CCSS_SharedClasses;assembly=CCSS-SharedClasses"
+			 mc:Ignorable="d" 
+			 d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=CCSS_SharedClasses:GameEditingData, IsDesignTimeCreatable=True}">
+	
+	<UserControl.Resources>
     </UserControl.Resources>
 
-    <StackPanel>
-        <TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding TestInt.InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
-            <TextBox.ToolTip>
-                <StackPanel>
-                    <TextBlock Text="ur mom"/>
-                    <ItemsControl ItemsSource="{Binding TestInt.ErrorsList}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </TextBox.ToolTip>
-            <ToolTipService.IsEnabled>
-                True
-            </ToolTipService.IsEnabled>
+	<StackPanel>
+        <TextBox DataContext="{Binding Path=TestInt}"
+                 Style="{StaticResource StringInputTooltipStyle}"
+                 HorizontalAlignment="Left"
+				 Margin="10,10,0,0"
+                 TextWrapping="Wrap"
+				 VerticalAlignment="Top"
+				 Width="120">
         </TextBox>
-        <TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding TestInt2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
-            <Validation.ErrorTemplate>
-                <ControlTemplate>
-                    <StackPanel>
-                        <!-- Placeholder for the TextBox itself -->
-                        <AdornedElementPlaceholder x:Name="textBox"/>
-                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
-                    </StackPanel>
-                </ControlTemplate>
-            </Validation.ErrorTemplate>
+
+		<TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding TestInt2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
+			<Validation.ErrorTemplate>
+				<ControlTemplate>
+					<StackPanel>
+						<!-- Placeholder for the TextBox itself -->
+						<AdornedElementPlaceholder x:Name="textBox"/>
+						<TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+					</StackPanel>
+				</ControlTemplate>
+			</Validation.ErrorTemplate>
         </TextBox>
-    </StackPanel>
+	</StackPanel>
 </UserControl>
