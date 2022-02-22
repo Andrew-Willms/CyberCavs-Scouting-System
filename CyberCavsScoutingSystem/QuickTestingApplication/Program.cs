@@ -40,4 +40,5 @@ public class Program {
 		Console.WriteLine(list[^1] + " }");
 	}
 
+	public static (int testInt, string testString, double testDouble) test = (1, "1", 1);
 }

@@ -4,7 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:GameMaker"
-			 xmlns:CCSS_SharedClasses="clr-namespace:CCSS_SharedClasses;assembly=CCSS-SharedClasses"
+			 xmlns:WPFUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
 			 Startup="ApplicationStartup">
 	<Application.Resources>
 		
@@ -14,24 +14,12 @@
 			<Ellipse x:Name="RedGreen" Fill="Red" HorizontalAlignment="Left" Height="27" Margin="11,12,0,0" Stroke="Black" VerticalAlignment="Top" Width="28" />
 		</Canvas>-->
 
-        <Style x:Key="StringInputTextBox" TargetType="TextBox" BasedOn="StringInputTooltipStyle">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Severity}" Value="0">
-                    <Setter Property="Foreground" Value="Gray"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Severity}" Value="1">
-                    <Setter Property="Foreground" Value="Yellow"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Severity}" Value="2">
-                    <Setter Property="Foreground" Value="Orange"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Severity}" Value="3">
-                    <Setter Property="Foreground" Value="Red"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+        <WPFUtilities:ErrorSeverityToBrushConverter x:Key="ErrorSeverityToBrushConverter"/>
+        <WPFUtilities:ErrorSeverityToColorConverter x:Key="ErrorSeverityToColorConverter"/>
 
         <Style x:Key="ErrorsItemControlStyle" TargetType="TextBlock">
+            <Setter Property="BorderBrush" Value="{Binding Path=GetErrorLevel, Converter={StaticResource ErrorSeverityToColorConverter}}"/>
+
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Severity}" Value="0">
                     <Setter Property="Foreground" Value="Gray"/>
@@ -59,8 +47,10 @@
 			<Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
 			<Setter Property="Text" Value="{Binding Path=InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-			
-			<Setter Property="ToolTip">
+
+            <Setter Property="BorderBrush" Value="{Binding Path=GetErrorLevel, Converter={StaticResource ErrorSeverityToBrushConverter}}"/>
+
+            <Setter Property="ToolTip">
 				<Setter.Value>
 					<StackPanel>
 						<TextBlock Text="Description stuff here."/>
