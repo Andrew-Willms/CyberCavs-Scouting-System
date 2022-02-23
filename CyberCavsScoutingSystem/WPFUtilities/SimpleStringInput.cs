@@ -22,7 +22,7 @@ public interface ISimpleStringInput {
 
 	public ReadOnlyCollection<StringInputValidationError> ErrorsList { get; }
 
-	public StringInputValidationErrorSeverity GetErrorLevel => ErrorsList.Select(x => x.Severity).Max();
+	public StringInputValidationErrorSeverity ErrorLevel => ErrorsList.Select(x => x.Severity).Max();
 }
 
 public class SimpleStringInput<T> : ISimpleStringInput, INotifyPropertyChanged {

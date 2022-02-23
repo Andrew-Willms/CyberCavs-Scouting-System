@@ -7,48 +7,25 @@
 			 xmlns:WPFUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
 			 Startup="ApplicationStartup">
 	<Application.Resources>
-		
-		<!--I don't know what this was here for.-->
-		<!--<Canvas x:Key="Ampel" x:Shared="False">
-			<Rectangle Fill="Black" HorizontalAlignment="Left" Height="52" Stroke="Black" VerticalAlignment="Top" Width="50"/>
-			<Ellipse x:Name="RedGreen" Fill="Red" HorizontalAlignment="Left" Height="27" Margin="11,12,0,0" Stroke="Black" VerticalAlignment="Top" Width="28" />
-		</Canvas>-->
 
         <WPFUtilities:ErrorSeverityToBrushConverter x:Key="ErrorSeverityToBrushConverter"/>
         <WPFUtilities:ErrorSeverityToColorConverter x:Key="ErrorSeverityToColorConverter"/>
 
         <Style x:Key="ErrorsItemControlStyle" TargetType="TextBlock">
-            <Setter Property="BorderBrush" Value="{Binding Path=GetErrorLevel, Converter={StaticResource ErrorSeverityToColorConverter}}"/>
-
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Severity}" Value="0">
-                    <Setter Property="Foreground" Value="Gray"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Severity}" Value="1">
-                    <Setter Property="Foreground" Value="Yellow"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Severity}" Value="2">
-                    <Setter Property="Foreground" Value="Orange"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Severity}" Value="3">
-                    <Setter Property="Foreground" Value="Red"/>
-                </DataTrigger>
-            </Style.Triggers>
+            <Setter Property="Foreground"
+                    Value="{Binding Path=Severity, Converter={StaticResource ErrorSeverityToColorConverter}, Mode=OneWay}"/>
         </Style>
 
-		<Style x:Key="StringInputTooltipStyle"
-			   TargetType="{x:Type TypeName=TextBox}">
-			<!--d:DataContext="{d:DesignInstance CCSS_SharedClasses:ISimpleStringInput}">-->
-
-			<!--<d:Style.DataContext>
-				<d:DesignInstance Type="CCSS_SharedClasses:ISimpleStringInput, IsDesignTimeCreatable=True"/>
+		<Style x:Key="StringInputTooltipStyle" TargetType="{x:Type TypeName=TextBox}">
+            <!--<d:Style.DataContext>
+				<d:DesignInstance Type="CCSSDomain:ISimpleStringInput, IsDesignTimeCreatable=True"/>
 			</d:Style.DataContext>-->
 
 			<Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
 			<Setter Property="Text" Value="{Binding Path=InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Setter Property="BorderBrush" Value="{Binding Path=GetErrorLevel, Converter={StaticResource ErrorSeverityToBrushConverter}}"/>
+            <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorSeverityToBrushConverter}, Mode=OneWay}"/>
 
             <Setter Property="ToolTip">
 				<Setter.Value>
