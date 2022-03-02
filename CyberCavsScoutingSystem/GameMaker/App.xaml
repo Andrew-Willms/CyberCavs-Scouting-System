@@ -10,6 +10,7 @@
 
         <WPFUtilities:ErrorSeverityToBrushConverter x:Key="ErrorSeverityToBrushConverter"/>
         <WPFUtilities:ErrorSeverityToColorConverter x:Key="ErrorSeverityToColorConverter"/>
+        <WPFUtilities:ErrorSeverityGreaterThanConverter x:Key="ErrorSeverityGreaterThanConverter"/>
 
         <Style x:Key="ErrorsItemControlStyle" TargetType="TextBlock">
             <Setter Property="Foreground"
@@ -21,11 +22,15 @@
 				<d:DesignInstance Type="CCSSDomain:ISimpleStringInput, IsDesignTimeCreatable=True"/>
 			</d:Style.DataContext>-->
 
-			<Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=ErrorLevel, Converter={StaticResource ErrorSeverityGreaterThanConverter}, ConverterParameter=0}" Value="True">
+                    <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorSeverityToBrushConverter}, Mode=OneWay}"/>
+                </DataTrigger>
+            </Style.Triggers>
+
+            <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
 			<Setter Property="Text" Value="{Binding Path=InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-            <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorSeverityToBrushConverter}, Mode=OneWay}"/>
 
             <Setter Property="ToolTip">
 				<Setter.Value>

@@ -3,6 +3,7 @@ using System.Windows.Data;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,10 +37,17 @@ public record StringInputValidationError {
 
 // These are just placeholder for now. Change as needed.
 public enum StringInputValidationErrorSeverity {
-	Note = 0,
-	Advisory = 1,
-	Warning = 2,
-	Error = 3
+	None,
+	Note,
+	Advisory,
+	Warning,
+	Error
+}
+
+public enum ErrorColorType {
+	BorderBrush,
+	Foreground,
+
 }
 
 public static class ErrorSeverityConverter {
@@ -53,7 +61,11 @@ public static class ErrorSeverityConverter {
 		});
 
 	public static Color ToColor(StringInputValidationErrorSeverity severity) {
-		return ErrorColors[severity];
+		Trace.WriteLine(severity);
+		Trace.WriteLine(ErrorColors[severity]);
+		Trace.WriteLine(Colors.Red);
+		//return ErrorColors[severity];
+		return Colors.Yellow;
 	}
 
 	public static Brush ToBrush(StringInputValidationErrorSeverity severity) {
@@ -90,5 +102,32 @@ public class ErrorSeverityToColorConverter : IValueConverter {
 
 	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
 		throw new NotImplementedException("You should not be getting the error severity by color.");
+	}
+}
+
+public class ErrorSeverityGreaterThanConverter : IValueConverter {
+
+	public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+
+		StringInputValidationErrorSeverity threshold, severity;
+
+		//if (parameter is StringInputValidationErrorSeverity parameterErrorSeverity) {
+		//	threshold = parameterErrorSeverity;
+		//} else {
+		//	throw new ArgumentException($"The parameter \"{nameof(parameter)}\" cannot be converted to StringInputValidationErrorSeverity");
+		//}
+
+		if (value is StringInputValidationErrorSeverity valueErrorSeverity) {
+			severity = valueErrorSeverity;
+		} else {
+			throw new ArgumentException($"The parameter \"{nameof(value)}\" cannot be converted to a StringInputValidationErrorSeverity");
+		}
+
+		//return severity > threshold;
+		return severity > StringInputValidationErrorSeverity.None;
+	}
+
+	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+		throw new NotImplementedException("This conversion does not work in reverse.");
 	}
 }

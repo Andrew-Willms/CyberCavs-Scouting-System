@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace WPFUtilities;
 
 // A custom delegate used as the type for the InputValidator.
 // This is necessary so the InputValidator can have ref and out parameters.
 // targetObject is a ref parameter so this function can change SimpleStringInput.TargetObject to a new instance of T if desired.
-public delegate void SimpleStringInputConverter<T>(ref T targetObject, string inputString, out ReadOnlyCollection<StringInputValidationError> errors);
+public delegate void SimpleStringInputConverter<T>(ref T? targetObject, string inputString, out ReadOnlyCollection<StringInputValidationError> errors);
 
+// This needs to be an abstract class and not an interface because INotifyPropertyChanged does not work with members defined in an interface
 public interface ISimpleStringInput {
 
 	public string InputString { get; }
@@ -22,7 +20,9 @@ public interface ISimpleStringInput {
 
 	public ReadOnlyCollection<StringInputValidationError> ErrorsList { get; }
 
-	public StringInputValidationErrorSeverity ErrorLevel => ErrorsList.Select(x => x.Severity).Max();
+	// There can't be an implementation here because INotifyPropertyChanged does not work when the implementation is inherited from an interface.
+	public StringInputValidationErrorSeverity ErrorLevel { get; }
+
 }
 
 public class SimpleStringInput<T> : ISimpleStringInput, INotifyPropertyChanged {
@@ -30,8 +30,8 @@ public class SimpleStringInput<T> : ISimpleStringInput, INotifyPropertyChanged {
 	#region Properties
 
 	// This is not an auto implemented property because I need to be able to pass the object as an out parameter. (Also I now have logic in get).
-	private T _TargetObject;
-	public T TargetObject => IsValid ? _TargetObject : default;
+	private T? _TargetObject;
+	public T? TargetObject => IsValid ? _TargetObject : default;
 
 	private string _InputString = "";
 	public string InputString {
@@ -61,7 +61,7 @@ public class SimpleStringInput<T> : ISimpleStringInput, INotifyPropertyChanged {
 	// list each time than it is to check over each error in the existing collection. Since all validation must
 	// occur every time the ValueConverter is run there would be no performance benefit from not creating a new
 	// collection. In addition using a ReadOnlyCollection saves me from having to implement INotifyCollectionChanged.
-	private ReadOnlyCollection<StringInputValidationError> _ErrorsList;
+	private ReadOnlyCollection<StringInputValidationError> _ErrorsList = new List<StringInputValidationError>().AsReadOnly();
 	public ReadOnlyCollection<StringInputValidationError> ErrorsList {
 
 		get => _ErrorsList;
@@ -71,6 +71,8 @@ public class SimpleStringInput<T> : ISimpleStringInput, INotifyPropertyChanged {
 			OnErrorsListChanged();
 		}
 	}
+
+	public StringInputValidationErrorSeverity ErrorLevel => (ErrorsList.Count > 0) ? ErrorsList.Select(x => x.Severity).Max() : 0;
 
 	#endregion Properties
 
@@ -99,7 +101,7 @@ public class SimpleStringInput<T> : ISimpleStringInput, INotifyPropertyChanged {
 
 	#region PropertyChanged
 
-	public event PropertyChangedEventHandler PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	protected void OnInputStringChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputString)));
@@ -107,6 +109,7 @@ public class SimpleStringInput<T> : ISimpleStringInput, INotifyPropertyChanged {
 
 	protected void OnErrorsListChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorsList)));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
 	}
 
 	#endregion PropertyChanged
