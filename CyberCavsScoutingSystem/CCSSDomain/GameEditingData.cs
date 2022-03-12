@@ -21,6 +21,7 @@ public class GameEditingData {
 	}
 
 	public int TestInt2 { get; set; }
+	public int TestInt3 { get; set; }
 
 	public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
 

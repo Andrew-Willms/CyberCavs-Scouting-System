@@ -9,15 +9,15 @@
 	<Application.Resources>
 
         <WPFUtilities:ErrorSeverityToBrushConverter x:Key="ErrorSeverityToBrushConverter"/>
-        <WPFUtilities:ErrorSeverityToColorConverter x:Key="ErrorSeverityToColorConverter"/>
+        <!--<WPFUtilities:ErrorSeverityToColorConverter x:Key="ErrorSeverityToColorConverter"/>-->
         <WPFUtilities:ErrorSeverityGreaterThanConverter x:Key="ErrorSeverityGreaterThanConverter"/>
 
         <Style x:Key="ErrorsItemControlStyle" TargetType="TextBlock">
             <Setter Property="Foreground"
-                    Value="{Binding Path=Severity, Converter={StaticResource ErrorSeverityToColorConverter}, Mode=OneWay}"/>
+                    Value="{Binding Path=Severity, Converter={StaticResource ErrorSeverityToBrushConverter}, Mode=OneWay}"/>
         </Style>
 
-		<Style x:Key="StringInputTooltipStyle" TargetType="{x:Type TypeName=TextBox}">
+        <Style x:Key="StringInputTooltipStyle" TargetType="{x:Type TypeName=TextBox}">
             <!--<d:Style.DataContext>
 				<d:DesignInstance Type="CCSSDomain:ISimpleStringInput, IsDesignTimeCreatable=True"/>
 			</d:Style.DataContext>-->
