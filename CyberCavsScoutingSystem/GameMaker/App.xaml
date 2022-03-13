@@ -23,7 +23,10 @@
 			</d:Style.DataContext>-->
 
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=ErrorLevel, Converter={StaticResource ErrorSeverityGreaterThanConverter}, ConverterParameter=0}" Value="True">
+                <DataTrigger Binding="{Binding Path=ErrorLevel,
+                                Converter={StaticResource ErrorSeverityGreaterThanConverter},
+                                ConverterParameter={x:Static WPFUtilities:StringInputValidationErrorSeverity.None}}"
+                             Value="True">
                     <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToBrushConverter}, Mode=OneWay}"/>
                 </DataTrigger>
             </Style.Triggers>

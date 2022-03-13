@@ -61,20 +61,19 @@ public class ErrorSeverityGreaterThanConverter : IValueConverter {
 
 		StringInputValidationErrorSeverity threshold, severity;
 
-		//if (parameter is StringInputValidationErrorSeverity parameterErrorSeverity) {
-		//	threshold = parameterErrorSeverity;
-		//} else {
-		//	throw new ArgumentException($"The parameter \"{nameof(parameter)}\" cannot be converted to StringInputValidationErrorSeverity");
-		//}
-
 		if (value is StringInputValidationErrorSeverity valueAsSeverity) {
 			severity = valueAsSeverity;
 		} else {
 			throw new ArgumentException($"The parameter \"{nameof(value)}\" cannot be converted to a StringInputValidationErrorSeverity");
 		}
 
-		//return severity > threshold;
-		return severity > StringInputValidationErrorSeverity.None;
+		if (parameter is StringInputValidationErrorSeverity parameterAsSeverity) {
+			threshold = parameterAsSeverity;
+		} else {
+			throw new ArgumentException($"The parameter \"{nameof(parameter)}\" cannot be converted to a StringInputValidationErrorSeverity");
+		}
+
+		return severity > threshold;
 	}
 
 	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
