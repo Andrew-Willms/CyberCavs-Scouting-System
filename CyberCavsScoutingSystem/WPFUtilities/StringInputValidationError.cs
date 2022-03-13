@@ -47,63 +47,13 @@ public enum StringInputValidationErrorSeverity {
 public enum ErrorColorType {
 	BorderBrush,
 	Foreground,
-
 }
 
-public static class ErrorSeverityConverter {
 
-	public static ReadOnlyDictionary<StringInputValidationErrorSeverity, Color> ErrorColors { get; } = new(
-		new Dictionary<StringInputValidationErrorSeverity, Color>() {
-			{ StringInputValidationErrorSeverity.Note, Colors.Gray },
-			{ StringInputValidationErrorSeverity.Advisory, Colors.Yellow },
-			{ StringInputValidationErrorSeverity.Warning, Colors.Orange },
-			{ StringInputValidationErrorSeverity.Error, Colors.Red }
-		});
 
-	public static Color ToColor(StringInputValidationErrorSeverity severity) {
-		Trace.WriteLine(severity);
-		Trace.WriteLine(ErrorColors[severity]);
-		Trace.WriteLine(Colors.Red);
-		//return ErrorColors[severity];
-		return Colors.Yellow;
-	}
 
-	public static Brush ToBrush(StringInputValidationErrorSeverity severity) {
-		return new SolidColorBrush(ErrorColors[severity]);
-	}
-}
 
-public class ErrorSeverityToBrushConverter : IValueConverter {
 
-	public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-
-		if (value is StringInputValidationErrorSeverity severity) {
-			return ErrorSeverityConverter.ToBrush(severity);
-		}
-
-		throw new ArgumentException("The object to be converted is not a StringInputValidationErrorSeverity");
-	}
-
-	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-		throw new NotImplementedException("You should not be getting the error severity by color.");
-	}
-}
-
-public class ErrorSeverityToColorConverter : IValueConverter {
-
-	public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-
-		if (value is StringInputValidationErrorSeverity severity) {
-			return ErrorSeverityConverter.ToColor(severity);
-		}
-
-		throw new ArgumentException("The object to be converted is not a StringInputValidationErrorSeverity");
-	}
-
-	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-		throw new NotImplementedException("You should not be getting the error severity by color.");
-	}
-}
 
 public class ErrorSeverityGreaterThanConverter : IValueConverter {
 
@@ -117,8 +67,8 @@ public class ErrorSeverityGreaterThanConverter : IValueConverter {
 		//	throw new ArgumentException($"The parameter \"{nameof(parameter)}\" cannot be converted to StringInputValidationErrorSeverity");
 		//}
 
-		if (value is StringInputValidationErrorSeverity valueErrorSeverity) {
-			severity = valueErrorSeverity;
+		if (value is StringInputValidationErrorSeverity valueAsSeverity) {
+			severity = valueAsSeverity;
 		} else {
 			throw new ArgumentException($"The parameter \"{nameof(value)}\" cannot be converted to a StringInputValidationErrorSeverity");
 		}

@@ -4,17 +4,17 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:GameMaker"
+			 xmlns:Converters="clr-namespace:GameMaker.Converters"
 			 xmlns:WPFUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
 			 Startup="ApplicationStartup">
 	<Application.Resources>
 
-        <WPFUtilities:ErrorSeverityToBrushConverter x:Key="ErrorSeverityToBrushConverter"/>
-        <!--<WPFUtilities:ErrorSeverityToColorConverter x:Key="ErrorSeverityToColorConverter"/>-->
+        <Converters:ErrorToBrushConverter x:Key="ErrorToBrushConverter"/>
         <WPFUtilities:ErrorSeverityGreaterThanConverter x:Key="ErrorSeverityGreaterThanConverter"/>
 
         <Style x:Key="ErrorsItemControlStyle" TargetType="TextBlock">
             <Setter Property="Foreground"
-                    Value="{Binding Path=Severity, Converter={StaticResource ErrorSeverityToBrushConverter}, Mode=OneWay}"/>
+                    Value="{Binding Path=Severity, Converter={StaticResource ErrorToBrushConverter}, Mode=OneTime}"/>
         </Style>
 
         <Style x:Key="StringInputTooltipStyle" TargetType="{x:Type TypeName=TextBox}">
@@ -24,7 +24,7 @@
 
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=ErrorLevel, Converter={StaticResource ErrorSeverityGreaterThanConverter}, ConverterParameter=0}" Value="True">
-                    <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorSeverityToBrushConverter}, Mode=OneWay}"/>
+                    <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToBrushConverter}, Mode=OneWay}"/>
                 </DataTrigger>
             </Style.Triggers>
 
