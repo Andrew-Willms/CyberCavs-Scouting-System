@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameMaker"
+        xmlns:Views="clr-namespace:GameMaker.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
@@ -27,7 +28,7 @@
         <TabControl Grid.Row="1">
             <TabItem Header="Meta">
                 <Grid Background="#FFE5E5E5">
-                    <local:MetaTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <Views:MetaTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Alliances">
