@@ -5,31 +5,19 @@ using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CCSSDomain;
 using WPFUtilities;
-
-
 
 namespace GameMaker.Converters;
 
-//public class ErrorToBrushConverter : IErrorConverter {
+public class ErrorToBrushConverter : IErrorConverter<ErrorSeverity, Brush> {
 
-//	public ReadOnlyDictionary<StringInputValidationErrorSeverity, object> ConversionDictionary { get; } =
-//		new(new Dictionary<StringInputValidationErrorSeverity, object>() {
-//			{ StringInputValidationErrorSeverity.Note, Brushes.Gray },
-//			{ StringInputValidationErrorSeverity.Advisory, Brushes.Yellow },
-//			{ StringInputValidationErrorSeverity.Warning, Brushes.Orange },
-//			{ StringInputValidationErrorSeverity.Error, Brushes.Red }
-//		});
-//}
-
-public class ErrorToBrushConverter : IErrorConverter<Brush> {
-
-	public ReadOnlyDictionary<StringInputValidationErrorSeverity, Brush> ConversionDictionary { get; } =
-		new(new Dictionary<StringInputValidationErrorSeverity, Brush>() {
-			{ StringInputValidationErrorSeverity.Note, Brushes.Gray },
-			{ StringInputValidationErrorSeverity.Advisory, Brushes.Yellow },
-			{ StringInputValidationErrorSeverity.Warning, Brushes.Orange },
-			{ StringInputValidationErrorSeverity.Error, Brushes.Red }
+	public ReadOnlyDictionary<ErrorSeverity, Brush> ConversionDictionary { get; } =
+		new(new Dictionary<ErrorSeverity, Brush>() {
+			{ ErrorSeverity.Note, Brushes.Gray },
+			{ ErrorSeverity.Advisory, Brushes.Yellow },
+			{ ErrorSeverity.Warning, Brushes.Orange },
+			{ ErrorSeverity.Error, Brushes.Red }
 		});
 
 }

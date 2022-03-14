@@ -23,9 +23,9 @@ public class GameEditingData {
 	public int TestInt2 { get; set; }
 	public int TestInt3 { get; set; }
 
-	public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
+	//public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
 
-	public void VersionNumberValueConverter(ref VersionNumber targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
+	/*public void VersionNumberValueConverter(ref VersionNumber targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
 		out List<StringInputValidationError> errors) {
 
 		// If the propertyIdentifier string is empty than I am trying to set all properties.
@@ -84,7 +84,7 @@ public class GameEditingData {
 
 			}
 		}
-	}
+	}*/
 
 	public string VersionDescription = "";
 	public DateTime VersionReleaseDate;
@@ -95,17 +95,17 @@ public class GameEditingData {
 	public string Name = "";
 	public string Description = "";
 
-	public SimpleStringInput<int> TestInt { get; private init; }
+	public SimpleStringInput<int, ErrorSeverity> TestInt { get; private init; }
 
-	public void TestIntValueConverter(ref int intValue, string inputString, out ReadOnlyCollection<StringInputValidationError> errors) {
+	public void TestIntValueConverter(ref int intValue, string inputString, out ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) {
 
-		List<StringInputValidationError> newErrors = new();
+		List<ValidationError<ErrorSeverity>> newErrors = new();
 		intValue = default;
 
 		string invalidCharacters = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
 
 		if (invalidCharacters.Length > 0) {
-			newErrors.Add(new("Invalid Characters"));
+			newErrors.Add(new("Invalid Characters", ErrorSeverity.Error));
 
 		} else {
 
@@ -116,10 +116,10 @@ public class GameEditingData {
 
 				// It really should be an overflow exception but check anyway.
 				if (ex is OverflowException) {
-					newErrors.Add(new("Number Too Large"));
+					newErrors.Add(new("Number Too Large", ErrorSeverity.Error));
 
 				} else {
-					newErrors.Add(new("Unknown Error"));
+					newErrors.Add(new("Unknown Error", ErrorSeverity.Error));
 				}
 			}
 
@@ -128,9 +128,9 @@ public class GameEditingData {
 		errors = newErrors.AsReadOnly();
 	}
 
-	public readonly StringInput<int> Year;
+	//public readonly StringInput<int> Year;
 
-	public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
+	/*public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
 
 		errors = new();
 
@@ -144,6 +144,6 @@ public class GameEditingData {
 			targetObject = int.Parse(inputStrings[""]);
 		}
 
-	}
+	}*/
 
 }

@@ -8,6 +8,8 @@ using System.Reflection;
 
 namespace WPFUtilities;
 
+/*
+
 // A custom delegate used as the type for the InputValidator.
 // This is necessary so the InputValidator can have ref and out paremeters.
 // targetObject is a ref parameter so this function can change StringInput.TargetObject to a new instance of T if desired.
@@ -35,7 +37,7 @@ public class StringInput<T> : INotifyPropertyChanged {
 	 *  
 	 *  - At some point I may want to separate the data converters from the GameEditingData class and I might want to move them to a static class.
 	 *  
-	 */
+	 *//*
 
 	#endregion Comments
 
@@ -76,8 +78,8 @@ public class StringInput<T> : INotifyPropertyChanged {
 	// Might be worth checking each error as it comes in to make sure the PropertyIdentifier is valid.
 	// Might be worth checking each error as it comes in to make sure the PropertyIdentifier is valid.
 	// Might also be worth making the object we pass out from the get accessor is immutable (what the private member is for).
-	private List<StringInputValidationError> _ErrorsList;
-	public List<StringInputValidationError> ErrorsList { get; private set; }
+	private List<ValidationError> _ErrorsList;
+	public List<ValidationError> ErrorsList { get; private set; }
 
 	#endregion Properties
 
@@ -150,3 +152,5 @@ public class StringInput<T> : INotifyPropertyChanged {
 	// Try fancy stuff with sub properties by having generic and non generic implementations of a sub class?
 
 }
+
+*/

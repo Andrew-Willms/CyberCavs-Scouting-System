@@ -6,11 +6,12 @@
 			 xmlns:local="clr-namespace:GameMaker"
 			 xmlns:Converters="clr-namespace:GameMaker.Converters"
 			 xmlns:WPFUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
+			 xmlns:Domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
 			 Startup="ApplicationStartup">
 	<Application.Resources>
 
         <Converters:ErrorToBrushConverter x:Key="ErrorToBrushConverter"/>
-        <WPFUtilities:ErrorSeverityGreaterThanConverter x:Key="ErrorSeverityGreaterThanConverter"/>
+        <Converters:ErrorGreaterThanConverter x:Key="ErrorGreaterThanConverter"/>
 
         <Style x:Key="ErrorsItemControlStyle" TargetType="TextBlock">
             <Setter Property="Foreground"
@@ -24,8 +25,8 @@
 
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=ErrorLevel,
-                                Converter={StaticResource ErrorSeverityGreaterThanConverter},
-                                ConverterParameter={x:Static WPFUtilities:StringInputValidationErrorSeverity.None}}"
+                                Converter={StaticResource ErrorGreaterThanConverter},
+                                ConverterParameter={x:Static Domain:ErrorSeverity.None}}"
                              Value="True">
                     <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToBrushConverter}, Mode=OneWay}"/>
                 </DataTrigger>
