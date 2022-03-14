@@ -29,17 +29,3 @@ public record ValidationError<TSeverityEnum> where TSeverityEnum : Enum {
 	}
 
 }
-
-//// These are just placeholder for now. Change as needed.
-//public enum StringInputValidationErrorSeverity {
-//	None,
-//	Note,
-//	Advisory,
-//	Warning,
-//	Error
-//}
-
-//public enum ErrorColorType {
-//	BorderBrush,
-//	Foreground,
-//}
