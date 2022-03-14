@@ -14,7 +14,7 @@
 
 	<StackPanel>
         <TextBox DataContext="{Binding Path=TestInt}"
-                 Style="{StaticResource StringInputTooltipStyle}"
+                 Style="{StaticResource TextBoxStringInputStyle}"
                  HorizontalAlignment="Left"
 				 Margin="10,10,0,0"
                  TextWrapping="Wrap"

@@ -10,27 +10,52 @@
 			 Startup="ApplicationStartup">
 	<Application.Resources>
 
-        <Converters:ErrorToBrushConverter x:Key="ErrorToBrushConverter"/>
-        <Converters:ErrorGreaterThanConverter x:Key="ErrorGreaterThanConverter"/>
+        <Converters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
+        <Converters:ErrorToMouseOverBrushConverter x:Key="ErrorToMouseOverBrushConverter"/>
+        <Converters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
+        <Converters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
 
-        <Style x:Key="ErrorsItemControlStyle" TargetType="TextBlock">
-            <Setter Property="Foreground"
-                    Value="{Binding Path=Severity, Converter={StaticResource ErrorToBrushConverter}, Mode=OneTime}"/>
-        </Style>
 
-        <Style x:Key="StringInputTooltipStyle" TargetType="{x:Type TypeName=TextBox}">
+        <Style x:Key="TextBoxStringInputStyle" TargetType="{x:Type TypeName=TextBox}">
             <!--<d:Style.DataContext>
 				<d:DesignInstance Type="CCSSDomain:ISimpleStringInput, IsDesignTimeCreatable=True"/>
 			</d:Style.DataContext>-->
 
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=ErrorLevel,
-                                Converter={StaticResource ErrorGreaterThanConverter},
-                                ConverterParameter={x:Static Domain:ErrorSeverity.None}}"
-                             Value="True">
-                    <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToBrushConverter}, Mode=OneWay}"/>
-                </DataTrigger>
-            </Style.Triggers>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Focusable="false"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{Binding Path=ErrorLevel,
+                                                        Converter={StaticResource ErrorToMouseOverBrushConverter},
+                                                        Mode=OneWay}"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="true">
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{Binding Path=ErrorLevel,
+                                                        Converter={StaticResource ErrorToFocusedBrushConverter},
+                                                        Mode=OneWay}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
 
             <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
@@ -43,7 +68,15 @@
                         <ItemsControl ItemsSource="{Binding ErrorsList}">
                             <ItemsControl.ItemTemplate>
 								<DataTemplate>
-                                    <TextBlock Text="{Binding Name}" Style="{StaticResource ErrorsItemControlStyle}"/>
+                                    <DataTemplate.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding Path=Severity,
+                                                            Converter={StaticResource ErrorToToolTipTextBrushConverter},
+                                                            Mode=OneTime}"/>
+                                        </Style>
+                                    </DataTemplate.Resources>
+                                    <TextBlock Text="{Binding Name}"/> <!--Style="{StaticResource ErrorsItemControlStyle}"/>-->
 								</DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ItemsControl>
