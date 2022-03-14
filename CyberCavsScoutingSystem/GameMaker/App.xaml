@@ -15,12 +15,12 @@
         <Converters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
         <Converters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
 
-
         <Style x:Key="TextBoxStringInputStyle" TargetType="{x:Type TypeName=TextBox}">
             <!--<d:Style.DataContext>
 				<d:DesignInstance Type="CCSSDomain:ISimpleStringInput, IsDesignTimeCreatable=True"/>
 			</d:Style.DataContext>-->
 
+            <!--I have to override the template in order to change the border color when focused or hovered over-->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
