@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 
-namespace GameMaker;
+namespace GameMaker.Views;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

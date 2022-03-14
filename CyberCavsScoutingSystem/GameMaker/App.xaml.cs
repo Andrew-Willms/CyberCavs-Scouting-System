@@ -18,7 +18,7 @@ public partial class App : Application {
 
 		ApplicationManager.ApplicationStartup();
 
-		MainWindow = new MainWindow(); // If I use the condensed new() syntax it creates a blank window.
+		MainWindow = new Views.MainWindow(); // If I use the condensed new() syntax it creates a blank window.
 		MainWindow.Show();
 
 	}
