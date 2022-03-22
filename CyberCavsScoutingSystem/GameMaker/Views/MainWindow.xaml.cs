@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using CCSSDomain;
 
 namespace GameMaker.Views;
 
@@ -22,6 +23,8 @@ namespace GameMaker.Views;
 public partial class MainWindow : Window {
 
 	public MainWindow() {
+
+		DataContext = ApplicationManager.GameProject.EditingData;
 
 		InitializeComponent();
 

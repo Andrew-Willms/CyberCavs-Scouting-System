@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Globalization;
 using CCSSDomain;
+using GameMaker.Views;
 
 namespace GameMaker;
 
 public static class ApplicationManager {
 
-	private static GameProject GameProject;
+	public static GameProject GameProject { get; private set; } = new();
+
+	public static MainWindow Window { get; private set; } = new();
 
 	public static bool ApplicationStartup() {
+
+		Window.Show();
 
 		GameProject = new();
 

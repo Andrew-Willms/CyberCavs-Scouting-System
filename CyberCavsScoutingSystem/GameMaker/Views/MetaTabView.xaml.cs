@@ -26,8 +26,6 @@ public partial class MetaTabView : UserControl {
 
 	public MetaTabView() {
 
-		DataContext = new GameEditingData();
-
 		InitializeComponent();
 
 	}

@@ -9,9 +9,9 @@ namespace CCSSDomain;
 public class GameProject {
 
 	// Do I even need this or should this be generated later?
-	public Game Game;
+	public Game Game = new();
 
-	public GameEditingData EditingData;
+	public GameEditingData EditingData = new();
 
 	// Maybe have an edit history here too, work it out later.
 
