@@ -20,7 +20,7 @@ public class GameEditingDataValidator {
 
 
 
-	// This function needs a bunch of work. The code is pretty ugly.
+	// TODO: this function needs a bunch of work. The code is pretty ugly.
 	public void YearValueConverter(ref int value, string inputString, out ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) {
 
 		List<ValidationError<ErrorSeverity>> newErrors = new();

@@ -31,6 +31,7 @@ public interface ISimpleStringInput<TSeverityEnum> where TSeverityEnum : Enum {
 
 
 
+// TODO: rename this to StringInput (the other one will be MultiStringInput)
 public class SimpleStringInput<TTargetType, TSeverityEnum> : ISimpleStringInput<TSeverityEnum>, INotifyPropertyChanged where TSeverityEnum : Enum {
 
 	private TTargetType? _TargetObject;
