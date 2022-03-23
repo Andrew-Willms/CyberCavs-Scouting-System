@@ -11,21 +11,17 @@ using System.Threading.Tasks;
 namespace WPFUtilities;
 
 // I think these things need to be static
-public record ValidationError<TSeverityEnum> where TSeverityEnum : Enum {
+public record ValidationError<TSeverityEnum>(string Name, TSeverityEnum Severity, string Description = "") where TSeverityEnum : Enum {
 
-	public string Name { get; private init; }
+	public string Name { get; } = Name;
 
-	public TSeverityEnum Severity { get; private init; }
+	// If I remove Description from the primary constructor I need this.
+	//public string Description { get; init; } = Description;
+
+	public TSeverityEnum Severity { get; } = Severity;
 
 	// This can be used to provide additional identifying information about the error.
 	// For example, if multi data binding is used to bind multiple View elements to a single UserMultiInput class
 	// the Identifier parameter can be used to indicate which of the multiple view elements the error relates to.
-	public string Identifier { get; private init; }
-
-	public ValidationError(string name, TSeverityEnum severity, string identifier = "") {
-		Name = name;
-		Severity = severity;
-		Identifier = identifier;
-	}
-
+	//public string Identifier { get; private init; }
 }

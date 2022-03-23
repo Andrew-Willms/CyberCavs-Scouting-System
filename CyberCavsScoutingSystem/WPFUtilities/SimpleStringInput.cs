@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.ComponentModel;
+using System.Linq;
 
 namespace WPFUtilities;
 
+//TODO: change this to return a tuple instead of having targetObject be a ref parameter and the dictionary be an out parameter.
 // A custom delegate used as the type for the InputValidator.
 // This is necessary so the InputValidator can have ref and out parameters.
 // targetObject is a ref parameter so this function can change SimpleStringInput.TargetObject to a new instance of T if desired.
@@ -30,13 +31,10 @@ public interface ISimpleStringInput<TSeverityEnum> where TSeverityEnum : Enum {
 
 
 
-public class SimpleStringInput<T, TSeverityEnum> : ISimpleStringInput<TSeverityEnum>, INotifyPropertyChanged where TSeverityEnum : Enum {
+public class SimpleStringInput<TTargetType, TSeverityEnum> : ISimpleStringInput<TSeverityEnum>, INotifyPropertyChanged where TSeverityEnum : Enum {
 
-	#region Properties
-
-	// This is not an auto implemented property because I need to be able to pass the object as an out parameter. (Also I now have logic in get).
-	private T? _TargetObject;
-	public T? TargetObject => IsValid ? _TargetObject : default;
+	private TTargetType? _TargetObject;
+	public TTargetType? TargetObject => IsValid ? _TargetObject : default;
 
 	private string _InputString = "";
 	public string InputString {
@@ -59,13 +57,8 @@ public class SimpleStringInput<T, TSeverityEnum> : ISimpleStringInput<TSeverityE
 
 	public bool IsValid => ErrorsList.Count == 0;
 
-	private SimpleStringInputConverter<T, TSeverityEnum> ValueConverter { get; } // get only properties can be set from the constructor.
+	private SimpleStringInputConverter<TTargetType, TSeverityEnum> ValueConverter { get; }
 
-	// This property is a ReadOnlyCollection so that every time validation occurs a totally new list is created
-	// and the existing list is not edited. This is desirable because it seems easier to create a totally new
-	// list each time than it is to check over each error in the existing collection. Since all validation must
-	// occur every time the ValueConverter is run there would be no performance benefit from not creating a new
-	// collection. In addition using a ReadOnlyCollection saves me from having to implement INotifyCollectionChanged.
 	private ReadOnlyCollection<ValidationError<TSeverityEnum>> _ErrorsList = new List<ValidationError<TSeverityEnum>>().AsReadOnly();
 	public ReadOnlyCollection<ValidationError<TSeverityEnum>> ErrorsList {
 
@@ -79,32 +72,21 @@ public class SimpleStringInput<T, TSeverityEnum> : ISimpleStringInput<TSeverityE
 
 	public TSeverityEnum ErrorLevel => (ErrorsList.Count > 0) ? ErrorsList.Select(x => x.Severity).Max() : default;
 
-	#endregion Properties
 
-	#region Functions
 
+	public SimpleStringInput(SimpleStringInputConverter<TTargetType, TSeverityEnum> valueConverter, string initialString = "") {
+		ValueConverter = valueConverter;
+		InputString = initialString;
+	}
+
+	
+	
 	private void ConvertValue(string inputString) {
 		ValueConverter(ref _TargetObject, inputString, out ReadOnlyCollection<ValidationError<TSeverityEnum>> errors);
 		ErrorsList = errors;
 	}
 
-	// Use this function to force validation. Hopefully it will never need to be used but I will leave it here for now.
-	public void Validate() {
-		ConvertValue(InputString);
-	}
 
-	#endregion Functions
-
-	#region Constructors
-
-	public SimpleStringInput(SimpleStringInputConverter<T, TSeverityEnum> valueConverter, string initialString = "") {
-		ValueConverter = valueConverter;
-		InputString = initialString;
-	}
-
-	#endregion Constructors
-
-	#region PropertyChanged
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -116,7 +98,5 @@ public class SimpleStringInput<T, TSeverityEnum> : ISimpleStringInput<TSeverityE
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorsList)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
 	}
-
-	#endregion PropertyChanged
 
 }

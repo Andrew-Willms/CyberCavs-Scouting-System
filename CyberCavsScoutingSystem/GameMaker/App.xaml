@@ -57,6 +57,8 @@
                 </Setter.Value>
             </Setter>
 
+            <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToFocusedBrushConverter}, Mode=OneWay}"/>
+
             <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
 			<Setter Property="Text" Value="{Binding Path=InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -76,8 +78,8 @@
                                                             Mode=OneTime}"/>
                                         </Style>
                                     </DataTemplate.Resources>
-                                    <TextBlock Text="{Binding Name}"/> <!--Style="{StaticResource ErrorsItemControlStyle}"/>-->
-								</DataTemplate>
+                                    <TextBlock Text="{Binding Description}"/>
+                                </DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ItemsControl>
 					</StackPanel>

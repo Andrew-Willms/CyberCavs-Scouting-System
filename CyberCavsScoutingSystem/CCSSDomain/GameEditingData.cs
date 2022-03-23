@@ -8,20 +8,37 @@ using WPFUtilities;
 
 namespace CCSSDomain;
 
+// TODO: make this implement INotifyPropertyChanged for the Properties that aren't StringInputs.
 public class GameEditingData {
+
+	private GameEditingDataValidator Validator { get; }
 
 	public GameEditingData() {
 
+		Validator = new(this);
+
+		Year = new(Validator.YearValueConverter, "42");
+		RobotsPerAlliance = new(Validator.TestIntValueConverter, "42");
+		AlliancesPerMatch = new(Validator.TestIntValueConverter, "42");
+
 		//Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
-
 		//Year = new(YearValueConverter, new string[] { "" }, new string[] { "0" });
-
-		TestInt = new(TestIntValueConverter, "42");
-
 	}
 
-	public int TestInt2 { get; set; }
-	public int TestInt3 { get; set; }
+
+
+
+	public SimpleStringInput<int, ErrorSeverity> Year { get; }
+
+	public SimpleStringInput<int, ErrorSeverity> RobotsPerAlliance { get; }
+
+	public SimpleStringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
+
+	public string Name { get; set; } = "";
+	public string Description { get; set; } = "";
+
+
+
 
 	//public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
 
@@ -86,64 +103,30 @@ public class GameEditingData {
 		}
 	}*/
 
-	public string VersionDescription = "";
-	public DateTime VersionReleaseDate;
+	public string VersionDescription { get; set; } = "";
+	public DateTime VersionReleaseDate { get; set; }
 
 	// Figure if/how to do version history later as it's not critical.
 	//public List<VersionNumber, string, DateTime> VersionHistory;
 
-	public string Name = "";
-	public string Description = "";
 
-	public SimpleStringInput<int, ErrorSeverity> TestInt { get; private init; }
-
-	public void TestIntValueConverter(ref int intValue, string inputString, out ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) {
-
-		List<ValidationError<ErrorSeverity>> newErrors = new();
-		intValue = default;
-
-		string invalidCharacters = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
-
-		if (invalidCharacters.Length > 0) {
-			newErrors.Add(new("Invalid Characters", ErrorSeverity.Error));
-
-		} else {
-
-			try {
-				intValue = int.Parse(inputString);
-
-			} catch (Exception ex) {
-
-				// It really should be an overflow exception but check anyway.
-				if (ex is OverflowException) {
-					newErrors.Add(new("Number Too Large", ErrorSeverity.Error));
-
-				} else {
-					newErrors.Add(new("Unknown Error", ErrorSeverity.Error));
-				}
-			}
-
-		}
-
-		errors = newErrors.AsReadOnly();
-	}
 
 	//public readonly StringInput<int> Year;
 
-	/*public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
+	//public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
 
-		errors = new();
+	//	errors = new();
 
-		string invalidCharacteres = string.Concat(inputStrings[""].Where(x => char.IsDigit(x) == false));
+	//	string invalidCharacteres = string.Concat(inputStrings[""].Where(x => char.IsDigit(x) == false));
 
-		if (invalidCharacteres.Length > 0) {
-			errors.Add(new("Invalid Characters", "")); // somehow need to make a tooltip too
-			targetObject = 0; // Since it is a value type that is not nullable the best I can do is return the default value.
+	//	if (invalidCharacteres.Length > 0) {
+	//		errors.Add(new("Invalid Characters", "")); // somehow need to make a tooltip too
+	//		targetObject = 0; // Since it is a value type that is not nullable the best I can do is return the default value.
 
-		} else {
-			targetObject = int.Parse(inputStrings[""]);
-		}
+	//	} else {
+	//		targetObject = int.Parse(inputStrings[""]);
+	//	}
 
-	}*/
+	//}
 
 }

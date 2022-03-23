@@ -13,25 +13,32 @@
     </UserControl.Resources>
 
 	<StackPanel>
-        <TextBox DataContext="{Binding Path=TestInt}"
+
+        <TextBox DataContext="{Binding Path=Year}"
                  Style="{StaticResource TextBoxStringInputStyle}"
                  HorizontalAlignment="Left"
-				 Margin="10,10,0,0"
+                 Margin="10,10,0,0"
                  TextWrapping="Wrap"
-				 VerticalAlignment="Top"
-				 Width="120">
+                 VerticalAlignment="Top"
+                 Width="120">
         </TextBox>
 
-		<TextBox HorizontalAlignment="Left" Margin="10,10,0,0" Text="{Binding TestInt2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120">
-			<Validation.ErrorTemplate>
-				<ControlTemplate>
-					<StackPanel>
-						<!-- Placeholder for the TextBox itself -->
-						<AdornedElementPlaceholder x:Name="textBox"/>
-						<TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
-					</StackPanel>
-				</ControlTemplate>
-			</Validation.ErrorTemplate>
+        <TextBox DataContext="{Binding Path=RobotsPerAlliance}"
+                 Style="{StaticResource TextBoxStringInputStyle}"
+                 HorizontalAlignment="Left"
+                 Margin="10,10,0,0"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top"
+                 Width="120">
+        </TextBox>
+
+        <TextBox DataContext="{Binding Path=AlliancesPerMatch}"
+                 Style="{StaticResource TextBoxStringInputStyle}"
+                 HorizontalAlignment="Left"
+                 Margin="10,10,0,0"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top"
+                 Width="120">
         </TextBox>
 
     </StackPanel>
