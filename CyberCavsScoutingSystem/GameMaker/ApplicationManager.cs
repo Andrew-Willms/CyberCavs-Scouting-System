@@ -20,8 +20,6 @@ public static class ApplicationManager {
 
 		Window.Show();
 
-		GameProject = new();
-
 		return true;
 	}
 
