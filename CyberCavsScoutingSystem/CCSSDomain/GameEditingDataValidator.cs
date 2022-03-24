@@ -21,24 +21,24 @@ public class GameEditingDataValidator {
 
 
 	// TODO: this function needs a bunch of work. The code is pretty ugly.
-	public void YearValueConverter(ref int value, string inputString, out ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) {
+	public (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) YearValueConverter(string inputString) {
 
 		List<ValidationError<ErrorSeverity>> newErrors = new();
-		value = default;
+		int newValue = 0;
 
 		try {
 
-			value = int.Parse(inputString);
+			newValue = int.Parse(inputString);
 
-			if (value < 0) {
+			if (newValue < 0) {
 				newErrors.Add(new("Unconventional Year Specified", ErrorSeverity.Warning, "The year specified is negative. It seems unlikely this is intentional."));
 			
 			// TODO: move the magic number elsewhere when I have a place for such resources.
-			} else if (value < 1992) {
+			} else if (newValue < 1992) {
 				newErrors.Add(new("Unconventional Year", ErrorSeverity.Advisory, "The year specified is before the year of the first FRC event."));
 			}
 
-			else if (value > DateTime.Now.Year + 1) {
+			else if (newValue > DateTime.Now.Year + 1) {
 				newErrors.Add(new("Year in Future", ErrorSeverity.Advisory, "The year specified is more than a year in the future."));
 			}
 
@@ -81,14 +81,14 @@ public class GameEditingDataValidator {
 			}
 		}
 
-		errors = newErrors.AsReadOnly();
+		return (newValue, newErrors.AsReadOnly());
 	}
 
 
-	public void TestIntValueConverter(ref int intValue, string inputString, out ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) {
+	public (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) TestIntValueConverter(string inputString) {
 
 		List<ValidationError<ErrorSeverity>> newErrors = new();
-		intValue = default;
+		int intValue = default;
 
 		string invalidCharacters = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
 
@@ -113,6 +113,6 @@ public class GameEditingDataValidator {
 
 		}
 
-		errors = newErrors.AsReadOnly();
+		return (intValue, newErrors.AsReadOnly());
 	}
 }
