@@ -9,34 +9,49 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
 
-    <StackPanel>
+    <Grid Margin="5,5,5,5">
 
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Robots Per Alliance"
-                       Margin="10,10,0,0"
-                       Width="120"/>
-            <TextBox DataContext="{Binding Path=RobotsPerAlliance}"
-                     Style="{StaticResource StringInputStyle}"
-                     HorizontalAlignment="Left"
-                     Margin="10,10,0,0"
-                     TextWrapping="Wrap"
-                     VerticalAlignment="Top"
-                     Width="120"/>
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Alliances Per Match"
-                       Margin="10,10,0,0"
-                       Width="120"/>
-            <TextBox DataContext="{Binding Path=AlliancesPerMatch}"
-                     Style="{StaticResource StringInputStyle}"
-                     HorizontalAlignment="Left"
-                     Margin="10,10,0,0"
-                     TextWrapping="Wrap"
-                     VerticalAlignment="Top"
-                     Width="120"/>
-        </StackPanel>
+        <TextBlock Text="Robots Per Alliance"
+                   Margin="5,5,5,5"
+                   Width="125"
+                   Grid.Row="0"
+                   Grid.Column="0"/>
 
-    </StackPanel>
+        <TextBlock Text="Alliances Per Match"
+                   Margin="5,5,5,5"
+                   Width="120"
+                   Grid.Row="1"
+                   Grid.Column="0"/>
+
+        <TextBox DataContext="{Binding Path=RobotsPerAlliance}"
+                 Style="{StaticResource StringInputStyle}"
+                 HorizontalAlignment="Left"
+                 Margin="5,5,5,5"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top"
+                 Width="120"
+                 Grid.Row="0"
+                 Grid.Column="1"/>
+
+        <TextBox DataContext="{Binding Path=AlliancesPerMatch}"
+                 Style="{StaticResource StringInputStyle}"
+                 HorizontalAlignment="Left"
+                 Margin="5,5,5,5"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top"
+                 Width="120"
+                 Grid.Row="1"
+                 Grid.Column="1"/>
+
+    </Grid>
 
 </UserControl>
