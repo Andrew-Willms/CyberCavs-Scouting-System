@@ -28,11 +28,11 @@ public class GameEditingData {
 
 
 
-	public SimpleStringInput<int, ErrorSeverity> Year { get; }
+	public StringInput<int, ErrorSeverity> Year { get; }
 
-	public SimpleStringInput<int, ErrorSeverity> RobotsPerAlliance { get; }
+	public StringInput<int, ErrorSeverity> RobotsPerAlliance { get; }
 
-	public SimpleStringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
+	public StringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
 
 	public string Name { get; set; } = "";
 	public string Description { get; set; } = "";
