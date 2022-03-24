@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameMaker.Views"
-        xmlns:Domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
+        xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        d:DataContext="{d:DesignInstance Type=Domain:GameEditingData, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
 
     <Window.Resources>
 
@@ -33,7 +33,9 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Alliances">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <local:AlliancesTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Data Fields">
                 <Grid Background="#FFE5E5E5"/>

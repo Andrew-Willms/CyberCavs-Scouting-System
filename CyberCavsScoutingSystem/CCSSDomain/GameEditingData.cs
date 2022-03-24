@@ -17,9 +17,9 @@ public class GameEditingData : INotifyPropertyChanged {
 
 		Validator = new(this);
 
-		Year = new(Validator.YearValueConverter, "42");
-		RobotsPerAlliance = new(Validator.TestIntValueConverter, "42");
-		AlliancesPerMatch = new(Validator.TestIntValueConverter, "42");
+		Year = new(Validator.YearValueConverter, DateTime.Now.Year.ToString());
+		RobotsPerAlliance = new(Validator.TestIntValueConverter, "3");
+		AlliancesPerMatch = new(Validator.TestIntValueConverter, "2");
 
 		//Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
 		//Year = new(YearValueConverter, new string[] { "" }, new string[] { "0" });
@@ -36,7 +36,7 @@ public class GameEditingData : INotifyPropertyChanged {
 
 
 
-	private string _Name = "Name";
+	private string _Name = "";
 	public string Name {
 		get => _Name;
 		set {
@@ -45,7 +45,7 @@ public class GameEditingData : INotifyPropertyChanged {
 		}
 	}
 
-	private string _Description = "Description";
+	private string _Description = "";
 	public string Description {
 		get => _Description;
 		set {

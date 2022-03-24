@@ -4,59 +4,53 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:local="clr-namespace:GameMaker.Views"
-			 xmlns:Domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
+			 xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
              mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=Domain:GameEditingData, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
 	
 	<UserControl.Resources>
     </UserControl.Resources>
 
 	<StackPanel>
 
-        <TextBox DataContext="{Binding Path=Year}"
-                 Style="{StaticResource StringInputStyle}"
-                 HorizontalAlignment="Left"
-                 Margin="10,10,0,0"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top"
-                 Width="120">
-        </TextBox>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Name"
+                       Margin="10,10,0,0"
+                       Width="120"/>
+            <TextBox Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalAlignment="Left"
+                     Margin="10,10,0,0"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Top"
+                     Width="120"/>
+        </StackPanel>
 
-        <TextBox DataContext="{Binding Path=RobotsPerAlliance}"
-                 Style="{StaticResource StringInputStyle}"
-                 HorizontalAlignment="Left"
-                 Margin="10,10,0,0"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top"
-                 Width="120">
-        </TextBox>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Year"
+                       Margin="10,10,0,0"
+                       Width="120"/>
+            <TextBox DataContext="{Binding Path=Year}"
+                     Style="{StaticResource StringInputStyle}"
+                     HorizontalAlignment="Left"
+                     Margin="10,10,0,0"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Top"
+                     Width="120"/>
+        </StackPanel>
 
-        <TextBox DataContext="{Binding Path=AlliancesPerMatch}"
-                 Style="{StaticResource StringInputStyle}"
-                 HorizontalAlignment="Left"
-                 Margin="10,10,0,0"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top"
-                 Width="120">
-        </TextBox>
-
-        <TextBox Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 HorizontalAlignment="Left"
-                 Margin="10,10,0,0"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top"
-                 Width="120">
-        </TextBox>
-
-        <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 HorizontalAlignment="Left"
-                 Margin="10,10,0,0"
-                 TextWrapping="Wrap"
-                 VerticalAlignment="Top"
-                 Width="120"
-                 Height="80">
-        </TextBox>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Description"
+                       Margin="10,10,0,0"
+                       Width="120"/>
+            <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalAlignment="Left"
+                     Margin="10,10,0,30"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Top"
+                     Width="120"
+                     Height="80"/>
+        </StackPanel>
 
     </StackPanel>
 </UserControl>

@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="GameMaker.Views.AlliancesTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GameMaker.Views"
+             xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
+
+    <StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Robots Per Alliance"
+                       Margin="10,10,0,0"
+                       Width="120"/>
+            <TextBox DataContext="{Binding Path=RobotsPerAlliance}"
+                     Style="{StaticResource StringInputStyle}"
+                     HorizontalAlignment="Left"
+                     Margin="10,10,0,0"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Top"
+                     Width="120"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Alliances Per Match"
+                       Margin="10,10,0,0"
+                       Width="120"/>
+            <TextBox DataContext="{Binding Path=AlliancesPerMatch}"
+                     Style="{StaticResource StringInputStyle}"
+                     HorizontalAlignment="Left"
+                     Margin="10,10,0,0"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Top"
+                     Width="120"/>
+        </StackPanel>
+
+    </StackPanel>
+
+</UserControl>

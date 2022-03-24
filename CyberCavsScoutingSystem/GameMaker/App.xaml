@@ -4,16 +4,16 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:GameMaker"
-			 xmlns:Converters="clr-namespace:GameMaker.Converters"
-			 xmlns:WPFUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
-			 xmlns:Domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
+			 xmlns:converters="clr-namespace:GameMaker.Converters"
+			 xmlns:wpfUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
+			 xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
 			 Startup="ApplicationStartup">
 	<Application.Resources>
 
-        <Converters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
-        <Converters:ErrorToMouseOverBrushConverter x:Key="ErrorToMouseOverBrushConverter"/>
-        <Converters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
-        <Converters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
+        <converters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
+        <converters:ErrorToMouseOverBrushConverter x:Key="ErrorToMouseOverBrushConverter"/>
+        <converters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
+        <converters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
 
         <Style x:Key="StringInputStyle" TargetType="{x:Type TypeName=TextBox}">
             <!--<d:Style.DataContext>
