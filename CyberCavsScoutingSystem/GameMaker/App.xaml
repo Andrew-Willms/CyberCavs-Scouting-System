@@ -15,7 +15,7 @@
         <Converters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
         <Converters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
 
-        <Style x:Key="TextBoxStringInputStyle" TargetType="{x:Type TypeName=TextBox}">
+        <Style x:Key="StringInputStyle" TargetType="{x:Type TypeName=TextBox}">
             <!--<d:Style.DataContext>
 				<d:DesignInstance Type="CCSSDomain:ISimpleStringInput, IsDesignTimeCreatable=True"/>
 			</d:Style.DataContext>-->
@@ -57,7 +57,7 @@
                 </Setter.Value>
             </Setter>
 
-            <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToFocusedBrushConverter}, Mode=OneWay}"/>
+            <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}, Mode=OneWay}"/>
 
             <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
@@ -87,5 +87,5 @@
 			</Setter>
 		</Style>
 
-	</Application.Resources>
+    </Application.Resources>
 </Application>

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using WPFUtilities;
 
 namespace CCSSDomain;
 
-// TODO: make this implement INotifyPropertyChanged for the Properties that aren't StringInputs.
-public class GameEditingData {
+
+public class GameEditingData : INotifyPropertyChanged {
 
 	private GameEditingDataValidator Validator { get; }
 
@@ -34,8 +34,25 @@ public class GameEditingData {
 
 	public StringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
 
-	public string Name { get; set; } = "";
-	public string Description { get; set; } = "";
+
+
+	private string _Name = "Name";
+	public string Name {
+		get => _Name;
+		set {
+			_Name = value;
+			OnPropertyChanged(nameof(Name));
+		}
+	}
+
+	private string _Description = "Description";
+	public string Description {
+		get => _Description;
+		set {
+			_Description = value;
+			OnPropertyChanged(nameof(Description));
+		}
+	}
 
 
 
@@ -117,9 +134,9 @@ public class GameEditingData {
 
 	//	errors = new();
 
-	//	string invalidCharacteres = string.Concat(inputStrings[""].Where(x => char.IsDigit(x) == false));
+	//	string invalidCharacters = string.Concat(inputStrings[""].Where(x => char.IsDigit(x) == false));
 
-	//	if (invalidCharacteres.Length > 0) {
+	//	if (invalidCharacters.Length > 0) {
 	//		errors.Add(new("Invalid Characters", "")); // somehow need to make a tooltip too
 	//		targetObject = 0; // Since it is a value type that is not nullable the best I can do is return the default value.
 
@@ -129,4 +146,10 @@ public class GameEditingData {
 
 	//}
 
+
+	public event PropertyChangedEventHandler? PropertyChanged;
+
+	protected void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
+	}
 }

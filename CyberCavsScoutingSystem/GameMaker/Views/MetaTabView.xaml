@@ -15,7 +15,7 @@
 	<StackPanel>
 
         <TextBox DataContext="{Binding Path=Year}"
-                 Style="{StaticResource TextBoxStringInputStyle}"
+                 Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Left"
                  Margin="10,10,0,0"
                  TextWrapping="Wrap"
@@ -24,7 +24,7 @@
         </TextBox>
 
         <TextBox DataContext="{Binding Path=RobotsPerAlliance}"
-                 Style="{StaticResource TextBoxStringInputStyle}"
+                 Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Left"
                  Margin="10,10,0,0"
                  TextWrapping="Wrap"
@@ -33,12 +33,29 @@
         </TextBox>
 
         <TextBox DataContext="{Binding Path=AlliancesPerMatch}"
-                 Style="{StaticResource TextBoxStringInputStyle}"
+                 Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Left"
                  Margin="10,10,0,0"
                  TextWrapping="Wrap"
                  VerticalAlignment="Top"
                  Width="120">
+        </TextBox>
+
+        <TextBox Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 HorizontalAlignment="Left"
+                 Margin="10,10,0,0"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top"
+                 Width="120">
+        </TextBox>
+
+        <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 HorizontalAlignment="Left"
+                 Margin="10,10,0,0"
+                 TextWrapping="Wrap"
+                 VerticalAlignment="Top"
+                 Width="120"
+                 Height="80">
         </TextBox>
 
     </StackPanel>
