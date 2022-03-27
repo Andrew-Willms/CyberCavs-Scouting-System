@@ -22,7 +22,6 @@ public class GameEditingData : INotifyPropertyChanged {
 		AlliancesPerMatch = new(Validator.TestIntValueConverter, "2");
 
 		//Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
-		//Year = new(YearValueConverter, new string[] { "" }, new string[] { "0" });
 	}
 
 
@@ -35,7 +34,7 @@ public class GameEditingData : INotifyPropertyChanged {
 	public StringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
 
 
-
+	// TODO: .Net 7.0 remove backing field
 	private string _Name = "";
 	public string Name {
 		get => _Name;
@@ -45,6 +44,7 @@ public class GameEditingData : INotifyPropertyChanged {
 		}
 	}
 
+	// TODO: .Net 7.0 remove backing field
 	private string _Description = "";
 	public string Description {
 		get => _Description;
@@ -55,6 +55,7 @@ public class GameEditingData : INotifyPropertyChanged {
 	}
 
 
+	//public MultiStringInput<VersionNumber, ErrorSeverity> Version { get; }
 
 
 	//public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
@@ -125,26 +126,6 @@ public class GameEditingData : INotifyPropertyChanged {
 
 	// Figure if/how to do version history later as it's not critical.
 	//public List<VersionNumber, string, DateTime> VersionHistory;
-
-
-
-	//public readonly StringInput<int> Year;
-
-	//public void YearValueConverter(ref int targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings, out List<StringInputValidationError> errors) {
-
-	//	errors = new();
-
-	//	string invalidCharacters = string.Concat(inputStrings[""].Where(x => char.IsDigit(x) == false));
-
-	//	if (invalidCharacters.Length > 0) {
-	//		errors.Add(new("Invalid Characters", "")); // somehow need to make a tooltip too
-	//		targetObject = 0; // Since it is a value type that is not nullable the best I can do is return the default value.
-
-	//	} else {
-	//		targetObject = int.Parse(inputStrings[""]);
-	//	}
-
-	//}
 
 
 	public event PropertyChangedEventHandler? PropertyChanged;

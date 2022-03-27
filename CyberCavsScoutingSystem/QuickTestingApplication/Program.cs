@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace QuickTestingApplication;
@@ -8,8 +9,7 @@ public class Program {
 
 	static void Main(string[] args) {
 
-		
-
+		Trace.WriteLine("Test");
 	}
 
 	private static void TestReadonlyCollection() {
