@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Reflection;
+
 using WPFUtilities;
 
 namespace CCSSDomain;
@@ -17,42 +19,44 @@ public class GameEditingData : INotifyPropertyChanged {
 
 		Validator = new(this);
 
-		Year = new(Validator.YearValueConverter, DateTime.Now.Year.ToString());
+		Year = new(Validator.YearValidator, DateTime.Now.Year.ToString());
+		Name = new(Validator.NameValidator, "");
+		Description = new(Validator.DescriptionValidator, "");
+
+		Version = new(Validator.VersionCovalidator,
+			(nameof(VersionNumber.MajorNumber), new StringInput<int, ErrorSeverity>(Validator.TestIntValueConverter, "1")),
+			(nameof(VersionNumber.MinorNumber), new StringInput<int, ErrorSeverity>(Validator.TestIntValueConverter, "2")),
+			(nameof(VersionNumber.PatchNumber), new StringInput<int, ErrorSeverity>(Validator.TestIntValueConverter, "3"))
+		);
+
+		
+
+
 		RobotsPerAlliance = new(Validator.TestIntValueConverter, "3");
 		AlliancesPerMatch = new(Validator.TestIntValueConverter, "2");
+		
+
 
 		//Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
 	}
 
 
 
-
+	public StringInput<string, ErrorSeverity> Name { get; }
 	public StringInput<int, ErrorSeverity> Year { get; }
+	public StringInput<string, ErrorSeverity> Description { get; }
+
+	public MultiStringInput<VersionNumber, ErrorSeverity> Version { get; }
 
 	public StringInput<int, ErrorSeverity> RobotsPerAlliance { get; }
 
 	public StringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
 
 
-	// TODO: .Net 7.0 remove backing field
-	private string _Name = "";
-	public string Name {
-		get => _Name;
-		set {
-			_Name = value;
-			OnPropertyChanged(nameof(Name));
-		}
-	}
 
-	// TODO: .Net 7.0 remove backing field
-	private string _Description = "";
-	public string Description {
-		get => _Description;
-		set {
-			_Description = value;
-			OnPropertyChanged(nameof(Description));
-		}
-	}
+
+
+
 
 
 	//public MultiStringInput<VersionNumber, ErrorSeverity> Version { get; }

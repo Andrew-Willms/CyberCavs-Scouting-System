@@ -23,6 +23,8 @@ public class VersionNumber {
 
 	public int PatchNumber { get; set; }
 
+	public int VersionDescription { get; set; }
+
 	public override string ToString() {
 		return $"{MajorNumber}.{MinorNumber}.{PatchNumber}";
 	}

@@ -21,7 +21,7 @@ public class GameEditingDataValidator {
 
 
 	// TODO: this function needs a bunch of work. The code is pretty ugly.
-	public (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) YearValueConverter(string inputString) {
+	public (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) YearValidator(string inputString) {
 
 		List<ValidationError<ErrorSeverity>> newErrors = new();
 		int newValue = 0;
@@ -85,10 +85,27 @@ public class GameEditingDataValidator {
 	}
 
 
+	public (VersionNumber, ReadOnlyCollection<ValidationError<ErrorSeverity>>) VersionCovalidator
+		(in VersionNumber? value, in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> stringInputComponents) {
+
+		VersionNumber version = new();
+		List<ValidationError<ErrorSeverity>> validationErrors = new();
+
+		version.MajorNumber = stringInputComponents[nameof(VersionNumber.MajorNumber)];
+
+
+		return (version, validationErrors.AsReadOnly());
+
+		//throw new NotImplementedException();
+	}
+
+
+
+
 	public (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) TestIntValueConverter(string inputString) {
 
 		List<ValidationError<ErrorSeverity>> newErrors = new();
-		int intValue = default;
+		int intValue = 0;
 
 		string invalidCharacters = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
 
@@ -114,5 +131,25 @@ public class GameEditingDataValidator {
 		}
 
 		return (intValue, newErrors.AsReadOnly());
+	}
+
+
+
+	public (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) NameValidator(string inputString) {
+		
+		List<ValidationError<ErrorSeverity>> newErrors = new();
+
+		// TODO: Move magic numbers to ValidationErrorParameters data or something.
+		if (inputString.Length > 40) {
+
+			newErrors.Add(new("Large Name", ErrorSeverity.Advisory, "The name specified is abnormally large"));
+		}
+
+		return (inputString, newErrors.AsReadOnly());
+	}
+
+	public (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) DescriptionValidator(string inputString) {
+
+		return (inputString, new List<ValidationError<ErrorSeverity>>().AsReadOnly());
 	}
 }

@@ -57,7 +57,8 @@
                    Grid.Row="5"
                    Grid.Column="0"/>
 
-        <TextBox Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox DataContext="{Binding Path=Name}"
+                 Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Top"
                  TextWrapping="Wrap"
@@ -78,7 +79,8 @@
                  Grid.Row="1"
                  Grid.Column="1"/>
 
-        <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <TextBox DataContext="{Binding Path=Description}"
+                 Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  VerticalScrollBarVisibility="Auto"
@@ -91,43 +93,51 @@
                  Grid.Row="2"
                  Grid.Column="1"/>
 
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="4"
-                    Grid.Column="1">
+        <Border BorderBrush="{Binding Path=Version.ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Grid.Row="4"
+                Grid.Column="1">
 
-            <TextBox DataContext="{Binding Path=Year}"
-                     Style="{StaticResource StringInputStyle}"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Top"
-                     TextWrapping="Wrap"
-                     Margin="5,5,2,5"
-                     Width="Auto"/>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="4"
+                        Grid.Column="1">
 
-            <TextBlock Text="."
-                       Margin="0,5,0,5"/>
+                <TextBox DataContext="{Binding Path=Year}"
+                         Style="{StaticResource StringInputStyle}"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         TextWrapping="Wrap"
+                         Margin="5,5,2,5"
+                         Width="Auto"/>
 
-            <TextBox DataContext="{Binding Path=Year}"
-                     Style="{StaticResource StringInputStyle}"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Top"
-                     TextWrapping="Wrap"
-                     Margin="2,5,2,5"
-                     Width="Auto"/>
+                <TextBlock Text="."
+                           Margin="0,5,0,5"/>
 
-            <TextBlock Text="."
-                       Margin="0,5,0,5"/>
+                <TextBox DataContext="{Binding Path=Year}"
+                         Style="{StaticResource StringInputStyle}"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         TextWrapping="Wrap"
+                         Margin="2,5,2,5"
+                         Width="Auto"/>
 
-            <TextBox DataContext="{Binding Path=Year}"
-                     Style="{StaticResource StringInputStyle}"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Top"
-                     TextWrapping="Wrap"
-                     Margin="2,5,5,5"
-                     Width="Auto"/>
+                <TextBlock Text="."
+                           Margin="0,5,0,5"/>
+
+                <TextBox DataContext="{Binding Path=Year}"
+                         Style="{StaticResource StringInputStyle}"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         TextWrapping="Wrap"
+                         Margin="2,5,5,5"
+                         Width="Auto"/>
 
         </StackPanel>
 
-        <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        </Border>
+
+        <TextBox DataContext="{Binding Path=Description}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  VerticalScrollBarVisibility="Auto"

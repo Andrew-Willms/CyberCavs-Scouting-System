@@ -8,29 +8,28 @@ namespace WPFUtilities;
 
 
 // A custom delegate used as the type for the InputValidator.
-public delegate (TTargetType, ReadOnlyCollection<ValidationError<TSeverityEnum>>) StringInputConverter<TTargetType, TSeverityEnum>
+public delegate (TTargetType, ReadOnlyCollection<ValidationError<TSeverityEnum>>) StringInputValidator<TTargetType, TSeverityEnum>
 	(string inputString) where TSeverityEnum : Enum;
 
 
 
-// This needs to be an abstract class and not an interface because INotifyPropertyChanged does not work with members defined in an interface.
-// IDK if the above line is right.
-//public interface IStringInput<TSeverityEnum> where TSeverityEnum : Enum {
+public interface IStringInput<TSeverityEnum> where TSeverityEnum : Enum {
 
-//	public string InputString { get; }
+	public string InputString { get; set; }
 
-//	public bool IsValid { get; }
+	public bool IsValid { get; }
 
-//	public ReadOnlyCollection<ValidationError<TSeverityEnum>> ErrorsList { get; }
+	public ReadOnlyCollection<ValidationError<TSeverityEnum>> ValidationErrors { get; }
 
-//	// There can't be an implementation here because INotifyPropertyChanged does not work when the implementation is inherited from an interface.
-//	public TSeverityEnum ErrorLevel { get; }
+	// There can't be an implementation here because INotifyPropertyChanged does not work when the implementation is inherited from an interface.
+	public TSeverityEnum ErrorLevel { get; }
 
-//}
-
+	public void ValidateInput();
+}
 
 
-public class StringInput<TTargetType, TSeverityEnum> : INotifyPropertyChanged where TSeverityEnum : Enum {
+
+public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnum>, INotifyPropertyChanged where TSeverityEnum : Enum {
 
 	// TODO: .Net 7.0 remove backing field
 	private TTargetType? _TargetObject;
@@ -47,32 +46,32 @@ public class StringInput<TTargetType, TSeverityEnum> : INotifyPropertyChanged wh
 
 		set {
 			_InputString = value;
-			ConvertInputString();
+			ValidateInput();
 			OnInputStringChanged();
 		}
 	}
 
-	public bool IsValid => ErrorsList.Count == 0;
-
-	private StringInputConverter<TTargetType, TSeverityEnum> ValueConverter { get; }
+	private StringInputValidator<TTargetType, TSeverityEnum> Validator { get; }
 
 	// TODO: .Net 7.0 remove backing field
-	private ReadOnlyCollection<ValidationError<TSeverityEnum>> _ErrorsList = new List<ValidationError<TSeverityEnum>>().AsReadOnly();
-	public ReadOnlyCollection<ValidationError<TSeverityEnum>> ErrorsList {
+	private ReadOnlyCollection<ValidationError<TSeverityEnum>> _ValidationErrors = new List<ValidationError<TSeverityEnum>>().AsReadOnly();
+	public ReadOnlyCollection<ValidationError<TSeverityEnum>> ValidationErrors {
 
-		get => _ErrorsList;
+		get => _ValidationErrors;
 
 		private set {
-			_ErrorsList = value;
+			_ValidationErrors = value;
 			OnErrorsListChanged();
 		}
-}
+	}
+
+	public bool IsValid => ValidationErrors.Count == 0;
 
 	public TSeverityEnum ErrorLevel {
 
 		get {
 
-			TSeverityEnum? returnValue = ErrorsList.Count > 0 ? ErrorsList.Select(x => x.Severity).Max() : default;
+			TSeverityEnum? returnValue = ValidationErrors.Count > 0 ? ValidationErrors.Select(x => x.Severity).Max() : default;
 
 			if (returnValue is null) {
 				throw new ArgumentException($"The default value of the TSeverityEnum type parameter \"{typeof(TSeverityEnum)}\" is null.");
@@ -84,15 +83,15 @@ public class StringInput<TTargetType, TSeverityEnum> : INotifyPropertyChanged wh
 
 
 
-	public StringInput(StringInputConverter<TTargetType, TSeverityEnum> valueConverter, string initialString = "") {
-		ValueConverter = valueConverter;
+	public StringInput(StringInputValidator<TTargetType, TSeverityEnum> validator, string initialString) {
+		Validator = validator;
 		InputString = initialString;
 	}
 
 	
 	
-	private void ConvertInputString() {
-		(TargetObject, ErrorsList) = ValueConverter(InputString);
+	public void ValidateInput() {
+		(TargetObject, ValidationErrors) = Validator(InputString);
 	}
 
 
@@ -104,7 +103,7 @@ public class StringInput<TTargetType, TSeverityEnum> : INotifyPropertyChanged wh
 	}
 
 	protected void OnErrorsListChanged() {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorsList)));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
 	}
 
