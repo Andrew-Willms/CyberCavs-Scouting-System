@@ -21,6 +21,7 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 	private TTargetType? _TargetObject;
 	public TTargetType? TargetObject {
+
 		// TODO: .Net 7.0 remove backing field
 		get => IsValid ? _TargetObject : default;
 		private set => _TargetObject = value;

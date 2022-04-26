@@ -31,17 +31,18 @@ public interface IStringInput<TSeverityEnum> where TSeverityEnum : Enum {
 
 public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnum>, INotifyPropertyChanged where TSeverityEnum : Enum {
 
-	// TODO: .Net 7.0 remove backing field
 	private TTargetType? _TargetObject;
 	public TTargetType? TargetObject {
+
+		// TODO: .Net 7.0 remove backing field
 		get => IsValid ? _TargetObject : default;
 		private set => _TargetObject = value;
 	}
 
-	// TODO: .Net 7.0 remove backing field
 	private string _InputString = "";
 	public string InputString {
 
+		// TODO: .Net 7.0 remove backing field
 		get => _InputString;
 
 		set {
@@ -53,10 +54,11 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 
 	private StringInputValidator<TTargetType, TSeverityEnum> Validator { get; }
 
-	// TODO: .Net 7.0 remove backing field
+
 	private ReadOnlyCollection<ValidationError<TSeverityEnum>> _ValidationErrors = new List<ValidationError<TSeverityEnum>>().AsReadOnly();
 	public ReadOnlyCollection<ValidationError<TSeverityEnum>> ValidationErrors {
 
+		// TODO: .Net 7.0 remove backing field
 		get => _ValidationErrors;
 
 		private set {
