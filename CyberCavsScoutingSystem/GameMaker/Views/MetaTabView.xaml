@@ -93,17 +93,17 @@
                  Grid.Row="2"
                  Grid.Column="1"/>
 
-        <Border BorderBrush="{Binding Path=Version.ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}}"
+        <Border DataContext="{Binding Path=Version}"
+                Style="{StaticResource MultiStringInputBorderStyle}"
+                BorderThickness="1,1,1,1"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Grid.Row="4"
-                Grid.Column="1">
+                Grid.Column="1" Margin="5,5,5,5">
 
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="4"
-                        Grid.Column="1">
+            <StackPanel Orientation="Horizontal">
 
-                <TextBox DataContext="{Binding Path=Year}"
+                <TextBox DataContext="{Binding Path=StringInputs[MajorNumber]}"
                          Style="{StaticResource StringInputStyle}"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
@@ -114,7 +114,7 @@
                 <TextBlock Text="."
                            Margin="0,5,0,5"/>
 
-                <TextBox DataContext="{Binding Path=Year}"
+                <TextBox DataContext="{Binding Path=StringInputs[MinorNumber]}"
                          Style="{StaticResource StringInputStyle}"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
@@ -125,7 +125,7 @@
                 <TextBlock Text="."
                            Margin="0,5,0,5"/>
 
-                <TextBox DataContext="{Binding Path=Year}"
+                <TextBox DataContext="{Binding Path=StringInputs[PatchNumber]}"
                          Style="{StaticResource StringInputStyle}"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
@@ -133,7 +133,7 @@
                          Margin="2,5,5,5"
                          Width="Auto"/>
 
-        </StackPanel>
+            </StackPanel>
 
         </Border>
 

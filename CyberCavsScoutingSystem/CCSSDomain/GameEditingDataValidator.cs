@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WPFUtilities;
 
 namespace CCSSDomain;
@@ -86,17 +84,32 @@ public class GameEditingDataValidator {
 
 
 	public (VersionNumber, ReadOnlyCollection<ValidationError<ErrorSeverity>>) VersionCovalidator
-		(in VersionNumber? value, in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> stringInputComponents) {
+		(in VersionNumber? value, in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> inputComponents) {
 
-		VersionNumber version = new();
+		var majorNumberInput = inputComponents[nameof(VersionNumber.MajorNumber)] as StringInput<int, ErrorSeverity>;
+		var minorNumberInput = inputComponents[nameof(VersionNumber.MinorNumber)] as StringInput<int, ErrorSeverity>;
+		var patchNumberInput = inputComponents[nameof(VersionNumber.PatchNumber)] as StringInput<int, ErrorSeverity>;
+
+		if (majorNumberInput is null) {
+			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(VersionNumber.MajorNumber)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
+		}
+
+		if (minorNumberInput is null) {
+			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(VersionNumber.MinorNumber)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
+		}
+
+		if (patchNumberInput is null) {
+			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(VersionNumber.PatchNumber)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
+		}
+
+		VersionNumber version = new(majorNumberInput.TargetObject, minorNumberInput.TargetObject, patchNumberInput.TargetObject);
 		List<ValidationError<ErrorSeverity>> validationErrors = new();
 
-		version.MajorNumber = stringInputComponents[nameof(VersionNumber.MajorNumber)];
-
+		if (version.MajorNumber + version.MinorNumber + version.PatchNumber > 10) {
+			validationErrors.Add(new("(test) total version numbers > 10", ErrorSeverity.Advisory, "something here"));
+		}
 
 		return (version, validationErrors.AsReadOnly());
-
-		//throw new NotImplementedException();
 	}
 
 

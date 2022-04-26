@@ -25,6 +25,8 @@ public interface IStringInput<TSeverityEnum> where TSeverityEnum : Enum {
 	public TSeverityEnum ErrorLevel { get; }
 
 	public void ValidateInput();
+
+	public event PropertyChangedEventHandler? PropertyChanged;
 }
 
 
@@ -54,7 +56,6 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 
 	private StringInputValidator<TTargetType, TSeverityEnum> Validator { get; }
 
-
 	private ReadOnlyCollection<ValidationError<TSeverityEnum>> _ValidationErrors = new List<ValidationError<TSeverityEnum>>().AsReadOnly();
 	public ReadOnlyCollection<ValidationError<TSeverityEnum>> ValidationErrors {
 
@@ -63,7 +64,7 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 
 		private set {
 			_ValidationErrors = value;
-			OnErrorsListChanged();
+			OnErrorsChanged();
 		}
 	}
 
@@ -104,7 +105,7 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputString)));
 	}
 
-	protected void OnErrorsListChanged() {
+	protected void OnErrorsChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
 	}

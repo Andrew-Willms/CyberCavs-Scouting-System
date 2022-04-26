@@ -27,9 +27,8 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 		private set => _TargetObject = value;
 	}
 
-	public ReadOnlyCollection<string> PropertyNames { get; }
-	public ReadOnlyDictionary<string, PropertyInfo> PropertyInfos { get; }
-	public ReadOnlyDictionary<string, MethodInfo> PropertySetters { get; }
+	public ReadOnlyCollection<string> InputComponentNames { get; }
+
 	public ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> StringInputs { get; }
 
 	private MultiStringInputCovalidator<TTargetType, TSeverityEnum> Covalidator { get; }
@@ -42,7 +41,7 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 		private set {
 			_CovalidationErrors = value;
-			OnErrorsListChanged();
+			OnErrorsChanged();
 		}
 	}
 
@@ -71,50 +70,61 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 	}
 
 
-
 	// Test if changing the name still works with data binding.
 	//[IndexerName("test indexer name")]
-	public string this[string propertyIdentifier] {
+	public string this[string inputComponentName] {
 		
 		get {
-			if (!PropertyNames.Contains(propertyIdentifier)) {
-				throw new ArgumentException($"This StringInput object does not contain the propertyIdentifier \"{propertyIdentifier}\"");
+
+			if (InputComponentNames.Contains(inputComponentName) == false) {
+				throw new ArgumentException($"This {nameof(MultiStringInput<TTargetType, TSeverityEnum>)} object does not contain the {nameof(inputComponentName)} \"{inputComponentName}\"");
 			}
-			return StringInputs[propertyIdentifier].InputString;
+
+			return StringInputs[inputComponentName].InputString;
 		}
 
 		set {
-			if (!PropertyNames.Contains(propertyIdentifier)) {
-				throw new ArgumentException($"This StringInput object does not contain the propertyIdentifier \"{propertyIdentifier}\"");
+
+			if (InputComponentNames.Contains(inputComponentName) == false) {
+				throw new ArgumentException($"This {nameof(MultiStringInput<TTargetType, TSeverityEnum>)} object does not contain the {nameof(inputComponentName)} \"{inputComponentName}\"");
 			}
 
-			StringInputs[propertyIdentifier].InputString = value;
+			StringInputs[inputComponentName].InputString = value;
 
 			CovalidateInput();
 
 			//OnSubPropertyChanged();
-			OnPropertyChanged($"Item[{propertyIdentifier}]"); // Could try Binding.Indexer name and injecting the propertyIdentifier
+			OnPropertyChanged($"Item[{inputComponentName}]"); // Could try Binding.Indexer name and injecting the inputComponentName
 		}
 	}
 
 
 
 	public MultiStringInput(MultiStringInputCovalidator<TTargetType, TSeverityEnum> covalidator,
-		params (string propertyName, IStringInput<TSeverityEnum> stringInput)[] inputProperties) {
+		params (string inputComponentName, IStringInput<TSeverityEnum> stringInput)[] inputComponents) {
 
 		Covalidator = covalidator;
 
-		// I should probably validate the propertyNames here?
+		InputComponentNames = inputComponents.Select(x => x.inputComponentName).ToList().AsReadOnly();
+		StringInputs = new(inputComponents.ToDictionary(x => x.inputComponentName, x => x.stringInput));
 
-		PropertyInfos = new(inputProperties.ToDictionary(x => x.propertyName, x => GetAndAssertPropertyInfo(x.propertyName)));
-		PropertySetters = new(inputProperties.ToDictionary(x => x.propertyName, x => GetAndAssertPropertySetters(x.propertyName)));
-		PropertyNames = inputProperties.Select(x => x.propertyName).ToList().AsReadOnly();
-		StringInputs = new(inputProperties.ToDictionary(x => x.propertyName, x => x.stringInput));
+		foreach (IStringInput<TSeverityEnum> inputString in StringInputs.Values) {
+
+			inputString.PropertyChanged += OnComponentInputChanged;
+
+		}
 
 		CovalidateInput();
 	}
 
 
+	protected void OnComponentInputChanged(object? sender, PropertyChangedEventArgs e) {
+
+		//e.PropertyName;
+
+		CovalidateInput();
+
+	}
 
 	private void CovalidateInput() {
 		(TargetObject, CovalidationErrors) = Covalidator(TargetObject, StringInputs);
@@ -131,38 +141,6 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 
 
-	private static PropertyInfo GetAndAssertPropertyInfo(string propertyName) {
-
-		Type targetType = typeof(TTargetType);
-		PropertyInfo? propertyInfo = targetType.GetProperty(propertyName);
-
-		if (propertyInfo is null) {
-			throw new ArgumentException($"The target type \"{nameof(TTargetType)}\" does not have the property \"{propertyName}\".");
-		}
-
-		return propertyInfo;
-	}
-
-	private static MethodInfo GetAndAssertPropertySetters(string propertyName) {
-
-		Type targetType = typeof(TTargetType);
-		PropertyInfo? propertyInfo = targetType.GetProperty(propertyName);
-
-		if (propertyInfo is null) {
-			throw new ArgumentException($"The target type \"{nameof(TTargetType)}\" does not have the property \"{propertyName}\".");
-		}
-
-		MethodInfo? methodInfo = propertyInfo.SetMethod;
-
-		if (methodInfo is null) {
-			throw new ArgumentException($"The property \"{nameof(TTargetType)}\".\"{propertyName}\" does not have an accessible setter.");
-		}
-
-		return methodInfo;
-	}
-
-
-
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	protected void OnPropertyChanged([CallerMemberName] string propertyName = "") {
@@ -170,14 +148,13 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 	}
 
 	//protected void OnSubPropertyChanged() {
-
 	//	string test = $"Item[{propertyIdentifier}]"; // Could try Binding.Indexer name and injecting the propertyIdentifier
-
 	//	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	//}
 
-	protected void OnErrorsListChanged() {
+	protected void OnErrorsChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrors)));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ComponentValidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
 	}
 }
