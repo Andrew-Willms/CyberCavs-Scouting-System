@@ -2,7 +2,7 @@
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:GameMaker"
 			 xmlns:converters="clr-namespace:GameMaker.Converters"
 			 xmlns:wpfUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
@@ -10,76 +10,76 @@
 			 Startup="ApplicationStartup">
 	<Application.Resources>
 
-        <converters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
-        <converters:ErrorToMouseOverBrushConverter x:Key="ErrorToMouseOverBrushConverter"/>
-        <converters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
-        <converters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
+		<converters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
+		<converters:ErrorToMouseOverBrushConverter x:Key="ErrorToMouseOverBrushConverter"/>
+		<converters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
+		<converters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
 
-        <Style x:Key="StringInputStyle" TargetType="TextBox">
+		<Style x:Key="StringInputStyle" TargetType="{x:Type TypeName=TextBox}">
             <d:Style.DataContext>
-				<d:DesignInstance Type="CCSSDomain:IStringInput, IsDesignTimeCreatable=True"/>
-			</d:Style.DataContext>
+                <d:DesignInstance Type="wpfUtilities:IStringInput, IsDesignTimeCreatable=True"/>
+            </d:Style.DataContext>
 
             <!--I have to override the template in order to change the border color when focused or hovered over-->
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBox}">
-                        <Border x:Name="border"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Background="{TemplateBinding Background}"
-                                SnapsToDevicePixels="True">
-                            <ScrollViewer x:Name="PART_ContentHost"
-                                          Focusable="false"
-                                          HorizontalScrollBarVisibility="Hidden"
-                                          VerticalScrollBarVisibility="Hidden"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="BorderBrush"
-                                        TargetName="border"
-                                        Value="{Binding Path=ErrorLevel,
-                                                        Converter={StaticResource ErrorToMouseOverBrushConverter},
-                                                        Mode=OneWay}"/>
-                            </Trigger>
-                            <Trigger Property="IsFocused" Value="true">
-                                <Setter Property="BorderBrush"
-                                        TargetName="border"
-                                        Value="{Binding Path=ErrorLevel,
-                                                        Converter={StaticResource ErrorToFocusedBrushConverter},
-                                                        Mode=OneWay}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBox}">
+						<Border x:Name="border"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								Background="{TemplateBinding Background}"
+								SnapsToDevicePixels="True">
+							<ScrollViewer x:Name="PART_ContentHost"
+										  Focusable="false"
+										  HorizontalScrollBarVisibility="Hidden"
+										  VerticalScrollBarVisibility="Hidden"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter Property="Opacity" TargetName="border" Value="0.56"/>
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="true">
+								<Setter Property="BorderBrush"
+										TargetName="border"
+										Value="{Binding Path=ErrorLevel,
+														Converter={StaticResource ErrorToMouseOverBrushConverter},
+														Mode=OneWay}"/>
+							</Trigger>
+							<Trigger Property="IsFocused" Value="true">
+								<Setter Property="BorderBrush"
+										TargetName="border"
+										Value="{Binding Path=ErrorLevel,
+														Converter={StaticResource ErrorToFocusedBrushConverter},
+														Mode=OneWay}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
 
-            <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}, Mode=OneWay}"/>
+			<Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}, Mode=OneWay}"/>
 
-            <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+			<Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
 			<Setter Property="Text" Value="{Binding Path=InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Setter Property="ToolTip">
+			<Setter Property="ToolTip">
 				<Setter.Value>
 					<StackPanel>
 						<TextBlock Text="Description stuff here."/>
-                        <ItemsControl ItemsSource="{Binding ValidationErrors}">
-                            <ItemsControl.ItemTemplate>
-								<DataTemplate>
+						<ItemsControl ItemsSource="{Binding ValidationErrors}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate d:DataType="{wpfUtilities:GenericObjectFactory Type={x:Type wpfUtilities:ValidationError`1}, T=domain:ErrorSeverity}">
                                     <DataTemplate.Resources>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground"
-                                                    Value="{Binding Path=Severity,
-                                                            Converter={StaticResource ErrorToToolTipTextBrushConverter},
-                                                            Mode=OneTime}"/>
-                                        </Style>
-                                    </DataTemplate.Resources>
-                                    <TextBlock Text="{Binding Description}"/>
-                                </DataTemplate>
+										<Style TargetType="TextBlock">
+											<Setter Property="Foreground"
+													Value="{Binding Path=Severity,
+															Converter={StaticResource ErrorToToolTipTextBrushConverter},
+															Mode=OneTime}"/>
+										</Style>
+									</DataTemplate.Resources>
+									<TextBlock Text="{Binding Description}"/>
+								</DataTemplate>
 							</ItemsControl.ItemTemplate>
 						</ItemsControl>
 					</StackPanel>
@@ -87,39 +87,40 @@
 			</Setter>
 		</Style>
 
-        <Style x:Key="MultiStringInputBorderStyle" TargetType="Border">
-            <d:Style.DataContext>
-				<d:DesignInstance Type="CCSSDomain:MultiStringInput, IsDesignTimeCreatable=True"/>
+		<Style x:Key="MultiStringInputBorderStyle" TargetType="Border">
+			<d:Style.DataContext>
+                <d:DesignInstance Type="{wpfUtilities:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:ValidationError`1}, T1=domain:VersionNumber, T2=domain:ErrorSeverity}"/>
+                <!--<d:DesignInstance Type="wpfUtilities:MultiStringInput, IsDesignTimeCreatable=True"/>-->
 			</d:Style.DataContext>
 
-            <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}}"/>
+			<Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}}"/>
 
             <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
-            <Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
-            <Setter Property="ToolTip">
-                <Setter.Value>
-                    <StackPanel>
-                        <TextBlock Text="Description stuff here."/>
-                        <ItemsControl ItemsSource="{Binding CovalidationErrors}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
+			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
+			<Setter Property="ToolTip">
+				<Setter.Value>
+					<StackPanel>
+						<TextBlock Text="Description stuff here."/>
+						<ItemsControl ItemsSource="{Binding CovalidationErrors}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate d:DataType="{wpfUtilities:GenericObjectFactory Type={x:Type wpfUtilities:ValidationError`1}, T=domain:ErrorSeverity}">
                                     <DataTemplate.Resources>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground"
-                                                    Value="{Binding Path=Severity,
-                                                            Converter={StaticResource ErrorToToolTipTextBrushConverter},
-                                                            Mode=OneTime}"/>
-                                        </Style>
-                                    </DataTemplate.Resources>
-                                    <TextBlock Text="{Binding Description}"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Setter.Value>
-            </Setter>
+										<Style TargetType="TextBlock">
+											<Setter Property="Foreground"
+													Value="{Binding Path=Severity,
+															Converter={StaticResource ErrorToToolTipTextBrushConverter},
+															Mode=OneTime}"/>
+										</Style>
+									</DataTemplate.Resources>
+									<TextBlock Text="{Binding Description}"/>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Setter.Value>
+			</Setter>
 
-        </Style>
+		</Style>
 
-    </Application.Resources>
+	</Application.Resources>
 </Application>
