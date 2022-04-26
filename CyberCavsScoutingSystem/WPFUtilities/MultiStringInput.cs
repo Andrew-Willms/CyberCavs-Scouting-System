@@ -70,35 +70,6 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 	}
 
 
-	// Test if changing the name still works with data binding.
-	//[IndexerName("test indexer name")]
-	public string this[string inputComponentName] {
-		
-		get {
-
-			if (InputComponentNames.Contains(inputComponentName) == false) {
-				throw new ArgumentException($"This {nameof(MultiStringInput<TTargetType, TSeverityEnum>)} object does not contain the {nameof(inputComponentName)} \"{inputComponentName}\"");
-			}
-
-			return StringInputs[inputComponentName].InputString;
-		}
-
-		set {
-
-			if (InputComponentNames.Contains(inputComponentName) == false) {
-				throw new ArgumentException($"This {nameof(MultiStringInput<TTargetType, TSeverityEnum>)} object does not contain the {nameof(inputComponentName)} \"{inputComponentName}\"");
-			}
-
-			StringInputs[inputComponentName].InputString = value;
-
-			CovalidateInput();
-
-			//OnSubPropertyChanged();
-			OnPropertyChanged($"Item[{inputComponentName}]"); // Could try Binding.Indexer name and injecting the inputComponentName
-		}
-	}
-
-
 
 	public MultiStringInput(MultiStringInputCovalidator<TTargetType, TSeverityEnum> covalidator,
 		params (string inputComponentName, IStringInput<TSeverityEnum> stringInput)[] inputComponents) {
@@ -118,12 +89,10 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 	}
 
 
+
 	protected void OnComponentInputChanged(object? sender, PropertyChangedEventArgs e) {
 
-		//e.PropertyName;
-
 		CovalidateInput();
-
 	}
 
 	private void CovalidateInput() {
@@ -143,16 +112,8 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	protected void OnPropertyChanged([CallerMemberName] string propertyName = "") {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
-
-	//protected void OnSubPropertyChanged() {
-	//	string test = $"Item[{propertyIdentifier}]"; // Could try Binding.Indexer name and injecting the propertyIdentifier
-	//	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	//}
-
 	protected void OnErrorsChanged() {
+
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ComponentValidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));

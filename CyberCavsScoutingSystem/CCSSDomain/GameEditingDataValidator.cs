@@ -123,7 +123,7 @@ public class GameEditingDataValidator {
 		string invalidCharacters = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
 
 		if (invalidCharacters.Length > 0) {
-			newErrors.Add(new("Invalid Characters", ErrorSeverity.Error));
+			newErrors.Add(new("Invalid Characters", ErrorSeverity.Error, "asdf"));
 
 		} else {
 
@@ -134,10 +134,10 @@ public class GameEditingDataValidator {
 
 				// It really should be an overflow exception but check anyway.
 				if (ex is OverflowException) {
-					newErrors.Add(new("Number Too Large", ErrorSeverity.Error));
+					newErrors.Add(new("Number Too Large", ErrorSeverity.Error, "asdf"));
 
 				} else {
-					newErrors.Add(new("Unknown Error", ErrorSeverity.Error));
+					newErrors.Add(new("Unknown Error", ErrorSeverity.Error, "asdf"));
 				}
 			}
 

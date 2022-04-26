@@ -29,15 +29,8 @@ public class GameEditingData : INotifyPropertyChanged {
 			(nameof(VersionNumber.PatchNumber), new StringInput<int, ErrorSeverity>(Validator.TestIntValueConverter, "3"))
 		);
 
-		
-
-
 		RobotsPerAlliance = new(Validator.TestIntValueConverter, "3");
 		AlliancesPerMatch = new(Validator.TestIntValueConverter, "2");
-		
-
-
-		//Version = new(VersionNumberValueConverter, new string[] { "MajorNumber", "MinorNumber", "PatchNumber" }, new string[] { "0", "0", "0" });
 	}
 
 
@@ -54,78 +47,6 @@ public class GameEditingData : INotifyPropertyChanged {
 
 
 
-
-
-
-
-
-	//public MultiStringInput<VersionNumber, ErrorSeverity> Version { get; }
-
-
-	//public readonly StringInput<VersionNumber> Version; // Cannot be initialized here because it needs to pass the instance member VersionNumberValueConverter
-
-	/*public void VersionNumberValueConverter(ref VersionNumber targetObject, string propertyIdentifier, Dictionary<string, string> inputStrings,
-		out List<StringInputValidationError> errors) {
-
-		// If the propertyIdentifier string is empty than I am trying to set all properties.
-		if (propertyIdentifier == "") {
-
-			targetObject = new();
-
-			List<StringInputValidationError> majorNumberErrors = new();
-			List<StringInputValidationError> minorNumberErrors = new();
-			List<StringInputValidationError> patchNumberErrors = new();
-
-			VersionNumberValueConverter(ref targetObject, "MajorNumber", inputStrings, out majorNumberErrors);
-			VersionNumberValueConverter(ref targetObject, "MinorNumber", inputStrings, out minorNumberErrors);
-			VersionNumberValueConverter(ref targetObject, "PatchNumber", inputStrings, out patchNumberErrors);
-
-			errors = majorNumberErrors.Concat(minorNumberErrors.Concat(patchNumberErrors)).ToList();
-
-			return;
-
-		} else {
-
-			int number = 0;
-			errors = new();
-
-			string invalidCharacteres = string.Concat(inputStrings[propertyIdentifier].Where(x => char.IsDigit(x) == false));
-
-			if (invalidCharacteres.Length > 0) {
-				errors.Add(new("Invalid Characters", propertyIdentifier)); // somehow need to make a tooltip too
-
-			} else {
-
-				try {
-					number = int.Parse(inputStrings[propertyIdentifier]);
-
-				} catch (Exception ex) {
-
-					// It really should be an overflow exception but check anyway.
-					if (ex is OverflowException) {
-						errors.Add(new("Number Too Large", propertyIdentifier));
-
-					} else {
-						errors.Add(new("Unknown Error", propertyIdentifier));
-					}
-				}
-
-				// This is clunky. Try to Find a better way.
-				if (propertyIdentifier == "MajorNumber") {
-					targetObject.MajorNumber = number;
-
-				} else if (propertyIdentifier == "MinorNumber") {
-					targetObject.MinorNumber = number;
-
-				} else if (propertyIdentifier == "PatchNumber") {
-					targetObject.PatchNumber = number;
-				}
-
-			}
-		}
-	}*/
-
-	public string VersionDescription { get; set; } = "";
 	public DateTime VersionReleaseDate { get; set; }
 
 	// Figure if/how to do version history later as it's not critical.
