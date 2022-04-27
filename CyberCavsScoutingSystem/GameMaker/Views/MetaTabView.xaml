@@ -137,7 +137,8 @@
 
         </Border>
 
-        <TextBox DataContext="{Binding Path=Description}"
+        <TextBox DataContext="{Binding Path=Version.StringInputs[VersionDescription]}"
+                 Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  VerticalScrollBarVisibility="Auto"

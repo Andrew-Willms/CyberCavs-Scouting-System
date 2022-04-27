@@ -13,7 +13,6 @@ public class GameEditingDataValidator {
 	public GameEditingDataValidator(GameEditingData editingData) {
 
 		EditingData = editingData;
-
 	}
 
 
@@ -162,6 +161,11 @@ public class GameEditingDataValidator {
 	}
 
 	public (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) DescriptionValidator(string inputString) {
+
+		return (inputString, new List<ValidationError<ErrorSeverity>>().AsReadOnly());
+	}
+
+	public (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) VersionDescriptionValidator(string inputString) {
 
 		return (inputString, new List<ValidationError<ErrorSeverity>>().AsReadOnly());
 	}

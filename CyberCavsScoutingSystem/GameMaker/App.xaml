@@ -93,7 +93,7 @@
                 <!--<d:DesignInstance Type="wpfUtilities:MultiStringInput, IsDesignTimeCreatable=True"/>-->
 			</d:Style.DataContext>
 
-			<Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}}"/>
+			<Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}, Mode=OneWay}"/>
 
             <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>

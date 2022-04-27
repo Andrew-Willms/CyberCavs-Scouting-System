@@ -13,7 +13,4 @@ public class Alliance {
 	public int ColorRedValue;
 	public int ColorGreenValue;
 	public int ColorBlueValue;
-	public int ColorAlphaValue;
-
-	public int RobotCount = 3;
 }
