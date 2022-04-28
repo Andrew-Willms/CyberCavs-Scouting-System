@@ -33,6 +33,12 @@
                    Grid.Row="1"
                    Grid.Column="0"/>
 
+        <TextBlock Text="Alliances"
+                   Margin="5,5,5,5"
+                   Width="120"
+                   Grid.Row="2"
+                   Grid.Column="0"/>
+
         <TextBox DataContext="{Binding Path=RobotsPerAlliance}"
                  Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Left"
