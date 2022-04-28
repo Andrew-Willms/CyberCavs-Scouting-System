@@ -17,6 +17,7 @@ public class GameEditingData : INotifyPropertyChanged {
 
 	private GameEditingDataValidator Validator { get; }
 
+	// TODO: setting of the members should be extracted to a GetNewGameEditingData function somewhere.
 	public GameEditingData() {
 
 		Validator = new(this);
@@ -69,7 +70,7 @@ public class GameEditingData : INotifyPropertyChanged {
 	public StringInput<int, ErrorSeverity> RobotsPerAlliance { get; }
 	public StringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
 
-	public ObservableCollection<AllianceEditingData> Alliances { get; }
+	public ObservableCollection<AllianceEditingData> Alliances { get; }// = new();
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 

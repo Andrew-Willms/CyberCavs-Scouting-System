@@ -62,30 +62,22 @@ public class AllianceEditingDataValidator {
 	public (Color, ReadOnlyCollection<ValidationError<ErrorSeverity>>) ColorCovalidator
 		(in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> inputComponents) {
 
-		var redValueInput = inputComponents[nameof(Color.R)] as StringInput<byte, ErrorSeverity>;
-		var greenValueInput = inputComponents[nameof(Color.G)] as StringInput<byte, ErrorSeverity>;
-		var blueValueInput = inputComponents[nameof(Color.B)] as StringInput<byte, ErrorSeverity>;
-
-		if (redValueInput is null) {
+		if (inputComponents[nameof(Color.R)] is not StringInput<byte, ErrorSeverity> redValueInput) {
 			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(Color.R)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
 		}
 
-		if (greenValueInput is null) {
+		if (inputComponents[nameof(Color.G)] is not StringInput<byte, ErrorSeverity> greenValueInput) {
 			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(Color.G)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
 		}
 
-		if (blueValueInput is null) {
+		if (inputComponents[nameof(Color.B)] is not StringInput<byte, ErrorSeverity> blueValueInput) {
 			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(Color.B)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
 		}
-
-		// Maybe check to make sure the red green and blue components are valid?
 
 		Color color = Color.FromRgb(redValueInput.TargetObject, greenValueInput.TargetObject, blueValueInput.TargetObject);
 		List<ValidationError<ErrorSeverity>> validationErrors = new();
 
-		// TODO: compare color to other alliance colors to make sure two alliances don't have colors that are too similar.
-
-		if (EditingData.Alliances != null) {
+		if (EditingData.Alliances is not null && AllianceEditingData is not null) {
 
 			foreach (AllianceEditingData allianceEditingData in EditingData.Alliances) {
 
@@ -93,7 +85,9 @@ public class AllianceEditingDataValidator {
 					continue;
 				}
 
-				int colorDifference = ColorDifference(allianceEditingData.AllianceColor.TargetObject,
+				int colorDifference = 0;
+
+				colorDifference = ColorDifference(allianceEditingData.AllianceColor.TargetObject,
 					AllianceEditingData.AllianceColor.TargetObject);
 
 				switch (colorDifference) {

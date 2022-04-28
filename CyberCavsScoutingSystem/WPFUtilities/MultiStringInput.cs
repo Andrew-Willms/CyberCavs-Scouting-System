@@ -100,7 +100,6 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 		foreach (IStringInput<TSeverityEnum> inputString in StringInputs.Values) {
 
 			inputString.PropertyChanged += OnComponentInputChanged;
-
 		}
 
 		CovalidateInput();
