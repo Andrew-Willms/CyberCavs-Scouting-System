@@ -11,7 +11,7 @@ public class AllianceEditingData {
 
 	public AllianceEditingData(GameEditingData editingData) {
 
-		Validator = new(editingData);
+		Validator = new(editingData, this);
 
 		Name = new(Validator.NameValidator, "");
 

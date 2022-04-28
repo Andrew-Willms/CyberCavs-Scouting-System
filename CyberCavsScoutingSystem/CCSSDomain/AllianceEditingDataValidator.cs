@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows.Media;
 using System.Linq;
 
@@ -12,9 +13,12 @@ public class AllianceEditingDataValidator {
 
 	private GameEditingData EditingData { get; }
 
-	public AllianceEditingDataValidator(GameEditingData editingData) {
+	private AllianceEditingData AllianceEditingData { get; }
+
+	public AllianceEditingDataValidator(GameEditingData editingData, AllianceEditingData allianceEditingData) {
 
 		EditingData = editingData;
+		AllianceEditingData = allianceEditingData;
 	}
 
 
@@ -81,7 +85,45 @@ public class AllianceEditingDataValidator {
 
 		// TODO: compare color to other alliance colors to make sure two alliances don't have colors that are too similar.
 
+		if (EditingData.Alliances != null) {
+
+			foreach (AllianceEditingData allianceEditingData in EditingData.Alliances) {
+
+				if (allianceEditingData == AllianceEditingData) {
+					continue;
+				}
+
+				int colorDifference = ColorDifference(allianceEditingData.AllianceColor.TargetObject,
+					AllianceEditingData.AllianceColor.TargetObject);
+
+				switch (colorDifference) {
+
+					case 0:
+						validationErrors.Add(new("Colors Identical", ErrorSeverity.Warning,
+							$"The color of this alliance are identical to that of the {allianceEditingData.Name.InputString}"));
+						break;
+
+					case < 10:
+						validationErrors.Add(new("Colors Very Close", ErrorSeverity.Warning,
+							$"The color of this alliance are very similar to that of the {allianceEditingData.Name.InputString}"));
+						break;
+
+					case < 30:
+						validationErrors.Add(new("Colors Very Close", ErrorSeverity.Advisory,
+							$"The color of this alliance are similar to that of the {allianceEditingData.Name.InputString}"));
+						break;
+				}
+			}
+
+		}
+
 		return (color, validationErrors.AsReadOnly());
 	}
+
+	private int ColorDifference(Color color1, Color color2) {
+
+		return Math.Abs(color1.R - color2.R) + Math.Abs(color1.G - color2.G) + Math.Abs(color1.B - color2.B);
+	}
+
 
 }

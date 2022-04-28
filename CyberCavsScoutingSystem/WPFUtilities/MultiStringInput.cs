@@ -52,6 +52,7 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 	public ReadOnlyCollection<ValidationError<TSeverityEnum>> AllValidationErrors =>
 		CovalidationErrors.Concat(ComponentValidationErrors).ToList().AsReadOnly();
 
+	// TODO: return true if there are only warnings or less
 	public bool IsValid => AllValidationErrors.Any() == false;
 
 	public TSeverityEnum CovalidationErrorLevel {
