@@ -21,7 +21,11 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 		// TODO: .Net 7.0 remove backing field
 		get => IsValid ? _TargetObject : default;
-		private set => _TargetObject = value;
+
+		private set {
+			_TargetObject = value;
+			OnTargetObjectChanged();
+		}
 	}
 
 	public ReadOnlyCollection<string> InputComponentNames { get; }
@@ -125,8 +129,11 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	protected void OnErrorsChanged() {
+	protected void OnTargetObjectChanged() {
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetObject)));
+	}
 
+	protected void OnErrorsChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ComponentValidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrorLevel)));

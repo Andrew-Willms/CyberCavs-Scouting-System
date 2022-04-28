@@ -61,12 +61,15 @@
                      Width="Auto"
                      Grid.Column="3"/>
 
-            <Rectangle Height="Auto"
-                       Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}"
-                       Fill="{Binding Path=TargetObject, Converter={StaticResource ColorToBrushConverter}}"
-                       Margin="5,5,5,5"
-                       Grid.Column="4">
-            </Rectangle>
+            <Border BorderThickness="1,1,1,1"
+                    BorderBrush="Black"
+                    Margin="5,5,5,5"
+                    Grid.Column="4">
+
+                <Rectangle Height="Auto"
+                           Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}"
+                           Fill="{Binding Path=TargetObject, Converter={StaticResource ColorToBrushConverter}}"/>
+            </Border>
 
         </Grid>
 

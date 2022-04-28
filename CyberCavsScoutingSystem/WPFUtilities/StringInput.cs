@@ -38,7 +38,11 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 
 		// TODO: .Net 7.0 remove backing field
 		get => IsValid ? _TargetObject : default;
-		private set => _TargetObject = value;
+
+		private set {
+			_TargetObject = value;
+			OnTargetObjectChanged();
+		}
 	}
 
 	private string _InputString = "";
@@ -100,6 +104,10 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 
 
 	public event PropertyChangedEventHandler? PropertyChanged;
+
+	protected void OnTargetObjectChanged() {
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetObject)));
+	}
 
 	protected void OnInputStringChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputString)));
