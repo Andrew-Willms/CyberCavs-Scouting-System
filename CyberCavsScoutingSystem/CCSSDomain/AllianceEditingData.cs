@@ -1,44 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Reflection;
+using System.Windows.Media;
 
 using WPFUtilities;
 
 namespace CCSSDomain;
 
-public class AllianceEditingData : INotifyPropertyChanged {
+public class AllianceEditingData {
 
 	private AllianceEditingDataValidator Validator { get; }
 
+	public AllianceEditingData(GameEditingData editingData, Color color)
+		: this(editingData, color.R.ToString(), color.G.ToString(), color.B.ToString()) { }
 
+	public AllianceEditingData(GameEditingData editingData, string redColorValue = "0", string greenColorValue = "0", string blueColorValue = "0") {
 
-	public AllianceEditingData() {
-
-		Validator = new(this);
+		Validator = new(editingData);
 
 		Name = new(Validator.NameValidator, "");
 
-		RedColorValue = new(Validator.ColorValueValidator, "0");
-		GreenColorValue = new(Validator.ColorValueValidator, "0");
-		BlueColorValue = new(Validator.ColorValueValidator, "0");
+		AllianceColor = new(Validator.ColorCovalidator,
+			(nameof(Color.R), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, redColorValue)),
+			(nameof(Color.G), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, greenColorValue)),
+			(nameof(Color.B), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, blueColorValue))
+		);
 	}
 
 
 
 	public StringInput<string, ErrorSeverity> Name { get; }
-	public StringInput<int, ErrorSeverity> RedColorValue { get; }
-	public StringInput<int, ErrorSeverity> GreenColorValue { get; }
-	public StringInput<int, ErrorSeverity> BlueColorValue { get; }
 
-
-
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	protected void OnPropertyChanged(string propertyName) {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+	public MultiStringInput<Color, ErrorSeverity> AllianceColor { get; }
 }

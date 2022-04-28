@@ -98,8 +98,9 @@
                 BorderThickness="1,1,1,1"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                Margin="5,5,5,5"
                 Grid.Row="4"
-                Grid.Column="1" Margin="5,5,5,5">
+                Grid.Column="1">
 
             <StackPanel Orientation="Horizontal">
 

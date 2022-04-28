@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Windows.Media;
 using System.Reflection;
 
 using WPFUtilities;
@@ -35,8 +36,8 @@ public class GameEditingData : INotifyPropertyChanged {
 		AlliancesPerMatch = new(Validator.TestIntValueConverter, "2");
 
 		Alliances = new() {
-			new(),
-			new()
+			new(this, Colors.Red),
+			new(this, Colors.Blue)
 		};
 	}
 
@@ -55,7 +56,6 @@ public class GameEditingData : INotifyPropertyChanged {
 	public StringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
 
 	public ObservableCollection<AllianceEditingData> Alliances { get; }
-
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 

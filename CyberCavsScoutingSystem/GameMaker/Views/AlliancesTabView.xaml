@@ -56,7 +56,13 @@
         <ItemsControl ItemsSource="{Binding Path=Alliances}"
                       Margin="5,5,5,5"
                       Grid.Row="2"
-                      Grid.Column="1"/>
+                      Grid.Column="1">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:AllianceView/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
     </Grid>
 

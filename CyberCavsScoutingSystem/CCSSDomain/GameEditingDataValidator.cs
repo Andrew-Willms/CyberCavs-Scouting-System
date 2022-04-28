@@ -83,7 +83,7 @@ public class GameEditingDataValidator {
 
 
 	public (VersionNumber, ReadOnlyCollection<ValidationError<ErrorSeverity>>) VersionCovalidator
-		(in VersionNumber? value, in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> inputComponents) {
+		(in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> inputComponents) {
 
 		var majorNumberInput = inputComponents[nameof(VersionNumber.MajorNumber)] as StringInput<int, ErrorSeverity>;
 		var minorNumberInput = inputComponents[nameof(VersionNumber.MinorNumber)] as StringInput<int, ErrorSeverity>;

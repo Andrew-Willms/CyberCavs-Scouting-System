@@ -10,8 +10,7 @@ namespace WPFUtilities;
 
 // A custom delegate used as the type for the InputValidator.
 public delegate (TTargetType, ReadOnlyCollection<ValidationError<TSeverityEnum>>) MultiStringInputCovalidator<TTargetType, TSeverityEnum>
-	(in TTargetType? value, in ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> stringInputComponents)
-	where TSeverityEnum : Enum;
+	(in ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> stringInputComponents) where TSeverityEnum : Enum;
 
 
 
@@ -51,7 +50,23 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 	public bool IsValid => AllValidationErrors.Any() == false;
 
-	public TSeverityEnum ErrorLevel {
+	public TSeverityEnum CovalidationErrorLevel {
+
+		get {
+
+			List<TSeverityEnum> allErrorLevels = CovalidationErrors.Select(x => x.Severity).ToList();
+
+			TSeverityEnum? returnValue = allErrorLevels.Any() ? allErrorLevels.Max() : default;
+
+			if (returnValue is null) {
+				throw new ArgumentException($"The default value of the {nameof(TSeverityEnum)} type parameter \"{typeof(TSeverityEnum)}\" is null.");
+			}
+
+			return returnValue;
+		}
+	}
+
+	public TSeverityEnum OverallErrorLevel {
 
 		get {
 
@@ -94,7 +109,7 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 	}
 
 	private void CovalidateInput() {
-		(TargetObject, CovalidationErrors) = Covalidator(TargetObject, StringInputs);
+		(TargetObject, CovalidationErrors) = Covalidator(StringInputs);
 	}
 
 	public void Validate() {
@@ -114,6 +129,7 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ComponentValidationErrors)));
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrorLevel)));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OverallErrorLevel)));
 	}
 }

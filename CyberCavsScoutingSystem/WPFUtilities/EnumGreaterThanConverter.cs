@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Windows.Data;
 using System.Globalization;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WPFUtilities;
 
