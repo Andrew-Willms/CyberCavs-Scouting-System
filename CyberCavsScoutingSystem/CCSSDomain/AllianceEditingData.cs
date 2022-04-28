@@ -9,19 +9,16 @@ public class AllianceEditingData {
 
 	private AllianceEditingDataValidator Validator { get; }
 
-	public AllianceEditingData(GameEditingData editingData, Color color)
-		: this(editingData, color.R.ToString(), color.G.ToString(), color.B.ToString()) { }
-
-	public AllianceEditingData(GameEditingData editingData, string redColorValue = "0", string greenColorValue = "0", string blueColorValue = "0") {
+	public AllianceEditingData(GameEditingData editingData) {
 
 		Validator = new(editingData);
 
 		Name = new(Validator.NameValidator, "");
 
 		AllianceColor = new(Validator.ColorCovalidator,
-			(nameof(Color.R), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, redColorValue)),
-			(nameof(Color.G), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, greenColorValue)),
-			(nameof(Color.B), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, blueColorValue))
+			(nameof(Color.R), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, "0")),
+			(nameof(Color.G), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, "0")),
+			(nameof(Color.B), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, "0"))
 		);
 	}
 

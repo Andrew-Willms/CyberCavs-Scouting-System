@@ -36,9 +36,23 @@ public class GameEditingData : INotifyPropertyChanged {
 		AlliancesPerMatch = new(Validator.TestIntValueConverter, "2");
 
 		Alliances = new() {
-			new(this, Colors.Red),
-			new(this, Colors.Blue)
+			new(this),
+			new(this)
 		};
+
+		Alliances[0].Name.InputString = "Red Alliance";
+		Alliances[1].Name.InputString = "Blue Alliance";
+
+		Alliances[0].AllianceColor.StringInputs[nameof(Color.R)].InputString = "255";
+		Alliances[0].AllianceColor.StringInputs[nameof(Color.G)].InputString = "0";
+		Alliances[0].AllianceColor.StringInputs[nameof(Color.B)].InputString = "0";
+
+		Alliances[1].AllianceColor.StringInputs[nameof(Color.R)].InputString = "0";
+		Alliances[1].AllianceColor.StringInputs[nameof(Color.G)].InputString = "0";
+		Alliances[1].AllianceColor.StringInputs[nameof(Color.B)].InputString = "255";
+
+
+
 	}
 
 
