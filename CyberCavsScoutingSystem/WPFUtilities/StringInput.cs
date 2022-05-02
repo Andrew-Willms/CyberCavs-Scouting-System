@@ -75,7 +75,7 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 		}
 	}
 
-	public bool IsValid => ErrorLevel.IsFatal;
+	public bool IsValid => ErrorLevel.IsFatal == false;
 
 	public TSeverityEnum ErrorLevel {
 

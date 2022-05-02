@@ -68,7 +68,7 @@
 
                 <Rectangle Height="Auto"
                            Width="{Binding Path=ActualHeight, RelativeSource={RelativeSource Self}}"
-                           Fill="{Binding Path=TargetObject, Converter={StaticResource ColorToBrushConverter}}"/>
+                           Fill="{Binding Path=TargetObject, Converter={StaticResource ColorToBrushConverter}, Mode=OneWay}"/>
             </Border>
 
         </Grid>

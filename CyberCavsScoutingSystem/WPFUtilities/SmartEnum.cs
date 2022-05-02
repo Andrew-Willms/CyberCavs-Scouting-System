@@ -100,7 +100,7 @@ public abstract class SmartEnum<T> {
 
 }
 
-public abstract class OrderedSmartEnum<T> : SmartEnum<T> {
+public abstract class OrderedSmartEnum<T> : SmartEnum<T>, IComparable {
 
 	protected OrderedSmartEnum(string name, int value) : base(name, value) { }
 
@@ -109,6 +109,15 @@ public abstract class OrderedSmartEnum<T> : SmartEnum<T> {
 	//	return (SmartEnum<T>.GetAllOptions().OrderBy(x => x.Value).Select(x => x as OrderedSmartEnum<T>).ToArray());
 
 	//}
+
+	public int CompareTo(object? obj) {
+
+		if (obj is OrderedSmartEnum<T> other) {
+			return CompareTo(other);
+		}
+
+		throw new ArgumentException($"The parameter {nameof(obj)} could not be compared this object of type {typeof(OrderedSmartEnum<T>)}");
+	}
 
 	public int CompareTo(OrderedSmartEnum<T>? other) {
 

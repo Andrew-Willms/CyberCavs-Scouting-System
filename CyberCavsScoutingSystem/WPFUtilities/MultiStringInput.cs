@@ -54,7 +54,7 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 	public ReadOnlyCollection<ValidationError<TSeverityEnum>> AllValidationErrors =>
 		CovalidationErrors.Concat(ComponentValidationErrors).ToList().AsReadOnly();
 
-	public bool IsValid => OverallErrorLevel.IsFatal;
+	public bool IsValid => OverallErrorLevel.IsFatal == false;
 
 	public TSeverityEnum CovalidationErrorLevel {
 
