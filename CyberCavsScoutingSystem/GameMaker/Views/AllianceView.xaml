@@ -25,7 +25,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox DataContext="{Binding Path=Name, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+            <TextBox DataContext="{Binding Path=Name, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AllianceView}}}"
                      Style="{StaticResource StringInputStyle}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Top"

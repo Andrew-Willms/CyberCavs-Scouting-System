@@ -9,11 +9,12 @@ namespace WPFUtilities;
 
 // A custom delegate used as the type for the InputValidator.
 public delegate (TTargetType, ReadOnlyCollection<ValidationError<TSeverityEnum>>) StringInputValidator<TTargetType, TSeverityEnum>
-	(string inputString) where TSeverityEnum : Enum;
+	(string inputString) where TSeverityEnum :ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 
 
-public interface IStringInput<TSeverityEnum> where TSeverityEnum : Enum {
+public interface IStringInput<TSeverityEnum> where TSeverityEnum :
+	ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	public string InputString { get; set; }
 
@@ -27,11 +28,13 @@ public interface IStringInput<TSeverityEnum> where TSeverityEnum : Enum {
 	public void ValidateInput();
 
 	public event PropertyChangedEventHandler? PropertyChanged;
+
 }
 
 
 
-public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnum>, INotifyPropertyChanged where TSeverityEnum : Enum {
+public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnum>, INotifyPropertyChanged
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TTargetType? _TargetObject;
 	public TTargetType? TargetObject {
@@ -72,16 +75,18 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 		}
 	}
 
-	public bool IsValid => ValidationErrors.Count == 0;
+	public bool IsValid => ErrorLevel.IsFatal;
 
 	public TSeverityEnum ErrorLevel {
 
 		get {
 
-			TSeverityEnum? returnValue = ValidationErrors.Count > 0 ? ValidationErrors.Select(x => x.Severity).Max() : default;
+			TSeverityEnum? returnValue = ValidationErrors.Any()
+				? ValidationErrors.Select(x => x.Severity).Max()
+				: TSeverityEnum.NoError;
 
 			if (returnValue is null) {
-				throw new ArgumentException($"The default value of the TSeverityEnum type parameter \"{typeof(TSeverityEnum)}\" is null.");
+				throw new ArgumentException("Something here was null. I'm not sure how.");
 			}
 
 			return returnValue;

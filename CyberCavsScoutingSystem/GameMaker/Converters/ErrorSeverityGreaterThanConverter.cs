@@ -6,7 +6,7 @@ using CCSSDomain;
 
 namespace GameMaker.Converters;
 
-public class ErrorGreaterThanConverter : WPFUtilities.EnumGreaterThanConverter<CCSSDomain.ErrorSeverity> { }
+public class ErrorGreaterThanConverter : WPFUtilities.EnumGreaterThanConverter<ErrorSeverity> { }
 
 /* Here is the XAML code for how this style was used
 

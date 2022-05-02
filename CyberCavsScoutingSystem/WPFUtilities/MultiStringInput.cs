@@ -10,11 +10,13 @@ namespace WPFUtilities;
 
 // A custom delegate used as the type for the InputValidator.
 public delegate (TTargetType, ReadOnlyCollection<ValidationError<TSeverityEnum>>) MultiStringInputCovalidator<TTargetType, TSeverityEnum>
-	(in ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> stringInputComponents) where TSeverityEnum : Enum;
+	(in ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> stringInputComponents)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 
 
-public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChanged where TSeverityEnum : Enum {
+public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChanged
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TTargetType? _TargetObject;
 	public TTargetType? TargetObject {
@@ -52,8 +54,7 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 	public ReadOnlyCollection<ValidationError<TSeverityEnum>> AllValidationErrors =>
 		CovalidationErrors.Concat(ComponentValidationErrors).ToList().AsReadOnly();
 
-	// TODO: return true if there are only warnings or less
-	public bool IsValid => AllValidationErrors.Any() == false;
+	public bool IsValid => OverallErrorLevel.IsFatal;
 
 	public TSeverityEnum CovalidationErrorLevel {
 
@@ -61,10 +62,10 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 			List<TSeverityEnum> allErrorLevels = CovalidationErrors.Select(x => x.Severity).ToList();
 
-			TSeverityEnum? returnValue = allErrorLevels.Any() ? allErrorLevels.Max() : default;
+			TSeverityEnum? returnValue = allErrorLevels.Any() ? allErrorLevels.Max() : TSeverityEnum.NoError;
 
 			if (returnValue is null) {
-				throw new ArgumentException($"The default value of the {nameof(TSeverityEnum)} type parameter \"{typeof(TSeverityEnum)}\" is null.");
+				throw new ArgumentException("Something here was null. I'm not sure how.");
 			}
 
 			return returnValue;
@@ -75,12 +76,12 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 		get {
 
-			List<TSeverityEnum> allErrorLevels = AllValidationErrors.Select(x => x.Severity).ToList();
+			IEnumerable<TSeverityEnum> allErrorLevels = AllValidationErrors.Select(x => x.Severity).ToList();
 
-			TSeverityEnum? returnValue = allErrorLevels.Any() ? allErrorLevels.Max() : default;
+			TSeverityEnum? returnValue = allErrorLevels.Any() ? allErrorLevels.Max() : TSeverityEnum.NoError;
 
 			if (returnValue is null) {
-				throw new ArgumentException($"The default value of the {nameof(TSeverityEnum)} type parameter \"{typeof(TSeverityEnum)}\" is null.");
+				throw new ArgumentException("Something here was null. I'm not sure how.");
 			}
 
 			return returnValue;
@@ -139,4 +140,5 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrorLevel)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OverallErrorLevel)));
 	}
+
 }

@@ -6,7 +6,8 @@ using System.Collections.ObjectModel;
 
 namespace WPFUtilities;
 
-public interface IErrorConverter<TSeverityEnum, TConversionType> : IValueConverter where TSeverityEnum : Enum {
+public interface IErrorConverter<TSeverityEnum, TConversionType> : IValueConverter
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum> {
 
 	// This can't be static abstract because static abstract members can only be accessed from implementation
 	// of the interface, not the interface it's self.
@@ -22,7 +23,7 @@ public interface IErrorConverter<TSeverityEnum, TConversionType> : IValueConvert
 			throw new ArgumentException($"The object to be converted is not a {typeof(TSeverityEnum)}");
 		}
 
-		TConversionType conversionResult = this.ConversionDictionary[severity];
+		TConversionType conversionResult = ConversionDictionary[severity];
 
 		if (conversionResult is null) {
 			throw new NullReferenceException();

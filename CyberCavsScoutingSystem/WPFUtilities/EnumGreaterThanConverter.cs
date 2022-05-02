@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace WPFUtilities;
 
-public class EnumGreaterThanConverter<TEnum> : IValueConverter where TEnum : Enum {
+public class EnumGreaterThanConverter<TEnum> : IValueConverter where TEnum : OrderedSmartEnum<TEnum> {
 
 	public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Windows.Data;
-using System.Globalization;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace WPFUtilities;
 
-namespace WPFUtilities;
+
 
 // I think these things need to be static
-public record ValidationError<TSeverityEnum>(string Name, TSeverityEnum Severity, string Description = "") where TSeverityEnum : Enum {
+public record ValidationError<TSeverityEnum>(string Name, TSeverityEnum Severity, string Description = "")
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	public string Name { get; } = Name;
 
@@ -20,8 +13,4 @@ public record ValidationError<TSeverityEnum>(string Name, TSeverityEnum Severity
 
 	public TSeverityEnum Severity { get; } = Severity;
 
-	// This can be used to provide additional identifying information about the error.
-	// For example, if multi data binding is used to bind multiple View elements to a single UserMultiInput class
-	// the Identifier parameter can be used to indicate which of the multiple view elements the error relates to.
-	//public string Identifier { get; private init; }
 }
