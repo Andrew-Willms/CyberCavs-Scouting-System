@@ -31,33 +31,24 @@ public abstract class SmartEnum<T> {
 
 	public static SmartEnum<T>[] GetAllOptions() {
 
-		Type baseType = typeof(T);
+		return typeof(T).Assembly.GetTypes()
+			.Where(x => typeof(T).IsAssignableFrom(x))
+			.SelectMany(x => x.GetFields())
+			.Where(x => x.FieldType == typeof(T))
+			.Select(x => (SmartEnum<T>)x.GetValue(null)!)
+			.OrderBy(x => x.Name)
+			.ToArray();
 
-		Assembly assembly = baseType.Assembly;
-
-		Type[] assemblyTypes = assembly.GetTypes();
-
-		IEnumerable<Type> relevantTypes = assemblyTypes.Where(x => baseType.IsAssignableFrom(x));
-
-		IEnumerable<FieldInfo> fieldInfos = relevantTypes.SelectMany(x => x.GetFields());
-
-		IEnumerable<FieldInfo> relevantFields = fieldInfos.Where(x => x.FieldType == typeof(T));
-
-		IEnumerable<SmartEnum<T>?> smartEnums = relevantFields.Select(x => x.GetValue(null) as SmartEnum<T>);
-
-		IEnumerable<SmartEnum<T>> mullSafeSmartEnums = smartEnums.Where(x => x is not null)!;
-
-		IEnumerable<SmartEnum<T>> alphabeticalSmartEnums = mullSafeSmartEnums.OrderBy(x => x.Name);
-
-		return alphabeticalSmartEnums.ToArray();
-
-		//return assembly.GetTypes()
-		//	.Where(x => baseType.IsAssignableFrom(x))
-		//	.SelectMany(x => x.GetFields())
-		//	.Where(x => x.FieldType == typeof(T))
-		//	.Select(x => (SmartEnum<T>)x.GetValue(null))
-		//	.OrderBy(x => x.Name)
-		//	.ToArray();
+		// Verbose version
+		//Type baseType = typeof(T);
+		//Assembly assembly = baseType.Assembly;
+		//Type[] assemblyTypes = assembly.GetTypes();
+		//IEnumerable<Type> relevantTypes = assemblyTypes.Where(x => baseType.IsAssignableFrom(x));
+		//IEnumerable<FieldInfo> fieldInfos = relevantTypes.SelectMany(x => x.GetFields());
+		//IEnumerable<FieldInfo> relevantFields = fieldInfos.Where(x => x.FieldType == typeof(T));
+		//IEnumerable<SmartEnum<T>> smartEnums = relevantFields.Select(x => (SmartEnum<T>)x.GetValue(null)!);
+		//IEnumerable<SmartEnum<T>> alphabeticalSmartEnums = smartEnums.OrderBy(x => x.Name);
+		//return alphabeticalSmartEnums.ToArray();
 	}
 
 	public override string ToString() {
@@ -104,11 +95,19 @@ public abstract class OrderedSmartEnum<T> : SmartEnum<T>, IComparable {
 
 	protected OrderedSmartEnum(string name, int value) : base(name, value) { }
 
-	//public static OrderedSmartEnum<T>[] GetAllOptions() {
+	public new static OrderedSmartEnum<T>[] GetAllOptions() {
 
-	//	return (SmartEnum<T>.GetAllOptions().OrderBy(x => x.Value).Select(x => x as OrderedSmartEnum<T>).ToArray());
+		return SmartEnum<T>.GetAllOptions()
+			.Select(x => (OrderedSmartEnum<T>)x)
+			.OrderBy(x => x.Value)
+			.ToArray();
 
-	//}
+		// Verbose version
+		//IEnumerable<SmartEnum<T>> allOptions = SmartEnum<T>.GetAllOptions();
+		//IEnumerable<SmartEnum<T>> sortedOptions = allOptions.OrderBy(x => x.Value);
+		//IEnumerable<OrderedSmartEnum<T>> asOrderedSmartEnums = sortedOptions.Select(x => (OrderedSmartEnum<T>)x);
+		//return asOrderedSmartEnums.ToArray();
+	}
 
 	public int CompareTo(object? obj) {
 
