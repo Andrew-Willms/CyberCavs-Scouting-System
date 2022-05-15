@@ -9,7 +9,7 @@ namespace WPFUtilities;
 
 // A custom delegate used as the type for the InputValidator.
 public delegate (TTargetType, ReadOnlyCollection<ValidationError<TSeverityEnum>>) StringInputValidator<TTargetType, TSeverityEnum>
-	(string inputString) where TSeverityEnum :ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+	(string inputString) where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 
 
