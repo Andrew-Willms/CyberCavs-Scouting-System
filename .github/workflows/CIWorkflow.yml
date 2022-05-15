@@ -18,4 +18,4 @@ jobs:
     - name: Build
       run: dotnet build CyberCavsScoutingSystem/CyberCavsScoutingSystem.sln
     - name: Test CCSSDomain
-      run: dotnet test CyberCavsScoutingSystem/CyberCavsScoutingSystem/CCSSDomain.Tests/CCSSDomain.Tests.csproj --no-build --verbosity normal
+      run: dotnet test CCSSDomain.Tests/CCSSDomain.Tests.csproj --no-build --verbosity normal
