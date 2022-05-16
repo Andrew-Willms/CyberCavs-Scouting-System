@@ -19,7 +19,9 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
     - name: Build
-      run: dotnet build CyberCavsScoutingSystem.sln
+      run: dotnet build CyberCavsScoutingSystem.sln --no-restore
     - name: Test CCSSDomain
       run: dotnet test CCSSDomain.Tests/CCSSDomain.Tests.csproj --no-build --verbosity normal
