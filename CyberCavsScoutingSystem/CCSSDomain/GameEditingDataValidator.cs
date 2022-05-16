@@ -151,10 +151,20 @@ public class GameEditingDataValidator {
 		
 		List<ValidationError<ErrorSeverity>> newErrors = new();
 
-		// TODO: Move magic numbers to ValidationErrorParameters data or something.
-		if (inputString.Length > 40) {
+		if (inputString is null) {
+			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
+		}
 
-			newErrors.Add(new("Large Name", ErrorSeverity.Advisory, "The name specified is abnormally large"));
+		// TODO: Move magic numbers to ValidationErrorParameters data or something.
+		switch (inputString.Length) {
+
+			case 0:
+				newErrors.Add(new("Missing Name", ErrorSeverity.Error, "The name cannot be empty"));
+				break;
+			
+			case > 40:
+				newErrors.Add(new("Large Name", ErrorSeverity.Advisory, "The name specified is abnormally large"));
+				break;
 		}
 
 		return (inputString, newErrors.AsReadOnly());

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using WPFUtilities;
-using CCSSDomain;
 using Xunit;
 
 namespace CCSSDomain.Tests; 
@@ -15,7 +14,7 @@ public class GameEditingDataValidatorTests {
 		GameEditingData editingData = new();
 		GameEditingDataValidator validator = new(editingData);
 
-		Assert.Throws<NullReferenceException>(() => validator.NameValidator(null));
+		Assert.Throws<ArgumentNullException>(() => validator.NameValidator(null));
 	}
 
 	[Fact]
@@ -53,8 +52,8 @@ public class GameEditingDataValidatorTests {
 	}
 
 	[Theory]
-	[MemberData(nameof(LongNameShouldWarnTestData))]
-	public void LongNameShouldWarn(string inputString, string expectedName, ValidationError<ErrorSeverity> expectedError) {
+	[MemberData(nameof(LongNameShouldAdviseTestData))]
+	public void LongNameShouldAdvise(string inputString, string expectedName, ValidationError<ErrorSeverity> expectedError) {
 
 		GameEditingData editingData = new();
 		GameEditingDataValidator validator = new(editingData);
@@ -69,12 +68,12 @@ public class GameEditingDataValidatorTests {
 		//Assert.True(errors[0] == expectedError);
 	}
 
-	public static IEnumerable<object[]> LongNameShouldWarnTestData() {
+	public static IEnumerable<object[]> LongNameShouldAdviseTestData() {
 
 		yield return new object[] {
-			"Some Really Long Name One Two Three Four",
-			"Some Really Long Name One Two Three Four",
-			new ValidationError<ErrorSeverity>("", ErrorSeverity.Warning)
+			"Some Really Long Name One Two Three Four Five Six Seven",
+			"Some Really Long Name One Two Three Four Five Six Seven",
+			new ValidationError<ErrorSeverity>("", ErrorSeverity.Advisory)
 		};
 	}
 }

@@ -65,11 +65,7 @@ public abstract class SmartEnum<T> {
 			return true;
 		}
 
-		if (other is null) {
-			return false;
-		}
-
-		return Value.Equals(other.Value);
+		return other is not null && Value.Equals(other.Value);
 	}
 
 	public static bool operator ==(SmartEnum<T>? left,SmartEnum<T>? right) {
@@ -78,11 +74,16 @@ public abstract class SmartEnum<T> {
 			return right is null;
 		}
 
-		return !(left != right);
+		return left.Equals(right);
 	}
 
 	public static bool operator !=(SmartEnum<T>? left, SmartEnum<T>? right) {
-		return !(left == right);
+
+		if (left is null) {
+			return right is not null;
+		}
+
+		return !left.Equals(right);
 	}
 
 }
