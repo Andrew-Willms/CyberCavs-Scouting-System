@@ -20,3 +20,4 @@ jobs:
       working-directory: CyberCavsScoutingSystem
     - name: Test CCSSDomain
       run: dotnet test CCSSDomain.Tests/CCSSDomain.Tests.csproj --no-build --verbosity normal
+      working-directory: CyberCavsScoutingSystem/CCSSDomain.Tests
