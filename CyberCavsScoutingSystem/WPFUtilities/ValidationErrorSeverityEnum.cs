@@ -2,7 +2,7 @@
 
 
 
-public abstract class ValidationErrorSeverityEnum<T> : OrderedSmartEnum<T> {
+public abstract class ValidationErrorSeverityEnum<T> : OrderedSmartEnum<T> where T : ValidationErrorSeverityEnum<T> {
 
 	public bool IsFatal { get; }
 

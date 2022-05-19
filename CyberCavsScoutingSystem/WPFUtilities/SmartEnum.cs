@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WPFUtilities; 
@@ -8,7 +9,7 @@ namespace WPFUtilities;
 // I got the idea for this from the Nick Chapsas video https://www.youtube.com/watch?v=CEZ6cF8eoeg
 // and Steve Smith's nuget package https://github.com/ardalis/SmartEnum.
 
-public abstract class SmartEnum<T> {
+public abstract class SmartEnum<T> where T : SmartEnum<T> {
 
 	public string Name { get; }
 	public int Value { get; }
@@ -25,7 +26,7 @@ public abstract class SmartEnum<T> {
 
 	//public abstract ReadOnlyCollection<SmartEnum<T>> Options { get; }
 
-	public static SmartEnum<T>[] GetAllOptions() {
+	public static IEnumerable<T> GetOptions() {
 
 		return typeof(T).Assembly.GetTypes()
 			.Where(x => typeof(T).IsAssignableFrom(x))
@@ -33,7 +34,7 @@ public abstract class SmartEnum<T> {
 			.Where(x => x.FieldType == typeof(T))
 			.Select(x => (SmartEnum<T>)x.GetValue(null)!)
 			.OrderBy(x => x.Name)
-			.ToArray();
+			.Select(x => (T)x);
 
 		// Verbose version
 		//Type baseType = typeof(T);
@@ -42,9 +43,9 @@ public abstract class SmartEnum<T> {
 		//IEnumerable<Type> relevantTypes = assemblyTypes.Where(x => baseType.IsAssignableFrom(x));
 		//IEnumerable<FieldInfo> fieldInfos = relevantTypes.SelectMany(x => x.GetFields());
 		//IEnumerable<FieldInfo> relevantFields = fieldInfos.Where(x => x.FieldType == typeof(T));
-		//IEnumerable<SmartEnum<T>> smartEnums = relevantFields.Select(x => (SmartEnum<T>)x.GetValue(null)!);
-		//IEnumerable<SmartEnum<T>> alphabeticalSmartEnums = smartEnums.OrderBy(x => x.Name);
-		//return alphabeticalSmartEnums.ToArray();
+		//IEnumerable<T> smartEnums = relevantFields.Select(x => (T)x.GetValue(null)!);
+		//IEnumerable<T> alphabeticalSmartEnums = smartEnums.OrderBy(x => x.Name);
+		//return alphabeticalSmartEnums;
 	}
 
 	public override string ToString() {
@@ -68,7 +69,7 @@ public abstract class SmartEnum<T> {
 		return other is not null && Value.Equals(other.Value);
 	}
 
-	public static bool operator ==(SmartEnum<T>? left,SmartEnum<T>? right) {
+	public static bool operator ==(SmartEnum<T>? left, SmartEnum<T>? right) {
 
 		if (left is null) {
 			return right is null;
@@ -88,22 +89,18 @@ public abstract class SmartEnum<T> {
 
 }
 
-public abstract class OrderedSmartEnum<T> : SmartEnum<T>, IComparable {
+public abstract class OrderedSmartEnum<T> : SmartEnum<T>, IComparable where T : OrderedSmartEnum<T> {
 
 	protected OrderedSmartEnum(string name, int value) : base(name, value) { }
 
-	public new static OrderedSmartEnum<T>[] GetAllOptions() {
+	public new static IEnumerable<T> GetOptions() {
 
-		return SmartEnum<T>.GetAllOptions()
-			.Select(x => (OrderedSmartEnum<T>)x)
-			.OrderBy(x => x.Value)
-			.ToArray();
+		return SmartEnum<T>.GetOptions().OrderBy(x => x.Value);
 
-		// Verbose version
-		//IEnumerable<SmartEnum<T>> allOptions = SmartEnum<T>.GetAllOptions();
-		//IEnumerable<SmartEnum<T>> sortedOptions = allOptions.OrderBy(x => x.Value);
-		//IEnumerable<OrderedSmartEnum<T>> asOrderedSmartEnums = sortedOptions.Select(x => (OrderedSmartEnum<T>)x);
-		//return asOrderedSmartEnums.ToArray();
+		//Verbose version
+		//IEnumerable<T> allOptions = SmartEnum<T>.GetAllOptions();
+		//IEnumerable<T> sortedOptions = allOptions.OrderBy(x => x.Value);
+		//return sortedOptions;
 	}
 
 	public int CompareTo(object? obj) {
