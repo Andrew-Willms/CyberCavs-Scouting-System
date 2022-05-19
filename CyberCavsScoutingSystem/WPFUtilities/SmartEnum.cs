@@ -8,7 +8,6 @@ namespace WPFUtilities;
 
 // I got the idea for this from the Nick Chapsas video https://www.youtube.com/watch?v=CEZ6cF8eoeg
 // and Steve Smith's nuget package https://github.com/ardalis/SmartEnum.
-
 public abstract class SmartEnum<T> where T : SmartEnum<T> {
 
 	public string Name { get; }
@@ -23,8 +22,6 @@ public abstract class SmartEnum<T> where T : SmartEnum<T> {
 		Name = name;
 		Value = value;
 	}
-
-	//public abstract ReadOnlyCollection<SmartEnum<T>> Options { get; }
 
 	public static IEnumerable<T> GetOptions() {
 
