@@ -7,13 +7,18 @@ using System.Linq;
 namespace WPFUtilities;
 
 
+
 // A custom delegate used as the type for the InputValidator.
-public delegate (TTargetType, ReadOnlyCollection<ValidationError<TSeverityEnum>>) StringInputValidator<TTargetType, TSeverityEnum>
+public delegate(TTargetType, ReadOnlyCollection<ValidationError<TSeverityEnum>>) AlternateInputConverter<TTargetType, TSeverityEnum>
 	(string inputString) where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
+// A custom delegate used as the type for the InputValidator.
+public delegate ReadOnlyCollection<ValidationError<TSeverityEnum>> AlternateInputValidator<in TTargetType, TSeverityEnum>
+	(TTargetType value) where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 
-public interface IStringInput<TSeverityEnum> where TSeverityEnum :
+
+public interface IAlternateInput<TSeverityEnum> where TSeverityEnum :
 	ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	public string InputString { get; set; }
@@ -33,7 +38,7 @@ public interface IStringInput<TSeverityEnum> where TSeverityEnum :
 
 
 
-public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnum>, INotifyPropertyChanged
+public class AlternateInput<TTargetType, TSeverityEnum> : IAlternateInput<TSeverityEnum>, INotifyPropertyChanged
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TTargetType? _TargetObject;
@@ -61,7 +66,9 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 		}
 	}
 
-	private StringInputValidator<TTargetType, TSeverityEnum> Validator { get; }
+	private AlternateInputConverter<TTargetType, TSeverityEnum> Converter { get; }
+
+	private ReadOnlyCollection<AlternateInputValidator<TTargetType, TSeverityEnum>> Validators { get; }
 
 	private ReadOnlyCollection<ValidationError<TSeverityEnum>> _ValidationErrors = new List<ValidationError<TSeverityEnum>>().AsReadOnly();
 	public ReadOnlyCollection<ValidationError<TSeverityEnum>> ValidationErrors {
@@ -95,15 +102,39 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 
 
 
-	public StringInput(StringInputValidator<TTargetType, TSeverityEnum> validator, string initialString) {
-		Validator = validator;
+	public AlternateInput(AlternateInputConverter<TTargetType, TSeverityEnum> converter, string initialString,
+		params AlternateInputValidator<TTargetType, TSeverityEnum>[] validators) {
+
+		Converter = converter;
+
+		Validators = validators.ToList().AsReadOnly();
+
 		InputString = initialString;
 	}
 
 	
 	
 	public void ValidateInput() {
-		(TargetObject, ValidationErrors) = Validator(InputString);
+
+		(TargetObject, ValidationErrors) = Converter(InputString);
+
+		if (IsValid == false) {
+			return;
+		}
+
+		foreach (AlternateInputValidator<TTargetType, TSeverityEnum> validator in Validators) {
+
+			ReadOnlyCollection<ValidationError<TSeverityEnum>> newErrors = validator(TargetObject);
+
+			// make an extension method GetMaxErrorLevel() later but use this for now
+
+			ValidationErrors = ValidationErrors.Concat(newErrors).ToList().AsReadOnly();
+
+			if (IsValid == false) {
+				return;
+			}
+		}
+
 	}
 
 
@@ -121,7 +152,17 @@ public class StringInput<TTargetType, TSeverityEnum> : IStringInput<TSeverityEnu
 	private void OnErrorsChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsValid)));
 	}
+
+}
+
+
+
+
+public class TestInput<TTargetType, TSeverityEnum>
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
+
+
+
 
 }

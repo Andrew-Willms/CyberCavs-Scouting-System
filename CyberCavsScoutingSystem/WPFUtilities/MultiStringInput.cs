@@ -108,7 +108,7 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 
 
-	protected void OnComponentInputChanged(object? sender, PropertyChangedEventArgs e) {
+	private void OnComponentInputChanged(object? sender, PropertyChangedEventArgs e) {
 
 		CovalidateInput();
 	}
@@ -130,15 +130,16 @@ public class MultiStringInput<TTargetType, TSeverityEnum> : INotifyPropertyChang
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	protected void OnTargetObjectChanged() {
+	private void OnTargetObjectChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetObject)));
 	}
 
-	protected void OnErrorsChanged() {
+	private void OnErrorsChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ComponentValidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CovalidationErrorLevel)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OverallErrorLevel)));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsValid)));
 	}
 
 }

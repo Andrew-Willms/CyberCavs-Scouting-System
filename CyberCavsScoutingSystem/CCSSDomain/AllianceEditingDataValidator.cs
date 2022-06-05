@@ -36,7 +36,7 @@ public class AllianceEditingDataValidator {
 		string invalidCharacters = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
 
 		if (invalidCharacters.Length > 0) {
-			newErrors.Add(new("Invalid Characters", ErrorSeverity.Error, "asdf"));
+			newErrors.Add(new("Invalid Characters", ErrorSeverity.Error, "Some error text."));
 
 		} else {
 
@@ -77,44 +77,43 @@ public class AllianceEditingDataValidator {
 		Color color = Color.FromRgb(redValueInput.TargetObject, greenValueInput.TargetObject, blueValueInput.TargetObject);
 		List<ValidationError<ErrorSeverity>> validationErrors = new();
 
-		if (EditingData.Alliances is not null && AllianceEditingData is not null) {
+		if (EditingData.Alliances is null || AllianceEditingData is null) {
+			return (color, validationErrors.AsReadOnly());
+		}
 
-			foreach (AllianceEditingData allianceEditingData in EditingData.Alliances) {
+		foreach (AllianceEditingData allianceEditingData in EditingData.Alliances.Where(x => x != AllianceEditingData)) {
 
-				if (allianceEditingData == AllianceEditingData) {
-					continue;
-				}
+			bool test1 = allianceEditingData is null;
+			bool test2 = allianceEditingData.AllianceColor is null;
+			bool test3 = AllianceEditingData is null;
+			bool test4 = AllianceEditingData.AllianceColor is null;
 
-				int colorDifference = 0;
+			int colorDifference = ColorDifference(allianceEditingData.AllianceColor.TargetObject,
+				AllianceEditingData.AllianceColor.TargetObject);
 
-				colorDifference = ColorDifference(allianceEditingData.AllianceColor.TargetObject,
-					AllianceEditingData.AllianceColor.TargetObject);
+			switch (colorDifference) {
 
-				switch (colorDifference) {
+				case 0:
+					validationErrors.Add(new("Colors Identical", ErrorSeverity.Warning,
+						$"The color of this alliance are identical to that of the {allianceEditingData.Name.InputString}"));
+					break;
 
-					case 0:
-						validationErrors.Add(new("Colors Identical", ErrorSeverity.Warning,
-							$"The color of this alliance are identical to that of the {allianceEditingData.Name.InputString}"));
-						break;
+				case < 10:
+					validationErrors.Add(new("Colors Very Close", ErrorSeverity.Warning,
+						$"The color of this alliance are very similar to that of the {allianceEditingData.Name.InputString}"));
+					break;
 
-					case < 10:
-						validationErrors.Add(new("Colors Very Close", ErrorSeverity.Warning,
-							$"The color of this alliance are very similar to that of the {allianceEditingData.Name.InputString}"));
-						break;
-
-					case < 30:
-						validationErrors.Add(new("Colors Very Close", ErrorSeverity.Advisory,
-							$"The color of this alliance are similar to that of the {allianceEditingData.Name.InputString}"));
-						break;
-				}
+				case < 30:
+					validationErrors.Add(new("Colors Very Close", ErrorSeverity.Advisory,
+						$"The color of this alliance are similar to that of the {allianceEditingData.Name.InputString}"));
+					break;
 			}
-
 		}
 
 		return (color, validationErrors.AsReadOnly());
 	}
 
-	private int ColorDifference(Color color1, Color color2) {
+	private static int ColorDifference(Color color1, Color color2) {
 
 		return Math.Abs(color1.R - color2.R) + Math.Abs(color1.G - color2.G) + Math.Abs(color1.B - color2.B);
 	}
