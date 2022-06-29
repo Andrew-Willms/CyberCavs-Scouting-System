@@ -13,11 +13,11 @@ public class ErrorGreaterThanConverter : WPFUtilities.EnumGreaterThanConverter<E
     <!--<Converters:ErrorGreaterThanConverter x:Key="ErrorGreaterThanConverter"/>-->
 
     <!--<Style.Triggers>
-        <DataTrigger Binding="{Binding Path=ErrorLevel,
+        <DataTrigger Binding="{Binding Path=ValidationErrorLevel,
                      Converter={StaticResource ErrorGreaterThanConverter},
                      ConverterParameter={x:Static Domain:ErrorSeverity.None}}"
                      Value="True">
-            <Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}, Mode=OneWay}"/>
+            <Setter Property="BorderBrush" Value="{Binding Path=ValidationErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}, Mode=OneWay}"/>
         </DataTrigger>
     </Style.Triggers>-->
 
