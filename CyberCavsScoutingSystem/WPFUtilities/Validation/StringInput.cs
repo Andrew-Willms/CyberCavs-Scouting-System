@@ -97,12 +97,6 @@ public class StringInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSever
 		OnErrorsChanged();
 	}
 
-	//protected override void PostValidation(ValidationError<TSeverityEnum> validationError) {
-
-	//	ValidationErrors.Add(validationError);
-	//	OnErrorsChanged();
-	//}
-
 
 
 	public override event PropertyChangedEventHandler? PropertyChanged;
