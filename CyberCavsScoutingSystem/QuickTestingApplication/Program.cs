@@ -3,14 +3,46 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
+
+
 namespace QuickTestingApplication;
 
 public class Program {
 
 	static void Main(string[] args) {
 
-		Trace.WriteLine("Test");
+		//Console.WriteLine("Test");
+		//Trace.WriteLine("Test");
+
+
+
 	}
+
+
+
+	public void TestGenericTypeMatching() {
+
+		ITestInterface<int, int> test = new TestClass1<int, int>();
+
+		Console.WriteLine(test is ITestInterface<int, int>);
+		Console.WriteLine(test is TestClass1<int, int>);
+		Console.WriteLine(test is TestClass1<int, int, int>);
+
+		Console.WriteLine(test.GetType());
+		Console.WriteLine(test.GetType().GetGenericArguments());
+		Console.WriteLine(test.GetType().GetGenericTypeDefinition());
+
+		Console.WriteLine(test.GetType().GetGenericTypeDefinition() == typeof(TestClass1<,>));
+		Console.WriteLine(test.GetType().GetGenericTypeDefinition() == typeof(TestClass1<,,>));
+	}
+
+	public interface ITestInterface<T1, T2> {}
+
+	public class TestClass1<T1, T2> : ITestInterface<T1, T2> {}
+
+	public class TestClass1<T1, T2, T3> : ITestInterface<T1, T2> {}
+
+
 
 	private static void TestReadonlyCollection() {
 
