@@ -30,14 +30,12 @@ public class MultiInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSeveri
 
 		protected set {
 			_TargetObject = value;
-			Validate();
 			OnTargetObjectChanged();
 		}
 	}
 
 	public ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> StringInputs { get; }
 
-	//	TODO: this isn't used, that's an issue
 	public override ValidationEvent TargetObjectChanged { get; } = new();
 
 	private MultiInputConverter<TTargetType, TSeverityEnum> Converter { get; }
@@ -104,6 +102,7 @@ public class MultiInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSeveri
 
 	private void OnTargetObjectChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetObject)));
+		TargetObjectChanged.Invoke();
 	}
 
 	protected override void OnErrorsChanged() {
