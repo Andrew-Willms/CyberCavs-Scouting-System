@@ -64,14 +64,14 @@ public class ValidationSet<TTargetType, TValidationParameter, TSeverityEnum> : I
 
 
 
-public class CovalidationSet<TTargetType, TSeverityEnum> : IValidationSet<TTargetType, TSeverityEnum>
+public class MultiValidationSet<TTargetType, TSeverityEnum> : IValidationSet<TTargetType, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private MultiInputCovalidator<TTargetType, TSeverityEnum> Validator { get; }
+	private MultiInputValidator<TTargetType, TSeverityEnum> Validator { get; }
 
 	private ValidationEvent ValidationEvent { get; }
 
-	public CovalidationSet(MultiInputCovalidator<TTargetType, TSeverityEnum> validator, ValidationEvent validationEvent) {
+	public MultiValidationSet(MultiInputValidator<TTargetType, TSeverityEnum> validator, ValidationEvent validationEvent) {
 
 		Validator = validator;
 		ValidationEvent = validationEvent;
@@ -87,7 +87,7 @@ public class CovalidationSet<TTargetType, TSeverityEnum> : IValidationSet<TTarge
 
 
 
-public class CovalidationSet<TTargetType, TValidationParameter, TSeverityEnum> : IValidationSet<TTargetType, TSeverityEnum>
+public class MultiValidationSet<TTargetType, TValidationParameter, TSeverityEnum> : IValidationSet<TTargetType, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private StringInputValidator<TTargetType, TValidationParameter, TSeverityEnum> Validator { get; }
@@ -96,7 +96,7 @@ public class CovalidationSet<TTargetType, TValidationParameter, TSeverityEnum> :
 
 	private Func<TValidationParameter> ValidationParameterGetter { get; }
 
-	public CovalidationSet(StringInputValidator<TTargetType, TValidationParameter, TSeverityEnum> validator,
+	public MultiValidationSet(StringInputValidator<TTargetType, TValidationParameter, TSeverityEnum> validator,
 		Func<TValidationParameter> validationParameterGetter, ValidationEvent validationEvent) {
 
 		Validator = validator;

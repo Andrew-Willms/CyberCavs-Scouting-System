@@ -27,11 +27,11 @@ public delegate (TTargetType?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate ValidationError<TSeverityEnum>?
-	MultiInputCovalidator<in TTargetType, TSeverityEnum>
+	MultiInputValidator<in TTargetType, TSeverityEnum>
 	(TTargetType targetObject)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate ValidationError<TSeverityEnum>?
-	MultiInputCovalidator<in TTargetType, in TValidationParameter, TSeverityEnum>
+	MultiInputValidator<in TTargetType, in TValidationParameter, TSeverityEnum>
 	(TTargetType targetObject, TValidationParameter parameter) 
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;

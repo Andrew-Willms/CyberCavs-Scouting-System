@@ -44,22 +44,22 @@ public class MultiInput<TTargetType, TSeverityEnum> : IMultiInput<TSeverityEnum>
 
 	public ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> StringInputs { get; }
 
-	private ValidationEvent TargetObjectChanged { get; } = new();
-	private ReadOnlyList<ValidationEvent> EventsToInvolve { get; }
+	//	TODO: this isn't used, that's an issue
+	public ValidationEvent TargetObjectChanged { get; } = new();
 
 	private MultiInputConverter<TTargetType, TSeverityEnum> Converter { get; }
-	private ReadOnlyList<MultiInputCovalidator<TTargetType, TSeverityEnum>> DefaultCovalidators { get; }
-	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> CovalidationTriggers { get; }
+	private ReadOnlyList<MultiInputValidator<TTargetType, TSeverityEnum>> DefaultValidators { get; }
+	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
 	private ReadOnlyList<ValidationError<TSeverityEnum>> ConversionErrors { get; set; } = new();
-	private List<ValidationError<TSeverityEnum>> CovalidationErrors { get; } = new();
+	private List<ValidationError<TSeverityEnum>> ValidationErrors { get; } = new();
 	private ReadOnlyList<ValidationError<TSeverityEnum>> ComponentErrors => StringInputs.Values.SelectMany(x => x.Errors).ToReadOnly();
-	public ReadOnlyList<ValidationError<TSeverityEnum>> Errors => ConversionErrors.CopyAndAddRanges(CovalidationErrors, ComponentErrors);
+	public ReadOnlyList<ValidationError<TSeverityEnum>> Errors => ConversionErrors.CopyAndAddRanges(ValidationErrors, ComponentErrors);
 
 	private TSeverityEnum ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
-	private TSeverityEnum CovalidationErrorLevel => CovalidationErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
+	private TSeverityEnum ValidationErrorLevel => ValidationErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
 	private TSeverityEnum ComponentErrorLevel => ComponentErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
-	public TSeverityEnum ErrorLevel => Math.Max(ConversionErrorLevel, CovalidationErrorLevel, ComponentErrorLevel);
+	public TSeverityEnum ErrorLevel => Math.Max(ConversionErrorLevel, ValidationErrorLevel, ComponentErrorLevel);
 
 	private bool IsConvertible => ConversionErrorLevel.IsFatal == false;
 	public bool IsValid => ErrorLevel.IsFatal == false;
@@ -68,20 +68,17 @@ public class MultiInput<TTargetType, TSeverityEnum> : IMultiInput<TSeverityEnum>
 
 	public MultiInput(MultiInputConverter<TTargetType, TSeverityEnum> converter,
 		ReadOnlyList<(string inputComponentName, IStringInput<TSeverityEnum> stringInput)> inputComponents,
-		ReadOnlyList<ValidationEvent> eventsToInvoke,
-		ReadOnlyList<MultiInputCovalidator<TTargetType, TSeverityEnum>> defaultCovalidators,
+		ReadOnlyList<MultiInputValidator<TTargetType, TSeverityEnum>> defaultValidators,
 		params IValidationSet<TTargetType, TSeverityEnum>[] validationSets) {
 
 		Converter = converter;
-		DefaultCovalidators = defaultCovalidators;
-		CovalidationTriggers = ValidationSetsToTriggers(validationSets);
-
-		EventsToInvolve = eventsToInvoke;
+		DefaultValidators = defaultValidators;
+		ValidationTriggers = ValidationSetsToTriggers(validationSets);
 
 		StringInputs = new(inputComponents.ToDictionary(x => x.inputComponentName, x => x.stringInput));
 
 		foreach (IStringInput<TSeverityEnum> inputString in StringInputs.Values) {
-			inputString.PropertyChanged += OnComponentInputChanged;
+			inputString.TargetObjectChanged.Subscribe(Validate);
 		}
 
 		Validate();
@@ -107,24 +104,20 @@ public class MultiInput<TTargetType, TSeverityEnum> : IMultiInput<TSeverityEnum>
 
 
 
-	private void OnComponentInputChanged(object? sender, PropertyChangedEventArgs e) {
-		Validate();
-	}
-
 	public void Validate() {
 
 		(TargetObject, ConversionErrors) = Converter(StringInputs);
 
-		CovalidationErrors.Clear();
+		ValidationErrors.Clear();
 
 		if (TargetObject is not null) {
 
-			foreach (MultiInputCovalidator<TTargetType, TSeverityEnum> covalidator in DefaultCovalidators) {
-				CovalidationErrors.AddIfNotNull(covalidator.Invoke(TargetObject));
+			foreach (MultiInputValidator<TTargetType, TSeverityEnum> covalidator in DefaultValidators) {
+				ValidationErrors.AddIfNotNull(covalidator.Invoke(TargetObject));
 			}
 
-			foreach (IValidationTrigger<TSeverityEnum> trigger in CovalidationTriggers) {
-				CovalidationErrors.AddIfNotNull(trigger.InvokeValidator());
+			foreach (IValidationTrigger<TSeverityEnum> trigger in ValidationTriggers) {
+				ValidationErrors.AddIfNotNull(trigger.InvokeValidator());
 			}
 		}
 
@@ -133,8 +126,7 @@ public class MultiInput<TTargetType, TSeverityEnum> : IMultiInput<TSeverityEnum>
 
 	private void PostValidation(ValidationError<TSeverityEnum> validationError) {
 
-		CovalidationErrors.Add(validationError);
-
+		ValidationErrors.Add(validationError);
 		OnErrorsChanged();
 	}
 

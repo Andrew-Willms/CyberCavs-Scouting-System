@@ -101,7 +101,7 @@ public class ValidationTrigger<TTargetType, TValidationParameter, TSeverityEnum>
 public class CovalidationTrigger<TTargetType, TSeverityEnum> : IValidationTrigger<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private MultiInputCovalidator<TTargetType, TSeverityEnum> Validator { get; }
+	private MultiInputValidator<TTargetType, TSeverityEnum> Validator { get; }
 
 	private Func<TTargetType> TargetObjectGetter { get; }
 
@@ -109,7 +109,7 @@ public class CovalidationTrigger<TTargetType, TSeverityEnum> : IValidationTrigge
 
 
 
-	public CovalidationTrigger(MultiInputCovalidator<TTargetType, TSeverityEnum> validator, ValidationEvent validationEvent,
+	public CovalidationTrigger(MultiInputValidator<TTargetType, TSeverityEnum> validator, ValidationEvent validationEvent,
 		Func<TTargetType> targetObjectGetter, Action<ValidationError<TSeverityEnum>> postValidationAction) {
 
 		Validator = validator;
@@ -141,7 +141,7 @@ public class CovalidationTrigger<TTargetType, TSeverityEnum> : IValidationTrigge
 public class CovalidationTrigger<TTargetType, TValidationParameter, TSeverityEnum> : IValidationTrigger<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private MultiInputCovalidator<TTargetType, TValidationParameter, TSeverityEnum> Validator { get; }
+	private MultiInputValidator<TTargetType, TValidationParameter, TSeverityEnum> Validator { get; }
 
 	private Func<TTargetType> TargetObjectGetter { get; }
 
@@ -151,7 +151,7 @@ public class CovalidationTrigger<TTargetType, TValidationParameter, TSeverityEnu
 
 
 
-	public CovalidationTrigger(MultiInputCovalidator<TTargetType, TValidationParameter, TSeverityEnum> validator,
+	public CovalidationTrigger(MultiInputValidator<TTargetType, TValidationParameter, TSeverityEnum> validator,
 		ValidationEvent validationEvent, Func<TTargetType> targetObjectGetter,
 		Func<TValidationParameter> validationParameterGetter, Action<ValidationError<TSeverityEnum>> postValidationAction) {
 
