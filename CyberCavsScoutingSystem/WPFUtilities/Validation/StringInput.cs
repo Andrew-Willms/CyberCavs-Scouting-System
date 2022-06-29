@@ -77,7 +77,7 @@ public class StringInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSever
 
 
 
-	public override void Validate() {
+	public sealed override void Validate() {
 
 		(TargetObject, ConversionErrors) = Converter(InputString);
 

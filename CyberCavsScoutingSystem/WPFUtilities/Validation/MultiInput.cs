@@ -1,41 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Controls;
-using System.Configuration;
 
 namespace WPFUtilities.Validation;
 
 
 
-public interface IMultiInput<TSeverityEnum> : INotifyPropertyChanged
+public interface IMultiInput<TSeverityEnum> : IInput<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	public bool IsValid { get; }
-
 	public ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> StringInputs { get; }
-
-	public ReadOnlyList<ValidationError<TSeverityEnum>> Errors { get; }
-
-	// There can't be an implementation here because INotifyPropertyChanged does not work when the implementation is inherited from an interface.
-	public TSeverityEnum ErrorLevel { get; }
-
-	public void Validate();
-
 }
 
-public class MultiInput<TTargetType, TSeverityEnum> : IMultiInput<TSeverityEnum>
+public interface IMultiInput<out TTargetType, TSeverityEnum> : IInput<TTargetType, TSeverityEnum>
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
+}
+
+
+
+public class MultiInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSeverityEnum>, IMultiInput<TTargetType, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TTargetType? _TargetObject;
-	public TTargetType? TargetObject {
+	public override TTargetType? TargetObject {
 
 		// TODO: .Net 7.0 remove backing field
 		get => IsConvertible ? _TargetObject : default;
 
-		private set {
+		protected set {
 			_TargetObject = value;
 			Validate();
 			OnTargetObjectChanged();
@@ -45,24 +38,24 @@ public class MultiInput<TTargetType, TSeverityEnum> : IMultiInput<TSeverityEnum>
 	public ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> StringInputs { get; }
 
 	//	TODO: this isn't used, that's an issue
-	public ValidationEvent TargetObjectChanged { get; } = new();
+	public override ValidationEvent TargetObjectChanged { get; } = new();
 
 	private MultiInputConverter<TTargetType, TSeverityEnum> Converter { get; }
 	private ReadOnlyList<MultiInputValidator<TTargetType, TSeverityEnum>> DefaultValidators { get; }
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
 	private ReadOnlyList<ValidationError<TSeverityEnum>> ConversionErrors { get; set; } = new();
-	private List<ValidationError<TSeverityEnum>> ValidationErrors { get; } = new();
+	protected override List<ValidationError<TSeverityEnum>> ValidationErrors { get; } = new();
 	private ReadOnlyList<ValidationError<TSeverityEnum>> ComponentErrors => StringInputs.Values.SelectMany(x => x.Errors).ToReadOnly();
-	public ReadOnlyList<ValidationError<TSeverityEnum>> Errors => ConversionErrors.CopyAndAddRanges(ValidationErrors, ComponentErrors);
+	public override ReadOnlyList<ValidationError<TSeverityEnum>> Errors => ConversionErrors.CopyAndAddRanges(ValidationErrors, ComponentErrors);
 
 	private TSeverityEnum ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
 	private TSeverityEnum ValidationErrorLevel => ValidationErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
 	private TSeverityEnum ComponentErrorLevel => ComponentErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
-	public TSeverityEnum ErrorLevel => Math.Max(ConversionErrorLevel, ValidationErrorLevel, ComponentErrorLevel);
+	public override TSeverityEnum ErrorLevel => Math.Max(ConversionErrorLevel, ValidationErrorLevel, ComponentErrorLevel);
 
 	private bool IsConvertible => ConversionErrorLevel.IsFatal == false;
-	public bool IsValid => ErrorLevel.IsFatal == false;
+	public override bool IsValid => ErrorLevel.IsFatal == false;
 
 
 
@@ -84,27 +77,8 @@ public class MultiInput<TTargetType, TSeverityEnum> : IMultiInput<TSeverityEnum>
 		Validate();
 	}
 
-	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationSetsToTriggers(
-		IEnumerable<IValidationSet<TTargetType, TSeverityEnum>> validationSets) {
 
-		TTargetType TargetObjectGetter() {
-
-			if (TargetObject is null) {
-				throw new NullReferenceException($"Validators should not be called if {nameof(TargetObject)} is null.");
-			}
-
-			return TargetObject;
-		}
-
-		IEnumerable<IValidationTrigger<TSeverityEnum>> validationTriggers = validationSets
-			.Select(validationSet => validationSet.ToValidationTrigger(TargetObjectGetter, PostValidation));
-
-		return validationTriggers.ToReadOnly();
-	}
-
-
-
-	public void Validate() {
+	public sealed override void Validate() {
 
 		(TargetObject, ConversionErrors) = Converter(StringInputs);
 
@@ -124,21 +98,15 @@ public class MultiInput<TTargetType, TSeverityEnum> : IMultiInput<TSeverityEnum>
 		OnErrorsChanged();
 	}
 
-	private void PostValidation(ValidationError<TSeverityEnum> validationError) {
-
-		ValidationErrors.Add(validationError);
-		OnErrorsChanged();
-	}
 
 
-
-	public event PropertyChangedEventHandler? PropertyChanged;
+	public override event PropertyChangedEventHandler? PropertyChanged;
 
 	private void OnTargetObjectChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetObject)));
 	}
 
-	private void OnErrorsChanged() {
+	protected override void OnErrorsChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Errors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsValid)));
