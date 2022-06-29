@@ -1,36 +1,62 @@
 ﻿using System;
+using Math = System.Math;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows.Media;
 using System.Linq;
-
 using WPFUtilities;
+using WPFUtilities.Validation;
 
-namespace CCSSDomain; 
+namespace CCSSDomain;
 
-public class AllianceEditingDataValidator {
+public static class AllianceEditingDataValidator {
 
-	private GameEditingData EditingData { get; }
+	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) NameConverter(string inputString) {
 
-	private AllianceEditingData AllianceEditingData { get; }
+		return (inputString, new());
+	}
 
-	public AllianceEditingDataValidator(GameEditingData editingData, AllianceEditingData allianceEditingData) {
+	// TODO: replace ValidationError? with Optional<ValidationError>.
+	public static ValidationError<ErrorSeverity>? NameValidator_EndsWithAlliance(string name) {
 
-		EditingData = editingData;
-		AllianceEditingData = allianceEditingData;
+		if (name.EndsWith(" Alliance")) {
+			return null;
+		}
+
+		return new("Does not end in \"Alliance\"", ErrorSeverity.Advisory,
+			"Typically alliance names should follow the format \"{Colour} Alliance\"");
+	}
+
+	public static ValidationError<ErrorSeverity>? NameValidator_Length(string name) {
+
+		//Todo extract this magic numbers.
+
+		return name.Length switch {
+			> 30 => new("Long Name", ErrorSeverity.Warning, "This alliance name is very long."),
+			> 20 => new("Long Name", ErrorSeverity.Advisory, "This alliance name is rather long."),
+			_ => null
+		};
+	}
+
+	public static ValidationError<ErrorSeverity>? NameValidator_Duplicate(string name, IEnumerable<AllianceEditingData> alliances) {
+
+		return alliances.Count(x => x.Name.TargetObject == name) switch {
+
+			0 => throw new ArgumentException($"No alliance has the name \"{name}\"."),
+
+			1 => null,
+
+			> 1 => new("Duplicate Name", ErrorSeverity.Error, $"Multiple Alliances share the name \"{name}\"."),
+
+			_ => throw new Exception("Uh... the enumerable had a negative count. How did you manage that?")
+		};
 	}
 
 
 
-	public (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) NameValidator(string inputString) {
+	public static (byte, ObservableCollection<ValidationError<ErrorSeverity>>) ColorValueValidator(string inputString) {
 
-		return (inputString, new List<ValidationError<ErrorSeverity>>().AsReadOnly());
-	}
-
-	public (byte, ReadOnlyCollection<ValidationError<ErrorSeverity>>) ColorValueValidator(string inputString) {
-
-		List<ValidationError<ErrorSeverity>> newErrors = new();
+		ObservableCollection<ValidationError<ErrorSeverity>> newErrors = new();
 		byte byteValue = 0;
 
 		string invalidCharacters = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
@@ -50,16 +76,18 @@ public class AllianceEditingDataValidator {
 					newErrors.Add(new("Color Value Out of Range", ErrorSeverity.Error, "The color value can be a maximum of 255"));
 
 				} else {
-					newErrors.Add(new("Color Value Out of Range", ErrorSeverity.Error, "The color value can be a minimum of 0"));;
+					newErrors.Add(new("Color Value Out of Range", ErrorSeverity.Error, "The color value can be a minimum of 0"));
 				}
 			}
 
 		}
 
-		return (byteValue, newErrors.AsReadOnly());
+		return (byteValue, newErrors);
 	}
 
-	public (Color, ReadOnlyCollection<ValidationError<ErrorSeverity>>) ColorCovalidator
+
+
+	public static (Color, ObservableCollection<ValidationError<ErrorSeverity>>) ColorCovalidator
 		(in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> inputComponents) {
 
 		if (inputComponents[nameof(Color.R)] is not StringInput<byte, ErrorSeverity> redValueInput) {
@@ -115,8 +143,7 @@ public class AllianceEditingDataValidator {
 
 	private static int ColorDifference(Color color1, Color color2) {
 
-		return Math.Abs(color1.R - color2.R) + Math.Abs(color1.G - color2.G) + Math.Abs(color1.B - color2.B);
+		return Math.Abs(color1.R - color2.R) + System.Math.Abs(color1.G - color2.G) + Math.Abs(color1.B - color2.B);
 	}
-
 
 }

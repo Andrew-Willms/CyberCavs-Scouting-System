@@ -1,4 +1,5 @@
 ﻿using WPFUtilities;
+using WPFUtilities.Validation;
 
 namespace CCSSDomain;
 

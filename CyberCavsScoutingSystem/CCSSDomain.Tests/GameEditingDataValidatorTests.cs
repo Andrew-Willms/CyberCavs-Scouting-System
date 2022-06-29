@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using WPFUtilities;
+using WPFUtilities.Validation;
 using Xunit;
 
-namespace CCSSDomain.Tests; 
+namespace CCSSDomain.Tests;
 
 public class GameEditingDataValidatorTests {
 
 	[Fact]
 	public void NullNameShouldThrowException() {
 
-		GameEditingData editingData = new();
+		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
 		GameEditingDataValidator validator = new(editingData);
 
 		Assert.Throws<ArgumentNullException>(() => validator.NameValidator(null));
@@ -20,7 +20,7 @@ public class GameEditingDataValidatorTests {
 	[Fact]
 	public void EmptyNameShouldFail() {
 
-		GameEditingData editingData = new();
+		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
 		GameEditingDataValidator validator = new(editingData);
 
 		(string name, ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) = validator.NameValidator("");
@@ -42,7 +42,7 @@ public class GameEditingDataValidatorTests {
 	[InlineData("test", "test")]
 	public void ValidNameShouldEcho(string inputString, string expectedName) {
 
-		GameEditingData editingData = new();
+		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
 		GameEditingDataValidator validator = new(editingData);
 
 		(string name, ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) = validator.NameValidator(inputString);
@@ -55,7 +55,7 @@ public class GameEditingDataValidatorTests {
 	[MemberData(nameof(LongNameShouldAdviseTestData))]
 	public void LongNameShouldAdvise(string inputString, string expectedName, ValidationError<ErrorSeverity> expectedError) {
 
-		GameEditingData editingData = new();
+		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
 		GameEditingDataValidator validator = new(editingData);
 
 		(string name, ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) = validator.NameValidator(inputString);

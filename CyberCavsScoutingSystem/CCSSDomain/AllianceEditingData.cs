@@ -1,22 +1,28 @@
-﻿using System.Windows.Media;
-using WPFUtilities;
+﻿using System.Collections.Generic;
+using System.Windows.Media;
+using WPFUtilities.Validation;
 
 namespace CCSSDomain;
 
 public class AllianceEditingData {
 
-	private AllianceEditingDataValidator Validator { get; }
+	private GameEditingData EditingData { get; }
 
 	public AllianceEditingData(GameEditingData editingData) {
 
-		Validator = new(editingData, this);
+		EditingData = editingData;
 
-		Name = new(Validator.NameValidator, "");
+		Name = new(AllianceEditingDataValidator.NameConverter, "", new(EditingData.AllianceNameChanged),
+			new ValidationSet<string, ErrorSeverity>(AllianceEditingDataValidator.NameValidator_EndsWithAlliance),
+			new ValidationSet<string, ErrorSeverity>(AllianceEditingDataValidator.NameValidator_Length),
+			new ValidationSet<string, IEnumerable<AllianceEditingData>, ErrorSeverity>(AllianceEditingDataValidator.NameValidator_Duplicate,
+				() => EditingData.Alliances, EditingData.AllianceNameChanged)
+		);
 
-		AllianceColor = new(Validator.ColorCovalidator,
-			(nameof(Color.R), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, "0")),
-			(nameof(Color.G), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, "0")),
-			(nameof(Color.B), new StringInput<byte, ErrorSeverity>(Validator.ColorValueValidator, "0"))
+		AllianceColor = new(AllianceEditingDataValidator.ColorCovalidator,
+			(nameof(Color.R), new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0")),
+			(nameof(Color.G), new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0")),
+			(nameof(Color.B), new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"))
 		);
 	}
 
@@ -24,5 +30,6 @@ public class AllianceEditingData {
 
 	public StringInput<string, ErrorSeverity> Name { get; }
 
-	public MultiStringInput<Color, ErrorSeverity> AllianceColor { get; }
+	public MultiInput<Color, ErrorSeverity> AllianceColor { get; }
+
 }

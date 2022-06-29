@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+
 using WPFUtilities;
+using WPFUtilities.Validation;
 
 namespace CCSSDomain;
 
-public class GameEditingDataValidator {
+public static class GameEditingDataValidator {
 
-	private GameEditingData EditingData { get; }
 
-	public GameEditingDataValidator(GameEditingData editingData) {
-
-		EditingData = editingData;
+	public static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) YearConverter(string inputString) {
+		throw new NotImplementedException();
 	}
 
-
-
 	// TODO: this function needs a bunch of work. The code is pretty ugly.
-	public (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) YearValidator(string inputString) {
+	public static (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) YearValidator(string inputString) {
 
 		List<ValidationError<ErrorSeverity>> newErrors = new();
 		int newValue = 0;
@@ -82,7 +80,7 @@ public class GameEditingDataValidator {
 	}
 
 
-	public (VersionNumber, ReadOnlyCollection<ValidationError<ErrorSeverity>>) VersionCovalidator
+	public static (VersionNumber, ReadOnlyCollection<ValidationError<ErrorSeverity>>) VersionCovalidator
 		(in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> inputComponents) {
 
 		var majorNumberInput = inputComponents[nameof(VersionNumber.MajorNumber)] as StringInput<int, ErrorSeverity>;
@@ -114,7 +112,7 @@ public class GameEditingDataValidator {
 
 
 
-	public (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) TestIntValueConverter(string inputString) {
+	public static (int, ReadOnlyCollection<ValidationError<ErrorSeverity>>) TestIntValueConverter(string inputString) {
 
 		List<ValidationError<ErrorSeverity>> newErrors = new();
 		int intValue = 0;
@@ -147,7 +145,7 @@ public class GameEditingDataValidator {
 
 
 
-	public (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) NameValidator(string inputString) {
+	public static (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) NameValidator(string inputString) {
 		
 		List<ValidationError<ErrorSeverity>> newErrors = new();
 
@@ -170,12 +168,12 @@ public class GameEditingDataValidator {
 		return (inputString, newErrors.AsReadOnly());
 	}
 
-	public (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) DescriptionValidator(string inputString) {
+	public static (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) DescriptionValidator(string inputString) {
 
 		return (inputString, new List<ValidationError<ErrorSeverity>>().AsReadOnly());
 	}
 
-	public (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) VersionDescriptionValidator(string inputString) {
+	public static (string, ReadOnlyCollection<ValidationError<ErrorSeverity>>) VersionDescriptionValidator(string inputString) {
 
 		return (inputString, new List<ValidationError<ErrorSeverity>>().AsReadOnly());
 	}

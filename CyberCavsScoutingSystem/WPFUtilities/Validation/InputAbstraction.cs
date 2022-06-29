@@ -37,6 +37,7 @@ public abstract class Input<TTargetType, TSeverityEnum> : IInput<TTargetType, TS
 
 	public abstract TTargetType? TargetObject { get; protected set; }
 
+	protected abstract List<ValidationError<TSeverityEnum>> ValidationErrors { get; }
 	public abstract ReadOnlyList<ValidationError<TSeverityEnum>> Errors { get; }
 	public abstract TSeverityEnum ErrorLevel { get; }
 
@@ -61,12 +62,10 @@ public abstract class Input<TTargetType, TSeverityEnum> : IInput<TTargetType, TS
 		return validationSets.Select(x => x.ToValidationTrigger(TargetObjectGetter, PostValidation)).ToReadOnly();
 	}
 
-	protected abstract void PostValidation(ValidationError<TSeverityEnum> validationError);
-
-	//private void PostValidation(ValidationError<TSeverityEnum> validationError) {
-	//	ValidationErrors.Add(validationError);
-	//	OnErrorsChanged();
-	//}
+	private void PostValidation(ValidationError<TSeverityEnum> validationError) {
+		ValidationErrors.Add(validationError);
+		OnErrorsChanged();
+	}
 
 	public abstract void Validate();
 	public abstract event PropertyChangedEventHandler? PropertyChanged;
