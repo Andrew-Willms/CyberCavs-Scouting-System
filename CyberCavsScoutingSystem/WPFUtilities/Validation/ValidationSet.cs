@@ -7,7 +7,7 @@ namespace WPFUtilities.Validation;
 public interface IValidationSet<in TTargetType, TSeverityEnum> 
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	public IValidationTrigger ToValidationTrigger(Func<TTargetType> targetObjectGetter,
+	public IValidationTrigger<TSeverityEnum> ToValidationTrigger(Func<TTargetType> targetObjectGetter,
 		Action<ValidationError<TSeverityEnum>> postValidationAction);
 }
 
@@ -26,7 +26,7 @@ public class ValidationSet<TTargetType, TSeverityEnum> : IValidationSet<TTargetT
 		ValidationEvent = validationEvent;
 	}
 
-	public IValidationTrigger ToValidationTrigger(Func<TTargetType> targetObjectGetter,
+	public IValidationTrigger<TSeverityEnum> ToValidationTrigger(Func<TTargetType> targetObjectGetter,
 		Action<ValidationError<TSeverityEnum>> postValidationAction) {
 
 		return new ValidationTrigger<TTargetType, TSeverityEnum>(Validator, ValidationEvent,
@@ -53,7 +53,7 @@ public class ValidationSet<TTargetType, TValidationParameter, TSeverityEnum> : I
 		ValidationParameterGetter = validationParameterGetter;
 	}
 
-	public IValidationTrigger ToValidationTrigger(Func<TTargetType> targetObjectGetter,
+	public IValidationTrigger<TSeverityEnum> ToValidationTrigger(Func<TTargetType> targetObjectGetter,
 		Action<ValidationError<TSeverityEnum>> postValidationAction) {
 
 		return new ValidationTrigger<TTargetType, TValidationParameter, TSeverityEnum>(Validator, ValidationEvent,
@@ -67,17 +67,17 @@ public class ValidationSet<TTargetType, TValidationParameter, TSeverityEnum> : I
 public class CovalidationSet<TTargetType, TSeverityEnum> : IValidationSet<TTargetType, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private MultiStringInputCovalidator<TTargetType, TSeverityEnum> Validator { get; }
+	private MultiInputCovalidator<TTargetType, TSeverityEnum> Validator { get; }
 
 	private ValidationEvent ValidationEvent { get; }
 
-	public CovalidationSet(MultiStringInputCovalidator<TTargetType, TSeverityEnum> validator, ValidationEvent validationEvent) {
+	public CovalidationSet(MultiInputCovalidator<TTargetType, TSeverityEnum> validator, ValidationEvent validationEvent) {
 
 		Validator = validator;
 		ValidationEvent = validationEvent;
 	}
 
-	public IValidationTrigger ToValidationTrigger(Func<TTargetType> targetObjectGetter,
+	public IValidationTrigger<TSeverityEnum> ToValidationTrigger(Func<TTargetType> targetObjectGetter,
 		Action<ValidationError<TSeverityEnum>> postValidationAction) {
 
 		return new CovalidationTrigger<TTargetType, TSeverityEnum>(Validator, ValidationEvent,
@@ -104,7 +104,7 @@ public class CovalidationSet<TTargetType, TValidationParameter, TSeverityEnum> :
 		ValidationParameterGetter = validationParameterGetter;
 	}
 
-	public IValidationTrigger ToValidationTrigger(Func<TTargetType> targetObjectGetter,
+	public IValidationTrigger<TSeverityEnum> ToValidationTrigger(Func<TTargetType> targetObjectGetter,
 		Action<ValidationError<TSeverityEnum>> postValidationAction) {
 
 		return new ValidationTrigger<TTargetType, TValidationParameter, TSeverityEnum>(Validator, ValidationEvent,
