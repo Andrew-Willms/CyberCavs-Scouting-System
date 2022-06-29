@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace WPFUtilities;
 
 
 
-public class ReadOnlyList<T> : ReadOnlyCollection<T> {
+public class ReadOnlyList<T> : ReadOnlyCollection<T>, IEnumerable<T> {
 
 	public ReadOnlyList() : base(new List<T>()) { }
 
@@ -41,18 +42,14 @@ public class ReadOnlyList<T> : ReadOnlyCollection<T> {
 
 		return array.ToList().ToReadOnly();
 	}
-}
 
-public static class CollectionExtensions {
+	public ReadOnlyList<T> CopyAndAddRange(params T[] newItems) {
 
-	public static ReadOnlyList<T> ToReadOnly<T>(this IEnumerable<T> enumerable) {
-
-		return (ReadOnlyList<T>)enumerable.ToList().AsReadOnly();
+		return CopyAndAddRange(newItems.AsEnumerable());
 	}
 
-	//public static ReadOnlyList<T> ToReadOnly<T>(this List<T> list) {
+	public ReadOnlyList<T> CopyAndAddRanges(params IEnumerable<T>[] newItems) {
 
-	//	return (ReadOnlyList<T>)list.AsReadOnly();
-	//}
-
+		return CopyAndAddRange(newItems.SelectMany(x => x)); // I think this should work
+	}
 }
