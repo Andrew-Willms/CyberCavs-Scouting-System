@@ -9,12 +9,10 @@ namespace QuickTestingApplication;
 
 public class Program {
 
-	static void Main(string[] args) {
+	private static void Main(string[] args) {
 
 		//Console.WriteLine("Test");
 		//Trace.WriteLine("Test");
-
-
 
 	}
 
@@ -35,12 +33,6 @@ public class Program {
 		Console.WriteLine(test.GetType().GetGenericTypeDefinition() == typeof(TestClass1<,>));
 		Console.WriteLine(test.GetType().GetGenericTypeDefinition() == typeof(TestClass1<,,>));
 	}
-
-	public interface ITestInterface<T1, T2> {}
-
-	public class TestClass1<T1, T2> : ITestInterface<T1, T2> {}
-
-	public class TestClass1<T1, T2, T3> : ITestInterface<T1, T2> {}
 
 
 
@@ -73,4 +65,29 @@ public class Program {
 	}
 
 	public static (int testInt, string testString, double testDouble) test = (1, "1", 1);
+}
+
+
+
+public interface ITestInterface<T1, T2> {}
+
+public class TestClass1<T1, T2> : ITestInterface<T1, T2> {}
+
+public class TestClass1<T1, T2, T3> : ITestInterface<T1, T2> {}
+
+
+
+public class TestIsNullInConstructor {
+
+	public TestIsNullInConstructor() {
+
+		Console.WriteLine("from constructor " + (this is null));
+
+		SomeOtherFunction(this);
+	}
+
+	private static void SomeOtherFunction(TestIsNullInConstructor? test) {
+		Console.WriteLine("from other function " + (test is null));
+	}
+
 }
