@@ -52,4 +52,6 @@ public class ReadOnlyList<T> : ReadOnlyCollection<T>, IEnumerable<T> {
 
 		return CopyAndAddRange(newItems.SelectMany(x => x)); // I think this should work
 	}
+
+	public static readonly ReadOnlyList<T> Empty = new();
 }
