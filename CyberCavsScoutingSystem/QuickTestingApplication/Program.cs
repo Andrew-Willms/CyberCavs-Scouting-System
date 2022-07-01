@@ -14,6 +14,7 @@ public class Program {
 		//Console.WriteLine("Test");
 		//Trace.WriteLine("Test");
 
+		Console.WriteLine(char.IsDigit('-'));
 	}
 
 
