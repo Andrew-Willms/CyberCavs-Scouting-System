@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Linq;
+using WPFUtilities.Extensions;
 
 namespace WPFUtilities.Validation;
 
@@ -38,7 +39,7 @@ public class MultiInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSeveri
 
 	public override ValidationEvent TargetObjectChanged { get; } = new();
 
-	private MultiInputConverter<TTargetType, TSeverityEnum> Converter { get; }
+	private MultiInputConverter<TTargetType?, TSeverityEnum> Converter { get; }
 	private ReadOnlyList<MultiInputValidator<TTargetType, TSeverityEnum>> DefaultValidators { get; }
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
@@ -57,7 +58,7 @@ public class MultiInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSeveri
 
 
 
-	public MultiInput(MultiInputConverter<TTargetType, TSeverityEnum> converter,
+	public MultiInput(MultiInputConverter<TTargetType?, TSeverityEnum> converter,
 		ReadOnlyList<(string inputComponentName, IStringInput<TSeverityEnum> stringInput)> inputComponents,
 		ReadOnlyList<MultiInputValidator<TTargetType, TSeverityEnum>> defaultValidators,
 		params IValidationSet<TTargetType, TSeverityEnum>[] validationSets) {
