@@ -2,8 +2,9 @@
 using System.ComponentModel;
 using System;
 using System.Linq;
+using WPFUtilities.Extensions;
 
-namespace WPFUtilities.Validation; 
+namespace WPFUtilities.Validation;
 
 
 
