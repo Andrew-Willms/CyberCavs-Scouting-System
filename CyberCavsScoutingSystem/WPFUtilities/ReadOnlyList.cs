@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace WPFUtilities; 
+using WPFUtilities.Extensions;
+
+namespace WPFUtilities;
 
 
 
 public class ReadOnlyList<T> : ReadOnlyCollection<T>, IEnumerable<T> {
-
-	public ReadOnlyList() : base(new List<T>()) { }
 
 	public ReadOnlyList(IList<T> list) : base(list) { }
 
