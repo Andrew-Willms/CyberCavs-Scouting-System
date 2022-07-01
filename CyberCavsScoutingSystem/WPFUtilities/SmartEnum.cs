@@ -10,8 +10,9 @@ namespace WPFUtilities;
 // and Steve Smith's nuget package https://github.com/ardalis/SmartEnum.
 public abstract class SmartEnum<T> : IEquatable<SmartEnum<T>> where T : SmartEnum<T> {
 
-	public string Name { get; }
-	public int Value { get; }
+	private string Name { get; }
+
+	protected int Value { get; }
 
 	protected SmartEnum(string name, int value) {
 
