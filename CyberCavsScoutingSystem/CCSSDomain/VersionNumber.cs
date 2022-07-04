@@ -11,19 +11,19 @@ public class VersionNumber {
 
 	public VersionNumber() { }
 
-	public VersionNumber(int major, int minor, int patch) {
+	public VersionNumber(uint major, uint minor, uint patch) {
 		MajorNumber = major;
 		MinorNumber = minor;
 		PatchNumber = patch;
 	}
 
-	public int MajorNumber { get; set; }
+	public uint MajorNumber { get; set; }
 
-	public int MinorNumber { get; set; }
+	public uint MinorNumber { get; set; }
 
-	public int PatchNumber { get; set; }
+	public uint PatchNumber { get; set; }
 
-	public int VersionDescription { get; set; }
+	public string VersionDescription { get; set; }
 
 	public override string ToString() {
 		return $"{MajorNumber}.{MinorNumber}.{PatchNumber}";
