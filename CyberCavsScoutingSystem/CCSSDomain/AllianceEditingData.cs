@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using WPFUtilities.Validation;
 
@@ -12,17 +13,21 @@ public class AllianceEditingData {
 
 		EditingData = editingData;
 
-		Name = new(AllianceEditingDataValidator.NameConverter, "", new(EditingData.AllianceNameChanged),
+		Name = new(AllianceEditingDataValidator.NameConverter, "",
 			new ValidationSet<string, ErrorSeverity>(AllianceEditingDataValidator.NameValidator_EndsWithAlliance),
 			new ValidationSet<string, ErrorSeverity>(AllianceEditingDataValidator.NameValidator_Length),
-			new ValidationSet<string, IEnumerable<AllianceEditingData>, ErrorSeverity>(AllianceEditingDataValidator.NameValidator_Duplicate,
-				() => EditingData.Alliances, EditingData.AllianceNameChanged)
+			new ValidationSet<string, IEnumerable<AllianceEditingData>, ErrorSeverity>(
+				AllianceEditingDataValidator.NameValidator_Uniqueness,
+				() => EditingData.Alliances.Where(x => x != this), EditingData.AllianceNameChanged)
 		);
 
-		AllianceColor = new(AllianceEditingDataValidator.ColorCovalidator,
-			(nameof(Color.R), new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0")),
-			(nameof(Color.G), new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0")),
-			(nameof(Color.B), new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"))
+		AllianceColor = new(AllianceEditingDataValidator.ColorConverter,
+			new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
+			new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
+			new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
+			new ValidationSet<Color, IEnumerable<AllianceEditingData>, ErrorSeverity>(
+				AllianceEditingDataValidator.ColorCovalidator_Uniqueness,
+				() => EditingData.Alliances.Where(x => x != this), EditingData.AllianceNameChanged)
 		);
 	}
 
@@ -30,6 +35,6 @@ public class AllianceEditingData {
 
 	public StringInput<string, ErrorSeverity> Name { get; }
 
-	public MultiInput<Color, ErrorSeverity> AllianceColor { get; }
+	public MultiInput<Color, ErrorSeverity, byte, byte, byte> AllianceColor { get; }
 
 }

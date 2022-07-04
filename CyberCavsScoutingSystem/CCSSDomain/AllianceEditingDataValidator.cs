@@ -1,62 +1,60 @@
 ﻿using System;
-using Math = System.Math;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.Linq;
 using WPFUtilities;
 using WPFUtilities.Validation;
+using WPFUtilities.Extensions;
 
 namespace CCSSDomain;
 
 public static class AllianceEditingDataValidator {
 
-	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) NameConverter(string inputString) {
+	public static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) NameConverter(string inputString) {
 
-		return (inputString, new());
-	}
-
-	// TODO: replace ValidationError? with Optional<ValidationError>.
-	public static ValidationError<ErrorSeverity>? NameValidator_EndsWithAlliance(string name) {
-
-		if (name.EndsWith(" Alliance")) {
-			return null;
+		if (inputString is null) {
+			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
 		}
 
-		return new("Does not end in \"Alliance\"", ErrorSeverity.Advisory,
-			"Typically alliance names should follow the format \"{Colour} Alliance\"");
+		return inputString.Length > 0
+			? (inputString, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty)
+			: (null, new(new ValidationError<ErrorSeverity>("Name Can't be Empty", ErrorSeverity.Error, "Test")));
 	}
 
-	public static ValidationError<ErrorSeverity>? NameValidator_Length(string name) {
+	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_EndsWithAlliance(string name) {
+
+		if (name.EndsWith(" Alliance")) {
+			return ReadOnlyList<ValidationError<ErrorSeverity>>.Empty;
+		}
+
+		return new(new ValidationError<ErrorSeverity> ("Does not end in \"Alliance\"", ErrorSeverity.Advisory,
+			"Typically alliance names should follow the format \"{Colour} Alliance\""));
+	}
+
+	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_Length(string name) {
 
 		//Todo extract this magic numbers.
-
 		return name.Length switch {
-			> 30 => new("Long Name", ErrorSeverity.Warning, "This alliance name is very long."),
-			> 20 => new("Long Name", ErrorSeverity.Advisory, "This alliance name is rather long."),
-			_ => null
+			> 30 => new(new ValidationError<ErrorSeverity>("Long Name", ErrorSeverity.Warning, "This alliance name is very long.")),
+			> 20 => new(new ValidationError<ErrorSeverity>("Long Name", ErrorSeverity.Advisory, "This alliance name is rather long.")),
+			_ => ReadOnlyList<ValidationError<ErrorSeverity>>.Empty
 		};
 	}
 
-	public static ValidationError<ErrorSeverity>? NameValidator_Duplicate(string name, IEnumerable<AllianceEditingData> alliances) {
+	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_Uniqueness(string name,
+		IEnumerable<AllianceEditingData> otherAlliances) {
 
-		return alliances.Count(x => x.Name.TargetObject == name) switch {
-
-			0 => throw new ArgumentException($"No alliance has the name \"{name}\"."),
-
-			1 => null,
-
-			> 1 => new("Duplicate Name", ErrorSeverity.Error, $"Multiple Alliances share the name \"{name}\"."),
-
-			_ => throw new Exception("Uh... the enumerable had a negative count. How did you manage that?")
-		};
+		return (from allianceEditingData in otherAlliances
+			where allianceEditingData.Name.TargetObject == name
+			select new ValidationError<ErrorSeverity>("Duplicate Name", ErrorSeverity.Error,
+				$"The name of this alliance is identical to that of the {allianceEditingData.Name.InputString}")).ToList().ToReadOnly();
 	}
 
 
 
-	public static (byte, ObservableCollection<ValidationError<ErrorSeverity>>) ColorValueValidator(string inputString) {
+	public static (byte, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorValueValidator(string inputString) {
 
-		ObservableCollection<ValidationError<ErrorSeverity>> newErrors = new();
+		List<ValidationError<ErrorSeverity>> newErrors = new();
 		byte byteValue = 0;
 
 		string invalidCharacters = string.Concat(inputString.Where(x => char.IsDigit(x) == false));
@@ -82,68 +80,43 @@ public static class AllianceEditingDataValidator {
 
 		}
 
-		return (byteValue, newErrors);
+		return (byteValue, newErrors.ToReadOnly());
 	}
 
 
 
-	public static (Color, ObservableCollection<ValidationError<ErrorSeverity>>) ColorCovalidator
-		(in ReadOnlyDictionary<string, IStringInput<ErrorSeverity>> inputComponents) {
+	public static (Color, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorConverter
+		(byte redValue, byte greenValue, byte blueValue) {
 
-		if (inputComponents[nameof(Color.R)] is not StringInput<byte, ErrorSeverity> redValueInput) {
-			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(Color.R)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
-		}
+		return (Color.FromRgb(redValue, greenValue, blueValue), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+	}
 
-		if (inputComponents[nameof(Color.G)] is not StringInput<byte, ErrorSeverity> greenValueInput) {
-			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(Color.G)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
-		}
+	public static ReadOnlyList<ValidationError<ErrorSeverity>> ColorCovalidator_Uniqueness(Color color,
+		IEnumerable<AllianceEditingData> otherAlliances) {
 
-		if (inputComponents[nameof(Color.B)] is not StringInput<byte, ErrorSeverity> blueValueInput) {
-			throw new ArgumentException($"{nameof(inputComponents)}[{nameof(Color.B)}] is null or cannot be converted to a {nameof(StringInput<int, ErrorSeverity>)}<{typeof(int)}, {nameof(ErrorSeverity)}>");
-		}
-
-		Color color = Color.FromRgb(redValueInput.TargetObject, greenValueInput.TargetObject, blueValueInput.TargetObject);
 		List<ValidationError<ErrorSeverity>> validationErrors = new();
 
-		if (EditingData.Alliances is null || AllianceEditingData is null) {
-			return (color, validationErrors.AsReadOnly());
-		}
+		// TODO: extract magic numbers
+		foreach (AllianceEditingData allianceEditingData in otherAlliances) {
 
-		foreach (AllianceEditingData allianceEditingData in EditingData.Alliances.Where(x => x != AllianceEditingData)) {
-
-			bool test1 = allianceEditingData is null;
-			bool test2 = allianceEditingData.AllianceColor is null;
-			bool test3 = AllianceEditingData is null;
-			bool test4 = AllianceEditingData.AllianceColor is null;
-
-			int colorDifference = ColorDifference(allianceEditingData.AllianceColor.TargetObject,
-				AllianceEditingData.AllianceColor.TargetObject);
-
-			switch (colorDifference) {
-
-				case 0:
-					validationErrors.Add(new("Colors Identical", ErrorSeverity.Warning,
-						$"The color of this alliance are identical to that of the {allianceEditingData.Name.InputString}"));
-					break;
-
-				case < 10:
-					validationErrors.Add(new("Colors Very Close", ErrorSeverity.Warning,
-						$"The color of this alliance are very similar to that of the {allianceEditingData.Name.InputString}"));
-					break;
-
-				case < 30:
-					validationErrors.Add(new("Colors Very Close", ErrorSeverity.Advisory,
-						$"The color of this alliance are similar to that of the {allianceEditingData.Name.InputString}"));
-					break;
+			if (color.Difference(allianceEditingData.AllianceColor.TargetObject) == 0) {
+				validationErrors.Add(new("Colors Identical", ErrorSeverity.Warning,
+					$"The color of this alliance are identical to that of the {allianceEditingData.Name.InputString}"));
 			}
+
+			if (color.Difference(allianceEditingData.AllianceColor.TargetObject) < 10) {
+				validationErrors.Add(new("Colors Very Close", ErrorSeverity.Warning,
+					$"The color of this alliance are very similar to that of the {allianceEditingData.Name.InputString}"));
+			}
+
+			if (color.Difference(allianceEditingData.AllianceColor.TargetObject) < 30) {
+				validationErrors.Add(new("Colors Very Close", ErrorSeverity.Advisory,
+					$"The color of this alliance are similar to that of the {allianceEditingData.Name.InputString}"));
+			}
+
 		}
 
-		return (color, validationErrors.AsReadOnly());
-	}
-
-	private static int ColorDifference(Color color1, Color color2) {
-
-		return Math.Abs(color1.R - color2.R) + System.Math.Abs(color1.G - color2.G) + Math.Abs(color1.B - color2.B);
+		return validationErrors.ToReadOnly();
 	}
 
 }

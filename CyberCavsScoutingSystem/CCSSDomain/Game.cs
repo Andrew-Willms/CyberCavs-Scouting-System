@@ -10,7 +10,6 @@ namespace CCSSDomain;
 public class Game {
 
 	public VersionNumber Version;
-	public string VersionDescription = "";
 
 	public DateTime VersionReleaseDate;
 

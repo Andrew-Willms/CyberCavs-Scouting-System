@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using WPFUtilities.Extensions;
 
 namespace WPFUtilities.Validation;
 
@@ -48,7 +47,6 @@ public class StringInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSever
 	}
 
 	private StringInputConverter<TTargetType?, TSeverityEnum> Converter { get; }
-	private ReadOnlyList<StringInputValidator<TTargetType, TSeverityEnum>> DefaultValidators { get; }
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
 	private ReadOnlyList<ValidationError<TSeverityEnum>> ConversionErrors { get; set; } = new();
@@ -65,12 +63,13 @@ public class StringInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSever
 	public override ValidationEvent TargetObjectChanged { get; } = new();
 
 
+
+	public StringInput(StringInputConverter<TTargetType?, TSeverityEnum> converter) : this(converter, string.Empty) { }
+
 	public StringInput(StringInputConverter<TTargetType?, TSeverityEnum> converter, string initialString,
-		ReadOnlyList<StringInputValidator<TTargetType, TSeverityEnum>> defaultValidators,
 		params IValidationSet<TTargetType, TSeverityEnum>[] validationSets) {
 
 		Converter = converter;
-		DefaultValidators = defaultValidators;
 		ValidationTriggers = ValidationSetsToTriggers(validationSets);
 
 		InputString = initialString;
@@ -86,12 +85,8 @@ public class StringInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSever
 
 		if (TargetObject is not null) {
 
-			foreach (StringInputValidator<TTargetType, TSeverityEnum> validator in DefaultValidators) {
-				ValidationErrors.AddIfNotNull(validator.Invoke(TargetObject));
-			}
-
 			foreach (IValidationTrigger<TSeverityEnum> trigger in ValidationTriggers) {
-				ValidationErrors.AddIfNotNull(trigger.InvokeValidator());
+				ValidationErrors.AddRange(trigger.InvokeValidator());
 			}
 		}
 

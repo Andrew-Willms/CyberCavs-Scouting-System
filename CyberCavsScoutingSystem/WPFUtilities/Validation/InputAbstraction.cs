@@ -63,8 +63,8 @@ public abstract class Input<TTargetType, TSeverityEnum> : IInput<TTargetType, TS
 		return validationSets.Select(x => x.ToValidationTrigger(TargetObjectGetter, PostValidation)).ToReadOnly();
 	}
 
-	private void PostValidation(ValidationError<TSeverityEnum> validationError) {
-		ValidationErrors.Add(validationError);
+	private void PostValidation(ReadOnlyList<ValidationError<TSeverityEnum>> validationError) {
+		ValidationErrors.AddRange(validationError);
 		OnErrorsChanged();
 	}
 

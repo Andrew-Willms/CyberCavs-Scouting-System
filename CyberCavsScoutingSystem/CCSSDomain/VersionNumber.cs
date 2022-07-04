@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CCSSDomain;
+﻿namespace CCSSDomain;
 
 // Consider making this a struct
 public class VersionNumber {
@@ -17,13 +11,13 @@ public class VersionNumber {
 		PatchNumber = patch;
 	}
 
-	public uint MajorNumber { get; set; }
+	public uint MajorNumber { get; }
 
-	public uint MinorNumber { get; set; }
+	public uint MinorNumber { get; }
 
-	public uint PatchNumber { get; set; }
+	public uint PatchNumber { get; }
 
-	public string VersionDescription { get; set; }
+	public string VersionDescription { get; } = "";
 
 	public override string ToString() {
 		return $"{MajorNumber}.{MinorNumber}.{PatchNumber}";

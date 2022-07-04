@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using WPFUtilities;
 using WPFUtilities.Validation;
 using Xunit;
 
@@ -11,25 +11,85 @@ public class GameEditingDataValidatorTests {
 	[Fact]
 	public void NullNameShouldThrowException() {
 
-		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
-		GameEditingDataValidator validator = new(editingData);
-
-		Assert.Throws<ArgumentNullException>(() => validator.NameValidator(null));
+		Assert.Throws<ArgumentNullException>(() => GameEditingDataValidator.NameConverter(null));
 	}
 
 	[Fact]
 	public void EmptyNameShouldFail() {
 
-		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
-		GameEditingDataValidator validator = new(editingData);
+		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length("");
 
-		(string name, ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) = validator.NameValidator("");
+		Assert.True(error is not null);
 
-		Assert.Equal("", name);
+		Assert.True(error!.Severity == ErrorSeverity.Error);
 
-		Assert.True(errors.Count == 1);
+		//TODO: once there is a resource to get standardized errors from assert that the error is the right one.
+		// Look at "LongNameShouldWarn" for how to set this up
+		// I should have some way of getting localized text like error messages before I test this.
+		//Assert.True(errors[0].Name == "");
+		//Assert.True(errors[0].Description == "");
+	}
 
-		Assert.True(errors[0].Severity == ErrorSeverity.Error);
+	[Theory]
+	[InlineData("test")]
+	public void VeryShortNameShouldWarn(string name) {
+
+		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length(name);
+
+		Assert.True(error is not null);
+
+		Assert.True(error!.Severity == ErrorSeverity.Warning);
+
+		//TODO: once there is a resource to get standardized errors from assert that the error is the right one.
+		// Look at "LongNameShouldWarn" for how to set this up
+		// I should have some way of getting localized text like error messages before I test this.
+		//Assert.True(errors[0].Name == "");
+		//Assert.True(errors[0].Description == "");
+	}
+
+	[Theory]
+	[InlineData("test")]
+	public void ShortNameShouldAdvise(string name) {
+
+		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length(name);
+
+		Assert.True(error is not null);
+
+		Assert.True(error!.Severity == ErrorSeverity.Advisory);
+
+		//TODO: once there is a resource to get standardized errors from assert that the error is the right one.
+		// Look at "LongNameShouldWarn" for how to set this up
+		// I should have some way of getting localized text like error messages before I test this.
+		//Assert.True(errors[0].Name == "");
+		//Assert.True(errors[0].Description == "");
+	}
+
+	[Theory]
+	[MemberData(nameof(LongNameShouldAdviseTestData))]
+	public void LongNameShouldAdvise(string name) {
+
+		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length(name);
+
+		Assert.True(error is not null);
+
+		Assert.True(error!.Severity == ErrorSeverity.Advisory);
+
+		//TODO: once there is a resource to get standardized errors from assert that the error is the right one.
+		// Look at "LongNameShouldWarn" for how to set this up
+		// I should have some way of getting localized text like error messages before I test this.
+		//Assert.True(errors[0].Name == "");
+		//Assert.True(errors[0].Description == "");
+	}
+
+	[Theory]
+	[InlineData("test")]
+	public void VeryLongNameShouldWard(string name) {
+
+		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length(name);
+
+		Assert.True(error is not null);
+
+		Assert.True(error!.Severity == ErrorSeverity.Warning);
 
 		//TODO: once there is a resource to get standardized errors from assert that the error is the right one.
 		// Look at "LongNameShouldWarn" for how to set this up
@@ -43,37 +103,18 @@ public class GameEditingDataValidatorTests {
 	public void ValidNameShouldEcho(string inputString, string expectedName) {
 
 		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
-		GameEditingDataValidator validator = new(editingData);
 
-		(string name, ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) = validator.NameValidator(inputString);
+		(string name, ReadOnlyList<ValidationError<ErrorSeverity>> errors) = GameEditingDataValidator.NameConverter(inputString);
 
 		Assert.Equal(expectedName, name);
 		Assert.True(errors.Count == 0);
-	}
-
-	[Theory]
-	[MemberData(nameof(LongNameShouldAdviseTestData))]
-	public void LongNameShouldAdvise(string inputString, string expectedName, ValidationError<ErrorSeverity> expectedError) {
-
-		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
-		GameEditingDataValidator validator = new(editingData);
-
-		(string name, ReadOnlyCollection<ValidationError<ErrorSeverity>> errors) = validator.NameValidator(inputString);
-
-		Assert.Equal(expectedName, name);
-
-		Assert.True(errors.Count == 1);
-
-		//TODO: once there is a resource to get standardized errors from assert that the error is the right one.
-		//Assert.True(errors[0] == expectedError);
 	}
 
 	public static IEnumerable<object[]> LongNameShouldAdviseTestData() {
 
 		yield return new object[] {
 			"Some Really Long Name One Two Three Four Five Six Seven",
-			"Some Really Long Name One Two Three Four Five Six Seven",
-			new ValidationError<ErrorSeverity>("", ErrorSeverity.Advisory)
+			"Some Really Long Name One Two Three Four Five Six Seven Eight",
 		};
 	}
 }
