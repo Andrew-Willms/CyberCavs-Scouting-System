@@ -68,16 +68,16 @@ public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	(TComponent1 componentInput1)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2>
 	(TComponent1 componentInput1,
 		TComponent2 componentInput2)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3>
@@ -86,8 +86,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent3 componentInput3)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -98,8 +98,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent4 componentInput4)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -112,8 +112,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent5 componentInput5)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -128,8 +128,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent6 componentInput6)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -146,8 +146,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent7 componentInput7)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -166,8 +166,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent8 componentInput8)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -188,8 +188,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent9 componentInput9)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -212,8 +212,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent10 componentInput10)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -238,8 +238,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent11 componentInput11)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -266,8 +266,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent12 componentInput12)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -296,8 +296,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent13 componentInput13)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -328,8 +328,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent14 componentInput14)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
@@ -362,8 +362,8 @@ public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 		TComponent15 componentInput15)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1,
 		in TComponent2,
 		in TComponent3,
