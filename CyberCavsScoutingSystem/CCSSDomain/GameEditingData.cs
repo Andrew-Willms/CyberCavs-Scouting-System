@@ -23,13 +23,13 @@ public class GameEditingData : INotifyPropertyChanged {
 			new ValidationSet<string, ErrorSeverity>(GameEditingDataValidator.NameValidator_Length)
 		);
 
-		Description = new(GameEditingDataValidator.DescriptionConverter);
+		Description = new(GameEditingDataValidator.DescriptionConverter, "");
 
 		Version = new(GameEditingDataValidator.VersionConverter,
-			new StringInput<uint, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
-			new StringInput<uint, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
-			new StringInput<uint, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
-			new StringInput<string, ErrorSeverity>(GameEditingDataValidator.VersionDescriptionConverter, "0")
+			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
+			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
+			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
+			new SingleInput<string, string, ErrorSeverity>(GameEditingDataValidator.VersionDescriptionConverter, "0")
 		);
 
 		RobotsPerAlliance = new(GameEditingDataValidator.TestIntValueConverter, "3");
@@ -65,12 +65,12 @@ public class GameEditingData : INotifyPropertyChanged {
 
 	public MultiInput<VersionNumber, ErrorSeverity, uint, uint, uint, string> Version { get; }
 
-	public StringInput<string, ErrorSeverity> Name { get; }
-	public StringInput<int, ErrorSeverity> Year { get; }
-	public StringInput<string, ErrorSeverity> Description { get; }
+	public SingleInput<string, string, ErrorSeverity> Name { get; }
+	public SingleInput<int, string, ErrorSeverity> Year { get; }
+	public SingleInput<string, string, ErrorSeverity> Description { get; }
 
-	public StringInput<int, ErrorSeverity> RobotsPerAlliance { get; }
-	public StringInput<int, ErrorSeverity> AlliancesPerMatch { get; }
+	public SingleInput<int, string, ErrorSeverity> RobotsPerAlliance { get; }
+	public SingleInput<int, string, ErrorSeverity> AlliancesPerMatch { get; }
 
 	public ValidationEvent AllianceNameChanged { get; } = new();
 

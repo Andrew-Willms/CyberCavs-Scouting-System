@@ -22,9 +22,9 @@ public class AllianceEditingData {
 		);
 
 		AllianceColor = new(AllianceEditingDataValidator.ColorConverter,
-			new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
-			new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
-			new StringInput<byte, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
+			new SingleInput<byte, string, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
+			new SingleInput<byte, string, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
+			new SingleInput<byte, string, ErrorSeverity>(AllianceEditingDataValidator.ColorValueValidator, "0"),
 			new ValidationSet<Color, IEnumerable<AllianceEditingData>, ErrorSeverity>(
 				AllianceEditingDataValidator.ColorCovalidator_Uniqueness,
 				() => EditingData.Alliances.Where(x => x != this), EditingData.AllianceNameChanged)
@@ -33,7 +33,7 @@ public class AllianceEditingData {
 
 
 
-	public StringInput<string, ErrorSeverity> Name { get; }
+	public SingleInput<string, string, ErrorSeverity> Name { get; }
 
 	public MultiInput<Color, ErrorSeverity, byte, byte, byte> AllianceColor { get; }
 

@@ -43,26 +43,27 @@ version of that value type because C# handles nullable reference types and nulla
 */
 
 public delegate ReadOnlyList<ValidationError<TSeverityEnum>>
-	InputValidator<in TTarget, TSeverityEnum>
-	(TTarget targetObject)
+	InputValidator<in TOutput, TSeverityEnum>
+	(TOutput targetObject)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate ReadOnlyList<ValidationError<TSeverityEnum>>
-	InputValidator<in TTarget, in TValidationParameter, TSeverityEnum>
-	(TTarget targetObject, TValidationParameter parameter)
+	InputValidator<in TOutput, in TValidationParameter, TSeverityEnum>
+	(TOutput targetObject, TValidationParameter parameter)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	StringInputConverter<TTarget, TSeverityEnum>
-	(string inputString)
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	SingleInputConverter<TOutput, in TInput, TSeverityEnum>
+	(TInput input)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 
 
-public delegate (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TTarget, TSeverityEnum,
+
+public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputConverter<TOutput, TSeverityEnum,
 		in TComponent1>
 	(TComponent1 componentInput1)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;

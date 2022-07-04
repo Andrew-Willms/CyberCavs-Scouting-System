@@ -6,47 +6,55 @@ namespace WPFUtilities.Validation;
 
 
 
-public interface IStringInput<TSeverityEnum> : IInput<TSeverityEnum>
+public interface ISingleInput<TSeverityEnum> : IInput<TSeverityEnum>
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> { }
+
+public interface ISingleInput<TInput, TSeverityEnum> : IInput<TSeverityEnum>, ISingleInput<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	public string InputString { get; set; }
+	public TInput InputObject { get; set; }
 }
 
-public interface IStringInput<out TTargetType, TSeverityEnum> : IInput<TTargetType, TSeverityEnum>, IStringInput<TSeverityEnum>
+public interface ISingleInput<out TOutput, TInput, TSeverityEnum> : IInput<TOutput, TSeverityEnum>, ISingleInput<TInput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 }
 
 
 
-public class StringInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSeverityEnum>, IStringInput<TTargetType, TSeverityEnum>
+public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSeverityEnum>, ISingleInput<TOutput, TInput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private TTargetType? _TargetObject;
-	public override TTargetType? TargetObject {
+	private TOutput? _TargetObject;
+	public override TOutput? OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
 		get => IsConvertible ? _TargetObject : default;
 
 		protected set {
+
+			//(TTargetType result, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Converter(InputObject);
+
+			//if (errors.Any() == false && result == )
+
 			_TargetObject = value;
 			OnTargetObjectChanged();
 		}
 	}
 
-	private string _InputString = "";
-	public string InputString {
+	private TInput _InputObject;
+	public TInput InputObject {
 
 		// TODO: .Net 7.0 remove backing field
-		get => _InputString;
+		get => _InputObject;
 
 		set {
-			_InputString = value;
-			OnInputStringChanged();
+			_InputObject = value;
+			OnInputChanged();
 			Validate();
 		}
 	}
 
-	private StringInputConverter<TTargetType?, TSeverityEnum> Converter { get; }
+	private SingleInputConverter<TOutput?, TInput, TSeverityEnum> Converter { get; }
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
 	private ReadOnlyList<ValidationError<TSeverityEnum>> ConversionErrors { get; set; } = new();
@@ -60,30 +68,31 @@ public class StringInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSever
 	private bool IsConvertible => ConversionErrorLevel.IsFatal == false;
 	public override bool IsValid => ErrorLevel.IsFatal == false;
 
-	public override ValidationEvent TargetObjectChanged { get; } = new();
+	public override ValidationEvent OutputObjectChanged { get; } = new();
 
 
 
-	public StringInput(StringInputConverter<TTargetType?, TSeverityEnum> converter) : this(converter, string.Empty) { }
+	//public SingleInput(SingleInputConverter<TOutput?, TInput, TSeverityEnum> converter) : this(converter, default) { }
 
-	public StringInput(StringInputConverter<TTargetType?, TSeverityEnum> converter, string initialString,
-		params IValidationSet<TTargetType, TSeverityEnum>[] validationSets) {
+	public SingleInput(SingleInputConverter<TOutput?, TInput, TSeverityEnum> converter, TInput initialInput,
+		params IValidationSet<TOutput, TSeverityEnum>[] validationSets) {
 
 		Converter = converter;
 		ValidationTriggers = ValidationSetsToTriggers(validationSets);
 
-		InputString = initialString;
+		_InputObject = initialInput;
+		InputObject = initialInput;
 	}
 
 
 
 	public sealed override void Validate() {
 
-		(TargetObject, ConversionErrors) = Converter(InputString);
+		(OutputObject, ConversionErrors) = Converter(InputObject);
 
 		ValidationErrors.Clear();
 
-		if (TargetObject is not null) {
+		if (OutputObject is not null) {
 
 			foreach (IValidationTrigger<TSeverityEnum> trigger in ValidationTriggers) {
 				ValidationErrors.AddRange(trigger.InvokeValidator());
@@ -99,12 +108,12 @@ public class StringInput<TTargetType, TSeverityEnum> : Input<TTargetType, TSever
 
 	private void OnTargetObjectChanged() {
 
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetObject)));
-		TargetObjectChanged.Invoke();
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputObject)));
+		OutputObjectChanged.Invoke();
 	}
 
-	private void OnInputStringChanged() {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputString)));
+	private void OnInputChanged() {
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputObject)));
 	}
 
 	protected override void OnErrorsChanged() {

@@ -45,9 +45,9 @@ public static class AllianceEditingDataValidator {
 		IEnumerable<AllianceEditingData> otherAlliances) {
 
 		return (from allianceEditingData in otherAlliances
-			where allianceEditingData.Name.TargetObject == name
+			where allianceEditingData.Name.OutputObject == name
 			select new ValidationError<ErrorSeverity>("Duplicate Name", ErrorSeverity.Error,
-				$"The name of this alliance is identical to that of the {allianceEditingData.Name.InputString}")).ToList().ToReadOnly();
+				$"The name of this alliance is identical to that of the {allianceEditingData.Name.InputObject}")).ToList().ToReadOnly();
 	}
 
 
@@ -99,19 +99,19 @@ public static class AllianceEditingDataValidator {
 		// TODO: extract magic numbers
 		foreach (AllianceEditingData allianceEditingData in otherAlliances) {
 
-			if (color.Difference(allianceEditingData.AllianceColor.TargetObject) == 0) {
+			if (color.Difference(allianceEditingData.AllianceColor.OutputObject) == 0) {
 				validationErrors.Add(new("Colors Identical", ErrorSeverity.Warning,
-					$"The color of this alliance are identical to that of the {allianceEditingData.Name.InputString}"));
+					$"The color of this alliance are identical to that of the {allianceEditingData.Name.InputObject}"));
 			}
 
-			if (color.Difference(allianceEditingData.AllianceColor.TargetObject) < 10) {
+			if (color.Difference(allianceEditingData.AllianceColor.OutputObject) < 10) {
 				validationErrors.Add(new("Colors Very Close", ErrorSeverity.Warning,
-					$"The color of this alliance are very similar to that of the {allianceEditingData.Name.InputString}"));
+					$"The color of this alliance are very similar to that of the {allianceEditingData.Name.InputObject}"));
 			}
 
-			if (color.Difference(allianceEditingData.AllianceColor.TargetObject) < 30) {
+			if (color.Difference(allianceEditingData.AllianceColor.OutputObject) < 30) {
 				validationErrors.Add(new("Colors Very Close", ErrorSeverity.Advisory,
-					$"The color of this alliance are similar to that of the {allianceEditingData.Name.InputString}"));
+					$"The color of this alliance are similar to that of the {allianceEditingData.Name.InputObject}"));
 			}
 
 		}

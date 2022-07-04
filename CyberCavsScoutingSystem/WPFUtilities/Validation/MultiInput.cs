@@ -11,20 +11,20 @@ namespace WPFUtilities.Validation;
 public interface IMultiInput<TSeverityEnum> : IInput<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	public ReadOnlyDictionary<string, IStringInput<TSeverityEnum>> StringInputs { get; }
+	public ReadOnlyDictionary<string, ISingleInput<TSeverityEnum>> StringInputs { get; }
 }
 
-public interface IMultiInput<out TTargetType, TSeverityEnum> : IInput<TTargetType, TSeverityEnum>
+public interface IMultiInput<out TOutput, TSeverityEnum> : IInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 }
 
 
 
-public abstract class MultiInput<TTarget, TSeverityEnum> : Input<TTarget, TSeverityEnum>, IMultiInput<TTarget, TSeverityEnum>
+public abstract class MultiInput<TOutput, TSeverityEnum> : Input<TOutput, TSeverityEnum>, IMultiInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private TTarget? _TargetObject;
-	public override TTarget? TargetObject {
+	private TOutput? _TargetObject;
+	public override TOutput? OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
 		get => IsConvertible ? _TargetObject : default;
@@ -37,9 +37,9 @@ public abstract class MultiInput<TTarget, TSeverityEnum> : Input<TTarget, TSever
 
 	private ReadOnlyList<IInput<TSeverityEnum>> InputComponents { get; }
 
-	public override ValidationEvent TargetObjectChanged { get; } = new();
+	public override ValidationEvent OutputObjectChanged { get; } = new();
 
-	protected abstract (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker { get; }
+	protected abstract (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker { get; }
 
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
@@ -59,14 +59,14 @@ public abstract class MultiInput<TTarget, TSeverityEnum> : Input<TTarget, TSever
 
 
 	protected MultiInput(ReadOnlyList<IInput<TSeverityEnum>> inputComponents,
-		params IValidationSet<TTarget, TSeverityEnum>[] validationSets) {
+		params IValidationSet<TOutput, TSeverityEnum>[] validationSets) {
 
 		ValidationTriggers = ValidationSetsToTriggers(validationSets);
 
 		InputComponents = inputComponents;
 
 		foreach (IInput<TSeverityEnum> inputString in InputComponents) {
-			inputString.TargetObjectChanged.Subscribe(Validate);
+			inputString.OutputObjectChanged.Subscribe(Validate);
 		}
 
 		Validate();
@@ -75,11 +75,11 @@ public abstract class MultiInput<TTarget, TSeverityEnum> : Input<TTarget, TSever
 
 	public sealed override void Validate() {
 
-		(TargetObject, ConversionErrors) = ConverterInvoker;
+		(OutputObject, ConversionErrors) = ConverterInvoker;
 
 		ValidationErrors.Clear();
 
-		if (TargetObject is not null) {
+		if (OutputObject is not null) {
 
 			foreach (IValidationTrigger<TSeverityEnum> trigger in ValidationTriggers) {
 				ValidationErrors.AddRange(trigger.InvokeValidator());
@@ -93,8 +93,8 @@ public abstract class MultiInput<TTarget, TSeverityEnum> : Input<TTarget, TSever
 	public override event PropertyChangedEventHandler? PropertyChanged;
 
 	private void OnTargetObjectChanged() {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TargetObject)));
-		TargetObjectChanged.Invoke();
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputObject)));
+		OutputObjectChanged.Invoke();
 	}
 
 	protected override void OnErrorsChanged() {
@@ -116,7 +116,7 @@ public class MultiInput<TTarget, TSeverityEnum,
 		TComponent1> Converter { get; }
 
 	protected override (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.TargetObject!);
+		=> Converter(InputComponent1.OutputObject!);
 
 	public IInput<TComponent1, TSeverityEnum> InputComponent1 { get; }
 
@@ -145,8 +145,8 @@ public class MultiInput<TTarget, TSeverityEnum,
 		TComponent2> Converter { get; }
 
 	protected override (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.TargetObject!,
-			InputComponent2.TargetObject!);
+		=> Converter(InputComponent1.OutputObject!,
+			InputComponent2.OutputObject!);
 
 	public IInput<TComponent1, TSeverityEnum> InputComponent1 { get; }
 	public IInput<TComponent2, TSeverityEnum> InputComponent2 { get; }
@@ -181,9 +181,9 @@ public class MultiInput<TTarget, TSeverityEnum,
 		TComponent3> Converter { get; }
 
 	protected override (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.TargetObject!,
-			InputComponent2.TargetObject!,
-			InputComponent3.TargetObject!);
+		=> Converter(InputComponent1.OutputObject!,
+			InputComponent2.OutputObject!,
+			InputComponent3.OutputObject!);
 
 	public IInput<TComponent1, TSeverityEnum> InputComponent1 { get; }
 	public IInput<TComponent2, TSeverityEnum> InputComponent2 { get; }
@@ -224,10 +224,10 @@ public class MultiInput<TTarget, TSeverityEnum,
 		TComponent4> Converter { get; }
 
 	protected override (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.TargetObject!,
-			InputComponent2.TargetObject!,
-			InputComponent3.TargetObject!,
-			InputComponent4.TargetObject!);
+		=> Converter(InputComponent1.OutputObject!,
+			InputComponent2.OutputObject!,
+			InputComponent3.OutputObject!,
+			InputComponent4.OutputObject!);
 
 	public IInput<TComponent1, TSeverityEnum> InputComponent1 { get; }
 	public IInput<TComponent2, TSeverityEnum> InputComponent2 { get; }
@@ -274,11 +274,11 @@ public class MultiInput<TTarget, TSeverityEnum,
 		TComponent5> Converter { get; }
 
 	protected override (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.TargetObject!,
-			InputComponent2.TargetObject!,
-			InputComponent3.TargetObject!,
-			InputComponent4.TargetObject!,
-			InputComponent5.TargetObject!);
+		=> Converter(InputComponent1.OutputObject!,
+			InputComponent2.OutputObject!,
+			InputComponent3.OutputObject!,
+			InputComponent4.OutputObject!,
+			InputComponent5.OutputObject!);
 
 	public IInput<TComponent1, TSeverityEnum> InputComponent1 { get; }
 	public IInput<TComponent2, TSeverityEnum> InputComponent2 { get; }
@@ -331,12 +331,12 @@ public class MultiInput<TTarget, TSeverityEnum,
 		TComponent6> Converter { get; }
 
 	protected override (TTarget?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.TargetObject!,
-			InputComponent2.TargetObject!,
-			InputComponent3.TargetObject!,
-			InputComponent4.TargetObject!,
-			InputComponent5.TargetObject!,
-			InputComponent6.TargetObject!);
+		=> Converter(InputComponent1.OutputObject!,
+			InputComponent2.OutputObject!,
+			InputComponent3.OutputObject!,
+			InputComponent4.OutputObject!,
+			InputComponent5.OutputObject!,
+			InputComponent6.OutputObject!);
 
 	public IInput<TComponent1, TSeverityEnum> InputComponent1 { get; }
 	public IInput<TComponent2, TSeverityEnum> InputComponent2 { get; }
