@@ -17,7 +17,7 @@ public class VersionNumber {
 
 	public uint PatchNumber { get; }
 
-	public string VersionDescription { get; } = "";
+	public string VersionDescription { get; init; } = "";
 
 	public override string ToString() {
 		return $"{MajorNumber}.{MinorNumber}.{PatchNumber}";

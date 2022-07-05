@@ -61,339 +61,722 @@ public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 
 
 
+public delegate (TInput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
+	SingleInputInverter<in TOutput, TInput, TSeverityEnum>
+	(TOutput output)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1>
-	(TComponent1 componentInput1)
+		in TInput1>
+	(TInput1 componentInput1)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2)
+		in TInput1,
+		in TInput2>
+	(TInput1 componentInput1,
+		TInput2 componentInput2)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3)
+		in TInput1,
+		in TInput2,
+		in TInput3>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8,
-		in TComponent9>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8,
-		TComponent9 componentInput9)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8,
+		in TInput9>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8,
+		TInput9 componentInput9)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8,
-		in TComponent9,
-		in TComponent10>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8,
-		TComponent9 componentInput9,
-		TComponent10 componentInput10)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8,
+		in TInput9,
+		in TInput10>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8,
+		TInput9 componentInput9,
+		TInput10 componentInput10)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8,
-		in TComponent9,
-		in TComponent10,
-		in TComponent11>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8,
-		TComponent9 componentInput9,
-		TComponent10 componentInput10,
-		TComponent11 componentInput11)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8,
+		in TInput9,
+		in TInput10,
+		in TInput11>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8,
+		TInput9 componentInput9,
+		TInput10 componentInput10,
+		TInput11 componentInput11)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8,
-		in TComponent9,
-		in TComponent10,
-		in TComponent11,
-		in TComponent12>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8,
-		TComponent9 componentInput9,
-		TComponent10 componentInput10,
-		TComponent11 componentInput11,
-		TComponent12 componentInput12)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8,
+		in TInput9,
+		in TInput10,
+		in TInput11,
+		in TInput12>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8,
+		TInput9 componentInput9,
+		TInput10 componentInput10,
+		TInput11 componentInput11,
+		TInput12 componentInput12)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8,
-		in TComponent9,
-		in TComponent10,
-		in TComponent11,
-		in TComponent12,
-		in TComponent13>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8,
-		TComponent9 componentInput9,
-		TComponent10 componentInput10,
-		TComponent11 componentInput11,
-		TComponent12 componentInput12,
-		TComponent13 componentInput13)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8,
+		in TInput9,
+		in TInput10,
+		in TInput11,
+		in TInput12,
+		in TInput13>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8,
+		TInput9 componentInput9,
+		TInput10 componentInput10,
+		TInput11 componentInput11,
+		TInput12 componentInput12,
+		TInput13 componentInput13)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8,
-		in TComponent9,
-		in TComponent10,
-		in TComponent11,
-		in TComponent12,
-		in TComponent13,
-		in TComponent14>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8,
-		TComponent9 componentInput9,
-		TComponent10 componentInput10,
-		TComponent11 componentInput11,
-		TComponent12 componentInput12,
-		TComponent13 componentInput13,
-		TComponent14 componentInput14)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8,
+		in TInput9,
+		in TInput10,
+		in TInput11,
+		in TInput12,
+		in TInput13,
+		in TInput14>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8,
+		TInput9 componentInput9,
+		TInput10 componentInput10,
+		TInput11 componentInput11,
+		TInput12 componentInput12,
+		TInput13 componentInput13,
+		TInput14 componentInput14)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8,
-		in TComponent9,
-		in TComponent10,
-		in TComponent11,
-		in TComponent12,
-		in TComponent13,
-		in TComponent14,
-		in TComponent15>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8,
-		TComponent9 componentInput9,
-		TComponent10 componentInput10,
-		TComponent11 componentInput11,
-		TComponent12 componentInput12,
-		TComponent13 componentInput13,
-		TComponent14 componentInput14,
-		TComponent15 componentInput15)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8,
+		in TInput9,
+		in TInput10,
+		in TInput11,
+		in TInput12,
+		in TInput13,
+		in TInput14,
+		in TInput15>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8,
+		TInput9 componentInput9,
+		TInput10 componentInput10,
+		TInput11 componentInput11,
+		TInput12 componentInput12,
+		TInput13 componentInput13,
+		TInput14 componentInput14,
+		TInput15 componentInput15)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
 	MultiInputConverter<TOutput, TSeverityEnum,
-		in TComponent1,
-		in TComponent2,
-		in TComponent3,
-		in TComponent4,
-		in TComponent5,
-		in TComponent6,
-		in TComponent7,
-		in TComponent8,
-		in TComponent9,
-		in TComponent10,
-		in TComponent11,
-		in TComponent12,
-		in TComponent13,
-		in TComponent14,
-		in TComponent15,
-		in TComponent16>
-	(TComponent1 componentInput1,
-		TComponent2 componentInput2,
-		TComponent3 componentInput3,
-		TComponent4 componentInput4,
-		TComponent5 componentInput5,
-		TComponent6 componentInput6,
-		TComponent7 componentInput7,
-		TComponent8 componentInput8,
-		TComponent9 componentInput9,
-		TComponent10 componentInput10,
-		TComponent11 componentInput11,
-		TComponent12 componentInput12,
-		TComponent13 componentInput13,
-		TComponent14 componentInput14,
-		TComponent15 componentInput15,
-		TComponent16 componentInput16)
+		in TInput1,
+		in TInput2,
+		in TInput3,
+		in TInput4,
+		in TInput5,
+		in TInput6,
+		in TInput7,
+		in TInput8,
+		in TInput9,
+		in TInput10,
+		in TInput11,
+		in TInput12,
+		in TInput13,
+		in TInput14,
+		in TInput15,
+		in TInput16>
+	(TInput1 componentInput1,
+		TInput2 componentInput2,
+		TInput3 componentInput3,
+		TInput4 componentInput4,
+		TInput5 componentInput5,
+		TInput6 componentInput6,
+		TInput7 componentInput7,
+		TInput8 componentInput8,
+		TInput9 componentInput9,
+		TInput10 componentInput10,
+		TInput11 componentInput11,
+		TInput12 componentInput12,
+		TInput13 componentInput13,
+		TInput14 componentInput14,
+		TInput15 componentInput15,
+		TInput16 componentInput16)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+
+
+public delegate (
+	TInput1?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	TInput9?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8,
+		TInput9>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	TInput9?,
+	TInput10?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8,
+		TInput9,
+		TInput10>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	TInput9?,
+	TInput10?,
+	TInput11?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8,
+		TInput9,
+		TInput10,
+		TInput11>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	TInput9?,
+	TInput10?,
+	TInput11?,
+	TInput12?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8,
+		TInput9,
+		TInput10,
+		TInput11,
+		TInput12>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	TInput9?,
+	TInput10?,
+	TInput11?,
+	TInput12?,
+	TInput13?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8,
+		TInput9,
+		TInput10,
+		TInput11,
+		TInput12,
+		TInput13>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	TInput9?,
+	TInput10?,
+	TInput11?,
+	TInput12?,
+	TInput13?,
+	TInput14?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8,
+		TInput9,
+		TInput10,
+		TInput11,
+		TInput12,
+		TInput13,
+		TInput14>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	TInput9?,
+	TInput10?,
+	TInput11?,
+	TInput12?,
+	TInput13?,
+	TInput14?,
+	TInput15?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8,
+		TInput9,
+		TInput10,
+		TInput11,
+		TInput12,
+		TInput13,
+		TInput14,
+		TInput15>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+public delegate (
+	TInput1?,
+	TInput2?,
+	TInput3?,
+	TInput4?,
+	TInput5?,
+	TInput6?,
+	TInput7?,
+	TInput8?,
+	TInput9?,
+	TInput10?,
+	TInput11?,
+	TInput12?,
+	TInput13?,
+	TInput14?,
+	TInput15?,
+	TInput16?,
+	ReadOnlyList<ValidationError<TSeverityEnum>>)
+	MultiInputInverter<in TOutput, TSeverityEnum,
+		TInput1,
+		TInput2,
+		TInput3,
+		TInput4,
+		TInput5,
+		TInput6,
+		TInput7,
+		TInput8,
+		TInput9,
+		TInput10,
+		TInput11,
+		TInput12,
+		TInput13,
+		TInput14,
+		TInput15,
+		TInput16>
+	(TOutput componentInput1)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
+
+
+public record ConversionPair<TOutput, TInput, TSeverityEnum>(
+	SingleInputConverter<TOutput?, TInput, TSeverityEnum> Converter,
+	SingleInputInverter<TOutput, TInput?, TSeverityEnum> Inverter)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;

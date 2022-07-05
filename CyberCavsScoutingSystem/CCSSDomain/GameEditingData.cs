@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Media;
 using WPFUtilities.Validation;
 
 namespace CCSSDomain;
@@ -11,29 +12,29 @@ public class GameEditingData : INotifyPropertyChanged {
 
 	private GameEditingData() {
 
-		Year = new(GameEditingDataValidator.YearConverter,
+		Year = new(GameEditingDataValidator.YearConverter, GameEditingDataValidator.YearInverter,
 			DateTime.Now.Year.ToString(),
 			new ValidationSet<int, ErrorSeverity>(GameEditingDataValidator.YearValidator_YearNotNegative),
 			new ValidationSet<int, ErrorSeverity>(GameEditingDataValidator.YearValidator_YearNotFarFuture),
 			new ValidationSet<int, ErrorSeverity>(GameEditingDataValidator.YearValidator_YearNotPredateFirst)
 		);
 
-		Name = new(GameEditingDataValidator.NameConverter,
+		Name = new(GameEditingDataValidator.NameConverter, GameEditingDataValidator.NameInverter,
 			DateTime.Now.Year.ToString(),
 			new ValidationSet<string, ErrorSeverity>(GameEditingDataValidator.NameValidator_Length)
 		);
 
-		Description = new(GameEditingDataValidator.DescriptionConverter, "");
+		Description = new(GameEditingDataValidator.DescriptionConverter, GameEditingDataValidator.DescriptionInverter, "");
 
-		Version = new(GameEditingDataValidator.VersionConverter,
-			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
-			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
-			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, "0"),
-			new SingleInput<string, string, ErrorSeverity>(GameEditingDataValidator.VersionDescriptionConverter, "0")
+		Version = new(GameEditingDataValidator.VersionConverter, GameEditingDataValidator.VersionInverter,
+			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, GameEditingDataValidator.VersionNumberComponentInverter, "0"),
+			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, GameEditingDataValidator.VersionNumberComponentInverter, "0"),
+			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, GameEditingDataValidator.VersionNumberComponentInverter, "0"),
+			new SingleInput<string, string, ErrorSeverity>(GameEditingDataValidator.VersionDescriptionConverter, GameEditingDataValidator.VersionDescriptionInverter, "")
 		);
 
-		RobotsPerAlliance = new(GameEditingDataValidator.TestIntValueConverter, "3");
-		AlliancesPerMatch = new(GameEditingDataValidator.TestIntValueConverter, "2");
+		RobotsPerAlliance = new(GameEditingDataValidator.RobotsPerAllianceConverter, GameEditingDataValidator.RobotsPerAllianceInverter, "3");
+		AlliancesPerMatch = new(GameEditingDataValidator.AlliancesPerMatchConverter, GameEditingDataValidator.AlliancesPerMatchInverter, "2");
 
 		Alliances = new();
 	}
@@ -47,16 +48,11 @@ public class GameEditingData : INotifyPropertyChanged {
 		gameEditingData.Alliances.Add(new(gameEditingData));
 		gameEditingData.Alliances.Add(new(gameEditingData));
 
-		gameEditingData.Alliances[0].Name.InputString = "Red Alliance";
-		gameEditingData.Alliances[1].Name.InputString = "Blue Alliance";
+		gameEditingData.Alliances[0].Name.InputObject = "Red Alliance";
+		gameEditingData.Alliances[1].Name.InputObject = "Blue Alliance";
 		
-		gameEditingData.Alliances[0].AllianceColor.InputComponent1.InputString = "255";
-		gameEditingData.Alliances[0].AllianceColor.StringInputs["G"].InputString = "0";
-		gameEditingData.Alliances[0].AllianceColor.StringInputs["B"].InputString = "0";
-		
-		gameEditingData.Alliances[1].AllianceColor.StringInputs["R"].InputString = "0";
-		gameEditingData.Alliances[1].AllianceColor.StringInputs["G"].InputString = "0";
-		gameEditingData.Alliances[1].AllianceColor.StringInputs["B"].InputString = "255";
+		gameEditingData.Alliances[0].AllianceColor.OutputObject = Color.FromRgb(255, 0, 0);
+		gameEditingData.Alliances[1].AllianceColor.OutputObject = Color.FromRgb(0, 0, 255);
 
 		return gameEditingData;
 	}

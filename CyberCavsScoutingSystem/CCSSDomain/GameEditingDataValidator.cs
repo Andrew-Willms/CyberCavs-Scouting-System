@@ -17,6 +17,13 @@ public static class GameEditingDataValidator {
 			ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
+	public static (uint, uint, uint, string, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionInverter
+		(VersionNumber versionNumber) {
+
+		return (versionNumber.MajorNumber, versionNumber.MinorNumber, versionNumber.PatchNumber, versionNumber.VersionDescription,
+			ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+	}
+
 	public static (uint, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionNumberComponentConverter(string inputString) {
 
 		if (inputString is null) {
@@ -41,6 +48,14 @@ public static class GameEditingDataValidator {
 		return (uint.Parse(inputString), new());
 	}
 
+	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionNumberComponentInverter
+		(uint versionNumberComponent) {
+
+		return (versionNumberComponent.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+	}
+
+
+
 	public static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionDescriptionConverter(string inputString) {
 
 		if (inputString is null) {
@@ -48,6 +63,15 @@ public static class GameEditingDataValidator {
 		}
 
 		return (inputString, new());
+	}
+
+	public static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionDescriptionInverter(string versionDescription) {
+
+		if (versionDescription is null) {
+			throw new ArgumentNullException(nameof(versionDescription), "You shouldn't be able to send a null string to this validator.");
+		}
+
+		return (versionDescription, new());
 	}
 
 
@@ -58,15 +82,19 @@ public static class GameEditingDataValidator {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
 		}
 
-		return inputString.Length > 0
-			? (inputString, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty)
-			: (null, new(new ValidationError<ErrorSeverity>("Name Can't be Empty", ErrorSeverity.Error, "Test")));
+		return (inputString, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+	}
+
+	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) NameInverter(string name) {
+
+		return (name, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
 	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_Length(string name) {
 
 		//Todo extract this magic numbers.
 		return name.Length switch {
+			0 => new(new ValidationError<ErrorSeverity>("Empty Name", ErrorSeverity.Warning, "This name is empty.")),
 			< 5 => new(new ValidationError<ErrorSeverity>("Short Name", ErrorSeverity.Warning, "This name is alarmingly short.")),
 			< 10 => new(new ValidationError<ErrorSeverity>("Short Name", ErrorSeverity.Warning, "This name is rather short.")),
 			> 40 => new(new ValidationError<ErrorSeverity>("Long Name", ErrorSeverity.Warning, "This alliance name is alarmingly long.")),
@@ -84,6 +112,15 @@ public static class GameEditingDataValidator {
 		}
 
 		return (inputString, new());
+	}
+
+	public static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) DescriptionInverter(string description) {
+
+		if (description is null) {
+			throw new ArgumentNullException(nameof(description), "You shouldn't be able to send a null string to this validator.");
+		}
+
+		return (description, new());
 	}
 
 
@@ -109,7 +146,12 @@ public static class GameEditingDataValidator {
 			return (0, new(new ValidationError<ErrorSeverity>("Number Too Large", ErrorSeverity.Error, "Too big to convert to int.")));
 		}
 
-		return (int.Parse(inputString), new());
+		return (int.Parse(inputString), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+	}
+
+	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) YearInverter(int year) {
+
+		return (year.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
 	public static ReadOnlyList<ValidationError<ErrorSeverity>> YearValidator_YearNotNegative(int year) {
@@ -140,6 +182,68 @@ public static class GameEditingDataValidator {
 		}
 
 		return ReadOnlyList<ValidationError<ErrorSeverity>>.Empty;
+	}
+
+
+
+	public static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) RobotsPerAllianceConverter(string inputString) {
+
+		if (inputString is null) {
+			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
+		}
+
+		if (inputString.Length == 0) {
+			return (0, new(new ValidationError<ErrorSeverity>("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value.")));
+		}
+
+		char[] invalidCharacters = inputString.Where(x => char.IsDigit(x) == false).ToArray();
+
+		if (invalidCharacters.Any()) {
+			return (0, new(new ValidationError<ErrorSeverity>("Invalid Characters", ErrorSeverity.Error,
+				$"The characters \"{invalidCharacters}\" are not valid in the year field.")));
+		}
+
+		if (inputString.NumericCompare(int.MaxValue.ToString()) > 1) {
+			return (0, new(new ValidationError<ErrorSeverity>("Number Too Large", ErrorSeverity.Error, "Too big to convert to int.")));
+		}
+
+		return (int.Parse(inputString), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+	}
+
+	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) RobotsPerAllianceInverter(int robotsPerAlliance) {
+
+		return (robotsPerAlliance.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+	}
+
+
+
+	public static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) AlliancesPerMatchConverter(string inputString) {
+
+		if (inputString is null) {
+			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
+		}
+
+		if (inputString.Length == 0) {
+			return (0, new(new ValidationError<ErrorSeverity>("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value.")));
+		}
+
+		char[] invalidCharacters = inputString.Where(x => char.IsDigit(x) == false).ToArray();
+
+		if (invalidCharacters.Any()) {
+			return (0, new(new ValidationError<ErrorSeverity>("Invalid Characters", ErrorSeverity.Error,
+				$"The characters \"{invalidCharacters}\" are not valid in the year field.")));
+		}
+
+		if (inputString.NumericCompare(int.MaxValue.ToString()) > 1) {
+			return (0, new(new ValidationError<ErrorSeverity>("Number Too Large", ErrorSeverity.Error, "Too big to convert to int.")));
+		}
+
+		return (int.Parse(inputString), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+	}
+
+	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) AlliancesPerMatchInverter(int alliancesPerMatch) {
+
+		return (alliancesPerMatch.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
 }

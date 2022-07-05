@@ -25,10 +25,10 @@ public interface IInput<TSeverityEnum> : INotifyPropertyChanged
 
 
 
-public interface IInput<out TOutput, TSeverityEnum> : IInput<TSeverityEnum>
+public interface IInput<TOutput, TSeverityEnum> : IInput<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	public TOutput? OutputObject { get; }
+	public TOutput? OutputObject { get; set; }
 }
 
 
@@ -36,7 +36,7 @@ public interface IInput<out TOutput, TSeverityEnum> : IInput<TSeverityEnum>
 public abstract class Input<TOutput, TSeverityEnum> : IInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	public abstract TOutput? OutputObject { get; protected set; }
+	public abstract TOutput? OutputObject { get; set; }
 
 	protected abstract List<ValidationError<TSeverityEnum>> ValidationErrors { get; }
 	public abstract ReadOnlyList<ValidationError<TSeverityEnum>> Errors { get; }

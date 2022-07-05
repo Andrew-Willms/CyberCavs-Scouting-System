@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -15,7 +16,7 @@ public interface ISingleInput<TInput, TSeverityEnum> : IInput<TSeverityEnum>, IS
 	public TInput InputObject { get; set; }
 }
 
-public interface ISingleInput<out TOutput, TInput, TSeverityEnum> : IInput<TOutput, TSeverityEnum>, ISingleInput<TInput, TSeverityEnum>
+public interface ISingleInput<TOutput, TInput, TSeverityEnum> : IInput<TOutput, TSeverityEnum>, ISingleInput<TInput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 }
 
@@ -24,20 +25,30 @@ public interface ISingleInput<out TOutput, TInput, TSeverityEnum> : IInput<TOutp
 public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSeverityEnum>, ISingleInput<TOutput, TInput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private TOutput? _TargetObject;
+	private TOutput? _OutputObject;
 	public override TOutput? OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
-		get => IsConvertible ? _TargetObject : default;
+		get => IsConvertible ? _OutputObject : default;
 
-		protected set {
+		set {
 
-			//(TTargetType result, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Converter(InputObject);
+			if (value is null) {
+				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
+			}
 
-			//if (errors.Any() == false && result == )
+			(TInput? result, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
-			_TargetObject = value;
-			OnTargetObjectChanged();
+			if (errors.Any() == false) {
+				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
+			}
+
+			if (result is not null /*&& result == InputObject*/) {
+				InputObject = result;
+			}
+
+			_OutputObject = value;
+			OnOutputObjectChanged();
 		}
 	}
 
@@ -55,6 +66,8 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 	}
 
 	private SingleInputConverter<TOutput?, TInput, TSeverityEnum> Converter { get; }
+	private SingleInputInverter<TOutput, TInput?, TSeverityEnum> Inverter { get; }
+
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
 	private ReadOnlyList<ValidationError<TSeverityEnum>> ConversionErrors { get; set; } = new();
@@ -71,13 +84,17 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 	public override ValidationEvent OutputObjectChanged { get; } = new();
 
 
+	public SingleInput(ConversionPair<TOutput, TInput, TSeverityEnum> conversionPair, TInput initialInput,
+		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
+		: this(conversionPair.Converter, conversionPair.Inverter, initialInput, validationSets) { }
 
-	//public SingleInput(SingleInputConverter<TOutput?, TInput, TSeverityEnum> converter) : this(converter, default) { }
-
-	public SingleInput(SingleInputConverter<TOutput?, TInput, TSeverityEnum> converter, TInput initialInput,
+	public SingleInput(SingleInputConverter<TOutput?, TInput, TSeverityEnum> converter,
+		SingleInputInverter<TOutput, TInput?, TSeverityEnum> inverter, TInput initialInput,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets) {
 
 		Converter = converter;
+		Inverter = inverter;
+
 		ValidationTriggers = ValidationSetsToTriggers(validationSets);
 
 		_InputObject = initialInput;
@@ -106,7 +123,7 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 	public override event PropertyChangedEventHandler? PropertyChanged;
 
-	private void OnTargetObjectChanged() {
+	private void OnOutputObjectChanged() {
 
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputObject)));
 		OutputObjectChanged.Invoke();
