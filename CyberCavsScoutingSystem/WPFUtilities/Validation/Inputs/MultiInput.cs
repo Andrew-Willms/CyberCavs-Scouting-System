@@ -131,20 +131,20 @@ public class MultiInput<TOutput, TSeverityEnum,
 		}
 	}
 
-	private MultiInputConverter<TOutput?, TSeverityEnum,
+	private MultiInputConverters<TOutput?, TSeverityEnum,
 		TInput1> Converter { get; }
 
 	protected override (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
 		=> Converter(InputComponent1.OutputObject!);
 
-	private MultiInputInverter<TOutput, TSeverityEnum,
+	private MultiInputInverters<TOutput, TSeverityEnum,
 		TInput1> Inverter { get; }
 
 	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
 
-	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum,
+	public MultiInput(MultiInputConverters<TOutput?, TSeverityEnum,
 			TInput1> converter,
-		MultiInputInverter<TOutput, TSeverityEnum,
+		MultiInputInverters<TOutput, TSeverityEnum,
 			TInput1> inverter,
 		IInput<TInput1, TSeverityEnum> inputComponent1,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)

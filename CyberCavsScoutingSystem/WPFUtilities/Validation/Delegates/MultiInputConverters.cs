@@ -5,7 +5,7 @@ namespace WPFUtilities.Validation.Delegates;
 
 
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	MultiInputConverter<TOutput, TSeverityEnum,
+	MultiInputConverters<TOutput, TSeverityEnum,
 		in TInput1>
 	(TInput1 componentInput1)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
