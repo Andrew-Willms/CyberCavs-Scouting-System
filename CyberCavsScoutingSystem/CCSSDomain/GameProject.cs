@@ -1,6 +1,6 @@
 ﻿using CCSSDomain.Game;
 
-namespace CCSSDomain.Test;
+namespace CCSSDomain;
 
 
 

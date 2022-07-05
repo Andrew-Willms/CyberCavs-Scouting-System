@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-
 using WPFUtilities;
 using WPFUtilities.Extensions;
 using WPFUtilities.Validation.Errors;
