@@ -11,7 +11,7 @@ namespace CCSSDomain.Alliance;
 
 
 
-public static class AllianceEditingDataValidator {
+public static class AllianceValidator {
 
 	private static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) NameConverter(string inputString) {
 
@@ -30,7 +30,7 @@ public static class AllianceEditingDataValidator {
 
 		return (name, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
-
+	
 	public static readonly ConversionPair<string, string, ErrorSeverity> NameConversionPair = new(NameConverter, NameInverter);
 
 

@@ -8,7 +8,7 @@ namespace CCSSDomain.Game;
 
 
 
-public static class GameEditingDataValidator {
+public static class GameValidator {
 
 	public static (VersionNumber?, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionConverter
 		(uint majorVersionNumber, uint minorVersionNumber, uint patchVersionNumber, string versionDescription) {

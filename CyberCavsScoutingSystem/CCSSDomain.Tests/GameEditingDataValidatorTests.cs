@@ -14,13 +14,13 @@ public class GameEditingDataValidatorTests {
 	[Fact]
 	public void NullNameShouldThrowException() {
 
-		Assert.Throws<ArgumentNullException>(() => GameEditingDataValidator.NameConverter(null));
+		Assert.Throws<ArgumentNullException>(() => GameValidator.NameConverter(null));
 	}
 
 	[Fact]
 	public void EmptyNameShouldFail() {
 
-		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length("");
+		ValidationError<ErrorSeverity>? error = GameValidator.NameValidator_Length("");
 
 		Assert.True(error is not null);
 
@@ -37,7 +37,7 @@ public class GameEditingDataValidatorTests {
 	[InlineData("test")]
 	public void VeryShortNameShouldWarn(string name) {
 
-		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length(name);
+		ValidationError<ErrorSeverity>? error = GameValidator.NameValidator_Length(name);
 
 		Assert.True(error is not null);
 
@@ -54,7 +54,7 @@ public class GameEditingDataValidatorTests {
 	[InlineData("test")]
 	public void ShortNameShouldAdvise(string name) {
 
-		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length(name);
+		ValidationError<ErrorSeverity>? error = GameValidator.NameValidator_Length(name);
 
 		Assert.True(error is not null);
 
@@ -71,7 +71,7 @@ public class GameEditingDataValidatorTests {
 	[MemberData(nameof(LongNameShouldAdviseTestData))]
 	public void LongNameShouldAdvise(string name) {
 
-		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length(name);
+		ValidationError<ErrorSeverity>? error = GameValidator.NameValidator_Length(name);
 
 		Assert.True(error is not null);
 
@@ -88,7 +88,7 @@ public class GameEditingDataValidatorTests {
 	[InlineData("test")]
 	public void VeryLongNameShouldWard(string name) {
 
-		ValidationError<ErrorSeverity>? error = GameEditingDataValidator.NameValidator_Length(name);
+		ValidationError<ErrorSeverity>? error = GameValidator.NameValidator_Length(name);
 
 		Assert.True(error is not null);
 
@@ -107,7 +107,7 @@ public class GameEditingDataValidatorTests {
 
 		GameEditingData editingData = GameEditingData.GetDefaultEditingData();
 
-		(string name, ReadOnlyList<ValidationError<ErrorSeverity>> errors) = GameEditingDataValidator.NameConverter(inputString);
+		(string name, ReadOnlyList<ValidationError<ErrorSeverity>> errors) = GameValidator.NameConverter(inputString);
 
 		Assert.Equal(expectedName, name);
 		Assert.True(errors.Count == 0);

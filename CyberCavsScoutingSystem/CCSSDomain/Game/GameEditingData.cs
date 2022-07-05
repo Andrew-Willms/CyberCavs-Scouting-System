@@ -14,29 +14,29 @@ public class GameEditingData : INotifyPropertyChanged {
 
 	private GameEditingData() {
 
-		Year = new(GameEditingDataValidator.YearConverter, GameEditingDataValidator.YearInverter,
+		Year = new(GameValidator.YearConverter, GameValidator.YearInverter,
 			DateTime.Now.Year.ToString(),
-			new ValidationSet<int, ErrorSeverity>(GameEditingDataValidator.YearValidator_YearNotNegative),
-			new ValidationSet<int, ErrorSeverity>(GameEditingDataValidator.YearValidator_YearNotFarFuture),
-			new ValidationSet<int, ErrorSeverity>(GameEditingDataValidator.YearValidator_YearNotPredateFirst)
+			new ValidationSet<int, ErrorSeverity>(GameValidator.YearValidator_YearNotNegative),
+			new ValidationSet<int, ErrorSeverity>(GameValidator.YearValidator_YearNotFarFuture),
+			new ValidationSet<int, ErrorSeverity>(GameValidator.YearValidator_YearNotPredateFirst)
 		);
 
-		Name = new(GameEditingDataValidator.NameConverter, GameEditingDataValidator.NameInverter,
+		Name = new(GameValidator.NameConverter, GameValidator.NameInverter,
 			DateTime.Now.Year.ToString(),
-			new ValidationSet<string, ErrorSeverity>(GameEditingDataValidator.NameValidator_Length)
+			new ValidationSet<string, ErrorSeverity>(GameValidator.NameValidator_Length)
 		);
 
-		Description = new(GameEditingDataValidator.DescriptionConverter, GameEditingDataValidator.DescriptionInverter, "");
+		Description = new(GameValidator.DescriptionConverter, GameValidator.DescriptionInverter, "");
 
-		Version = new(GameEditingDataValidator.VersionConverter, GameEditingDataValidator.VersionInverter,
-			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, GameEditingDataValidator.VersionNumberComponentInverter, "0"),
-			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, GameEditingDataValidator.VersionNumberComponentInverter, "0"),
-			new SingleInput<uint, string, ErrorSeverity>(GameEditingDataValidator.VersionNumberComponentConverter, GameEditingDataValidator.VersionNumberComponentInverter, "0"),
-			new SingleInput<string, string, ErrorSeverity>(GameEditingDataValidator.VersionDescriptionConverter, GameEditingDataValidator.VersionDescriptionInverter, "")
+		Version = new(GameValidator.VersionConverter, GameValidator.VersionInverter,
+			new SingleInput<uint, string, ErrorSeverity>(GameValidator.VersionNumberComponentConverter, GameValidator.VersionNumberComponentInverter, "0"),
+			new SingleInput<uint, string, ErrorSeverity>(GameValidator.VersionNumberComponentConverter, GameValidator.VersionNumberComponentInverter, "0"),
+			new SingleInput<uint, string, ErrorSeverity>(GameValidator.VersionNumberComponentConverter, GameValidator.VersionNumberComponentInverter, "0"),
+			new SingleInput<string, string, ErrorSeverity>(GameValidator.VersionDescriptionConverter, GameValidator.VersionDescriptionInverter, "")
 		);
 
-		RobotsPerAlliance = new(GameEditingDataValidator.RobotsPerAllianceConverter, GameEditingDataValidator.RobotsPerAllianceInverter, "3");
-		AlliancesPerMatch = new(GameEditingDataValidator.AlliancesPerMatchConverter, GameEditingDataValidator.AlliancesPerMatchInverter, "2");
+		RobotsPerAlliance = new(GameValidator.RobotsPerAllianceConverter, GameValidator.RobotsPerAllianceInverter, "3");
+		AlliancesPerMatch = new(GameValidator.AlliancesPerMatchConverter, GameValidator.AlliancesPerMatchInverter, "2");
 
 		Alliances = new();
 	}

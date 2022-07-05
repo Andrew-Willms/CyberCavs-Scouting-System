@@ -15,20 +15,20 @@ public class AllianceEditingData {
 
 		EditingData = editingData;
 
-		Name = new(AllianceEditingDataValidator.NameConversionPair, "",
-			new ValidationSet<string, ErrorSeverity>(AllianceEditingDataValidator.NameValidator_EndsWithAlliance),
-			new ValidationSet<string, ErrorSeverity>(AllianceEditingDataValidator.NameValidator_Length),
+		Name = new(AllianceValidator.NameConversionPair, "",
+			new ValidationSet<string, ErrorSeverity>(AllianceValidator.NameValidator_EndsWithAlliance),
+			new ValidationSet<string, ErrorSeverity>(AllianceValidator.NameValidator_Length),
 			new ValidationSet<string, IEnumerable<AllianceEditingData>, ErrorSeverity>(
-				AllianceEditingDataValidator.NameValidator_Uniqueness,
+				AllianceValidator.NameValidator_Uniqueness,
 				() => EditingData.Alliances.Where(x => x != this), EditingData.AllianceNameChanged)
 		);
 
-		AllianceColor = new(AllianceEditingDataValidator.ColorConverter, AllianceEditingDataValidator.ColorInverter,
-			new SingleInput<byte, string, ErrorSeverity>(AllianceEditingDataValidator.ColorComponentConversionPair, "0"),
-			new SingleInput<byte, string, ErrorSeverity>(AllianceEditingDataValidator.ColorComponentConversionPair, "0"),
-			new SingleInput<byte, string, ErrorSeverity>(AllianceEditingDataValidator.ColorComponentConversionPair, "0"),
+		AllianceColor = new(AllianceValidator.ColorConverter, AllianceValidator.ColorInverter,
+			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConversionPair, "0"),
+			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConversionPair, "0"),
+			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConversionPair, "0"),
 			new ValidationSet<Color, IEnumerable<AllianceEditingData>, ErrorSeverity>(
-				AllianceEditingDataValidator.ColorCovalidator_Uniqueness,
+				AllianceValidator.ColorCovalidator_Uniqueness,
 				() => EditingData.Alliances.Where(x => x != this), EditingData.AllianceNameChanged)
 		);
 	}
