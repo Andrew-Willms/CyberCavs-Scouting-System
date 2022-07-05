@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+
+using CCSSDomain.Game;
+
 using WPFUtilities.Validation;
 using WPFUtilities.Validation.Inputs;
 
-namespace CCSSDomain;
+namespace CCSSDomain.Alliance;
 
 public class AllianceEditingData {
 

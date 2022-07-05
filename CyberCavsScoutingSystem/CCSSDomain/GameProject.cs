@@ -1,4 +1,6 @@
-﻿namespace CCSSDomain;
+﻿using CCSSDomain.Game;
+
+namespace CCSSDomain;
 
 
 

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using CCSSDomain.Game;
 using WPFUtilities;
 using WPFUtilities.Validation.Errors;
-
 using Xunit;
 
 namespace CCSSDomain.Tests;
+
+
 
 public class GameEditingDataValidatorTests {
 

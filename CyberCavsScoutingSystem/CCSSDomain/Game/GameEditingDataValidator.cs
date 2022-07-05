@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
+
 using WPFUtilities;
 using WPFUtilities.Extensions;
 using WPFUtilities.Validation.Errors;
 
-namespace CCSSDomain;
+namespace CCSSDomain.Game;
 
 
 
@@ -40,7 +41,7 @@ public static class GameEditingDataValidator {
 			return (0, new(new ValidationError<ErrorSeverity>("Invalid Characters", ErrorSeverity.Error,
 				$"The characters \"{invalidCharacters}\" are not valid in the year field.")));
 		}
-		
+
 		if (inputString.NumericCompare(uint.MaxValue.ToString()) > 1) {
 			return (0, new(new ValidationError<ErrorSeverity>("Number Too Large", ErrorSeverity.Error, "Too big to convert to int.")));
 		}

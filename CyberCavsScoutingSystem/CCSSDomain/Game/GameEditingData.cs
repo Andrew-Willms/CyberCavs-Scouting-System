@@ -2,10 +2,13 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
+
+using CCSSDomain.Alliance;
+
 using WPFUtilities.Validation;
 using WPFUtilities.Validation.Inputs;
 
-namespace CCSSDomain;
+namespace CCSSDomain.Game;
 
 
 
@@ -51,7 +54,7 @@ public class GameEditingData : INotifyPropertyChanged {
 
 		gameEditingData.Alliances[0].Name.InputObject = "Red Alliance";
 		gameEditingData.Alliances[1].Name.InputObject = "Blue Alliance";
-		
+
 		gameEditingData.Alliances[0].AllianceColor.OutputObject = Color.FromRgb(255, 0, 0);
 		gameEditingData.Alliances[1].AllianceColor.OutputObject = Color.FromRgb(0, 0, 255);
 

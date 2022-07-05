@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CCSSDomain;
+namespace CCSSDomain.Game;
 
 
 

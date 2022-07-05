@@ -7,7 +7,7 @@ using WPFUtilities.Extensions;
 using WPFUtilities.Validation.Delegates;
 using WPFUtilities.Validation.Errors;
 
-namespace CCSSDomain;
+namespace CCSSDomain.Alliance;
 
 
 
@@ -41,7 +41,7 @@ public static class AllianceEditingDataValidator {
 			return ReadOnlyList<ValidationError<ErrorSeverity>>.Empty;
 		}
 
-		return new(new ValidationError<ErrorSeverity> ("Does not end in \"Alliance\"", ErrorSeverity.Advisory,
+		return new(new ValidationError<ErrorSeverity>("Does not end in \"Alliance\"", ErrorSeverity.Advisory,
 			"Typically alliance names should follow the format \"{Colour} Alliance\""));
 	}
 
@@ -60,9 +60,9 @@ public static class AllianceEditingDataValidator {
 		IEnumerable<AllianceEditingData> otherAlliances) {
 
 		return (from allianceEditingData in otherAlliances
-			where allianceEditingData.Name.OutputObject == name
-			select new ValidationError<ErrorSeverity>("Duplicate Name", ErrorSeverity.Error,
-				$"The name of this alliance is identical to that of the {allianceEditingData.Name.InputObject}")).ToList().ToReadOnly();
+				where allianceEditingData.Name.OutputObject == name
+				select new ValidationError<ErrorSeverity>("Duplicate Name", ErrorSeverity.Error,
+					$"The name of this alliance is identical to that of the {allianceEditingData.Name.InputObject}")).ToList().ToReadOnly();
 	}
 
 
