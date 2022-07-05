@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WPFUtilities.Validation.Delegates;
+namespace WPFUtilities; 
 
 
 
@@ -34,10 +34,3 @@ public struct Optional<T> {
 	}
 
 }
-
-
-
-/*
-When value types are used in StringInputValidator<TheValueType, TSeverityEnum> the method cannot return a nullable
-version of that value type because C# handles nullable reference types and nullable value types differently
-*/
