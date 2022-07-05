@@ -17,7 +17,7 @@ public interface IValidationTrigger<TSeverityEnum>
 
 
 
-public class ValidationTrigger<TTargetType, TSeverityEnum> : IValidationTrigger<TSeverityEnum>
+internal class ValidationTrigger<TTargetType, TSeverityEnum> : IValidationTrigger<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private InputValidator<TTargetType, TSeverityEnum> Validator { get; }
@@ -60,7 +60,7 @@ public class ValidationTrigger<TTargetType, TSeverityEnum> : IValidationTrigger<
 
 
 
-public class ValidationTrigger<TTargetType, TValidationParameter, TSeverityEnum> : IValidationTrigger<TSeverityEnum>
+internal class ValidationTrigger<TTargetType, TValidationParameter, TSeverityEnum> : IValidationTrigger<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private InputValidator<TTargetType, TValidationParameter, TSeverityEnum> Validator { get; }
