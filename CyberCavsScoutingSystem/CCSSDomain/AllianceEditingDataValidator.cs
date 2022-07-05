@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Windows.Media;
 using System.Linq;
-using System.Windows.Input;
 using WPFUtilities;
-using WPFUtilities.Validation;
 using WPFUtilities.Extensions;
-using System.Xml.Linq;
+using WPFUtilities.Validation.Delegates;
+using WPFUtilities.Validation.Errors;
 
 namespace CCSSDomain;
 
@@ -14,7 +13,7 @@ namespace CCSSDomain;
 
 public static class AllianceEditingDataValidator {
 
-	public static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) NameConverter(string inputString) {
+	private static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) NameConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
@@ -23,7 +22,7 @@ public static class AllianceEditingDataValidator {
 		return (inputString, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
-	public static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) NameInverter(string name) {
+	private static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) NameInverter(string name) {
 
 		if (name is null) {
 			throw new ArgumentNullException(nameof(name), "You shouldn't be able to send a null value to an inverter.");
@@ -68,7 +67,7 @@ public static class AllianceEditingDataValidator {
 
 
 
-	public static (byte, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorComponentConverter(string inputString) {
+	private static (byte, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorComponentConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
@@ -92,7 +91,7 @@ public static class AllianceEditingDataValidator {
 		return (byte.Parse(inputString), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
-	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorComponentInverter(
+	private static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorComponentInverter(
 		byte colourComponentValue) {
 
 		return (colourComponentValue.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);

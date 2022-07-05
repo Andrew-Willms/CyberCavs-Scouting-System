@@ -2,6 +2,8 @@
 
 namespace WPFUtilities; 
 
+
+
 // I created this class while experimenting with ASP.NET Web APIs but thought it might be useful so I added it to this solution.
 // I really need a more robust way of sharing code I frequently use between solutions.
 public class Range<T> where T : IComparable {

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Windows.Data;
 using System.Globalization;
-using WPFUtilities;
 using CCSSDomain;
+using WPFUtilities.SmartEnum;
 
 namespace GameMaker.Converters;
 
-public class ErrorGreaterThanConverter : WPFUtilities.EnumGreaterThanConverter<ErrorSeverity> { }
+public class ErrorGreaterThanConverter : EnumGreaterThanConverter<ErrorSeverity> { }
 
 /* Here is the XAML code for how this style was used
 

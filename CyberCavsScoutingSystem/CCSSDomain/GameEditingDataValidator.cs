@@ -2,7 +2,7 @@
 using System.Linq;
 using WPFUtilities;
 using WPFUtilities.Extensions;
-using WPFUtilities.Validation;
+using WPFUtilities.Validation.Errors;
 
 namespace CCSSDomain;
 

@@ -3,8 +3,9 @@ using System.ComponentModel;
 using System;
 using System.Linq;
 using WPFUtilities.Extensions;
+using WPFUtilities.Validation.Errors;
 
-namespace WPFUtilities.Validation;
+namespace WPFUtilities.Validation.Inputs;
 
 
 

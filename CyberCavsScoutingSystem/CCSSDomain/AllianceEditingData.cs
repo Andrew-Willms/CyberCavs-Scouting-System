@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Media;
 using WPFUtilities.Validation;
+using WPFUtilities.Validation.Inputs;
 
 namespace CCSSDomain;
 

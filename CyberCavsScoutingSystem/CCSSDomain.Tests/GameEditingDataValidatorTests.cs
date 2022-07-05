@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using WPFUtilities;
-using WPFUtilities.Validation;
+using WPFUtilities.Validation.Errors;
+
 using Xunit;
 
 namespace CCSSDomain.Tests;

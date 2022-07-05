@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Windows.Data;
-using System.Globalization;
 using System.Collections.ObjectModel;
-using WPFUtilities.Validation;
+using System.Globalization;
+using System.Windows.Data;
 
-namespace WPFUtilities;
+namespace WPFUtilities.Validation.Errors;
+
+
 
 public interface IErrorConverter<TSeverityEnum, TConversionType> : IValueConverter
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum> {

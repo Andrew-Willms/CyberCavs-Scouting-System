@@ -1,4 +1,6 @@
-﻿namespace WPFUtilities.Validation;
+﻿using WPFUtilities.SmartEnum;
+
+namespace WPFUtilities.Validation.Errors;
 
 
 

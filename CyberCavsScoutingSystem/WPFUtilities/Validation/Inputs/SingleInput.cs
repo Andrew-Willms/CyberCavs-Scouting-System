@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace WPFUtilities.Validation;
+using WPFUtilities.Validation.Delegates;
+using WPFUtilities.Validation.Errors;
+
+namespace WPFUtilities.Validation.Inputs;
 
 
 

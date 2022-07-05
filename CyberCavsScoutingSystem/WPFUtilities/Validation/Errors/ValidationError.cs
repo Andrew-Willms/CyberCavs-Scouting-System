@@ -1,4 +1,4 @@
-﻿namespace WPFUtilities.Validation;
+﻿namespace WPFUtilities.Validation.Errors;
 
 
 

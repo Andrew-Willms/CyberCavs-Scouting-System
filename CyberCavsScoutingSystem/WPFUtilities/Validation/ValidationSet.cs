@@ -1,6 +1,8 @@
 ﻿using System;
+using WPFUtilities.Validation.Delegates;
+using WPFUtilities.Validation.Errors;
 
-namespace WPFUtilities.Validation; 
+namespace WPFUtilities.Validation;
 
 
 

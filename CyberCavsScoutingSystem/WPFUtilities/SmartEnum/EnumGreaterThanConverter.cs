@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Globalization;
 
-namespace WPFUtilities;
+namespace WPFUtilities.SmartEnum;
 
 public class EnumGreaterThanConverter<TEnum> : IValueConverter where TEnum : OrderedSmartEnum<TEnum> {
 
@@ -22,7 +22,7 @@ public class EnumGreaterThanConverter<TEnum> : IValueConverter where TEnum : Ord
 			throw new ArgumentException($"The parameter \"{nameof(parameter)}\" cannot be converted to a StringInputValidationErrorSeverity");
 		}
 
-		return (severity.CompareTo(threshold) > 0);
+		return severity.CompareTo(threshold) > 0;
 	}
 
 	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {

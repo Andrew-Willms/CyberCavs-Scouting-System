@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using WPFUtilities.Extensions;
 using System;
+using WPFUtilities.Validation.Delegates;
+using WPFUtilities.Validation.Errors;
 
-namespace WPFUtilities.Validation;
+namespace WPFUtilities.Validation.Inputs;
 
 
 
@@ -96,9 +98,9 @@ public abstract class MultiInput<TOutput, TSeverityEnum> : Input<TOutput, TSever
 
 
 
-public class MultiInput<TOutput, TSeverityEnum, 
+public class MultiInput<TOutput, TSeverityEnum,
 		TInput1>
-	: MultiInput<TOutput, TSeverityEnum> 
+	: MultiInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
@@ -109,7 +111,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 		get => IsConvertible ? _OutputObject : default;
 
 		set {
-			
+
 			if (value is null) {
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
@@ -140,7 +142,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
 
-	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum, 
+	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum,
 			TInput1> converter,
 		MultiInputInverter<TOutput, TSeverityEnum,
 			TInput1> inverter,
@@ -157,10 +159,10 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 }
 
-public class MultiInput<TOutput, TSeverityEnum, 
+public class MultiInput<TOutput, TSeverityEnum,
 		TInput1,
 		TInput2>
-	: MultiInput<TOutput, TSeverityEnum> 
+	: MultiInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
@@ -171,7 +173,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 		get => IsConvertible ? _OutputObject : default;
 
 		set {
-			
+
 			if (value is null) {
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
@@ -212,7 +214,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
 	private IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
 
-	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum, 
+	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum,
 			TInput1,
 			TInput2> converter,
 		MultiInputInverter<TOutput, TSeverityEnum,
@@ -233,11 +235,11 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 }
 
-public class MultiInput<TOutput, TSeverityEnum, 
+public class MultiInput<TOutput, TSeverityEnum,
 		TInput1,
 		TInput2,
 		TInput3>
-	: MultiInput<TOutput, TSeverityEnum> 
+	: MultiInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
@@ -248,7 +250,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 		get => IsConvertible ? _OutputObject : default;
 
 		set {
-			
+
 			if (value is null) {
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
@@ -298,7 +300,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 	private IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
 	private IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
 
-	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum, 
+	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum,
 			TInput1,
 			TInput2,
 			TInput3> converter,
@@ -323,12 +325,12 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 }
 
-public class MultiInput<TOutput, TSeverityEnum, 
+public class MultiInput<TOutput, TSeverityEnum,
 		TInput1,
 		TInput2,
 		TInput3,
 		TInput4>
-	: MultiInput<TOutput, TSeverityEnum> 
+	: MultiInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
@@ -339,7 +341,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 		get => IsConvertible ? _OutputObject : default;
 
 		set {
-			
+
 			if (value is null) {
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
@@ -398,7 +400,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 	private IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
 	private IInput<TInput4, TSeverityEnum> InputComponent4 { get; }
 
-	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum, 
+	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum,
 			TInput1,
 			TInput2,
 			TInput3,

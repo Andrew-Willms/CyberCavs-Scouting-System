@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Markup;
 
-namespace WPFUtilities;
+namespace WPFUtilities.Extensions;
 
 
 

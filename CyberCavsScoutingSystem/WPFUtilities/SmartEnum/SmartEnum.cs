@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace WPFUtilities; 
+namespace WPFUtilities.SmartEnum;
 
 
 
@@ -55,7 +55,7 @@ public abstract class SmartEnum<T> : IEquatable<SmartEnum<T>> where T : SmartEnu
 	}
 
 	public override bool Equals(object? obj) {
-		return (obj is SmartEnum<T> other) && Equals(other);
+		return obj is SmartEnum<T> other && Equals(other);
 	}
 
 	public bool Equals(SmartEnum<T>? other) {
@@ -118,7 +118,7 @@ public abstract class OrderedSmartEnum<T> : SmartEnum<T>, IComparable where T : 
 	}
 
 	public static bool operator <(OrderedSmartEnum<T>? left, OrderedSmartEnum<T>? right) {
-		 
+
 		ArgumentNullException.ThrowIfNull(left, nameof(left));
 		ArgumentNullException.ThrowIfNull(right, nameof(right));
 
