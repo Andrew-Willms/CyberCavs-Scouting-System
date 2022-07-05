@@ -6,6 +6,7 @@ using WPFUtilities;
 using WPFUtilities.Extensions;
 using WPFUtilities.Validation.Delegates;
 using WPFUtilities.Validation.Errors;
+using CCSSDomain.Data;
 
 namespace CCSSDomain.Alliance;
 
@@ -37,21 +38,20 @@ public static class AllianceValidator {
 
 	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_EndsWithAlliance(string name) {
 
-		if (name.EndsWith(" Alliance")) {
-			return ReadOnlyList<ValidationError<ErrorSeverity>>.Empty;
-		}
-
-		return new(new ValidationError<ErrorSeverity>("Does not end in \"Alliance\"", ErrorSeverity.Advisory,
-			"Typically alliance names should follow the format \"{Colour} Alliance\""));
+		return name.EndsWith(" Alliance")
+			? ReadOnlyList<ValidationError<ErrorSeverity>>.Empty
+			: new(AllianceData.Name.DoesNotEndWithAllianceError);
 	}
 
 	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_Length(string name) {
 
-		//Todo extract this magic numbers.
 		return name.Length switch {
-			0 => new(new ValidationError<ErrorSeverity>("Empty Name", ErrorSeverity.Warning, "This alliance cannot have a blank name.")),
-			> 30 => new(new ValidationError<ErrorSeverity>("Long Name", ErrorSeverity.Warning, "This alliance name is very long.")),
-			> 20 => new(new ValidationError<ErrorSeverity>("Long Name", ErrorSeverity.Advisory, "This alliance name is rather long.")),
+			<= AllianceData.Name.Length.LowerErrorThreshold => new(AllianceData.Name.Length.TooShortError),
+			<= AllianceData.Name.Length.LowerWarningThreshold => new(AllianceData.Name.Length.TooShortWarning),
+			<= AllianceData.Name.Length.LowerAdvisoryThreshold => new(AllianceData.Name.Length.TooShortAdvisory),
+			>= AllianceData.Name.Length.UpperErrorThreshold => new(AllianceData.Name.Length.TooLongError),
+			>= AllianceData.Name.Length.UpperWarningThreshold => new(AllianceData.Name.Length.TooLongWarning),
+			>= AllianceData.Name.Length.UpperAdvisoryThreshold => new(AllianceData.Name.Length.TooLongAdvisory),
 			_ => ReadOnlyList<ValidationError<ErrorSeverity>>.Empty
 		};
 	}
@@ -59,10 +59,9 @@ public static class AllianceValidator {
 	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_Uniqueness(string name,
 		IEnumerable<AllianceEditingData> otherAlliances) {
 
-		return (from allianceEditingData in otherAlliances
-				where allianceEditingData.Name.OutputObject == name
-				select new ValidationError<ErrorSeverity>("Duplicate Name", ErrorSeverity.Error,
-					$"The name of this alliance is identical to that of the {allianceEditingData.Name.InputObject}")).ToList().ToReadOnly();
+		return otherAlliances.Any(otherAlliance => otherAlliance.Name.OutputObject == name)
+			? new(AllianceData.Name.GetDuplicateNameError(name))
+			: ReadOnlyList<ValidationError<ErrorSeverity>>.Empty;
 	}
 
 
@@ -118,29 +117,20 @@ public static class AllianceValidator {
 	//	= new(ColorConverter, ColorInverter);
 
 
+
 	public static ReadOnlyList<ValidationError<ErrorSeverity>> ColorCovalidator_Uniqueness(Color color,
 		IEnumerable<AllianceEditingData> otherAlliances) {
 
 		List<ValidationError<ErrorSeverity>> validationErrors = new();
 
-		// TODO: extract magic numbers
-		foreach (AllianceEditingData allianceEditingData in otherAlliances) {
+		foreach (AllianceEditingData otherAlliance in otherAlliances) {
 
-			if (color.Difference(allianceEditingData.AllianceColor.OutputObject) == 0) {
-				validationErrors.Add(new("Colors Identical", ErrorSeverity.Warning,
-					$"The color of this alliance are identical to that of the {allianceEditingData.Name.InputObject}"));
-			}
+			int colorDifference = color.Difference(otherAlliance.AllianceColor.OutputObject);
 
-			if (color.Difference(allianceEditingData.AllianceColor.OutputObject) < 10) {
-				validationErrors.Add(new("Colors Very Close", ErrorSeverity.Warning,
-					$"The color of this alliance are very similar to that of the {allianceEditingData.Name.InputObject}"));
-			}
+			ValidationError<ErrorSeverity>? validationError =
+				AllianceData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
 
-			if (color.Difference(allianceEditingData.AllianceColor.OutputObject) < 30) {
-				validationErrors.Add(new("Colors Very Close", ErrorSeverity.Advisory,
-					$"The color of this alliance are similar to that of the {allianceEditingData.Name.InputObject}"));
-			}
-
+			validationErrors.AddIfNotNull(validationError);
 		}
 
 		return validationErrors.ToReadOnly();
