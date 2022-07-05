@@ -16,5 +16,5 @@ public class Game {
 	public string Description = "";
 	public int Year = 0;
 
-	public List<Alliance> Alliances = new();
+	public List<Alliance.Alliance> Alliances = new();
 }

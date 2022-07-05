@@ -1,13 +1,13 @@
 ﻿using CCSSDomain.Game;
 
-namespace CCSSDomain;
+namespace CCSSDomain.Test;
 
 
 
 public class GameProject {
 
 	// Do I even need this or should this be generated later?
-	public Game Game = new();
+	public Game.Game Game = new();
 
 	public GameEditingData EditingData = GameEditingData.GetDefaultEditingData();
 

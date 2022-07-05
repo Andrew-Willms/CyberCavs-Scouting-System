@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-
 using CCSSDomain.Game;
-
 using WPFUtilities.Validation;
 using WPFUtilities.Validation.Inputs;
 
