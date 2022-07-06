@@ -1,22 +1,24 @@
 ﻿namespace CCSSDomain;
 
 // Consider making this a struct
-public class VersionNumber {
+public class Version {
 
-	public VersionNumber() { }
+	public Version() { }
 
-	public VersionNumber(uint major, uint minor, uint patch, string description = "") {
+	public Version(uint major, uint minor, uint patch, string description = "") {
 		MajorNumber = major;
 		MinorNumber = minor;
 		PatchNumber = patch;
 		Description = description;
 	}
 
-	public uint MajorNumber { get; }
+	public uint MajorNumber { get; init; }
 
-	public uint MinorNumber { get; }
+	public uint MinorNumber { get; init; }
 
-	public uint PatchNumber { get; }
+	public uint PatchNumber { get; init; }
+
+	public string Name { get; init; } = "";
 
 	public string Description { get; init; } = "";
 

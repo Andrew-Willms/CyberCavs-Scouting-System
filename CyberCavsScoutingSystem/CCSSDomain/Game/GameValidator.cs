@@ -11,18 +11,18 @@ namespace CCSSDomain.Game;
 
 public static class GameValidator {
 
-	private static (VersionNumber?, ValidationError<ErrorSeverity>?) VersionConverter
+	private static (Version?, ValidationError<ErrorSeverity>?) VersionConverter
 		((uint major, uint minor, uint path, string description) input) {
 
 		return (new(input.major, input.minor, input.path, input.description), null);
 	}
 
-	private static ((uint, uint, uint, string), ValidationError<ErrorSeverity>?) VersionInverter(VersionNumber version) {
+	private static ((uint, uint, uint, string), ValidationError<ErrorSeverity>?) VersionInverter(Version version) {
 
 		return ((version.MajorNumber, version.MinorNumber, version.PatchNumber, version.Description), null);
 	}
 
-	public static readonly ConversionPair<VersionNumber, (uint, uint, uint, string), ErrorSeverity>
+	public static readonly ConversionPair<Version, (uint, uint, uint, string), ErrorSeverity>
 		VersionConversionPair = new(VersionConverter, VersionInverter);
 
 

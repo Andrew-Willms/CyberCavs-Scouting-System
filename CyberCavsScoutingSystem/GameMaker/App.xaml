@@ -91,7 +91,7 @@
 
 		<Style x:Key="MultiStringInputBorderStyle" TargetType="Border">
 			<d:Style.DataContext>
-                <d:DesignInstance Type="{extensions:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:ValidationError`1}, T1=domain:VersionNumber, T2=domain:ErrorSeverity}"/>
+                <d:DesignInstance Type="{extensions:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:ValidationError`1}, T1=domain:Version, T2=domain:ErrorSeverity}"/>
                 <!--<d:DesignInstance Type="wpfUtilities:MultiStringInput, IsDesignTimeCreatable=True"/>-->
 			</d:Style.DataContext>
 

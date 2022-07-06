@@ -61,7 +61,7 @@ public class GameEditingData : INotifyPropertyChanged {
 
 
 
-	public MultiInput<VersionNumber, ErrorSeverity, uint, uint, uint, string> Version { get; }
+	public MultiInput<Version, ErrorSeverity, uint, uint, uint, string> Version { get; }
 
 	public SingleInput<string, string, ErrorSeverity> Name { get; }
 	public SingleInput<int, string, ErrorSeverity> Year { get; }
