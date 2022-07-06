@@ -24,11 +24,12 @@ public class ValidationSet<TOutput, TSeverityEnum> : IValidationSet<TOutput, TSe
 
 
 
-	public ValidationSet(InputValidatorSingleError<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents) {
-
-		Validator = (outputObject) => new(validator.Invoke(outputObject));
-		ValidationEvents = validationEvents;
-	}
+	public ValidationSet(InputValidatorSingleError<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents) 
+		: this(outputObject => {
+			ValidationError<TSeverityEnum>? error = validator.Invoke(outputObject);
+			return error is null ? ReadOnlyList<ValidationError<TSeverityEnum>>.Empty : new(error);
+		}, validationEvents)
+	{ }
 
 	public ValidationSet(InputValidatorErrorsList<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents) {
 
@@ -61,12 +62,13 @@ public class ValidationSet<TOutput, TValidationParameter, TSeverityEnum> : IVali
 
 
 	public ValidationSet(InputValidatorSingleError<TOutput, TValidationParameter, TSeverityEnum> validator,
-		Func<TValidationParameter> validationParameterGetter, params ValidationEvent[] validationEvents) {
+		Func<TValidationParameter> validationParameterGetter, params ValidationEvent[] validationEvents) 
 
-		Validator = (outputObject, validationParameter) => new(validator.Invoke(outputObject, validationParameter));
-		ValidationEvents = validationEvents;
-		ValidationParameterGetter = validationParameterGetter;
-	}
+		: this((outputObject, validationParameter) => {
+			ValidationError<TSeverityEnum>? error = validator.Invoke(outputObject, validationParameter);
+			return error is null ? ReadOnlyList<ValidationError<TSeverityEnum>>.Empty : new(error);
+		}, validationParameterGetter, validationEvents)
+	{ }
 
 	public ValidationSet(InputValidatorErrorsList<TOutput, TValidationParameter, TSeverityEnum> validator,
 		Func<TValidationParameter> validationParameterGetter, params ValidationEvent[] validationEvents) {
