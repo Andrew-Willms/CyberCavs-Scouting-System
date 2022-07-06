@@ -25,7 +25,7 @@ public class AllianceEditingData {
 				() => EditingData.Alliances.Where(x => x != this), EditingData.AllianceNameChanged)
 		);
 
-		AllianceColor = new(AllianceValidator.ColorConverter, AllianceValidator.ColorInverter,
+		AllianceColor = new(AllianceValidator.ColorConversionPair,
 			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConversionPair, "0"),
 			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConversionPair, "0"),
 			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConversionPair, "0"),

@@ -6,9 +6,9 @@ namespace WPFUtilities.Validation.Delegates;
 
 internal static class DelegateConverters {
 	
-	public static SingleInputConverterErrorList<TOutput?, TInput, TSeverityEnum>
+	public static InputConverterErrorList<TOutput?, TInput, TSeverityEnum>
 		SingleToErrorListConvert<TOutput, TInput, TSeverityEnum>
-		(SingleInputConverterSingleError<TOutput?, TInput, TSeverityEnum> converter)
+		(InputConverterSingleError<TOutput?, TInput, TSeverityEnum> converter)
 		where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 		return inputObject => {
@@ -20,9 +20,9 @@ internal static class DelegateConverters {
 		};
 	}
 
-	public static SingleInputInverterErrorList<TOutput, TInput?, TSeverityEnum>
+	public static InputInverterErrorList<TOutput, TInput?, TSeverityEnum>
 		SingleToErrorListInvert<TOutput, TInput, TSeverityEnum>
-		(SingleInputInverterSingleError<TOutput, TInput?, TSeverityEnum> inverter)
+		(InputInverterSingleError<TOutput, TInput?, TSeverityEnum> inverter)
 		where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 		return outputObject => {

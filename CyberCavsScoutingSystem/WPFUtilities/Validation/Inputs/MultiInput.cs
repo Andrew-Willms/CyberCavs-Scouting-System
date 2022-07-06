@@ -104,7 +104,6 @@ public class MultiInput<TOutput, TSeverityEnum,
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
-
 	public override TOutput? OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -116,7 +115,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
 
-			(TInput1? input1Result, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
+			(TInput1? input1Result,
+				ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
 			if (errors.Any() == false) {
 				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
@@ -126,26 +126,41 @@ public class MultiInput<TOutput, TSeverityEnum,
 				InputComponent1.OutputObject = input1Result;
 			}
 
+
 			_OutputObject = value;
 			OnOutputObjectChanged();
 		}
 	}
 
-	private MultiInputConverters<TOutput?, TSeverityEnum,
-		TInput1> Converter { get; }
+	private InputConverterErrorList<TOutput?, 
+		TInput1,
+		TSeverityEnum> Converter { get; }
 
 	protected override (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.OutputObject!);
+		=> Converter(
+			InputComponent1.OutputObject!);
 
-	private MultiInputInverters<TOutput, TSeverityEnum,
-		TInput1> Inverter { get; }
+	private InputInverterErrorList<TOutput,
+		TInput1?,
+		TSeverityEnum> Inverter { get; }
 
 	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
 
-	public MultiInput(MultiInputConverters<TOutput?, TSeverityEnum,
-			TInput1> converter,
-		MultiInputInverters<TOutput, TSeverityEnum,
-			TInput1> inverter,
+	public MultiInput(ConversionPair<TOutput,
+			TInput1,
+			TSeverityEnum> conversionPair,
+		IInput<TInput1, TSeverityEnum> inputComponent1,
+		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
+		: this(conversionPair.Converter, conversionPair.Inverter,
+			inputComponent1,
+			validationSets) { }
+
+	public MultiInput(InputConverterErrorList<TOutput?,
+			TInput1,
+			TSeverityEnum> converter,
+		InputInverterErrorList<TOutput,
+			TInput1?,
+			TSeverityEnum> inverter,
 		IInput<TInput1, TSeverityEnum> inputComponent1,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
 
@@ -159,6 +174,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 }
 
+
+
 public class MultiInput<TOutput, TSeverityEnum,
 		TInput1,
 		TInput2>
@@ -166,7 +183,6 @@ public class MultiInput<TOutput, TSeverityEnum,
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
-
 	public override TOutput? OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -178,8 +194,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
 
-			(TInput1? input1Result,
-				TInput2? input2Result,
+			((TInput1? input1Result,
+				TInput2? input2Result),
 				ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
 			if (errors.Any() == false) {
@@ -199,27 +215,44 @@ public class MultiInput<TOutput, TSeverityEnum,
 		}
 	}
 
-	private MultiInputConverter<TOutput?, TSeverityEnum,
-		TInput1,
-		TInput2> Converter { get; }
+	private InputConverterErrorList<TOutput?, 
+		(TInput1,
+		TInput2),
+		TSeverityEnum> Converter { get; }
 
 	protected override (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.OutputObject!,
-			InputComponent2.OutputObject!);
+		=> Converter((
+			InputComponent1.OutputObject!,
+			InputComponent2.OutputObject!));
 
-	private MultiInputInverter<TOutput, TSeverityEnum,
-		TInput1,
-		TInput2> Inverter { get; }
+	private InputInverterErrorList<TOutput,
+		(TInput1?,
+		TInput2?),
+		TSeverityEnum> Inverter { get; }
 
 	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
 	private IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
 
-	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum,
-			TInput1,
-			TInput2> converter,
-		MultiInputInverter<TOutput, TSeverityEnum,
-			TInput1,
-			TInput2> inverter,
+	public MultiInput(ConversionPair<TOutput,
+			(TInput1,
+			TInput2),
+			TSeverityEnum> conversionPair,
+		IInput<TInput1, TSeverityEnum> inputComponent1,
+		IInput<TInput2, TSeverityEnum> inputComponent2,
+		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
+		: this(conversionPair.Converter, conversionPair.Inverter,
+			inputComponent1,
+			inputComponent2,
+			validationSets) { }
+
+	public MultiInput(InputConverterErrorList<TOutput?,
+			(TInput1,
+			TInput2),
+			TSeverityEnum> converter,
+		InputInverterErrorList<TOutput,
+			(TInput1?,
+			TInput2?),
+			TSeverityEnum> inverter,
 		IInput<TInput1, TSeverityEnum> inputComponent1,
 		IInput<TInput2, TSeverityEnum> inputComponent2,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
@@ -235,6 +268,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 }
 
+
+
 public class MultiInput<TOutput, TSeverityEnum,
 		TInput1,
 		TInput2,
@@ -243,7 +278,6 @@ public class MultiInput<TOutput, TSeverityEnum,
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
-
 	public override TOutput? OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -255,9 +289,9 @@ public class MultiInput<TOutput, TSeverityEnum,
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
 
-			(TInput1? input1Result,
+			((TInput1? input1Result,
 				TInput2? input2Result,
-				TInput3? input3Result,
+				TInput3? input3Result),
 				ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
 			if (errors.Any() == false) {
@@ -281,33 +315,53 @@ public class MultiInput<TOutput, TSeverityEnum,
 		}
 	}
 
-	private MultiInputConverter<TOutput?, TSeverityEnum,
-		TInput1,
+	private InputConverterErrorList<TOutput?, 
+		(TInput1,
 		TInput2,
-		TInput3> Converter { get; }
+		TInput3),
+		TSeverityEnum> Converter { get; }
 
 	protected override (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.OutputObject!,
+		=> Converter((
+			InputComponent1.OutputObject!,
 			InputComponent2.OutputObject!,
-			InputComponent3.OutputObject!);
+			InputComponent3.OutputObject!));
 
-	private MultiInputInverter<TOutput, TSeverityEnum,
-		TInput1,
-		TInput2,
-		TInput3> Inverter { get; }
+	private InputInverterErrorList<TOutput,
+		(TInput1?,
+		TInput2?,
+		TInput3?),
+		TSeverityEnum> Inverter { get; }
 
 	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
 	private IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
 	private IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
 
-	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum,
-			TInput1,
+	public MultiInput(ConversionPair<TOutput,
+			(TInput1,
 			TInput2,
-			TInput3> converter,
-		MultiInputInverter<TOutput, TSeverityEnum,
-			TInput1,
+			TInput3),
+			TSeverityEnum> conversionPair,
+		IInput<TInput1, TSeverityEnum> inputComponent1,
+		IInput<TInput2, TSeverityEnum> inputComponent2,
+		IInput<TInput3, TSeverityEnum> inputComponent3,
+		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
+		: this(conversionPair.Converter, conversionPair.Inverter,
+			inputComponent1,
+			inputComponent2,
+			inputComponent3,
+			validationSets) { }
+
+	public MultiInput(InputConverterErrorList<TOutput?,
+			(TInput1,
 			TInput2,
-			TInput3> inverter,
+			TInput3),
+			TSeverityEnum> converter,
+		InputInverterErrorList<TOutput,
+			(TInput1?,
+			TInput2?,
+			TInput3?),
+			TSeverityEnum> inverter,
 		IInput<TInput1, TSeverityEnum> inputComponent1,
 		IInput<TInput2, TSeverityEnum> inputComponent2,
 		IInput<TInput3, TSeverityEnum> inputComponent3,
@@ -325,6 +379,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 }
 
+
+
 public class MultiInput<TOutput, TSeverityEnum,
 		TInput1,
 		TInput2,
@@ -334,7 +390,6 @@ public class MultiInput<TOutput, TSeverityEnum,
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
-
 	public override TOutput? OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -346,10 +401,10 @@ public class MultiInput<TOutput, TSeverityEnum,
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
 
-			(TInput1? input1Result,
+			((TInput1? input1Result,
 				TInput2? input2Result,
 				TInput3? input3Result,
-				TInput4? input4Result,
+				TInput4? input4Result),
 				ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
 			if (errors.Any() == false) {
@@ -367,7 +422,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 			if (input3Result is not null /*&& result == InputObject*/) {
 				InputComponent3.OutputObject = input3Result;
 			}
-
+			
 			if (input4Result is not null /*&& result == InputObject*/) {
 				InputComponent4.OutputObject = input4Result;
 			}
@@ -377,39 +432,62 @@ public class MultiInput<TOutput, TSeverityEnum,
 		}
 	}
 
-	private MultiInputConverter<TOutput?, TSeverityEnum,
-		TInput1,
+	private InputConverterErrorList<TOutput?, 
+		(TInput1,
 		TInput2,
 		TInput3,
-		TInput4> Converter { get; }
+		TInput4),
+		TSeverityEnum> Converter { get; }
 
 	protected override (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter(InputComponent1.OutputObject!,
+		=> Converter((
+			InputComponent1.OutputObject!,
 			InputComponent2.OutputObject!,
 			InputComponent3.OutputObject!,
-			InputComponent4.OutputObject!);
+			InputComponent4.OutputObject!));
 
-	private MultiInputInverter<TOutput, TSeverityEnum,
-		TInput1,
-		TInput2,
-		TInput3,
-		TInput4> Inverter { get; }
+	private InputInverterErrorList<TOutput,
+		(TInput1?,
+		TInput2?,
+		TInput3?,
+		TInput4?),
+		TSeverityEnum> Inverter { get; }
 
 	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
 	private IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
 	private IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
 	private IInput<TInput4, TSeverityEnum> InputComponent4 { get; }
 
-	public MultiInput(MultiInputConverter<TOutput?, TSeverityEnum,
-			TInput1,
+	public MultiInput(ConversionPair<TOutput,
+			(TInput1,
 			TInput2,
 			TInput3,
-			TInput4> converter,
-		MultiInputInverter<TOutput, TSeverityEnum,
-			TInput1,
+			TInput4),
+			TSeverityEnum> conversionPair,
+		IInput<TInput1, TSeverityEnum> inputComponent1,
+		IInput<TInput2, TSeverityEnum> inputComponent2,
+		IInput<TInput3, TSeverityEnum> inputComponent3,
+		IInput<TInput4, TSeverityEnum> inputComponent4,
+		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
+		: this(conversionPair.Converter, conversionPair.Inverter,
+			inputComponent1,
+			inputComponent2,
+			inputComponent3,
+			inputComponent4,
+			validationSets) { }
+
+	public MultiInput(InputConverterErrorList<TOutput?,
+			(TInput1,
 			TInput2,
 			TInput3,
-			TInput4> inverter,
+			TInput4),
+			TSeverityEnum> converter,
+		InputInverterErrorList<TOutput,
+			(TInput1?,
+			TInput2?,
+			TInput3?,
+			TInput4?),
+			TSeverityEnum> inverter,
 		IInput<TInput1, TSeverityEnum> inputComponent1,
 		IInput<TInput2, TSeverityEnum> inputComponent2,
 		IInput<TInput3, TSeverityEnum> inputComponent3,

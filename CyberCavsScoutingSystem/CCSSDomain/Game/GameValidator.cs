@@ -2,6 +2,7 @@
 using System.Linq;
 using WPFUtilities;
 using WPFUtilities.Extensions;
+using WPFUtilities.Validation.Delegates;
 using WPFUtilities.Validation.Errors;
 
 namespace CCSSDomain.Game;
@@ -10,21 +11,23 @@ namespace CCSSDomain.Game;
 
 public static class GameValidator {
 
-	public static (VersionNumber?, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionConverter
-		(uint majorVersionNumber, uint minorVersionNumber, uint patchVersionNumber, string versionDescription) {
+	private static (VersionNumber?, ValidationError<ErrorSeverity>?) VersionConverter
+		((uint major, uint minor, uint path, string description) input) {
 
-		return (new(majorVersionNumber, minorVersionNumber, patchVersionNumber) { VersionDescription = versionDescription },
-			ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+		return (new(input.major, input.minor, input.path, input.description), null);
 	}
 
-	public static (uint, uint, uint, string, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionInverter
-		(VersionNumber versionNumber) {
+	private static ((uint, uint, uint, string), ValidationError<ErrorSeverity>?) VersionInverter(VersionNumber version) {
 
-		return (versionNumber.MajorNumber, versionNumber.MinorNumber, versionNumber.PatchNumber, versionNumber.VersionDescription,
-			ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+		return ((version.MajorNumber, version.MinorNumber, version.PatchNumber, version.Description), null);
 	}
 
-	public static (uint, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionNumberComponentConverter(string inputString) {
+	public static readonly ConversionPair<VersionNumber, (uint, uint, uint, string), ErrorSeverity>
+		VersionConversionPair = new(VersionConverter, VersionInverter);
+
+
+
+	private static (uint, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionComponentNumberConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
@@ -48,15 +51,18 @@ public static class GameValidator {
 		return (uint.Parse(inputString), new());
 	}
 
-	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionNumberComponentInverter
+	private static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionComponentNumberInverter
 		(uint versionNumberComponent) {
 
 		return (versionNumberComponent.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
+	public static readonly ConversionPair<uint, string, ErrorSeverity> VersionComponentNumberConversionPair 
+		= new(VersionComponentNumberConverter, VersionComponentNumberInverter);
 
 
-	public static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionDescriptionConverter(string inputString) {
+
+	private static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionDescriptionConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
@@ -65,7 +71,7 @@ public static class GameValidator {
 		return (inputString, new());
 	}
 
-	public static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionDescriptionInverter(string versionDescription) {
+	private static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) VersionDescriptionInverter(string versionDescription) {
 
 		if (versionDescription is null) {
 			throw new ArgumentNullException(nameof(versionDescription), "You shouldn't be able to send a null string to this validator.");
@@ -73,6 +79,9 @@ public static class GameValidator {
 
 		return (versionDescription, new());
 	}
+
+	public static readonly ConversionPair<string, string, ErrorSeverity> VersionDescriptionConversionPair 
+		= new(VersionDescriptionConverter, VersionDescriptionInverter);
 
 
 
@@ -125,7 +134,7 @@ public static class GameValidator {
 
 
 
-	public static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) YearConverter(string inputString) {
+	private static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) YearConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
@@ -149,10 +158,14 @@ public static class GameValidator {
 		return (int.Parse(inputString), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
-	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) YearInverter(int year) {
+	private static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) YearInverter(int year) {
 
 		return (year.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
+
+	public static readonly ConversionPair<int, string, ErrorSeverity> YearConversionPair = new(YearConverter, YearInverter);
+
+
 
 	public static ReadOnlyList<ValidationError<ErrorSeverity>> YearValidator_YearNotNegative(int year) {
 
@@ -186,7 +199,7 @@ public static class GameValidator {
 
 
 
-	public static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) RobotsPerAllianceConverter(string inputString) {
+	private static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) RobotsPerAllianceConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
@@ -210,14 +223,17 @@ public static class GameValidator {
 		return (int.Parse(inputString), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
-	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) RobotsPerAllianceInverter(int robotsPerAlliance) {
+	private static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) RobotsPerAllianceInverter(int robotsPerAlliance) {
 
 		return (robotsPerAlliance.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
+	public static readonly ConversionPair<int, string, ErrorSeverity> RobotsPerAllianceConversionPair
+		= new(RobotsPerAllianceConverter, RobotsPerAllianceInverter);
 
 
-	public static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) AlliancesPerMatchConverter(string inputString) {
+
+	private static (int, ReadOnlyList<ValidationError<ErrorSeverity>>) AlliancesPerMatchConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
@@ -241,9 +257,12 @@ public static class GameValidator {
 		return (int.Parse(inputString), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
 
-	public static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) AlliancesPerMatchInverter(int alliancesPerMatch) {
+	private static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) AlliancesPerMatchInverter(int alliancesPerMatch) {
 
 		return (alliancesPerMatch.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
 	}
+
+	public static readonly ConversionPair<int, string, ErrorSeverity> AlliancesPerMatchConversionPair
+		= new(AlliancesPerMatchConverter, AlliancesPerMatchInverter);
 
 }

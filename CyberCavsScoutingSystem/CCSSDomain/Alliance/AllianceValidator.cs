@@ -99,20 +99,20 @@ public static class AllianceValidator {
 
 
 
-	public static (Color, ValidationError<ErrorSeverity>?) ColorConverter
-		(byte redValue, byte greenValue, byte blueValue) {
+	private static (Color, ValidationError<ErrorSeverity>?) ColorConverter
+		((byte redValue, byte greenValue, byte blueValue) input) {
 
-		return (Color.FromRgb(redValue, greenValue, blueValue), null);
+		return (Color.FromRgb(input.redValue, input.greenValue, input.blueValue), null);
 	}
 
-	public static (byte redValue, byte greenValue, byte blueValue, ValidationError<ErrorSeverity>?) ColorInverter
+	private static ((byte redValue, byte greenValue, byte blueValue) invertedValues, ValidationError<ErrorSeverity>?) ColorInverter
 		(Color color) {
 
-		return (color.R, color.G, color.B, null);
+		return ((color.R, color.G, color.B), null);
 	}
 
-	//public static ConversionPair<Color, (byte, byte, byte), ErrorSeverity> ColorConversionPair
-	//	= new(ColorConverter, ColorInverter);
+	public static readonly ConversionPair<Color, (byte, byte, byte), ErrorSeverity> ColorConversionPair
+		= new(ColorConverter, ColorInverter);
 
 
 

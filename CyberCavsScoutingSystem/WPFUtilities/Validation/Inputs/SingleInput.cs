@@ -68,8 +68,8 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		}
 	}
 
-	private SingleInputConverterErrorList<TOutput?, TInput, TSeverityEnum> Converter { get; }
-	private SingleInputInverterErrorList<TOutput, TInput?, TSeverityEnum> Inverter { get; }
+	private InputConverterErrorList<TOutput?, TInput, TSeverityEnum> Converter { get; }
+	private InputInverterErrorList<TOutput, TInput?, TSeverityEnum> Inverter { get; }
 
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
@@ -91,8 +91,8 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
 		: this(conversionPair.Converter, conversionPair.Inverter, initialInput, validationSets) { }
 
-	public SingleInput(SingleInputConverterErrorList<TOutput?, TInput, TSeverityEnum> converter,
-		SingleInputInverterErrorList<TOutput, TInput?, TSeverityEnum> inverter, TInput initialInput,
+	public SingleInput(InputConverterErrorList<TOutput?, TInput, TSeverityEnum> converter,
+		InputInverterErrorList<TOutput, TInput?, TSeverityEnum> inverter, TInput initialInput,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets) {
 
 		Converter = converter;
