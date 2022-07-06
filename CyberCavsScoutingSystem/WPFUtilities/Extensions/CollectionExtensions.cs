@@ -25,4 +25,5 @@ public static class CollectionExtensions {
 
 		return newValue is null ? enumerable : enumerable.Append(newValue);
 	}
+
 }

@@ -39,14 +39,14 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
 
-			(TInput? result, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
+			(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
-			if (errors.Any() == false) {
+			if (errors.Any(x => x.Severity.IsFatal)) {
 				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
 			}
 
-			if (result is not null /*&& result == InputObject*/) {
-				InputObject = result;
+			if (inversionResult.HasValue /*&& result == InputObject*/) {
+				InputObject = inversionResult.Value;
 			}
 
 			_OutputObject = value;
@@ -67,8 +67,8 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		}
 	}
 
-	private InputConverterErrorList<TOutput?, TInput, TSeverityEnum> Converter { get; }
-	private InputInverterErrorList<TOutput, TInput?, TSeverityEnum> Inverter { get; }
+	private InputConverterErrorList<TOutput, TInput, TSeverityEnum> Converter { get; }
+	private InputInverterErrorList<TOutput, TInput, TSeverityEnum> Inverter { get; }
 
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
@@ -91,8 +91,8 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
 		: this(conversionPair.Converter, conversionPair.Inverter, initialInput, validationSets) { }
 
-	public SingleInput(InputConverterErrorList<TOutput?, TInput, TSeverityEnum> converter,
-		InputInverterErrorList<TOutput, TInput?, TSeverityEnum> inverter, TInput initialInput,
+	public SingleInput(InputConverterErrorList<TOutput, TInput, TSeverityEnum> converter,
+		InputInverterErrorList<TOutput, TInput, TSeverityEnum> inverter, TInput initialInput,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets) {
 
 		Converter = converter;
@@ -108,11 +108,13 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 	public sealed override void Validate() {
 
-		(OutputObject, ConversionErrors) = Converter(InputObject);
+		(Optional<TOutput> outputObject, ConversionErrors) = Converter(InputObject);
 
 		ValidationErrors.Clear();
 
-		if (OutputObject is not null) {
+		if (outputObject.HasValue) {
+
+			OutputObject = outputObject.Value;
 
 			foreach (IValidationTrigger<TSeverityEnum> trigger in ValidationTriggers) {
 				ValidationErrors.AddRange(trigger.InvokeValidator());

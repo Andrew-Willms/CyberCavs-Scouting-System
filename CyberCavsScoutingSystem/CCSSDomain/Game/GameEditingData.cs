@@ -21,12 +21,12 @@ public class GameEditingData : INotifyPropertyChanged {
 			new ValidationSet<int, ErrorSeverity>(GameValidator.YearValidator_YearNotPredateFirst)
 		);
 
-		Name = new(GameValidator.NameConverter, GameValidator.NameInverter,
+		Name = new(GameValidator.VersionNameConversionPair,
 			DateTime.Now.Year.ToString(),
 			new ValidationSet<string, ErrorSeverity>(GameValidator.NameValidator_Length)
 		);
 
-		Description = new(GameValidator.DescriptionConverter, GameValidator.DescriptionInverter, "");
+		Description = new(GameValidator.VersionDescriptionConversionPair, "");
 
 		Version = new(GameValidator.VersionConversionPair,
 			new SingleInput<uint, string, ErrorSeverity>(GameValidator.VersionComponentNumberConversionPair, "0"),
