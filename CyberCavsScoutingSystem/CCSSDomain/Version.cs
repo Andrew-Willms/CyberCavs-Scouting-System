@@ -1,5 +1,7 @@
 ﻿namespace CCSSDomain;
 
+
+
 // Consider making this a struct
 public class Version {
 
