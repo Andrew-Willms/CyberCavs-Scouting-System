@@ -4,14 +4,24 @@ namespace WPFUtilities.Validation.Delegates;
 
 
 
+public delegate (TOutput?, ValidationError<TSeverityEnum>?)
+	SingleInputConverterSingleError<TOutput, in TInput, TSeverityEnum>
+	(TInput input)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
 public delegate (TOutput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	SingleInputConverter<TOutput, in TInput, TSeverityEnum>
+	SingleInputConverterErrorList<TOutput, in TInput, TSeverityEnum>
 	(TInput input)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
 
 
 
+public delegate (TInput?, ValidationError<TSeverityEnum>?)
+	SingleInputInverterSingleError<in TOutput, TInput, TSeverityEnum>
+	(TOutput output)
+	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
+
 public delegate (TInput?, ReadOnlyList<ValidationError<TSeverityEnum>>)
-	SingleInputInverter<in TOutput, TInput, TSeverityEnum>
+	SingleInputInverterErrorList<in TOutput, TInput, TSeverityEnum>
 	(TOutput output)
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum>;
