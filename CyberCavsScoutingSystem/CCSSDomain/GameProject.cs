@@ -17,4 +17,3 @@ public class GameProject {
 
 	// Project specific editor settings.
 }
-

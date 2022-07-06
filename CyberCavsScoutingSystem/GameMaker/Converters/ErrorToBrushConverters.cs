@@ -59,4 +59,3 @@ public class ErrorToFocusedBrushConverter : IErrorConverter<ErrorSeverity, Brush
 			{ ErrorSeverity.Error, Brushes.Red }
 		});
 }
-

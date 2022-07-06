@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-
 using WPFUtilities.Validation.Delegates;
 using WPFUtilities.Validation.Errors;
 
@@ -85,6 +84,7 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 	public override bool IsValid => ErrorLevel.IsFatal == false;
 
 	public override ValidationEvent OutputObjectChanged { get; } = new();
+
 
 
 	public SingleInput(ConversionPair<TOutput, TInput, TSeverityEnum> conversionPair, TInput initialInput,
