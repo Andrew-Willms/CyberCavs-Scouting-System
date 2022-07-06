@@ -7,6 +7,8 @@ using WPFUtilities.Validation.Inputs;
 
 namespace CCSSDomain.Alliance;
 
+
+
 public class AllianceEditingData {
 
 	private GameEditingData EditingData { get; }

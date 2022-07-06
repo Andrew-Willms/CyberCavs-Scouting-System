@@ -36,32 +36,30 @@ public static class AllianceValidator {
 
 
 
-	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_EndsWithAlliance(string name) {
+	public static ValidationError<ErrorSeverity>? NameValidator_EndsWithAlliance(string name) {
 
-		return name.EndsWith(" Alliance")
-			? ReadOnlyList<ValidationError<ErrorSeverity>>.Empty
-			: new(AllianceData.Name.DoesNotEndWithAllianceError);
+		return name.EndsWith(" Alliance") ? null : AllianceData.Name.DoesNotEndWithAllianceError;
 	}
 
-	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_Length(string name) {
+	public static ValidationError<ErrorSeverity>? NameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= AllianceData.Name.Length.LowerErrorThreshold => new(AllianceData.Name.Length.TooShortError),
-			<= AllianceData.Name.Length.LowerWarningThreshold => new(AllianceData.Name.Length.TooShortWarning),
-			<= AllianceData.Name.Length.LowerAdvisoryThreshold => new(AllianceData.Name.Length.TooShortAdvisory),
-			>= AllianceData.Name.Length.UpperErrorThreshold => new(AllianceData.Name.Length.TooLongError),
-			>= AllianceData.Name.Length.UpperWarningThreshold => new(AllianceData.Name.Length.TooLongWarning),
-			>= AllianceData.Name.Length.UpperAdvisoryThreshold => new(AllianceData.Name.Length.TooLongAdvisory),
-			_ => ReadOnlyList<ValidationError<ErrorSeverity>>.Empty
+			<= AllianceData.Name.Length.LowerErrorThreshold => AllianceData.Name.Length.TooShortError,
+			<= AllianceData.Name.Length.LowerWarningThreshold => AllianceData.Name.Length.TooShortWarning,
+			<= AllianceData.Name.Length.LowerAdvisoryThreshold => AllianceData.Name.Length.TooShortAdvisory,
+			>= AllianceData.Name.Length.UpperErrorThreshold => AllianceData.Name.Length.TooLongError,
+			>= AllianceData.Name.Length.UpperWarningThreshold => AllianceData.Name.Length.TooLongWarning,
+			>= AllianceData.Name.Length.UpperAdvisoryThreshold => AllianceData.Name.Length.TooLongAdvisory,
+			_ => null
 		};
 	}
 
-	public static ReadOnlyList<ValidationError<ErrorSeverity>> NameValidator_Uniqueness(string name,
+	public static ValidationError<ErrorSeverity>? NameValidator_Uniqueness(string name,
 		IEnumerable<AllianceEditingData> otherAlliances) {
 
 		return otherAlliances.Any(otherAlliance => otherAlliance.Name.OutputObject == name)
-			? new(AllianceData.Name.GetDuplicateNameError(name))
-			: ReadOnlyList<ValidationError<ErrorSeverity>>.Empty;
+			? AllianceData.Name.GetDuplicateNameError(name)
+			: null;
 	}
 
 
