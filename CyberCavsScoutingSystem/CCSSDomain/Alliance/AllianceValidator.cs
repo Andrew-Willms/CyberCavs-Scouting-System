@@ -128,8 +128,7 @@ public static class AllianceValidator {
 
 			int colorDifference = color.Difference(otherAlliance.AllianceColor.OutputObject);
 
-			Error? validationError =
-				AllianceData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
+			Error? validationError = AllianceData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
 
 			validationErrors.AddIfNotNull(validationError);
 		}

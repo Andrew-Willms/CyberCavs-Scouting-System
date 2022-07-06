@@ -15,7 +15,7 @@ public static class GameValidator {
 	private static (Optional<Version>, Optional<Error>) VersionConverter
 		((uint major, uint minor, uint path, string description) input) {
 
-		return ((new Version(input.major, input.minor, input.path, input.description)), Optional.NoValue);
+		return (new Version(input.major, input.minor, input.path, input.description), Optional.NoValue);
 	}
 
 	private static (Optional<(uint, uint, uint, string)>, Optional<Error>) VersionInverter(Version version) {
@@ -120,7 +120,7 @@ public static class GameValidator {
 
 
 
-	public static (string?, Optional<Error>) DescriptionConverter(string inputString) {
+	private static (Optional<string>, Optional<Error>) DescriptionConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
@@ -129,7 +129,7 @@ public static class GameValidator {
 		return (inputString, Optional.NoValue);
 	}
 
-	public static (string?, Optional<Error>) DescriptionInverter(string description) {
+	private static (Optional<string>, Optional<Error>) DescriptionInverter(string description) {
 
 		if (description is null) {
 			throw new ArgumentNullException(nameof(description), "You shouldn't be able to send a null string to this validator.");
@@ -137,6 +137,9 @@ public static class GameValidator {
 
 		return (description, Optional.NoValue);
 	}
+
+	public static readonly ConversionPair<string, string, ErrorSeverity> DescriptionConversionPair 
+		= new(DescriptionConverter, DescriptionInverter);
 
 
 

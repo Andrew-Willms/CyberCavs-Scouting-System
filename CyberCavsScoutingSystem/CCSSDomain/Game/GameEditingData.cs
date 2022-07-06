@@ -26,7 +26,7 @@ public class GameEditingData : INotifyPropertyChanged {
 			new ValidationSet<string, ErrorSeverity>(GameValidator.NameValidator_Length)
 		);
 
-		Description = new(GameValidator.VersionDescriptionConversionPair, "");
+		Description = new(GameValidator.DescriptionConversionPair, "");
 
 		Version = new(GameValidator.VersionConversionPair,
 			new SingleInput<uint, string, ErrorSeverity>(GameValidator.VersionComponentNumberConversionPair, "0"),
