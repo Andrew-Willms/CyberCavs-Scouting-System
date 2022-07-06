@@ -24,7 +24,8 @@ public class ValidationSet<TOutput, TSeverityEnum> : IValidationSet<TOutput, TSe
 
 
 
-	public ValidationSet(InputValidatorSingleError<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents) 
+	public ValidationSet(InputValidatorSingleError<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents)
+
 		: this(outputObject => {
 			ValidationError<TSeverityEnum>? error = validator.Invoke(outputObject);
 			return error is null ? ReadOnlyList<ValidationError<TSeverityEnum>>.Empty : new(error);
