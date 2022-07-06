@@ -6,18 +6,16 @@ namespace WPFUtilities;
 
 public struct Optional<T> {
 
-	private T? _Value = default;
+	private readonly T _Value;
 	public T Value {
 
 		get {
 			if (!HasValue) {
-				throw new InvalidOperationException("You cannot get the value of a null nullable.");
+				throw new InvalidOperationException("You cannot get the value of an Option with no value.");
 			}
 
 			return _Value;
 		}
-
-		set => _Value = value;
 	}
 
 	public bool HasValue { get; }
@@ -25,12 +23,14 @@ public struct Optional<T> {
 	public Optional() {
 
 		HasValue = false;
+		_Value = default!;
 	}
 
 	public Optional(T value) {
 
 		HasValue = true;
-		Value = value;
+		_Value = value;
 	}
 
+	public static readonly Optional<T> NoValue = new();
 }
