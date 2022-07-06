@@ -14,22 +14,22 @@ namespace CCSSDomain.Alliance;
 
 public static class AllianceValidator {
 
-	private static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) NameConverter(string inputString) {
+	private static (string?, ValidationError<ErrorSeverity>?) NameConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
 		}
 
-		return (inputString, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+		return (inputString, null);
 	}
 
-	private static (string?, ReadOnlyList<ValidationError<ErrorSeverity>>) NameInverter(string name) {
+	private static (string?, ValidationError<ErrorSeverity>?) NameInverter(string name) {
 
 		if (name is null) {
 			throw new ArgumentNullException(nameof(name), "You shouldn't be able to send a null value to an inverter.");
 		}
 
-		return (name, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+		return (name, null);
 	}
 	
 	public static readonly ConversionPair<string, string, ErrorSeverity> NameConversionPair = new(NameConverter, NameInverter);
@@ -64,34 +64,34 @@ public static class AllianceValidator {
 
 
 
-	private static (byte, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorComponentConverter(string inputString) {
+	private static (byte, ValidationError<ErrorSeverity>?) ColorComponentConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
 		}
 
 		if (inputString.Length == 0) {
-			return (0, new(new ValidationError<ErrorSeverity>("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value.")));
+			return (0, new("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value."));
 		}
 
 		char[] invalidCharacters = inputString.Where(x => char.IsDigit(x) == false).ToArray();
 
 		if (invalidCharacters.Any()) {
-			return (0, new(new ValidationError<ErrorSeverity>("Invalid Characters", ErrorSeverity.Error,
-				$"The characters \"{invalidCharacters}\" are not valid in the year field.")));
+			return (0, new("Invalid Characters", ErrorSeverity.Error,
+				$"The characters \"{invalidCharacters}\" are not valid in the year field."));
 		}
 
 		if (inputString.NumericCompare(byte.MaxValue.ToString()) > 1) {
-			return (0, new(new ValidationError<ErrorSeverity>("Number Too Large", ErrorSeverity.Error, "Too big to convert to int.")));
+			return (0, new("Number Too Large", ErrorSeverity.Error, "Too big to convert to int."));
 		}
 
-		return (byte.Parse(inputString), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+		return (byte.Parse(inputString), null);
 	}
 
-	private static (string, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorComponentInverter(
+	private static (string, ValidationError<ErrorSeverity>?) ColorComponentInverter(
 		byte colourComponentValue) {
 
-		return (colourComponentValue.ToString(), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+		return (colourComponentValue.ToString(), null);
 	}
 
 	public static readonly ConversionPair<byte, string, ErrorSeverity> ColorComponentConversionPair
@@ -99,16 +99,16 @@ public static class AllianceValidator {
 
 
 
-	public static (Color, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorConverter
+	public static (Color, ValidationError<ErrorSeverity>?) ColorConverter
 		(byte redValue, byte greenValue, byte blueValue) {
 
-		return (Color.FromRgb(redValue, greenValue, blueValue), ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+		return (Color.FromRgb(redValue, greenValue, blueValue), null);
 	}
 
-	public static (byte redValue, byte greenValue, byte blueValue, ReadOnlyList<ValidationError<ErrorSeverity>>) ColorInverter
+	public static (byte redValue, byte greenValue, byte blueValue, ValidationError<ErrorSeverity>?) ColorInverter
 		(Color color) {
 
-		return (color.R, color.G, color.B, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty);
+		return (color.R, color.G, color.B, null);
 	}
 
 	//public static ConversionPair<Color, (byte, byte, byte), ErrorSeverity> ColorConversionPair
