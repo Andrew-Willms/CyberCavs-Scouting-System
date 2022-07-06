@@ -19,9 +19,9 @@ public class Optional<T> {
 	public T Value {
 
 		get {
+
 			if (!HasValue) {
-				// TODO: make this a custom exception
-				throw new InvalidOperationException("You cannot get the value of an Option with no value.");
+				throw new EvaluatingValuelessOptionalException();
 			}
 
 			return _Value;
@@ -52,4 +52,15 @@ public class Optional<T> {
 		return new(value);
 	}
 
+}
+
+
+
+public class EvaluatingValuelessOptionalException : InvalidOperationException {
+
+	public EvaluatingValuelessOptionalException() { }
+
+	public EvaluatingValuelessOptionalException(string message) : base(message) { }
+
+	public EvaluatingValuelessOptionalException(string message, Exception inner) : base(message, inner) { }
 }

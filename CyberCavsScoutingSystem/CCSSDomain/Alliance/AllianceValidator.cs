@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Media;
 using System.Linq;
 using WPFUtilities;
 using WPFUtilities.Extensions;
 using WPFUtilities.Validation.Delegates;
 using CCSSDomain.Data;
-
+using WPFUtilities.Validation;
 using Error = WPFUtilities.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace CCSSDomain.Alliance;
@@ -18,7 +17,7 @@ public static class AllianceValidator {
 	private static (Optional<string>, Optional<Error>) NameConverter(string inputString) {
 
 		if (inputString is null) {
-			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
+			throw new NullInputObjectInConverter();
 		}
 
 		return (inputString, Optional.NoValue);
@@ -27,7 +26,7 @@ public static class AllianceValidator {
 	private static (Optional<string>, Optional<Error>) NameInverter(string name) {
 
 		if (name is null) {
-			throw new ArgumentNullException(nameof(name), "You shouldn't be able to send a null value to an inverter.");
+			throw new NullInputObjectInInverter();
 		}
 
 		return (name, Optional.NoValue);
@@ -70,7 +69,7 @@ public static class AllianceValidator {
 	private static (Optional<byte>, Optional<Error>) ColorComponentConverter(string inputString) {
 
 		if (inputString is null) {
-			throw new ArgumentNullException(nameof(inputString), "You shouldn't be able to send a null string to this validator.");
+			throw new NullInputObjectInConverter();
 		}
 
 		if (inputString.Length == 0) {
@@ -91,8 +90,7 @@ public static class AllianceValidator {
 		return (byte.Parse(inputString), Optional.NoValue);
 	}
 
-	private static (Optional<string>, Optional<Error>) ColorComponentInverter(
-		byte colourComponentValue) {
+	private static (Optional<string>, Optional<Error>) ColorComponentInverter(byte colourComponentValue) {
 
 		return (colourComponentValue.ToString(), Optional.NoValue);
 	}
