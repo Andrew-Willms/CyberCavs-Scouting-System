@@ -67,8 +67,8 @@ public class GameEditingData : INotifyPropertyChanged {
 	public SingleInput<int, string, ErrorSeverity> Year { get; }
 	public SingleInput<string, string, ErrorSeverity> Description { get; }
 
-	public SingleInput<int, string, ErrorSeverity> RobotsPerAlliance { get; }
-	public SingleInput<int, string, ErrorSeverity> AlliancesPerMatch { get; }
+	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance { get; }
+	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch { get; }
 
 	public ValidationEvent AllianceNameChanged { get; } = new();
 

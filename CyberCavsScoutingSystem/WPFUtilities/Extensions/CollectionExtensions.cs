@@ -21,9 +21,21 @@ public static class CollectionExtensions {
 		enumerable.Add(newValue);
 	}
 
+	public static void AddIfHasValue<T>(this List<T> enumerable, Optional<T> newValue) {
+
+		if (newValue.HasValue) {
+			enumerable.Add(newValue.Value);
+		}
+	}
+
 	public static IEnumerable<T> AppendIfNotNull<T>(this IEnumerable<T> enumerable, T? newValue) {
 
 		return newValue is null ? enumerable : enumerable.Append(newValue);
+	}
+
+	public static ReadOnlyList<T> ReadOnlyListify<T>(this T item) {
+
+		return new List<T> { item }.ToReadOnly();
 	}
 
 }

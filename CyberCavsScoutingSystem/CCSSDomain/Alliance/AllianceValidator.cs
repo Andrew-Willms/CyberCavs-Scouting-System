@@ -38,9 +38,9 @@ public static class AllianceValidator {
 
 	public static Optional<Error> NameValidator_EndsWithAlliance(string name) {
 
-		return name.EndsWith(" Alliance")
+		return name.EndsWith(AllianceData.Name.ShouldEndWith)
 			? Optional.NoValue
-			: AllianceData.Name.DoesNotEndWithAllianceError;
+			: AllianceData.Name.DoesNotEndWithCorrectSequenceError;
 	}
 
 	public static Optional<Error> NameValidator_Length(string name) {
@@ -66,28 +66,13 @@ public static class AllianceValidator {
 
 
 
-	private static (Optional<byte>, Optional<Error>) ColorComponentConverter(string inputString) {
+	private static (Optional<byte>, ReadOnlyList<Error>) ColorComponentConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new NullInputObjectInConverter();
 		}
 
-		if (inputString.Length == 0) {
-			return (0, new Error("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value."));
-		}
-
-		char[] invalidCharacters = inputString.Where(x => char.IsDigit(x) == false).ToArray();
-
-		if (invalidCharacters.Any()) {
-			return (0, new Error("Invalid Characters", ErrorSeverity.Error,
-				$"The characters \"{invalidCharacters}\" are not valid in the year field."));
-		}
-
-		if (inputString.NumericCompare(byte.MaxValue.ToString()) > 1) {
-			return (0, new Error("Number Too Large", ErrorSeverity.Error, "Too big to convert to int."));
-		}
-
-		return (byte.Parse(inputString), Optional.NoValue);
+		return GeneralData.ConvertToByte(inputString, AllianceData.Color.Component.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) ColorComponentInverter(byte colourComponentValue) {
@@ -100,8 +85,7 @@ public static class AllianceValidator {
 
 
 
-	private static (Optional<Color>, Optional<Error>) ColorConverter
-		((byte redValue, byte greenValue, byte blueValue) input) {
+	private static (Optional<Color>, Optional<Error>) ColorConverter((byte redValue, byte greenValue, byte blueValue) input) {
 
 		return (Color.FromRgb(input.redValue, input.greenValue, input.blueValue), Optional.NoValue);
 	}
@@ -126,9 +110,9 @@ public static class AllianceValidator {
 
 			int colorDifference = color.Difference(otherAlliance.AllianceColor.OutputObject);
 
-			Error? validationError = AllianceData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
+			Optional<Error> validationError = AllianceData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
 
-			validationErrors.AddIfNotNull(validationError);
+			validationErrors.AddIfHasValue(validationError);
 		}
 
 		return validationErrors.ToReadOnly();

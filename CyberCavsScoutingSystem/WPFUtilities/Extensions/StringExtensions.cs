@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace WPFUtilities.Extensions; 
 
 
 
 public static class StringExtensions {
+
+	private static bool IsValidNumericString(string text) {
+		throw new NotImplementedException();
+	}
 
 	/// <summary>
 	/// This function assumes the two strings only have only the numerals 0-9
@@ -17,8 +19,20 @@ public static class StringExtensions {
 	/// <returns></returns>
 	public static int NumericCompare(this string current, string other) {
 
-		string currentTrimmed = current.Trim('0');
-		string otherTrimmed = other.Trim('0');
+		if (IsValidNumericString(current) == false) {
+
+		}
+
+		if (IsValidNumericString(other) == false) {
+
+		}
+
+		if (!current.StartsWith('-') && !other.StartsWith('-')) {
+
+		}
+
+		string currentTrimmed = current.TrimStart('0');
+		string otherTrimmed = other.TrimStart('0');
 
 		if (currentTrimmed.Length > otherTrimmed.Length) {
 			return 1;
@@ -42,10 +56,42 @@ public static class StringExtensions {
 		return 0;
 	}
 
+	public static int NumericCompare(this string current, NumericString other) {
+		throw new NotImplementedException();
+	}
+
+	public static bool NumericGreaterThan(this string current, byte value) {
+		throw new NotImplementedException();
+	}
+
+	public static bool NumericGreaterThan(this string current, uint value) {
+		throw new NotImplementedException();
+	}
+
+	public static bool NumericGreaterThan(this string current, string other) {
+		return current.NumericCompare(other) == 1;
+	}
+
+	public static bool NumericGreaterThan(this string current, NumericString other) {
+		throw new NotImplementedException();
+	}
+
+	public static bool NumericLessThan(this string current, string other) {
+		return current.NumericCompare(other) == -1;
+	}
+
+	public static bool NumericLessThan(this string current, NumericString other) {
+		throw new NotImplementedException();
+	}
+
+	public static bool NumericEquals(this string current, string other) {
+		return current.NumericCompare(other) == 0;
+	}
+
 }
 
 
-/*
+
 public static class NumericStringExtensions {
 
 	public static NumericString ConvertToNumericString(this string text) {
@@ -96,6 +142,38 @@ public class NumericString : IEquatable<NumericString>, IComparable<NumericStrin
 	private Digit[] Value { get; }
 
 	//private readonly string Value;
+
+
+
+	public NumericString(short number) {
+		throw new NotImplementedException();
+	}
+
+	public NumericString(int number) {
+		throw new NotImplementedException();
+	}
+
+	public NumericString(long number) {
+		throw new NotImplementedException();
+	}
+
+	public NumericString(byte number) {
+		throw new NotImplementedException();
+	}
+
+	public NumericString(ushort number) {
+		throw new NotImplementedException();
+	}
+
+	public NumericString(uint number) {
+		throw new NotImplementedException();
+	}
+
+	public NumericString(ulong number) {
+		throw new NotImplementedException();
+	}
+
+
 
 	private NumericString(string value) {
 
@@ -323,4 +401,3 @@ public class NumericString : IEquatable<NumericString>, IComparable<NumericStrin
 
 
 }
-*/

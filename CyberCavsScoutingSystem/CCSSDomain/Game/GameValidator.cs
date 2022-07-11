@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using CCSSDomain.Data;
 using WPFUtilities;
-using WPFUtilities.Extensions;
 using WPFUtilities.Validation;
 using WPFUtilities.Validation.Delegates;
 using Error = WPFUtilities.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
@@ -37,28 +35,13 @@ public static class GameVersionValidator {
 
 
 
-	private static (Optional<uint>, Optional<Error>) ComponentNumberConverter(string inputString) {
+	private static (Optional<uint>, ReadOnlyList<Error>) ComponentNumberConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new NullInputObjectInConverter();
 		}
 
-		if (inputString.Length == 0) {
-			return (0, new Error("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value."));
-		}
-
-		char[] invalidCharacters = inputString.Where(x => char.IsDigit(x) == false).ToArray();
-
-		if (invalidCharacters.Any()) {
-			return (0, new Error("Invalid Characters", ErrorSeverity.Error,
-				$"The characters \"{invalidCharacters}\" are not valid in the year field."));
-		}
-
-		if (inputString.NumericCompare(uint.MaxValue.ToString()) > 1) {
-			return (0, new Error("Number Too Large", ErrorSeverity.Error, "Too big to convert to int."));
-		}
-
-		return (uint.Parse(inputString), Optional.NoValue);
+		return GeneralData.ConvertToUint(inputString, VersionData.ComponentNumber.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) ComponentNumberInverter(uint versionNumberComponent) {
@@ -164,28 +147,13 @@ public static class GameTextValidator {
 
 public static class GameNumbersValidator {
 
-	private static (Optional<int>, Optional<Error>) YearConverter(string inputString) {
+	private static (Optional<int>, ReadOnlyList<Error>) YearConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new NullInputObjectInConverter();
 		}
 
-		if (inputString.Length == 0) {
-			return (0, new Error("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value."));
-		}
-
-		char[] invalidCharacters = inputString.Where(x => char.IsDigit(x) == false).ToArray();
-
-		if (invalidCharacters.Any()) {
-			return (0, new Error("Invalid Characters", ErrorSeverity.Error,
-				$"The characters \"{invalidCharacters}\" are not valid in the year field."));
-		}
-
-		if (inputString.NumericCompare(int.MaxValue.ToString()) > 1) {
-			return (0, new Error("Number Too Large", ErrorSeverity.Error, "Too big to convert to int."));
-		}
-
-		return (int.Parse(inputString), Optional.NoValue);
+		return GeneralData.ConvertToInt(inputString, GameData.Year.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) YearInverter(int year) {
@@ -230,70 +198,40 @@ public static class GameNumbersValidator {
 
 
 
-	private static (Optional<int>, Optional<Error>) RobotsPerAllianceConverter(string inputString) {
+	private static (Optional<uint>, ReadOnlyList<Error>) RobotsPerAllianceConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new NullInputObjectInConverter();
 		}
 
-		if (inputString.Length == 0) {
-			return (0, new Error("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value."));
-		}
-
-		char[] invalidCharacters = inputString.Where(x => char.IsDigit(x) == false).ToArray();
-
-		if (invalidCharacters.Any()) {
-			return (0, new Error("Invalid Characters", ErrorSeverity.Error,
-				$"The characters \"{invalidCharacters}\" are not valid in the year field."));
-		}
-
-		if (inputString.NumericCompare(int.MaxValue.ToString()) > 1) {
-			return (0, new Error("Number Too Large", ErrorSeverity.Error, "Too big to convert to int."));
-		}
-
-		return (int.Parse(inputString), Optional.NoValue);
+		return GeneralData.ConvertToUint(inputString, GameData.RobotsPerAlliance.ConversionErrorSet);
 	}
 
-	private static (Optional<string>, Optional<Error>) RobotsPerAllianceInverter(int robotsPerAlliance) {
+	private static (Optional<string>, Optional<Error>) RobotsPerAllianceInverter(uint robotsPerAlliance) {
 
 		return (robotsPerAlliance.ToString(), Optional.NoValue);
 	}
 
-	public static readonly ConversionPair<int, string, ErrorSeverity> RobotsPerAllianceConversionPair
+	public static readonly ConversionPair<uint, string, ErrorSeverity> RobotsPerAllianceConversionPair
 		= new(RobotsPerAllianceConverter, RobotsPerAllianceInverter);
 
 
 
-	private static (Optional<int>, Optional<Error>) AlliancesPerMatchConverter(string inputString) {
+	private static (Optional<uint>, ReadOnlyList<Error>) AlliancesPerMatchConverter(string inputString) {
 
 		if (inputString is null) {
 			throw new NullInputObjectInConverter();
 		}
 
-		if (inputString.Length == 0) {
-			return (0, new Error("Empty Year Field", ErrorSeverity.Error, "The year cannot have no value."));
-		}
-
-		char[] invalidCharacters = inputString.Where(x => char.IsDigit(x) == false).ToArray();
-
-		if (invalidCharacters.Any()) {
-			return (0, new Error("Invalid Characters", ErrorSeverity.Error,
-				$"The characters \"{invalidCharacters}\" are not valid in the year field."));
-		}
-
-		if (inputString.NumericCompare(int.MaxValue.ToString()) > 1) {
-			return (0, new Error("Number Too Large", ErrorSeverity.Error, "Too big to convert to int."));
-		}
-
-		return (int.Parse(inputString), Optional.NoValue);
+		return GeneralData.ConvertToUint(inputString, GameData.AlliancesPerMatch.ConversionErrorSet);
 	}
 
-	private static (Optional<string>, Optional<Error>) AlliancesPerMatchInverter(int alliancesPerMatch) {
+	private static (Optional<string>, Optional<Error>) AlliancesPerMatchInverter(uint alliancesPerMatch) {
 
 		return (alliancesPerMatch.ToString(), Optional.NoValue);
 	}
 
-	public static readonly ConversionPair<int, string, ErrorSeverity> AlliancesPerMatchConversionPair
+	public static readonly ConversionPair<uint, string, ErrorSeverity> AlliancesPerMatchConversionPair
 		= new(AlliancesPerMatchConverter, AlliancesPerMatchInverter);
 
 }
