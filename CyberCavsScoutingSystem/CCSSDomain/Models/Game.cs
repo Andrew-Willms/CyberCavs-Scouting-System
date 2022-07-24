@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CCSSDomain.Game;
+namespace CCSSDomain.Models;
 
 
 
@@ -16,5 +16,5 @@ public class Game {
 	public string Description = "";
 	public int Year = 0;
 
-	public List<Alliance.Alliance> Alliances = new();
+	public List<Alliance> Alliances = new();
 }

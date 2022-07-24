@@ -2,11 +2,12 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
-using CCSSDomain.Alliance;
+using CCSSDomain.Data;
+using CCSSDomain.Validation.Validators;
 using WPFUtilities.Validation;
 using WPFUtilities.Validation.Inputs;
 
-namespace CCSSDomain.Game;
+namespace CCSSDomain.EditingData;
 
 
 
@@ -21,15 +22,14 @@ public class GameEditingData : INotifyPropertyChanged {
 			new ValidationSet<int, ErrorSeverity>(GameNumbersValidator.YearValidator_YearNotPredateFirst)
 		);
 
-		Name = new(GameTextValidator.VersionNameConversionPair,
-			DateTime.Now.Year.ToString(),
+		Name = new(GameTextValidator.NameConversionPair, GameNameGenerator.GetRandomGameName(),
 			new ValidationSet<string, ErrorSeverity>(GameTextValidator.NameValidator_Length)
 		);
 
 		Description = new(GameTextValidator.DescriptionConversionPair, "");
 
 		Version = new(GameVersionValidator.ConversionPair,
-			new SingleInput<uint, string, ErrorSeverity>(GameVersionValidator.ComponentNumberConversionPair, "0"),
+			new SingleInput<uint, string, ErrorSeverity>(GameVersionValidator.ComponentNumberConversionPair, "1"),
 			new SingleInput<uint, string, ErrorSeverity>(GameVersionValidator.ComponentNumberConversionPair, "0"),
 			new SingleInput<uint, string, ErrorSeverity>(GameVersionValidator.ComponentNumberConversionPair, "0"),
 			new SingleInput<string, string, ErrorSeverity>(GameVersionValidator.DescriptionConversionPair, "")

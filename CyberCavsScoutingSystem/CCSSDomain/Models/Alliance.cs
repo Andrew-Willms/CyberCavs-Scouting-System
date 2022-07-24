@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace CCSSDomain.Alliance;
+namespace CCSSDomain.Models;
 
 
 

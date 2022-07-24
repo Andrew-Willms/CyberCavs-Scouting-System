@@ -4,11 +4,12 @@ using System.Linq;
 using WPFUtilities;
 using WPFUtilities.Extensions;
 using WPFUtilities.Validation.Delegates;
-using CCSSDomain.Data;
+using CCSSDomain.Validation.Data;
 using WPFUtilities.Validation;
 using Error = WPFUtilities.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using CCSSDomain.EditingData;
 
-namespace CCSSDomain.Alliance;
+namespace CCSSDomain.Validation.Validators;
 
 
 
@@ -16,42 +17,38 @@ public static class AllianceValidator {
 
 	private static (Optional<string>, Optional<Error>) NameConverter(string inputString) {
 
-		if (inputString is null) {
-			throw new NullInputObjectInConverter();
-		}
+		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
 		return (inputString, Optional.NoValue);
 	}
 
 	private static (Optional<string>, Optional<Error>) NameInverter(string name) {
 
-		if (name is null) {
-			throw new NullInputObjectInInverter();
-		}
+		NullInputObjectInInverterException.ThrowIfNull(name);
 
 		return (name, Optional.NoValue);
 	}
-	
+
 	public static readonly ConversionPair<string, string, ErrorSeverity> NameConversionPair = new(NameConverter, NameInverter);
 
 
 
 	public static Optional<Error> NameValidator_EndsWithAlliance(string name) {
 
-		return name.EndsWith(AllianceData.Name.ShouldEndWith)
+		return name.EndsWith(AllianceValidationData.Name.ShouldEndWith)
 			? Optional.NoValue
-			: AllianceData.Name.DoesNotEndWithCorrectSequenceError;
+			: AllianceValidationData.Name.DoesNotEndWithCorrectSequenceError;
 	}
 
 	public static Optional<Error> NameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= AllianceData.Name.Length.LowerErrorThreshold => AllianceData.Name.Length.TooShortError,
-			<= AllianceData.Name.Length.LowerWarningThreshold => AllianceData.Name.Length.TooShortWarning,
-			<= AllianceData.Name.Length.LowerAdvisoryThreshold => AllianceData.Name.Length.TooShortAdvisory,
-			>= AllianceData.Name.Length.UpperErrorThreshold => AllianceData.Name.Length.TooLongError,
-			>= AllianceData.Name.Length.UpperWarningThreshold => AllianceData.Name.Length.TooLongWarning,
-			>= AllianceData.Name.Length.UpperAdvisoryThreshold => AllianceData.Name.Length.TooLongAdvisory,
+			<= AllianceValidationData.Name.Length.LowerErrorThreshold => AllianceValidationData.Name.Length.TooShortError,
+			<= AllianceValidationData.Name.Length.LowerWarningThreshold => AllianceValidationData.Name.Length.TooShortWarning,
+			<= AllianceValidationData.Name.Length.LowerAdvisoryThreshold => AllianceValidationData.Name.Length.TooShortAdvisory,
+			>= AllianceValidationData.Name.Length.UpperErrorThreshold => AllianceValidationData.Name.Length.TooLongError,
+			>= AllianceValidationData.Name.Length.UpperWarningThreshold => AllianceValidationData.Name.Length.TooLongWarning,
+			>= AllianceValidationData.Name.Length.UpperAdvisoryThreshold => AllianceValidationData.Name.Length.TooLongAdvisory,
 			_ => Optional.NoValue
 		};
 	}
@@ -60,7 +57,7 @@ public static class AllianceValidator {
 		IEnumerable<AllianceEditingData> otherAlliances) {
 
 		return otherAlliances.Any(otherAlliance => otherAlliance.Name.OutputObject == name)
-			? AllianceData.Name.GetDuplicateNameError(name)
+			? AllianceValidationData.Name.GetDuplicateNameError(name)
 			: Optional.NoValue;
 	}
 
@@ -68,11 +65,9 @@ public static class AllianceValidator {
 
 	private static (Optional<byte>, ReadOnlyList<Error>) ColorComponentConverter(string inputString) {
 
-		if (inputString is null) {
-			throw new NullInputObjectInConverter();
-		}
+		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return GeneralData.ConvertToByte(inputString, AllianceData.Color.Component.ConversionErrorSet);
+		return Conversion.StringConversion.ToByte(inputString, AllianceValidationData.Color.Component.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) ColorComponentInverter(byte colourComponentValue) {
@@ -110,7 +105,7 @@ public static class AllianceValidator {
 
 			int colorDifference = color.Difference(otherAlliance.AllianceColor.OutputObject);
 
-			Optional<Error> validationError = AllianceData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
+			Optional<Error> validationError = AllianceValidationData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
 
 			validationErrors.AddIfHasValue(validationError);
 		}

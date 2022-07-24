@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using CCSSDomain.Game;
+using CCSSDomain.Validation.Validators;
 using WPFUtilities.Validation;
 using WPFUtilities.Validation.Inputs;
 
-namespace CCSSDomain.Alliance;
+namespace CCSSDomain.EditingData;
 
 
 
