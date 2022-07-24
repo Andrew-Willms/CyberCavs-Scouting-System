@@ -1,8 +1,5 @@
-﻿using System;
-using System.Windows.Data;
-using System.Globalization;
-using CCSSDomain;
-using WPFUtilities.SmartEnum;
+﻿using CCSSDomain;
+using WPFUtilities.WPF;
 
 namespace GameMaker.Converters;
 

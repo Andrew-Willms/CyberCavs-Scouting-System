@@ -2,9 +2,11 @@
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using CCSSDomain;
-using WPFUtilities.Validation.Errors;
+using WPFUtilities.WPF;
 
 namespace GameMaker.Converters;
+
+
 
 public class ErrorToToolTipTextBrushConverter : IErrorConverter<ErrorSeverity, Brush> {
 
