@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMaker", "GameMaker\GameMaker.csproj", "{54B71C94-8F0F-4607-994F-D51694BD5C0B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTestingApplication", "QuickTestingApplication\QuickTestingApplication.csproj", "{360B6DE3-E1B0-4692-8E66-F92D5422D893}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFUtilities", "WPFUtilities\WPFUtilities.csproj", "{22EC8326-E7D2-4B44-A06D-11430F5505A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSSDomain", "CCSSDomain\CCSSDomain.csproj", "{17DAA2C2-87A1-4740-B68A-1FA063080659}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSSDomain.Tests", "CCSSDomain.Tests\CCSSDomain.Tests.csproj", "{9C1F721E-0620-4D4B-983B-85DD63A495B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSSDomain.Tests", "CCSSDomain.Tests\CCSSDomain.Tests.csproj", "{9C1F721E-0620-4D4B-983B-85DD63A495B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMakerWpf", "GameMakerWpf\GameMakerWpf.csproj", "{34A7D979-6226-4C3C-AE82-93FA0DD7A354}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{54B71C94-8F0F-4607-994F-D51694BD5C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54B71C94-8F0F-4607-994F-D51694BD5C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54B71C94-8F0F-4607-994F-D51694BD5C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54B71C94-8F0F-4607-994F-D51694BD5C0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{360B6DE3-E1B0-4692-8E66-F92D5422D893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{360B6DE3-E1B0-4692-8E66-F92D5422D893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{360B6DE3-E1B0-4692-8E66-F92D5422D893}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{9C1F721E-0620-4D4B-983B-85DD63A495B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C1F721E-0620-4D4B-983B-85DD63A495B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C1F721E-0620-4D4B-983B-85DD63A495B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
