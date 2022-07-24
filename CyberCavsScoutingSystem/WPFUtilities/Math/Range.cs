@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WPFUtilities; 
+namespace WPFUtilities.Math;
 
 
 
