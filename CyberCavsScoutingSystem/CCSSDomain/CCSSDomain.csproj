@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
-		<TargetFramework>net6.0-windows</TargetFramework>
+		<TargetFramework>net7.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
@@ -11,7 +11,12 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Folder Include="Data\" />
+	  <Folder Include="Validation\Conversion\" />
+	  <Folder Include="Validation\Data\" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="CCSSDomain.Tests" />
+	</ItemGroup>
+	
 </Project>
