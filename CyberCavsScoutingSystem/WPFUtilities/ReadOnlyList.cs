@@ -52,4 +52,5 @@ public class ReadOnlyList<T> : ReadOnlyCollection<T>, IEnumerable<T> {
 	}
 
 	public static readonly ReadOnlyList<T> Empty = new();
+
 }

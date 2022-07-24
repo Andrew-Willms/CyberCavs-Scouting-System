@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace WPFUtilities.Extensions;
@@ -9,7 +11,7 @@ public static class CollectionExtensions {
 
 	public static ReadOnlyList<T> ToReadOnly<T>(this IEnumerable<T> enumerable) {
 
-		return (ReadOnlyList<T>)enumerable.ToList().AsReadOnly();
+		return new(enumerable.ToList());
 	}
 
 	public static void AddIfNotNull<T>(this List<T> enumerable, T? newValue) {
@@ -36,6 +38,16 @@ public static class CollectionExtensions {
 	public static ReadOnlyList<T> ReadOnlyListify<T>(this T item) {
 
 		return new List<T> { item }.ToReadOnly();
+	}
+
+	public static bool OnlyOne<T>(this IEnumerable<T> enumerable, T value) where T : IComparable {
+
+		return enumerable.Count(x => x.CompareTo(value) == 0) == 1;
+	}
+
+	public static bool Multiple<T>(this IEnumerable<T> enumerable, T value) where T : IComparable {
+
+		return enumerable.Count(x => x.CompareTo(value) == 0) > 1;
 	}
 
 }

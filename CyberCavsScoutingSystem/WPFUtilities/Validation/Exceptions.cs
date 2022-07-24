@@ -4,37 +4,54 @@ namespace WPFUtilities.Validation;
 
 
 
-public class TestException : Exception {
+public class NullInputObjectInConverterException : Exception {
 
-	public TestException() {
+	public NullInputObjectInConverterException() { }
 
-	}
+	public NullInputObjectInConverterException(string message) : base(message) { }
 
-	public TestException(string message) : base(message) {
+	public NullInputObjectInConverterException(string message, Exception inner) : base(message, inner) { }
 
-	}
+	public static void ThrowIfNull(object? inputString) {
 
-	public TestException(string message, Exception inner) : base(message, inner) {
-
+		if (inputString is null) {
+			throw new NullInputObjectInConverterException();
+		}
 	}
 
 }
 
+public class NullInputObjectInInverterException : Exception {
 
-public class NullInputObjectInConverter : Exception {
+	public NullInputObjectInInverterException() { }
 
-	public NullInputObjectInConverter() { }
+	public NullInputObjectInInverterException(string message) : base(message) { }
 
-	public NullInputObjectInConverter(string message) : base(message) { }
+	public NullInputObjectInInverterException(string message, Exception inner) : base(message, inner) { }
 
-	public NullInputObjectInConverter(string message, Exception inner) : base(message, inner) { }
+	public static void ThrowIfNull(object? inputString) {
+
+		if (inputString is null) {
+			throw new NullInputObjectInInverterException();
+		}
+	}
+
 }
 
-public class NullInputObjectInInverter : Exception {
+public class ShouldNotReachException : Exception {
 
-	public NullInputObjectInInverter() { }
+	public ShouldNotReachException() { }
 
-	public NullInputObjectInInverter(string message) : base(message) { }
+	public ShouldNotReachException(string message) : base(message) { }
 
-	public NullInputObjectInInverter(string message, Exception inner) : base(message, inner) { }
+	public ShouldNotReachException(string message, Exception inner) : base(message, inner) { }
+}
+
+public class ShouldMatchOtherCaseException : Exception {
+
+	public ShouldMatchOtherCaseException() { }
+
+	public ShouldMatchOtherCaseException(string message) : base(message) { }
+
+	public ShouldMatchOtherCaseException(string message, Exception inner) : base(message, inner) { }
 }
