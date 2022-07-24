@@ -1,4 +1,4 @@
-﻿using CCSSDomain.Game;
+﻿using CCSSDomain.EditingData;
 
 namespace CCSSDomain;
 
@@ -7,7 +7,7 @@ namespace CCSSDomain;
 public class GameProject {
 
 	// Do I even need this or should this be generated later?
-	public Game.Game Game = new();
+	public Models.Game Game = new();
 
 	public GameEditingData EditingData = GameEditingData.GetDefaultEditingData();
 
