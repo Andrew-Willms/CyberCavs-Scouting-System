@@ -3,7 +3,9 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace WPFUtilities.Validation.Errors;
+using WPFUtilities.Validation.Errors;
+
+namespace WPFUtilities.WPF;
 
 
 

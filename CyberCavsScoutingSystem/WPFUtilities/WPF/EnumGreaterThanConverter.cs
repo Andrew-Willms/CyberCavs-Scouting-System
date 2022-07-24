@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Windows.Data;
 using System.Globalization;
+using System.Windows.Data;
+using WPFUtilities.SmartEnum;
 
-namespace WPFUtilities.SmartEnum;
+namespace WPFUtilities.WPF;
 
 public class EnumGreaterThanConverter<TEnum> : IValueConverter where TEnum : OrderedSmartEnum<TEnum> {
 
