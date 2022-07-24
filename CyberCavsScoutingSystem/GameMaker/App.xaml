@@ -6,9 +6,9 @@
 			 xmlns:local="clr-namespace:GameMaker"
 			 xmlns:converters="clr-namespace:GameMaker.Converters"
 			 xmlns:wpfUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
+             xmlns:wpf="clr-namespace:WPFUtilities.WPF;assembly=WPFUtilities"
 			 xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
-			 xmlns:extensions="clr-namespace:WPFUtilities.Extensions;assembly=WPFUtilities"
-			 Startup="ApplicationStartup">
+             Startup="ApplicationStartup">
 	<Application.Resources>
 
 		<converters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
@@ -63,15 +63,15 @@
 
 			<Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
-			<Setter Property="Text" Value="{Binding Path=InputString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Setter Property="Text" Value="{Binding Path=InputObject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 			<Setter Property="ToolTip">
 				<Setter.Value>
 					<StackPanel>
 						<TextBlock Text="Description stuff here."/>
-						<ItemsControl ItemsSource="{Binding ValidationErrors}">
+						<ItemsControl ItemsSource="{Binding Errors}">
 							<ItemsControl.ItemTemplate>
-								<DataTemplate d:DataType="{extensions:GenericObjectFactory Type={x:Type wpfUtilities:ValidationError`1}, T=domain:ErrorSeverity}">
+								<DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
                                     <DataTemplate.Resources>
 										<Style TargetType="TextBlock">
 											<Setter Property="Foreground"
@@ -91,7 +91,7 @@
 
 		<Style x:Key="MultiStringInputBorderStyle" TargetType="Border">
 			<d:Style.DataContext>
-                <d:DesignInstance Type="{extensions:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:ValidationError`1}, T1=domain:Version, T2=domain:ErrorSeverity}"/>
+                <d:DesignInstance Type="{wpf:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T1=domain:Version, T2=domain:ErrorSeverity}"/>
                 <!--<d:DesignInstance Type="wpfUtilities:MultiStringInput, IsDesignTimeCreatable=True"/>-->
 			</d:Style.DataContext>
 
@@ -105,7 +105,7 @@
 						<TextBlock Text="Description stuff here."/>
 						<ItemsControl ItemsSource="{Binding CovalidationErrors}">
 							<ItemsControl.ItemTemplate>
-								<DataTemplate d:DataType="{extensions:GenericObjectFactory Type={x:Type wpfUtilities:ValidationError`1}, T=domain:ErrorSeverity}">
+                                <DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
                                     <DataTemplate.Resources>
 										<Style TargetType="TextBlock">
 											<Setter Property="Foreground"

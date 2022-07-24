@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameMaker.Views"
              xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
+             xmlns:editingData="clr-namespace:CCSSDomain.EditingData;assembly=CCSSDomain"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="500"
-             d:DataContext="{d:DesignInstance Type=domain:AllianceEditingData, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=editingData:AllianceEditingData, IsDesignTimeCreatable=False}">
 
     <Border DataContext="{Binding Path=AllianceColor}"
             Style="{StaticResource MultiStringInputBorderStyle}"
@@ -34,7 +35,7 @@
                      Width="Auto"
                      Grid.Column="0"/>
 
-            <TextBox DataContext="{Binding Path=StringInputs[R]}"
+            <TextBox DataContext="{Binding Path=InputComponent1}"
                      Style="{StaticResource StringInputStyle}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Top"
@@ -43,7 +44,7 @@
                      Width="Auto"
                      Grid.Column="1"/>
 
-            <TextBox DataContext="{Binding Path=StringInputs[G]}"
+            <TextBox DataContext="{Binding Path=InputComponent2}"
                      Style="{StaticResource StringInputStyle}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Top"
@@ -52,7 +53,7 @@
                      Width="Auto"
                      Grid.Column="2"/>
 
-            <TextBox DataContext="{Binding Path=StringInputs[B]}"
+            <TextBox DataContext="{Binding Path=InputComponent3}"
                      Style="{StaticResource StringInputStyle}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Top"

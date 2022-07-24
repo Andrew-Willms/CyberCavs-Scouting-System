@@ -1,11 +1,8 @@
-﻿using System;
-using System.Configuration;
-using System.Data;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Diagnostics;
+﻿using System.Windows;
 
 namespace GameMaker;
+
+
 
 /// <summary>
 /// Interaction logic for App.xaml
