@@ -1,21 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Linq;
+using System.ComponentModel;
+using System.Collections.Generic;
 using WPFUtilities.Extensions;
-using System;
-using WPFUtilities.Validation.Delegates;
 using WPFUtilities.Validation.Errors;
+using WPFUtilities.Validation.Delegates;
 
 namespace WPFUtilities.Validation.Inputs;
 
 
-
-public interface IMultiInput<TSeverityEnum> : IInput<TSeverityEnum>
-	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
-
-	public ReadOnlyDictionary<string, ISingleInput<TSeverityEnum>> StringInputs { get; }
-}
 
 public interface IMultiInput<TOutput, TSeverityEnum> : IInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
@@ -42,7 +35,7 @@ public abstract class MultiInput<TOutput, TSeverityEnum> : Input<TOutput, TSever
 	private TSeverityEnum ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
 	private TSeverityEnum ValidationErrorLevel => ValidationErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
 	private TSeverityEnum ComponentErrorLevel => ComponentErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
-	public override TSeverityEnum ErrorLevel => Math.Max(ConversionErrorLevel, ValidationErrorLevel, ComponentErrorLevel);
+	public override TSeverityEnum ErrorLevel => Math.Operations.Max(ConversionErrorLevel, ValidationErrorLevel, ComponentErrorLevel);
 
 	protected bool IsConvertible => ConversionErrorLevel.IsFatal == false;
 	public override bool IsValid => ErrorLevel.IsFatal == false;
@@ -59,8 +52,6 @@ public abstract class MultiInput<TOutput, TSeverityEnum> : Input<TOutput, TSever
 		foreach (IInput<TSeverityEnum> inputString in InputComponents) {
 			inputString.OutputObjectChanged.Subscribe(Validate);
 		}
-
-		Validate();
 	}
 
 
@@ -133,6 +124,13 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 			if (inversionResult.HasValue) {
 
+				// TODO: figure out if this is a good idea
+				//if (inversionResult.Value.inputComponent1 is not null &&
+				//    !inversionResult.Value.inputComponent1.Equals(InputComponent1.OutputObject)) {
+
+				//	InputComponent1.OutputObject = inversionResult.Value.inputComponent1;
+				//}
+
 				InputComponent1.OutputObject = inversionResult.Value.inputComponent1;
 				InputComponent2.OutputObject = inversionResult.Value.inputComponent2;
 				InputComponent3.OutputObject = inversionResult.Value.inputComponent3;
@@ -161,9 +159,9 @@ public class MultiInput<TOutput, TSeverityEnum,
 		TInput3),
 		TSeverityEnum> Inverter { get; }
 
-	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
-	private IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
-	private IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
+	public IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
+	public IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
+	public IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
 
 	public MultiInput(ConversionPair<TOutput,
 			(TInput1,
@@ -274,10 +272,10 @@ public class MultiInput<TOutput, TSeverityEnum,
 		TInput4),
 		TSeverityEnum> Inverter { get; }
 
-	private IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
-	private IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
-	private IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
-	private IInput<TInput4, TSeverityEnum> InputComponent4 { get; }
+	public IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
+	public IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
+	public IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
+	public IInput<TInput4, TSeverityEnum> InputComponent4 { get; }
 
 	public MultiInput(ConversionPair<TOutput,
 			(TInput1,
@@ -324,6 +322,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 		InputComponent2 = inputComponent2;
 		InputComponent3 = inputComponent3;
 		InputComponent4 = inputComponent4;
+
+		Validate();
 	}
 
 }

@@ -25,6 +25,8 @@ public interface ISingleInput<TOutput, TInput, TSeverityEnum> : IInput<TOutput, 
 
 
 public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSeverityEnum>, ISingleInput<TOutput, TInput, TSeverityEnum>
+	where TInput : IEquatable<TInput>
+	where TOutput : IEquatable<TOutput>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	private TOutput? _OutputObject;
@@ -39,13 +41,18 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
 
+			if (value.Equals(OutputObject)) {
+				//OnOutputObjectChanged();
+				return;
+			}
+
 			(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
 			if (errors.Any(x => x.Severity.IsFatal)) {
 				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
 			}
 
-			if (inversionResult.HasValue /*&& result == InputObject*/) {
+			if (inversionResult.HasValue && !inversionResult.Value.Equals(InputObject)) {
 				InputObject = inversionResult.Value;
 			}
 
@@ -78,7 +85,7 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 	private TSeverityEnum ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
 	private TSeverityEnum ValidationErrorLevel => ValidationErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
-	public override TSeverityEnum ErrorLevel => Math.Max(ConversionErrorLevel, ValidationErrorLevel);
+	public override TSeverityEnum ErrorLevel => Math.Operations.Max(ConversionErrorLevel, ValidationErrorLevel);
 
 	private bool IsConvertible => ConversionErrorLevel.IsFatal == false;
 	public override bool IsValid => ErrorLevel.IsFatal == false;
@@ -100,8 +107,10 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 		ValidationTriggers = ValidationSetsToTriggers(validationSets);
 
+		//_InputObject = initialInput;
 		_InputObject = initialInput;
 		InputObject = initialInput;
+		OnOutputObjectChanged();
 	}
 
 
