@@ -4,7 +4,7 @@ using System.Windows.Media;
 using CCSSDomain;
 using WPFUtilities.WPF;
 
-namespace GameMaker.Converters;
+namespace GameMakerWpf.Converters;
 
 
 

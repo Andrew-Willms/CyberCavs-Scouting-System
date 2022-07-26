@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Windows.Data;
 using System.Globalization;
+using System.Windows.Data;
 using System.Windows.Media;
 
-namespace GameMaker.Converters; 
+namespace GameMakerWpf.Converters; 
 
 public class ColorToBrushConverter  : IValueConverter {
 	

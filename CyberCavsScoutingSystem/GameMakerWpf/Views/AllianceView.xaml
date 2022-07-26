@@ -1,11 +1,12 @@
-﻿<UserControl x:Class="GameMaker.Views.AllianceView"
+﻿<UserControl x:Class="GameMakerWpf.Views.AllianceView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GameMaker.Views"
+             xmlns:local="clr-namespace:GameMakerWpf.Views"
              xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
              xmlns:editingData="clr-namespace:CCSSDomain.EditingData;assembly=CCSSDomain"
+             xmlns:views="clr-namespace:GameMakerWpf.Views"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance Type=editingData:AllianceEditingData, IsDesignTimeCreatable=False}">
@@ -26,7 +27,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <TextBox DataContext="{Binding Path=DataContext.Name, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:AllianceView}}}"
+            <TextBox DataContext="{Binding Path=DataContext.Name, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type views:AllianceView}}}"
                      Style="{StaticResource StringInputStyle}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Top"

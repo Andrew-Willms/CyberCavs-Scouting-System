@@ -1,7 +1,9 @@
 ﻿using CCSSDomain;
-using GameMaker.Views;
+using GameMakerWpf.Views;
 
-namespace GameMaker;
+namespace GameMakerWpf;
+
+
 
 public static class ApplicationManager {
 

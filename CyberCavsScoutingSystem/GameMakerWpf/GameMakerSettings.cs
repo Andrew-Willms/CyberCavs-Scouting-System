@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace GameMakerWpf;
 
-namespace GameMaker {
 
-	public class GameMakerSettings {
 
-	}
+public class GameMakerSettings {
 
 }
