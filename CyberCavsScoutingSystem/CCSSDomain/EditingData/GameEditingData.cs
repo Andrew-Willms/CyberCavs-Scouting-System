@@ -13,7 +13,7 @@ namespace CCSSDomain.EditingData;
 
 public class GameEditingData : INotifyPropertyChanged {
 
-	private GameEditingData() {
+	public GameEditingData() {
 
 		Year = new(GameNumbersValidator.YearConversionPair,
 			DateTime.Now.Year.ToString(),

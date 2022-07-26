@@ -3,16 +3,12 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:local="clr-namespace:GameMakerWpf"
-			 xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
              xmlns:wpfUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
              xmlns:wpf="clr-namespace:WPFUtilities.WPF;assembly=WPFUtilities"
 			 xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
 			 xmlns:converters="clr-namespace:GameMakerWpf.Converters"
 			 Startup="ApplicationStartup">
 	<Application.Resources>
-
-        <displayData:MetaTabData x:Key="MetaTabData"/>
 
         <converters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
 		<converters:ErrorToMouseOverBrushConverter x:Key="ErrorToMouseOverBrushConverter"/>
@@ -74,7 +70,8 @@
 						<TextBlock Text="Description stuff here."/>
 						<ItemsControl ItemsSource="{Binding Errors}">
 							<ItemsControl.ItemTemplate>
-								<DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
+								<DataTemplate DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
+                                    <!--<DataTemplate.DataType>d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}"</DataTemplate.DataType>-->
                                     <DataTemplate.Resources>
 										<Style TargetType="TextBlock">
 											<Setter Property="Foreground"
