@@ -70,7 +70,7 @@
 						<TextBlock Text="Description stuff here."/>
 						<ItemsControl ItemsSource="{Binding Errors}">
 							<ItemsControl.ItemTemplate>
-								<DataTemplate DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
+								<DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
                                     <!--<DataTemplate.DataType>d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}"</DataTemplate.DataType>-->
                                     <DataTemplate.Resources>
 										<Style TargetType="TextBlock">
