@@ -1,0 +1,59 @@
+﻿<Window x:Class="GameMakerWpf.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GameMakerWpf.Views"
+        xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
+        xmlns:editingData="clr-namespace:CCSSDomain.EditingData;assembly=CCSSDomain"
+        xmlns:views="clr-namespace:GameMakerWpf.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance Type=editingData:GameEditingData, IsDesignTimeCreatable=True}">
+
+    <Window.Resources>
+
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Save"/>
+                <MenuItem Header="Save _As"/>
+                <MenuItem Header="_Open"/>
+                <MenuItem Header="_New"/>
+            </MenuItem>
+        </Menu>
+        <TabControl Grid.Row="1">
+            <TabItem Header="Meta">
+                <Grid Background="#FFE5E5E5">
+                    <local:MetaTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Alliances">
+                <Grid Background="#FFE5E5E5">
+                    <views:AlliancesTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Data Fields">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Sidebar">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Field Image">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Field Buttons">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Timer">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

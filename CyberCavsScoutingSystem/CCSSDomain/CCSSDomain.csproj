@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	
+	<PropertyGroup>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<EnablePreviewFeatures>True</EnablePreviewFeatures>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\WPFUtilities\WPFUtilities.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Validation\Conversion\" />
+	  <Folder Include="Validation\Data\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="CCSSDomain.Tests" />
+	</ItemGroup>
+	
+</Project>
