@@ -28,4 +28,4 @@ The primary components are listed below:
 
 - ScoutingApp: A cross-platform mobile scouting app.
 
-- DataCollector: A tool for transfering data from scouting devices to a central database.
+- DataIngester: A tool for transfering data from scouting devices to a central database.
