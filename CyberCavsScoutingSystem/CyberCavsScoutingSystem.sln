@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSSDomain.Tests", "CCSSDom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMakerWpf", "GameMakerWpf\GameMakerWpf.csproj", "{34A7D979-6226-4C3C-AE82-93FA0DD7A354}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoutingApp", "ScoutingApp\ScoutingApp.csproj", "{CF920B3A-3477-4D40-8151-63298AAEDE60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,12 @@ Global
 		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
