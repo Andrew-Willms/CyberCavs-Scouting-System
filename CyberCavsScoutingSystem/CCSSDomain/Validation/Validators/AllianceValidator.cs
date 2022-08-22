@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media;
 using System.Linq;
-using WPFUtilities;
-using WPFUtilities.Extensions;
-using WPFUtilities.Validation.Delegates;
+using UtilitiesLibrary;
+using UtilitiesLibrary.Extensions;
+using UtilitiesLibrary.Validation.Delegates;
 using CCSSDomain.Validation.Data;
-using WPFUtilities.Validation;
-using Error = WPFUtilities.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using UtilitiesLibrary.Validation;
+using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 using CCSSDomain.EditingData;
 
 namespace CCSSDomain.Validation.Validators;

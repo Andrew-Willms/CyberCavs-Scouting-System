@@ -1,6 +1,6 @@
 ﻿using CCSSDomain.Validation.Conversion;
 using CCSSDomain.Validation.Data;
-using Error = WPFUtilities.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace CCSSDomain.Validation.Validators; 
 

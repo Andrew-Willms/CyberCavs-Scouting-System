@@ -1,4 +1,4 @@
-﻿using WPFUtilities.Validation.Errors;
+﻿using UtilitiesLibrary.Validation.Errors;
 
 namespace CCSSDomain;
 

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Xunit;
-using WPFUtilities;
-using WPFUtilities.Validation;
-using Error = WPFUtilities.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using UtilitiesLibrary;
+using UtilitiesLibrary.Validation;
+using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace CCSSDomain.Tests.GameValidator;
 

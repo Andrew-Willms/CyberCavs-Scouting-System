@@ -1,5 +1,5 @@
 ﻿using CCSSDomain;
-using WPFUtilities.WPF;
+using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Converters;
 

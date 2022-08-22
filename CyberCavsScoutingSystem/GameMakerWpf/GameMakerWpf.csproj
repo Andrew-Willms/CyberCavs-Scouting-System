@@ -10,7 +10,7 @@
 	
 	<ItemGroup>
 		<ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
-		<ProjectReference Include="..\WPFUtilities\WPFUtilities.csproj" />
+		<ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
 	
 	<ItemGroup>

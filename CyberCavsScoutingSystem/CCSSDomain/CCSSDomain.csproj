@@ -7,16 +7,16 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<ProjectReference Include="..\WPFUtilities\WPFUtilities.csproj" />
-	</ItemGroup>
-	
-	<ItemGroup>
 	  <Folder Include="Validation\Conversion\" />
 	  <Folder Include="Validation\Data\" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="CCSSDomain.Tests" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
 	
 </Project>

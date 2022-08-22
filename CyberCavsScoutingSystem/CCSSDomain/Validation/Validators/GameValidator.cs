@@ -1,9 +1,9 @@
 ﻿using System;
 using CCSSDomain.Validation.Data;
-using WPFUtilities;
-using WPFUtilities.Validation;
-using WPFUtilities.Validation.Delegates;
-using Error = WPFUtilities.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using UtilitiesLibrary;
+using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Validation.Delegates;
+using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace CCSSDomain.Validation.Validators;
 

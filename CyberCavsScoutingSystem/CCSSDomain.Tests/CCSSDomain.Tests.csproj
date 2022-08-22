@@ -15,8 +15,8 @@
 		</PackageReference>
     </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
+    </ItemGroup>
 
 </Project>

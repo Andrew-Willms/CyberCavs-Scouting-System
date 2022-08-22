@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Windows.Media;
 using CCSSDomain.Data;
 using CCSSDomain.Validation.Validators;
-using WPFUtilities.Validation;
-using WPFUtilities.Validation.Inputs;
+using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Validation.Inputs;
 
 namespace CCSSDomain.EditingData;
 

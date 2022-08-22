@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using CCSSDomain;
-using WPFUtilities.WPF;
+using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Converters;
 

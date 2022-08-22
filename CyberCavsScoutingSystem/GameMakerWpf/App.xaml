@@ -3,8 +3,8 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:wpfUtilities="clr-namespace:WPFUtilities;assembly=WPFUtilities"
-             xmlns:wpf="clr-namespace:WPFUtilities.WPF;assembly=WPFUtilities"
+             xmlns:wpfUtilities="clr-namespace:UtilitiesLibrary;assembly=UtilitiesLibrary"
+             xmlns:wpf="clr-namespace:UtilitiesLibrary.WPF;assembly=UtilitiesLibrary"
 			 xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
 			 xmlns:converters="clr-namespace:GameMakerWpf.Converters"
 			 Startup="ApplicationStartup">
