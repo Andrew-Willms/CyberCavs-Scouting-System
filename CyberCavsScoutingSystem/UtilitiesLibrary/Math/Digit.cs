@@ -98,9 +98,7 @@ public class Digit : OrderedSmartEnum<Digit> {
 
 	public static Digit GetOnesColumn<T>(T number) where T : INumber<T> {
 
-		T ten = T.One + T.One + T.One + T.One + T.One + T.One + T.One + T.One + T.One + T.One;
-
-		T lowestValue = number % ten;
+		T lowestValue = number % Constants.NumberInterface<T>.Ten;
 		return FromINumber(lowestValue);
 	}
 
