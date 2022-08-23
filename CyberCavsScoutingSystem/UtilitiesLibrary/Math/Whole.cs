@@ -203,7 +203,7 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 			return -1;
 		}
 
-		for (int position = LargestDecimalPosition - 1; position >= 0; position--) {
+		for (int position = LargestDecimalPosition; position >= 0; position--) {
 
 			if (GetDigitInPosition(position) > other.GetDigitInPosition(position)) {
 				return 1;
