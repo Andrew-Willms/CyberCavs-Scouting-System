@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace CCSSDomain.Data; 
+namespace GameMakerWpf.Data; 
 
 
 
@@ -15,7 +15,7 @@ public static class GameNameGenerator {
 	private static string GetRandomAdjective() {
 
 		string solutionDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.Parent!.FullName;
-		string fileDirectory = solutionDirectory + "\\\\CCSSDomain\\\\Data\\\\" + "adjectives.txt";
+		string fileDirectory = solutionDirectory + "\\\\GameMakerWpf\\\\Data\\\\" + "adjectives.txt";
 
 		string[] lines = File.ReadAllLines(fileDirectory);
 		Random rand = new();
@@ -25,7 +25,7 @@ public static class GameNameGenerator {
 	private static string GetRandomNoun() {
 
 		string solutionDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.Parent!.FullName;
-		string fileDirectory = solutionDirectory + "\\\\CCSSDomain\\\\Data\\\\" + "nouns.txt";
+		string fileDirectory = solutionDirectory + "\\\\GameMakerWpf\\\\Data\\\\" + "nouns.txt";
 
 		string[] lines = File.ReadAllLines(fileDirectory);
 		Random rand = new();

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using CCSSDomain.Validation.Validators;
+using CCSSDomain;
+using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 
-namespace CCSSDomain.EditingData;
+namespace GameMakerWpf.EditingData;
 
 
 

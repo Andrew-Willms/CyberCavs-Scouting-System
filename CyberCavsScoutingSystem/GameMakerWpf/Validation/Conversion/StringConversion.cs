@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UtilitiesLibrary;
 using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Math;
 using UtilitiesLibrary.Validation;
-using UtilitiesLibrary;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
-namespace CCSSDomain.Validation.Conversion; 
+namespace GameMakerWpf.Validation.Conversion; 
 
 
 

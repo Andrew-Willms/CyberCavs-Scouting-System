@@ -4,12 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameMakerWpf.Views"
-        xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
-        xmlns:editingData="clr-namespace:CCSSDomain.EditingData;assembly=CCSSDomain"
         xmlns:views="clr-namespace:GameMakerWpf.Views"
+        xmlns:editingData1="clr-namespace:GameMakerWpf.EditingData"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        d:DataContext="{d:DesignInstance Type=editingData:GameEditingData, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance Type=editingData1:GameEditingData, IsDesignTimeCreatable=True}">
 
     <Window.Resources>
 

@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
+      <ProjectReference Include="..\GameMakerWpf\GameMakerWpf.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
-using Xunit;
+using GameMakerWpf.Validation.Data;
+using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
+using Xunit;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
-namespace CCSSDomain.Tests.GameValidator;
+namespace GameMakerWpf.Tests.GameValidator;
 
 
 
@@ -16,7 +18,7 @@ public class Name {
 		public void NullNameShouldThrowException() {
 
 			Assert.Throws<NullInputObjectInConverterException>(() => 
-				Validation.Validators.GameTextValidator.NameConversionPair.Converter(null!));
+				GameTextValidator.NameConversionPair.Converter(null!));
 		}
 
 		[Theory]
@@ -24,7 +26,7 @@ public class Name {
 		public void ValidNameShouldEcho(string validName) {
 
 			(Optional<string> optional, ReadOnlyList<Error> errors)
-				= Validation.Validators.GameTextValidator.NameConversionPair.Converter(validName);
+				= GameTextValidator.NameConversionPair.Converter(validName);
 
 			Assert.True(optional.HasValue);
 			Assert.Empty(errors);
@@ -39,7 +41,7 @@ public class Name {
 		public void NullNameShouldThrowException() {
 
 			Assert.Throws<NullInputObjectInInverterException>(() => 
-				Validation.Validators.GameTextValidator.NameConversionPair.Inverter(null!));
+				GameTextValidator.NameConversionPair.Inverter(null!));
 		}
 
 		[Theory]
@@ -47,7 +49,7 @@ public class Name {
 		public void ValidNameShouldEcho(string validName) {
 
 			(Optional<string> optional, ReadOnlyList<Error> errors)
-				= Validation.Validators.GameTextValidator.NameConversionPair.Inverter(validName);
+				= GameTextValidator.NameConversionPair.Inverter(validName);
 
 			Assert.True(optional.HasValue);
 			Assert.Empty(errors);
@@ -68,10 +70,10 @@ public class Name {
 		[Fact]
 		public void EmptyNameShouldError() {
 
-			Optional<Error> error = Validation.Validators.GameTextValidator.NameValidator_Length("");
+			Optional<Error> error = GameTextValidator.NameValidator_Length("");
 
 			Assert.True(error.HasValue);
-			Assert.Equal(error.Value, Validation.Data.GameValidationData.Name.Length.TooShortError);
+			Assert.Equal(error.Value, GameValidationData.Name.Length.TooShortError);
 		}
 
 
@@ -79,10 +81,10 @@ public class Name {
 		[MemberData(nameof(LongNameShouldAdviseTestData))]
 		public void LongNameShouldAdvise(string longName) {
 
-			Optional<Error> error = Validation.Validators.GameTextValidator.NameValidator_Length(longName);
+			Optional<Error> error = GameTextValidator.NameValidator_Length(longName);
 
 			Assert.True(error.HasValue);
-			Assert.Equal(error.Value, Validation.Data.GameValidationData.Name.Length.TooLongAdvisory);
+			Assert.Equal(error.Value, GameValidationData.Name.Length.TooLongAdvisory);
 		}
 
 	}

@@ -2,12 +2,14 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Media;
-using CCSSDomain.Data;
-using CCSSDomain.Validation.Validators;
+using CCSSDomain;
+using GameMakerWpf.Data;
+using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
+using Version = CCSSDomain.Version;
 
-namespace CCSSDomain.EditingData;
+namespace GameMakerWpf.EditingData;
 
 
 

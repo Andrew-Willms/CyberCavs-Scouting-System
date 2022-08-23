@@ -4,9 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GameMakerWpf.Views"
-             xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
-             xmlns:editingData="clr-namespace:CCSSDomain.EditingData;assembly=CCSSDomain"
              xmlns:views="clr-namespace:GameMakerWpf.Views"
+             xmlns:editingData="clr-namespace:GameMakerWpf.EditingData"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="500"
              d:DataContext="{d:DesignInstance Type=editingData:AllianceEditingData, IsDesignTimeCreatable=False}">

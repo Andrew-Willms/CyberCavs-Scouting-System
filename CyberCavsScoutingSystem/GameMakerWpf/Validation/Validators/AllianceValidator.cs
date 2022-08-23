@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Media;
 using System.Linq;
+using System.Windows.Media;
+using CCSSDomain;
+using GameMakerWpf.EditingData;
+using GameMakerWpf.Validation.Conversion;
+using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Extensions;
-using UtilitiesLibrary.Validation.Delegates;
-using CCSSDomain.Validation.Data;
 using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Validation.Delegates;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
-using CCSSDomain.EditingData;
 
-namespace CCSSDomain.Validation.Validators;
+namespace GameMakerWpf.Validation.Validators;
 
 
 
@@ -67,7 +69,7 @@ public static class AllianceValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return Conversion.StringConversion.ToByte(inputString, AllianceValidationData.Color.Component.ConversionErrorSet);
+		return StringConversion.ToByte(inputString, AllianceValidationData.Color.Component.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) ColorComponentInverter(byte colourComponentValue) {

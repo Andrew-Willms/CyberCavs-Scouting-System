@@ -1,4 +1,4 @@
-﻿using CCSSDomain.EditingData;
+﻿using GameMakerWpf.EditingData;
 
 namespace CCSSDomain;
 

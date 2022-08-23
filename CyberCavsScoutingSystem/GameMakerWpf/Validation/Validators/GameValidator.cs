@@ -1,11 +1,14 @@
 ﻿using System;
-using CCSSDomain.Validation.Data;
+using CCSSDomain;
+using GameMakerWpf.Validation.Conversion;
+using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Delegates;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using Version = CCSSDomain.Version;
 
-namespace CCSSDomain.Validation.Validators;
+namespace GameMakerWpf.Validation.Validators;
 
 
 
@@ -35,7 +38,7 @@ public static class GameVersionValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return Conversion.StringConversion.ToUint(inputString, VersionValidationData.ComponentNumber.ConversionErrorSet);
+		return StringConversion.ToUint(inputString, VersionValidationData.ComponentNumber.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) ComponentNumberInverter(uint versionNumberComponent) {
@@ -133,7 +136,7 @@ public static class GameNumbersValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return Conversion.StringConversion.ToInt(inputString, GameValidationData.Year.ConversionErrorSet);
+		return StringConversion.ToInt(inputString, GameValidationData.Year.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) YearInverter(int year) {
@@ -182,7 +185,7 @@ public static class GameNumbersValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return Conversion.StringConversion.ToUint(inputString, GameValidationData.RobotsPerAlliance.ConversionErrorSet);
+		return StringConversion.ToUint(inputString, GameValidationData.RobotsPerAlliance.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) RobotsPerAllianceInverter(uint robotsPerAlliance) {
@@ -199,7 +202,7 @@ public static class GameNumbersValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return Conversion.StringConversion.ToUint(inputString, GameValidationData.AlliancesPerMatch.ConversionErrorSet);
+		return StringConversion.ToUint(inputString, GameValidationData.AlliancesPerMatch.ConversionErrorSet);
 	}
 
 	private static (Optional<string>, Optional<Error>) AlliancesPerMatchInverter(uint alliancesPerMatch) {

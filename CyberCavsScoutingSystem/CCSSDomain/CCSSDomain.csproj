@@ -5,11 +5,6 @@
 		<Nullable>enable</Nullable>
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
-	
-	<ItemGroup>
-	  <Folder Include="Validation\Conversion\" />
-	  <Folder Include="Validation\Data\" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="CCSSDomain.Tests" />
