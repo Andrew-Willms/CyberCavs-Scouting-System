@@ -35,5 +35,5 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build CyberCavsScoutingSystem.sln --no-restore
-    - name: Test CCSSDomain
-      run: dotnet test CCSSDomain.Tests/CCSSDomain.Tests.csproj --no-build --verbosity normal
+    - name: Test GameMakerWpf
+      run: dotnet test GameMakerWpf.Tests/GameMakerWpf.Tests.csproj --no-build --verbosity normal
