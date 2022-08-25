@@ -37,22 +37,23 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 		set {
 
+			// I feel like this shouldn't be here
 			if (value is null) {
 				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
 			}
 
-			if (value.Equals(OutputObject)) {
+			if (value.Equals(_OutputObject)) {
 				//OnOutputObjectChanged();
 				return;
 			}
 
 			(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
-			if (errors.Any(x => x.Severity.IsFatal)) {
-				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
+			if (errors.Any(x => x.Severity.IsFatal) || !inversionResult.HasValue) {
+				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to a value that cannot be inverted.");
 			}
 
-			if (inversionResult.HasValue && !inversionResult.Value.Equals(InputObject)) {
+			if (!inversionResult.Value.Equals(InputObject)) {
 				InputObject = inversionResult.Value;
 			}
 
@@ -107,7 +108,6 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 		ValidationTriggers = ValidationSetsToTriggers(validationSets);
 
-		//_InputObject = initialInput;
 		_InputObject = initialInput;
 		InputObject = initialInput;
 		OnOutputObjectChanged();
@@ -128,6 +128,10 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 			foreach (IValidationTrigger<TSeverityEnum> trigger in ValidationTriggers) {
 				ValidationErrors.AddRange(trigger.InvokeValidator());
 			}
+
+		} else {
+			//OutputObject = default;
+			OnOutputObjectChanged();
 		}
 
 		OnErrorsChanged();
