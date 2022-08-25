@@ -193,7 +193,11 @@ public class MultiInput<TOutput, TSeverityEnum,
 		IInput<TInput3, TSeverityEnum> inputComponent3,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
 
-		: base(new(inputComponent1), validationSets) {
+		: base(new(
+			inputComponent1,
+			inputComponent2,
+			inputComponent3),
+			validationSets) {
 
 		Converter = converter;
 		Inverter = inverter;
@@ -313,7 +317,12 @@ public class MultiInput<TOutput, TSeverityEnum,
 		IInput<TInput4, TSeverityEnum> inputComponent4,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
 
-		: base(new(inputComponent1), validationSets) {
+		: base(new(
+			inputComponent1,
+			inputComponent2,
+			inputComponent3,
+			inputComponent4),
+			validationSets) {
 
 		Converter = converter;
 		Inverter = inverter;

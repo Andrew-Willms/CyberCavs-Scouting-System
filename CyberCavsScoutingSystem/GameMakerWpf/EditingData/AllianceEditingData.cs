@@ -23,7 +23,8 @@ public class AllianceEditingData {
 			new ValidationSet<string, ErrorSeverity>(AllianceValidator.NameValidator_Length),
 			new ValidationSet<string, IEnumerable<AllianceEditingData>, ErrorSeverity>(
 				AllianceValidator.NameValidator_Uniqueness,
-				() => EditingData.Alliances.Where(x => x != this), EditingData.AllianceNameChanged)
+				() => EditingData.Alliances.Where(x => x != this),
+				EditingData.AllianceNameChanged)
 		);
 
 		AllianceColor = new(AllianceValidator.ColorConversionPair,
@@ -32,7 +33,8 @@ public class AllianceEditingData {
 			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConversionPair, "0"),
 			new ValidationSet<Color, IEnumerable<AllianceEditingData>, ErrorSeverity>(
 				AllianceValidator.ColorCovalidator_Uniqueness,
-				() => EditingData.Alliances.Where(x => x != this), EditingData.AllianceNameChanged)
+				() => EditingData.Alliances.Where(x => x != this),
+				EditingData.AllianceNameChanged)
 		);
 	}
 
