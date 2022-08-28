@@ -14,59 +14,50 @@ namespace GameMakerWpf.Validation.Validators;
 
 public static class GameVersionValidator {
 
-	private static (Optional<Version>, Optional<Error>) Converter
+	public static (Optional<Version>, ReadOnlyList<Error>) Converter
 		((uint major, uint minor, uint path, string description) input) {
 
 		NullInputObjectInConverterException.ThrowIfNull(input.description);
 
-		return (new Version(input.major, input.minor, input.path, input.description), Optional.NoValue);
+		return (new Version(input.major, input.minor, input.path, input.description), ReadOnlyList<Error>.Empty);
 	}
 
-	private static (Optional<(uint, uint, uint, string)>, Optional<Error>) Inverter(Version version) {
+	public static (Optional<(uint, uint, uint, string)>, ReadOnlyList<Error>) Inverter(Version version) {
 
 		NullInputObjectInInverterException.ThrowIfNull(version);
 
-		return ((version.MajorNumber, version.MinorNumber, version.PatchNumber, version.Description), Optional.NoValue);
+		return ((version.MajorNumber, version.MinorNumber, version.PatchNumber, version.Description), ReadOnlyList<Error>.Empty);
 	}
 
-	public static readonly ConversionPair<Version, (uint, uint, uint, string), ErrorSeverity> ConversionPair
-		= new(Converter, Inverter);
 
 
-
-	private static (Optional<uint>, ReadOnlyList<Error>) ComponentNumberConverter(string inputString) {
+	public static (Optional<uint>, ReadOnlyList<Error>) ComponentNumberConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
 		return StringConversion.ToUint(inputString, VersionValidationData.ComponentNumber.ConversionErrorSet);
 	}
 
-	private static (Optional<string>, Optional<Error>) ComponentNumberInverter(uint versionNumberComponent) {
+	public static (Optional<string>, ReadOnlyList<Error>) ComponentNumberInverter(uint versionNumberComponent) {
 
-		return (versionNumberComponent.ToString(), Optional.NoValue);
+		return (versionNumberComponent.ToString(), ReadOnlyList<Error>.Empty);
 	}
 
-	public static readonly ConversionPair<uint, string, ErrorSeverity> ComponentNumberConversionPair
-		= new(ComponentNumberConverter, ComponentNumberInverter);
 
 
-
-	private static (Optional<string>, Optional<Error>) DescriptionConverter(string inputString) {
+	public static (Optional<string>, ReadOnlyList<Error>) DescriptionConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString, Optional.NoValue);
+		return (inputString, ReadOnlyList<Error>.Empty);
 	}
 
-	private static (Optional<string>, Optional<Error>) DescriptionInverter(string versionDescription) {
+	public static (Optional<string>, ReadOnlyList<Error>) DescriptionInverter(string versionDescription) {
 
 		NullInputObjectInInverterException.ThrowIfNull(versionDescription);
 
-		return (versionDescription, Optional.NoValue);
+		return (versionDescription, ReadOnlyList<Error>.Empty);
 	}
-
-	public static readonly ConversionPair<string, string, ErrorSeverity> DescriptionConversionPair
-		= new(DescriptionConverter, DescriptionInverter);
 
 }
 
@@ -74,57 +65,51 @@ public static class GameVersionValidator {
 
 public static class GameTextValidator {
 
-	private static (Optional<string>, Optional<Error>) NameConverter(string inputString) {
+	public static (Optional<string>, ReadOnlyList<Error>) NameConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString, Optional.NoValue);
+		return (inputString, ReadOnlyList<Error>.Empty);
 	}
 
-	private static (Optional<string>, Optional<Error>) NameInverter(string name) {
+	public static (Optional<string>, ReadOnlyList<Error>) NameInverter(string name) {
 
 		NullInputObjectInInverterException.ThrowIfNull(name);
 
-		return (name, Optional.NoValue);
+		return (name, ReadOnlyList<Error>.Empty);
 	}
 
-	public static readonly ConversionPair<string, string, ErrorSeverity> NameConversionPair
-		= new(NameConverter, NameInverter);
 
 
-
-	public static Optional<Error> NameValidator_Length(string name) {
+	public static ReadOnlyList<Error> NameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= GameValidationData.Name.Length.LowerErrorThreshold => GameValidationData.Name.Length.TooShortError,
-			<= GameValidationData.Name.Length.LowerWarningThreshold => GameValidationData.Name.Length.TooShortWarning,
-			<= GameValidationData.Name.Length.LowerAdvisoryThreshold => GameValidationData.Name.Length.TooShortAdvisory,
-			>= GameValidationData.Name.Length.UpperErrorThreshold => GameValidationData.Name.Length.TooLongError,
-			>= GameValidationData.Name.Length.UpperWarningThreshold => GameValidationData.Name.Length.TooLongWarning,
-			>= GameValidationData.Name.Length.UpperAdvisoryThreshold => GameValidationData.Name.Length.TooLongAdvisory,
-			_ => Optional.NoValue
+			<= GameValidationData.Name.Length.LowerErrorThreshold => new(GameValidationData.Name.Length.TooShortError),
+			<= GameValidationData.Name.Length.LowerWarningThreshold => new(GameValidationData.Name.Length.TooShortWarning),
+			<= GameValidationData.Name.Length.LowerAdvisoryThreshold => new(GameValidationData.Name.Length.TooShortAdvisory),
+			>= GameValidationData.Name.Length.UpperErrorThreshold => new(GameValidationData.Name.Length.TooLongError),
+			>= GameValidationData.Name.Length.UpperWarningThreshold => new(GameValidationData.Name.Length.TooLongWarning),
+			>= GameValidationData.Name.Length.UpperAdvisoryThreshold => new(GameValidationData.Name.Length.TooLongAdvisory),
+			_ => ReadOnlyList<Error>.Empty
 		};
 
 	}
 
 
 
-	private static (Optional<string>, Optional<Error>) DescriptionConverter(string inputString) {
+	public static (Optional<string>, ReadOnlyList<Error>) DescriptionConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString, Optional.NoValue);
+		return (inputString, ReadOnlyList<Error>.Empty);
 	}
 
-	private static (Optional<string>, Optional<Error>) DescriptionInverter(string description) {
+	public static (Optional<string>, ReadOnlyList<Error>) DescriptionInverter(string description) {
 
 		NullInputObjectInInverterException.ThrowIfNull(description);
 
-		return (description, Optional.NoValue);
+		return (description, ReadOnlyList<Error>.Empty);
 	}
-
-	public static readonly ConversionPair<string, string, ErrorSeverity> DescriptionConversionPair
-		= new(DescriptionConverter, DescriptionInverter);
 
 }
 
@@ -132,85 +117,71 @@ public static class GameTextValidator {
 
 public static class GameNumbersValidator {
 
-	private static (Optional<int>, ReadOnlyList<Error>) YearConverter(string inputString) {
+	public static (Optional<int>, ReadOnlyList<Error>) YearConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
 		return StringConversion.ToInt(inputString, GameValidationData.Year.ConversionErrorSet);
 	}
 
-	private static (Optional<string>, Optional<Error>) YearInverter(int year) {
+	public static (Optional<string>, ReadOnlyList<Error>) YearInverter(int year) {
 
-		return (year.ToString(), Optional.NoValue);
+		return (year.ToString(), ReadOnlyList<Error>.Empty);
 	}
 
-	public static readonly ConversionPair<int, string, ErrorSeverity> YearConversionPair = new(YearConverter, YearInverter);
 
 
+	public static ReadOnlyList<Error> YearValidator_YearNotNegative(int year) {
 
-	public static Optional<Error> YearValidator_YearNotNegative(int year) {
-
-		if (year < 0) {
-			return GameValidationData.Year.NegativeYearWarning;
-		}
-
-		return Optional.NoValue;
+		return year < 0
+			? new(GameValidationData.Year.NegativeYearWarning)
+			: ReadOnlyList<Error>.Empty;
 	}
 
-	public static Optional<Error> YearValidator_YearNotPredateFirst(int year) {
+	public static ReadOnlyList<Error> YearValidator_YearNotPredateFirst(int year) {
 
-		if (year < GameValidationData.Year.FirstYearOfFirst) {
-			return GameValidationData.Year.YearPredatesFirstWarning;
-		}
-
-		return Optional.NoValue;
+		return year < GameValidationData.Year.FirstYearOfFirst 
+			? new(GameValidationData.Year.YearPredatesFirstWarning) 
+			: ReadOnlyList<Error>.Empty;
 	}
 
-	public static Optional<Error> YearValidator_YearNotFarFuture(int year) {
+	public static ReadOnlyList<Error> YearValidator_YearNotFarFuture(int year) {
 
 		if (year > DateTime.Now.Year + GameValidationData.Year.FutureYearWarningThreshold) {
-			return GameValidationData.Year.FutureYearWarning;
+			return new(GameValidationData.Year.FutureYearWarning);
 		}
 
-		if (year > DateTime.Now.Year + GameValidationData.Year.FutureYearAdvisoryThreshold) {
-			return GameValidationData.Year.FutureYearAdvisory;
-		}
-
-		return Optional.NoValue;
+		return year > DateTime.Now.Year + GameValidationData.Year.FutureYearAdvisoryThreshold 
+			? new(GameValidationData.Year.FutureYearAdvisory) 
+			: ReadOnlyList<Error>.Empty;
 	}
 
 
 
-	private static (Optional<uint>, ReadOnlyList<Error>) RobotsPerAllianceConverter(string inputString) {
+	public static (Optional<uint>, ReadOnlyList<Error>) RobotsPerAllianceConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
 		return StringConversion.ToUint(inputString, GameValidationData.RobotsPerAlliance.ConversionErrorSet);
 	}
 
-	private static (Optional<string>, Optional<Error>) RobotsPerAllianceInverter(uint robotsPerAlliance) {
+	public static (Optional<string>, ReadOnlyList<Error>) RobotsPerAllianceInverter(uint robotsPerAlliance) {
 
-		return (robotsPerAlliance.ToString(), Optional.NoValue);
+		return (robotsPerAlliance.ToString(), ReadOnlyList<Error>.Empty);
 	}
 
-	public static readonly ConversionPair<uint, string, ErrorSeverity> RobotsPerAllianceConversionPair
-		= new(RobotsPerAllianceConverter, RobotsPerAllianceInverter);
 
 
-
-	private static (Optional<uint>, ReadOnlyList<Error>) AlliancesPerMatchConverter(string inputString) {
+	public static (Optional<uint>, ReadOnlyList<Error>) AlliancesPerMatchConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
 		return StringConversion.ToUint(inputString, GameValidationData.AlliancesPerMatch.ConversionErrorSet);
 	}
 
-	private static (Optional<string>, Optional<Error>) AlliancesPerMatchInverter(uint alliancesPerMatch) {
+	public static (Optional<string>, ReadOnlyList<Error>) AlliancesPerMatchInverter(uint alliancesPerMatch) {
 
-		return (alliancesPerMatch.ToString(), Optional.NoValue);
+		return (alliancesPerMatch.ToString(), ReadOnlyList<Error>.Empty);
 	}
-
-	public static readonly ConversionPair<uint, string, ErrorSeverity> AlliancesPerMatchConversionPair
-		= new(AlliancesPerMatchConverter, AlliancesPerMatchInverter);
 
 }

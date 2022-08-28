@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Media;
-using CCSSDomain;
+using System.Collections.Generic;
 using GameMakerWpf.EditingData;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Validation;
-using UtilitiesLibrary.Validation.Delegates;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace GameMakerWpf.Validation.Validators;
@@ -17,87 +15,80 @@ namespace GameMakerWpf.Validation.Validators;
 
 public static class AllianceValidator {
 
-	private static (Optional<string>, Optional<Error>) NameConverter(string inputString) {
+	public static (Optional<string>, ReadOnlyList<Error>) NameConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString, Optional.NoValue);
+		return (inputString, ReadOnlyList<Error>.Empty);
 	}
 
-	private static (Optional<string>, Optional<Error>) NameInverter(string name) {
+	public static (Optional<string>, ReadOnlyList<Error>) NameInverter(string name) {
 
 		NullInputObjectInInverterException.ThrowIfNull(name);
 
-		return (name, Optional.NoValue);
+		return (name, ReadOnlyList<Error>.Empty);
 	}
 
-	public static readonly ConversionPair<string, string, ErrorSeverity> NameConversionPair = new(NameConverter, NameInverter);
 
 
 
-	public static Optional<Error> NameValidator_EndsWithAlliance(string name) {
+	public static ReadOnlyList<Error> NameValidator_EndsWithAlliance(string name) {
 
 		return name.EndsWith(AllianceValidationData.Name.ShouldEndWith)
-			? Optional.NoValue
-			: AllianceValidationData.Name.DoesNotEndWithCorrectSequenceError;
+			? ReadOnlyList<Error>.Empty
+			: new(AllianceValidationData.Name.DoesNotEndWithCorrectSequenceError);
 	}
 
-	public static Optional<Error> NameValidator_Length(string name) {
+	public static ReadOnlyList<Error> NameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= AllianceValidationData.Name.Length.LowerErrorThreshold => AllianceValidationData.Name.Length.TooShortError,
-			<= AllianceValidationData.Name.Length.LowerWarningThreshold => AllianceValidationData.Name.Length.TooShortWarning,
-			<= AllianceValidationData.Name.Length.LowerAdvisoryThreshold => AllianceValidationData.Name.Length.TooShortAdvisory,
-			>= AllianceValidationData.Name.Length.UpperErrorThreshold => AllianceValidationData.Name.Length.TooLongError,
-			>= AllianceValidationData.Name.Length.UpperWarningThreshold => AllianceValidationData.Name.Length.TooLongWarning,
-			>= AllianceValidationData.Name.Length.UpperAdvisoryThreshold => AllianceValidationData.Name.Length.TooLongAdvisory,
-			_ => Optional.NoValue
+			<= AllianceValidationData.Name.Length.LowerErrorThreshold => new(AllianceValidationData.Name.Length.TooShortError),
+			<= AllianceValidationData.Name.Length.LowerWarningThreshold => new(AllianceValidationData.Name.Length.TooShortWarning),
+			<= AllianceValidationData.Name.Length.LowerAdvisoryThreshold => new(AllianceValidationData.Name.Length.TooShortAdvisory),
+			>= AllianceValidationData.Name.Length.UpperErrorThreshold => new(AllianceValidationData.Name.Length.TooLongError),
+			>= AllianceValidationData.Name.Length.UpperWarningThreshold => new(AllianceValidationData.Name.Length.TooLongWarning),
+			>= AllianceValidationData.Name.Length.UpperAdvisoryThreshold => new(AllianceValidationData.Name.Length.TooLongAdvisory),
+			_ => ReadOnlyList<Error>.Empty
 		};
 	}
 
-	public static Optional<Error> NameValidator_Uniqueness(string name,
+	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name,
 		IEnumerable<AllianceEditingData> otherAlliances) {
 
 		return otherAlliances
 			.Where(otherAlliance => otherAlliance.Name.OutputObject.HasValue)
 			.Any(otherAlliance => otherAlliance.Name.OutputObject.Value == name)
 
-			? AllianceValidationData.Name.GetDuplicateNameError(name)
-			: Optional.NoValue;
+			? new(AllianceValidationData.Name.GetDuplicateNameError(name))
+			: ReadOnlyList<Error>.Empty;
 	}
 
 
 
-	private static (Optional<byte>, ReadOnlyList<Error>) ColorComponentConverter(string inputString) {
+	public static (Optional<byte>, ReadOnlyList<Error>) ColorComponentConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
 		return StringConversion.ToByte(inputString, AllianceValidationData.Color.Component.ConversionErrorSet);
 	}
 
-	private static (Optional<string>, Optional<Error>) ColorComponentInverter(byte colourComponentValue) {
+	public static (Optional<string>, ReadOnlyList<Error>) ColorComponentInverter(byte colourComponentValue) {
 
-		return (colourComponentValue.ToString(), Optional.NoValue);
+		return (colourComponentValue.ToString(), ReadOnlyList<Error>.Empty);
 	}
 
-	public static readonly ConversionPair<byte, string, ErrorSeverity> ColorComponentConversionPair
-		= new(ColorComponentConverter, ColorComponentInverter);
 
 
+	public static (Optional<Color>, ReadOnlyList<Error>) ColorConverter((byte redValue, byte greenValue, byte blueValue) input) {
 
-	private static (Optional<Color>, Optional<Error>) ColorConverter((byte redValue, byte greenValue, byte blueValue) input) {
-
-		return (Color.FromRgb(input.redValue, input.greenValue, input.blueValue), Optional.NoValue);
+		return (Color.FromRgb(input.redValue, input.greenValue, input.blueValue), ReadOnlyList<Error>.Empty);
 	}
 
-	private static (Optional<(byte redValue, byte greenValue, byte blueValue)> invertedValues, Optional<Error>) ColorInverter
+	public static (Optional<(byte redValue, byte greenValue, byte blueValue)> invertedValues, ReadOnlyList<Error>) ColorInverter
 		(Color color) {
 
-		return ((color.R, color.G, color.B), Optional.NoValue);
+		return ((color.R, color.G, color.B), ReadOnlyList<Error>.Empty);
 	}
-
-	public static readonly ConversionPair<Color, (byte, byte, byte), ErrorSeverity> ColorConversionPair
-		= new(ColorConverter, ColorInverter);
 
 
 

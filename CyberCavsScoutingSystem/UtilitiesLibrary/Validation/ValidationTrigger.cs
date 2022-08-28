@@ -21,7 +21,7 @@ public interface IValidationTrigger<TSeverityEnum>
 internal class ValidationTrigger<TOutput, TSeverityEnum> : IValidationTrigger<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private InputValidatorErrorsList<TOutput, TSeverityEnum> Validator { get; }
+	private InputValidator<TOutput, TSeverityEnum> Validator { get; }
 
 	private Func<TOutput> OutputObjectGetter { get; }
 
@@ -29,7 +29,7 @@ internal class ValidationTrigger<TOutput, TSeverityEnum> : IValidationTrigger<TS
 
 
 
-	public ValidationTrigger(InputValidatorErrorsList<TOutput, TSeverityEnum> validator,
+	public ValidationTrigger(InputValidator<TOutput, TSeverityEnum> validator,
 		IEnumerable<ValidationEvent> validationEvents, Func<TOutput> outputObjectGetter,
 		Action<ReadOnlyList<ValidationError<TSeverityEnum>>> postValidationAction) {
 
@@ -65,7 +65,7 @@ internal class ValidationTrigger<TOutput, TSeverityEnum> : IValidationTrigger<TS
 internal class ValidationTrigger<TOutput, TValidationParameter, TSeverityEnum> : IValidationTrigger<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private InputValidatorErrorsList<TOutput, TValidationParameter, TSeverityEnum> Validator { get; }
+	private InputValidator<TOutput, TValidationParameter, TSeverityEnum> Validator { get; }
 
 	private Func<TOutput> OutputObjectGetter { get; }
 
@@ -75,7 +75,7 @@ internal class ValidationTrigger<TOutput, TValidationParameter, TSeverityEnum> :
 
 
 
-	public ValidationTrigger(InputValidatorErrorsList<TOutput, TValidationParameter, TSeverityEnum> validator,
+	public ValidationTrigger(InputValidator<TOutput, TValidationParameter, TSeverityEnum> validator,
 		IEnumerable<ValidationEvent> validationEvents, Func<TOutput> outputObjectGetter,
 		Func<TValidationParameter> validationParameterGetter, Action<ReadOnlyList<ValidationError<TSeverityEnum>>> postValidationAction) {
 

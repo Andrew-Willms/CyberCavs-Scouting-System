@@ -129,7 +129,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 		}
 	}
 
-	private InputConverterErrorList<TOutput, 
+	private InputConverter<TOutput, 
 		(TInput1,
 		TInput2,
 		TInput3),
@@ -153,7 +153,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 	}
 
 
-	private InputInverterErrorList<TOutput,
+	private InputInverter<TOutput,
 		(TInput1,
 		TInput2,
 		TInput3),
@@ -163,27 +163,14 @@ public class MultiInput<TOutput, TSeverityEnum,
 	public IInput<TInput2, TSeverityEnum> InputComponent2 { get; }
 	public IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
 
-	public MultiInput(ConversionPair<TOutput,
-			(TInput1,
-			TInput2,
-			TInput3),
-			TSeverityEnum> conversionPair,
-		IInput<TInput1, TSeverityEnum> inputComponent1,
-		IInput<TInput2, TSeverityEnum> inputComponent2,
-		IInput<TInput3, TSeverityEnum> inputComponent3,
-		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
-		: this(conversionPair.Converter, conversionPair.Inverter,
-			inputComponent1,
-			inputComponent2,
-			inputComponent3,
-			validationSets) { }
 
-	public MultiInput(InputConverterErrorList<TOutput,
+
+	public MultiInput(InputConverter<TOutput,
 			(TInput1,
 			TInput2,
 			TInput3),
 			TSeverityEnum> converter,
-		InputInverterErrorList<TOutput,
+		InputInverter<TOutput,
 			(TInput1,
 			TInput2,
 			TInput3),
@@ -276,7 +263,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 		}
 	}
 
-	private InputConverterErrorList<TOutput, 
+	private InputConverter<TOutput, 
 		(TInput1,
 		TInput2,
 		TInput3,
@@ -290,7 +277,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 			InputComponent3.OutputObject.Value,
 			InputComponent4.OutputObject.Value));
 
-	private InputInverterErrorList<TOutput,
+	private InputInverter<TOutput,
 		(TInput1,
 		TInput2,
 		TInput3,
@@ -302,31 +289,15 @@ public class MultiInput<TOutput, TSeverityEnum,
 	public IInput<TInput3, TSeverityEnum> InputComponent3 { get; }
 	public IInput<TInput4, TSeverityEnum> InputComponent4 { get; }
 
-	public MultiInput(ConversionPair<TOutput,
-			(TInput1,
-			TInput2,
-			TInput3,
-			TInput4),
-			TSeverityEnum> conversionPair,
-		IInput<TInput1, TSeverityEnum> inputComponent1,
-		IInput<TInput2, TSeverityEnum> inputComponent2,
-		IInput<TInput3, TSeverityEnum> inputComponent3,
-		IInput<TInput4, TSeverityEnum> inputComponent4,
-		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
-		: this(conversionPair.Converter, conversionPair.Inverter,
-			inputComponent1,
-			inputComponent2,
-			inputComponent3,
-			inputComponent4,
-			validationSets) { }
 
-	public MultiInput(InputConverterErrorList<TOutput,
+
+	public MultiInput(InputConverter<TOutput,
 			(TInput1,
 			TInput2,
 			TInput3,
 			TInput4),
 			TSeverityEnum> converter,
-		InputInverterErrorList<TOutput,
+		InputInverter<TOutput,
 			(TInput1,
 			TInput2,
 			TInput3,

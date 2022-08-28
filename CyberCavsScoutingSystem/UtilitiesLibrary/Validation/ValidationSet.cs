@@ -18,16 +18,16 @@ public interface IValidationSet<in TOutput, TSeverityEnum>
 public class ValidationSet<TOutput, TSeverityEnum> : IValidationSet<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private InputValidatorErrorsList<TOutput, TSeverityEnum> Validator { get; }
+	private InputValidator<TOutput, TSeverityEnum> Validator { get; }
 
 	private ValidationEvent[] ValidationEvents { get; }
 
 
 
-	public ValidationSet(InputValidatorSingleError<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents)
-		: this(DelegateConverters.SingleToErrorListValidator(validator), validationEvents) { }
+	//public ValidationSet(InputValidatorSingleError<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents)
+	//	: this(DelegateConverters.SingleToErrorListValidator(validator), validationEvents) { }
 
-	public ValidationSet(InputValidatorErrorsList<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents) {
+	public ValidationSet(InputValidator<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents) {
 
 		Validator = validator;
 		ValidationEvents = validationEvents;
@@ -49,7 +49,7 @@ public class ValidationSet<TOutput, TSeverityEnum> : IValidationSet<TOutput, TSe
 public class ValidationSet<TOutput, TValidationParameter, TSeverityEnum> : IValidationSet<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private InputValidatorErrorsList<TOutput, TValidationParameter, TSeverityEnum> Validator { get; }
+	private InputValidator<TOutput, TValidationParameter, TSeverityEnum> Validator { get; }
 
 	private ValidationEvent[] ValidationEvents { get; }
 
@@ -57,11 +57,11 @@ public class ValidationSet<TOutput, TValidationParameter, TSeverityEnum> : IVali
 
 
 
-	public ValidationSet(InputValidatorSingleError<TOutput, TValidationParameter, TSeverityEnum> validator,
-		Func<TValidationParameter> validationParameterGetter, params ValidationEvent[] validationEvents)
-		: this(DelegateConverters.SingleToErrorListValidator(validator), validationParameterGetter, validationEvents) { }
+	//public ValidationSet(InputValidatorSingleError<TOutput, TValidationParameter, TSeverityEnum> validator,
+	//	Func<TValidationParameter> validationParameterGetter, params ValidationEvent[] validationEvents)
+	//	: this(DelegateConverters.SingleToErrorListValidator(validator), validationParameterGetter, validationEvents) { }
 
-	public ValidationSet(InputValidatorErrorsList<TOutput, TValidationParameter, TSeverityEnum> validator,
+	public ValidationSet(InputValidator<TOutput, TValidationParameter, TSeverityEnum> validator,
 		Func<TValidationParameter> validationParameterGetter, params ValidationEvent[] validationEvents) {
 
 		Validator = validator;

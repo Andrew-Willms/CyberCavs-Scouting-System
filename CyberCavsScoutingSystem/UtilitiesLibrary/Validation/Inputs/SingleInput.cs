@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Validation.Errors;
+using UtilitiesLibrary.Validation.Delegates;
 
 namespace UtilitiesLibrary.Validation.Inputs;
 
@@ -71,8 +71,8 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		}
 	}
 
-	private InputConverterErrorList<TOutput, TInput, TSeverityEnum> Converter { get; }
-	private InputInverterErrorList<TOutput, TInput, TSeverityEnum> Inverter { get; }
+	private InputConverter<TOutput, TInput, TSeverityEnum> Converter { get; }
+	private InputInverter<TOutput, TInput, TSeverityEnum> Inverter { get; }
 
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
 
@@ -91,12 +91,8 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 
 
-	public SingleInput(ConversionPair<TOutput, TInput, TSeverityEnum> conversionPair, TInput initialInput,
-		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
-		: this(conversionPair.Converter, conversionPair.Inverter, initialInput, validationSets) { }
-
-	public SingleInput(InputConverterErrorList<TOutput, TInput, TSeverityEnum> converter,
-		InputInverterErrorList<TOutput, TInput, TSeverityEnum> inverter, TInput initialInput,
+	public SingleInput(InputConverter<TOutput, TInput, TSeverityEnum> converter,
+		InputInverter<TOutput, TInput, TSeverityEnum> inverter, TInput initialInput,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets) {
 
 		Converter = converter;

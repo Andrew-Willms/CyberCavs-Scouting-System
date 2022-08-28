@@ -5,8 +5,6 @@ using UtilitiesLibrary;
 using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Math;
 using UtilitiesLibrary.Validation;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 using Number = UtilitiesLibrary.Math.Number;
 
