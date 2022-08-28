@@ -29,27 +29,23 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 	where TOutput : IEquatable<TOutput>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private TOutput? _OutputObject;
-	public override TOutput? OutputObject {
+	private Optional<TOutput> _OutputObject;
+	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
-		get => IsConvertible ? _OutputObject : default;
+		get => IsConvertible ? _OutputObject : Optional.NoValue;
 
-		set {
-
-			// I feel like this shouldn't be here
-			if (value is null) {
-				throw new InvalidOperationException($"You cannot set {nameof(OutputObject)} to a null value.");
-			}
+		protected set {
 
 			if (value.Equals(_OutputObject)) {
-				//OnOutputObjectChanged();
 				return;
 			}
 
-			(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
 
-			if (errors.Any(x => x.Severity.IsFatal) || !inversionResult.HasValue) {
+
+			(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> inversionErrors) = Inverter(value.Value);
+
+			if (inversionErrors.Any(x => x.Severity.IsFatal) || !inversionResult.HasValue) {
 				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to a value that cannot be inverted.");
 			}
 
@@ -137,6 +133,16 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		OnErrorsChanged();
 	}
 
+	public override void SetOutputValue(TOutput value) {
+
+		(Optional<TInput> _, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
+
+		if (errors.AreFatal()) {
+			throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
+		}
+
+		OutputObject = value;
+	}
 
 
 	public override event PropertyChangedEventHandler? PropertyChanged;

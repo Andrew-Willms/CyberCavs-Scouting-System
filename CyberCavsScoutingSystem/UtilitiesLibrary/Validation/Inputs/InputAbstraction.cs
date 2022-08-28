@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
+using System.ComponentModel;
+using System.Collections.Generic;
 using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Validation.Errors;
 
@@ -29,7 +29,9 @@ public interface IInput<TSeverityEnum> : INotifyPropertyChanged
 public interface IInput<TOutput, TSeverityEnum> : IInput<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	public TOutput? OutputObject { get; set; }
+	public Optional<TOutput> OutputObject { get; }
+
+	public void SetOutputValue(TOutput value);
 }
 
 
@@ -37,7 +39,7 @@ public interface IInput<TOutput, TSeverityEnum> : IInput<TSeverityEnum>
 public abstract class Input<TOutput, TSeverityEnum> : IInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	public abstract TOutput? OutputObject { get; set; }
+	public abstract Optional<TOutput> OutputObject { get; protected set; }
 
 	protected abstract List<ValidationError<TSeverityEnum>> ValidationErrors { get; }
 	public abstract ReadOnlyList<ValidationError<TSeverityEnum>> Errors { get; }
@@ -54,15 +56,17 @@ public abstract class Input<TOutput, TSeverityEnum> : IInput<TOutput, TSeverityE
 
 		TOutput TargetObjectGetter() {
 
-			if (OutputObject is null) {
+			if (!OutputObject.HasValue) {
 				throw new NullReferenceException($"Validators should not be called if {nameof(OutputObject)} is null.");
 			}
 
-			return OutputObject;
+			return OutputObject.Value;
 		}
 
 		return validationSets.Select(x => x.ToValidationTrigger(TargetObjectGetter, PostValidation)).ToReadOnly();
 	}
+
+	public abstract void SetOutputValue(TOutput value);
 
 	private void PostValidation(ReadOnlyList<ValidationError<TSeverityEnum>> validationError) {
 		ValidationErrors.AddRange(validationError);

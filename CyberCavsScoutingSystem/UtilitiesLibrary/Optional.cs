@@ -52,6 +52,9 @@ public class Optional<T> {
 		return new(value);
 	}
 
+	public static Optional<T> FromValue(T value) {
+		return new(value);
+	}
 }
 
 

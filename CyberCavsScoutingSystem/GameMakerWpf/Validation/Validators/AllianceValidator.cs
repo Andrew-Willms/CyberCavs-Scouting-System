@@ -58,7 +58,10 @@ public static class AllianceValidator {
 	public static Optional<Error> NameValidator_Uniqueness(string name,
 		IEnumerable<AllianceEditingData> otherAlliances) {
 
-		return otherAlliances.Any(otherAlliance => otherAlliance.Name.OutputObject == name)
+		return otherAlliances
+			.Where(otherAlliance => otherAlliance.Name.OutputObject.HasValue)
+			.Any(otherAlliance => otherAlliance.Name.OutputObject.Value == name)
+
 			? AllianceValidationData.Name.GetDuplicateNameError(name)
 			: Optional.NoValue;
 	}
@@ -105,7 +108,18 @@ public static class AllianceValidator {
 
 		foreach (AllianceEditingData otherAlliance in otherAlliances) {
 
-			int colorDifference = color.Difference(otherAlliance.AllianceColor.OutputObject);
+			Optional<Color> allianceColorOption = otherAlliance.AllianceColor.OutputObject;
+
+			// something not initialized yet
+			if (allianceColorOption is null) {
+				continue;
+			}
+
+			if (allianceColorOption.HasValue == false) {
+				continue;
+			}
+
+			int colorDifference = color.Difference(allianceColorOption.Value);
 
 			Optional<Error> validationError = AllianceValidationData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
 

@@ -21,7 +21,7 @@ internal static class DelegateConverters {
 
 			return outputObject.HasValue
 				? (outputObject, errors)
-				: (default, errors);
+				: (Optional.NoValue, errors);
 		};
 	}
 
@@ -40,7 +40,7 @@ internal static class DelegateConverters {
 
 			return invertedObject.HasValue
 				? (invertedObject, errors)
-				: (default, errors);
+				: (Optional.NoValue, errors);
 		};
 	}
 

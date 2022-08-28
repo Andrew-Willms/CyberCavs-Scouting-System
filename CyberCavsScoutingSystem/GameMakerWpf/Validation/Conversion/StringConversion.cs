@@ -5,7 +5,10 @@ using UtilitiesLibrary;
 using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Math;
 using UtilitiesLibrary.Validation;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using Number = UtilitiesLibrary.Math.Number;
 
 namespace GameMakerWpf.Validation.Conversion; 
 
@@ -151,7 +154,7 @@ public static class StringConversion {
 			throw new InvalidOperationException($"Somehow parsing the input as a {typeof(Number)} failed.");
 		}
 
-		return (number, ReadOnlyList<Error>.Empty);
+		return (Optional<Number>.FromValue(number.Value), ReadOnlyList<Error>.Empty);
 	}
 
 	private static (Optional<Integer>, ReadOnlyList<Error>) ToInteger(string inputString, IntegerConversionErrorSet errorSet) {
@@ -186,7 +189,7 @@ public static class StringConversion {
 			throw new InvalidOperationException($"Somehow parsing the input as a {typeof(Integer)} failed.");
 		}
 
-		return (integer, ReadOnlyList<Error>.Empty);
+		return (Optional<Integer>.FromValue(integer), ReadOnlyList<Error>.Empty);
 	}
 
 	private static (Optional<Whole>, ReadOnlyList<Error>) ToWhole(string inputString, WholeConversionErrorSet errorSet) {
@@ -221,7 +224,7 @@ public static class StringConversion {
 			throw new InvalidOperationException($"Somehow parsing the input as a {typeof(Whole)} failed.");
 		}
 
-		return (natural, ReadOnlyList<Error>.Empty);
+		return (Optional<Whole>.FromValue(natural), ReadOnlyList<Error>.Empty);
 	}
 
 
@@ -246,7 +249,7 @@ public static class StringConversion {
 				_ => throw new ShouldMatchOtherCaseException()
 			},
 
-			Success<T> success => (success.Value, ReadOnlyList<Error>.Empty),
+			Success<T> success => (Optional<T>.FromValue(success.Value), ReadOnlyList<Error>.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};
@@ -272,7 +275,7 @@ public static class StringConversion {
 				_ => throw new ShouldMatchOtherCaseException()
 			},
 
-			Success<T> success => (success.Value, ReadOnlyList<Error>.Empty),
+			Success<T> success => (Optional<T>.FromValue(success.Value), ReadOnlyList<Error>.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};
@@ -298,7 +301,7 @@ public static class StringConversion {
 				_ => throw new ShouldMatchOtherCaseException()
 			},
 
-			Success<T> success => (success.Value, ReadOnlyList<Error>.Empty),
+			Success<T> success => (Optional<T>.FromValue(success.Value), ReadOnlyList<Error>.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};
