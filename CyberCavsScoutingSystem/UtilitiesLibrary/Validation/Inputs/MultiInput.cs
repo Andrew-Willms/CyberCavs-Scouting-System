@@ -91,15 +91,12 @@ public abstract class MultiInput<TOutput, TSeverityEnum> : Input<TOutput, TSever
 
 
 
-
 public class MultiInput<TOutput, TSeverityEnum,
-		TInput1,
-		TInput2,
-		TInput3>
+		TInput1, TInput2, TInput3>
 	: MultiInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private Optional<TOutput> _OutputObject;
+	private Optional<TOutput> _OutputObject = Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -111,17 +108,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 				return;
 			}
 
-			if (value.HasValue) {
-
-				(Optional<(
-					TInput1 inputComponent1,
-					TInput2 inputComponent2,
-					TInput3 inputComponent3)
-				> _, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value.Value);
-
-				if (errors.AreFatal()) {
-					throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
-				}
+			if (value.HasValue && !IsInvertible(value.Value)) {
+				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
 			}
 
 			_OutputObject = value;
@@ -130,12 +118,11 @@ public class MultiInput<TOutput, TSeverityEnum,
 	}
 
 	private InputConverter<TOutput, 
-		(TInput1,
-		TInput2,
-		TInput3),
+		(TInput1, TInput2, TInput3),
 		TSeverityEnum> Converter { get; }
 
 	protected override (Optional<TOutput>, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker {
+
 		get {
 
 			if (!InputComponent1.OutputObject.HasValue ||
@@ -154,9 +141,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 
 	private InputInverter<TOutput,
-		(TInput1,
-		TInput2,
-		TInput3),
+		(TInput1, TInput2, TInput3),
 		TSeverityEnum> Inverter { get; }
 
 	public IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
@@ -166,14 +151,10 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 
 	public MultiInput(InputConverter<TOutput,
-			(TInput1,
-			TInput2,
-			TInput3),
+			(TInput1, TInput2, TInput3),
 			TSeverityEnum> converter,
 		InputInverter<TOutput,
-			(TInput1,
-			TInput2,
-			TInput3),
+			(TInput1, TInput2, TInput3),
 			TSeverityEnum> inverter,
 		IInput<TInput1, TSeverityEnum> inputComponent1,
 		IInput<TInput2, TSeverityEnum> inputComponent2,
@@ -181,9 +162,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
 
 		: base(new(
-			inputComponent1,
-			inputComponent2,
-			inputComponent3),
+			inputComponent1, inputComponent2, inputComponent3),
 			validationSets) {
 
 		Converter = converter;
@@ -194,30 +173,12 @@ public class MultiInput<TOutput, TSeverityEnum,
 		InputComponent3 = inputComponent3;
 	}
 
-	public override void SetOutputValue(TOutput value) {
+	protected override bool IsInvertible(TOutput testValue) {
 
-		(Optional<(
-			TInput1 inputComponent1,
-			TInput2 inputComponent2,
-			TInput3 inputComponent3
-		)> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
+		(Optional<(TInput1, TInput2, TInput3)> _, 
+			ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(testValue);
 
-		if (errors.AreFatal()) {
-			throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
-		}
-
-		// TODO: figure out if this is a good idea
-		//if (inversionResult.Value.inputComponent1 is not null &&
-		//    !inversionResult.Value.inputComponent1.Equals(InputComponent1.OutputObject)) {
-
-		//	InputComponent1.OutputObject = inversionResult.Value.inputComponent1;
-		//}
-
-		InputComponent1.SetOutputValue(inversionResult.Value.inputComponent1);
-		InputComponent2.SetOutputValue(inversionResult.Value.inputComponent2);
-		InputComponent3.SetOutputValue(inversionResult.Value.inputComponent3);
-
-		OutputObject = Optional<TOutput>.FromValue(value);
+		return !errors.AreFatal();
 	}
 
 }
@@ -225,14 +186,11 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 
 public class MultiInput<TOutput, TSeverityEnum,
-		TInput1,
-		TInput2,
-		TInput3,
-		TInput4>
+		TInput1, TInput2, TInput3, TInput4>
 	: MultiInput<TOutput, TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private Optional<TOutput> _OutputObject;
+	private Optional<TOutput> _OutputObject = Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -244,18 +202,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 				return;
 			}
 
-			if (value.HasValue) {
-
-				(Optional<(
-					TInput1 inputComponent1,
-					TInput2 inputComponent2,
-					TInput3 inputComponent3,
-					TInput4 inputComponent4)
-				> _, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value.Value);
-
-				if (errors.AreFatal()) {
-					throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
-				}
+			if (value.HasValue && !IsInvertible(value.Value)) {
+				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
 			}
 
 			_OutputObject = value;
@@ -264,24 +212,31 @@ public class MultiInput<TOutput, TSeverityEnum,
 	}
 
 	private InputConverter<TOutput, 
-		(TInput1,
-		TInput2,
-		TInput3,
-		TInput4),
+		(TInput1, TInput2, TInput3, TInput4),
 		TSeverityEnum> Converter { get; }
 
-	protected override (Optional<TOutput>, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker
-		=> Converter((
-			InputComponent1.OutputObject.Value,
-			InputComponent2.OutputObject.Value,
-			InputComponent3.OutputObject.Value,
-			InputComponent4.OutputObject.Value));
+	protected override (Optional<TOutput>, ReadOnlyList<ValidationError<TSeverityEnum>>) ConverterInvoker {
+
+		get {
+
+			if (!InputComponent1.OutputObject.HasValue ||
+			    !InputComponent2.OutputObject.HasValue ||
+			    !InputComponent3.OutputObject.HasValue) {
+
+				return (Optional.NoValue, ReadOnlyList<ValidationError<TSeverityEnum>>.Empty);
+			}
+
+			return Converter((
+				InputComponent1.OutputObject.Value,
+				InputComponent2.OutputObject.Value,
+				InputComponent3.OutputObject.Value,
+				InputComponent4.OutputObject.Value));
+		}
+	}
+
 
 	private InputInverter<TOutput,
-		(TInput1,
-		TInput2,
-		TInput3,
-		TInput4),
+		(TInput1, TInput2, TInput3, TInput4),
 		TSeverityEnum> Inverter { get; }
 
 	public IInput<TInput1, TSeverityEnum> InputComponent1 { get; }
@@ -292,16 +247,10 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 
 	public MultiInput(InputConverter<TOutput,
-			(TInput1,
-			TInput2,
-			TInput3,
-			TInput4),
+			(TInput1, TInput2, TInput3, TInput4),
 			TSeverityEnum> converter,
 		InputInverter<TOutput,
-			(TInput1,
-			TInput2,
-			TInput3,
-			TInput4),
+			(TInput1, TInput2, TInput3, TInput4),
 			TSeverityEnum> inverter,
 		IInput<TInput1, TSeverityEnum> inputComponent1,
 		IInput<TInput2, TSeverityEnum> inputComponent2,
@@ -310,10 +259,7 @@ public class MultiInput<TOutput, TSeverityEnum,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
 
 		: base(new(
-			inputComponent1,
-			inputComponent2,
-			inputComponent3,
-			inputComponent4),
+			inputComponent1, inputComponent2, inputComponent3),
 			validationSets) {
 
 		Converter = converter;
@@ -323,36 +269,14 @@ public class MultiInput<TOutput, TSeverityEnum,
 		InputComponent2 = inputComponent2;
 		InputComponent3 = inputComponent3;
 		InputComponent4 = inputComponent4;
-
-		Validate();
 	}
 
-	public override void SetOutputValue(TOutput value) {
+	protected override bool IsInvertible(TOutput testValue) {
 
-		(Optional<(
-			TInput1 inputComponent1,
-			TInput2 inputComponent2,
-			TInput3 inputComponent3,
-			TInput4   inputComponent4)
-		> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
+		(Optional<(TInput1, TInput2, TInput3, TInput4)> _, 
+			ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(testValue);
 
-		if (errors.AreFatal()) {
-			throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
-		}
-
-		// TODO: figure out if this is a good idea
-		//if (inversionResult.Value.inputComponent1 is not null &&
-		//    !inversionResult.Value.inputComponent1.Equals(InputComponent1.OutputObject)) {
-
-		//	InputComponent1.OutputObject = inversionResult.Value.inputComponent1;
-		//}
-
-		InputComponent1.SetOutputValue(inversionResult.Value.inputComponent1);
-		InputComponent2.SetOutputValue(inversionResult.Value.inputComponent2);
-		InputComponent3.SetOutputValue(inversionResult.Value.inputComponent3);
-		InputComponent4.SetOutputValue(inversionResult.Value.inputComponent4);
-
-		OutputObject = Optional<TOutput>.FromValue(value);
+		return !errors.AreFatal();
 	}
 
 }

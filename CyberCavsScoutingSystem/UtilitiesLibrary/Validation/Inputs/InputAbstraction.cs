@@ -31,7 +31,7 @@ public interface IInput<TOutput, TSeverityEnum> : IInput<TSeverityEnum>
 
 	public Optional<TOutput> OutputObject { get; }
 
-	public void SetOutputValue(TOutput value);
+	//public void SetOutputValue(TOutput value); // I don't think the input objects you should be able to be changed like this.
 }
 
 
@@ -57,7 +57,7 @@ public abstract class Input<TOutput, TSeverityEnum> : IInput<TOutput, TSeverityE
 		TOutput TargetObjectGetter() {
 
 			if (!OutputObject.HasValue) {
-				throw new NullReferenceException($"Validators should not be called if {nameof(OutputObject)} is null.");
+				throw new NullReferenceException($"Validators should not be called if {nameof(OutputObject)} does not have a value.");
 			}
 
 			return OutputObject.Value;
@@ -66,7 +66,7 @@ public abstract class Input<TOutput, TSeverityEnum> : IInput<TOutput, TSeverityE
 		return validationSets.Select(x => x.ToValidationTrigger(TargetObjectGetter, PostValidation)).ToReadOnly();
 	}
 
-	public abstract void SetOutputValue(TOutput value);
+	protected abstract bool IsInvertible(TOutput testValue);
 
 	private void PostValidation(ReadOnlyList<ValidationError<TSeverityEnum>> validationError) {
 		ValidationErrors.AddRange(validationError);

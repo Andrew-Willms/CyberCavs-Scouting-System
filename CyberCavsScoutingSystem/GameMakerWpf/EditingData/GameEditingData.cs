@@ -48,14 +48,8 @@ public class GameEditingData : INotifyPropertyChanged {
 
 		GameEditingData gameEditingData = new();
 
-		gameEditingData.Alliances.Add(new(gameEditingData));
-		gameEditingData.Alliances.Add(new(gameEditingData));
-
-		gameEditingData.Alliances[0].Name.InputObject = "Red Alliance";
-		gameEditingData.Alliances[1].Name.InputObject = "Blue Alliance";
-
-		gameEditingData.Alliances[0].AllianceColor.SetOutputValue(Color.FromRgb(255, 0, 0));
-		gameEditingData.Alliances[1].AllianceColor.SetOutputValue(Color.FromRgb(0, 0, 255));
+		gameEditingData.Alliances.Add(new(gameEditingData, "Red Alliance", Color.FromRgb(255, 0, 0)));
+		gameEditingData.Alliances.Add(new(gameEditingData, "Blue Alliance", Color.FromRgb(0, 0, 255)));
 
 		return gameEditingData;
 	}

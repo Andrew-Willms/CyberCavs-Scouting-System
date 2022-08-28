@@ -14,11 +14,11 @@ public class AllianceEditingData {
 
 	private GameEditingData EditingData { get; }
 
-	public AllianceEditingData(GameEditingData editingData) {
+	public AllianceEditingData(GameEditingData editingData, string allianceName, Color allianceColor) {
 
 		EditingData = editingData;
 
-		Name = new(AllianceValidator.NameConverter, AllianceValidator.NameInverter, "",
+		Name = new(AllianceValidator.NameConverter, AllianceValidator.NameInverter, allianceName,
 			new ValidationSet<string, ErrorSeverity>(AllianceValidator.NameValidator_EndsWithAlliance),
 			new ValidationSet<string, ErrorSeverity>(AllianceValidator.NameValidator_Length),
 			new ValidationSet<string, IEnumerable<AllianceEditingData>, ErrorSeverity>(
@@ -28,9 +28,16 @@ public class AllianceEditingData {
 		);
 
 		AllianceColor = new(AllianceValidator.ColorConverter, AllianceValidator.ColorInverter,
-			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, AllianceValidator.ColorComponentInverter, "0"),
-			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, AllianceValidator.ColorComponentInverter, "0"),
-			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, AllianceValidator.ColorComponentInverter, "0"),
+
+			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, 
+				AllianceValidator.ColorComponentInverter,allianceColor.R.ToString()),
+
+			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, 
+				AllianceValidator.ColorComponentInverter, allianceColor.G.ToString()),
+
+			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, 
+				AllianceValidator.ColorComponentInverter, allianceColor.B.ToString()),
+
 			new ValidationSet<Color, IEnumerable<AllianceEditingData>, ErrorSeverity>(
 				AllianceValidator.ColorCovalidator_Uniqueness,
 				() => EditingData.Alliances.Where(x => x != this),

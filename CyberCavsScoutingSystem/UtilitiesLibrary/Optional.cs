@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace UtilitiesLibrary;
 
@@ -55,6 +56,25 @@ public class Optional<T> {
 	public static Optional<T> FromValue(T value) {
 		return new(value);
 	}
+
+
+
+
+	public static bool operator ==(Optional<T> left, Optional<T> right) {
+
+		if (!left.HasValue) {
+			return !right.HasValue;
+		}
+
+		return right.HasValue && left.Value.Equals(right.Value);
+	}
+
+	public static bool operator !=(Optional<T> left, Optional<T> right) {
+		return !(left == right);
+	}
+
+
+
 }
 
 

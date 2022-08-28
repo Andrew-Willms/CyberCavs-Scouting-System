@@ -29,7 +29,7 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 	where TOutput : IEquatable<TOutput>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
-	private Optional<TOutput> _OutputObject;
+	private Optional<TOutput> _OutputObject = Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -129,15 +129,11 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		OnErrorsChanged();
 	}
 
-	public override void SetOutputValue(TOutput value) {
+	protected override bool IsInvertible(TOutput testValue) {
 
-		(Optional<TInput> _, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(value);
+		(Optional<TInput> _, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(testValue);
 
-		if (errors.AreFatal()) {
-			throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
-		}
-
-		OutputObject = value;
+		return !errors.AreFatal();
 	}
 
 
