@@ -58,7 +58,7 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		}
 	}
 
-	private TInput _InputObject;
+	private TInput _InputObject = default!;
 	public TInput InputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -100,9 +100,7 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 		ValidationTriggers = ValidationSetsToTriggers(validationSets);
 
-		_InputObject = initialInput;
 		InputObject = initialInput;
-		OnOutputObjectChanged();
 	}
 
 

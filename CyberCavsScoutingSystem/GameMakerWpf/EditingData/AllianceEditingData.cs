@@ -30,7 +30,7 @@ public class AllianceEditingData {
 		AllianceColor = new(AllianceValidator.ColorConverter, AllianceValidator.ColorInverter,
 
 			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, 
-				AllianceValidator.ColorComponentInverter,allianceColor.R.ToString()),
+				AllianceValidator.ColorComponentInverter, allianceColor.R.ToString()),
 
 			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, 
 				AllianceValidator.ColorComponentInverter, allianceColor.G.ToString()),

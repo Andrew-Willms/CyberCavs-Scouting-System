@@ -125,17 +125,18 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 		get {
 
-			if (!InputComponent1.OutputObject.HasValue ||
-			    !InputComponent2.OutputObject.HasValue ||
-			    !InputComponent3.OutputObject.HasValue) {
+			if (InputComponent1.OutputObject.HasValue &&
+			    InputComponent2.OutputObject.HasValue &&
+			    InputComponent3.OutputObject.HasValue) {
 
-				return (Optional.NoValue, ReadOnlyList<ValidationError<TSeverityEnum>>.Empty);
+				return Converter((
+					InputComponent1.OutputObject.Value,
+					InputComponent2.OutputObject.Value,
+					InputComponent3.OutputObject.Value));
 			}
 
-			return Converter((
-				InputComponent1.OutputObject.Value,
-				InputComponent2.OutputObject.Value,
-				InputComponent3.OutputObject.Value));
+			return (Optional.NoValue, ReadOnlyList<ValidationError<TSeverityEnum>>.Empty);
+
 		}
 	}
 
@@ -150,7 +151,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 
 
 
-	public MultiInput(InputConverter<TOutput,
+	public MultiInput(
+		InputConverter<TOutput,
 			(TInput1, TInput2, TInput3),
 			TSeverityEnum> converter,
 		InputInverter<TOutput,
@@ -161,9 +163,10 @@ public class MultiInput<TOutput, TSeverityEnum,
 		IInput<TInput3, TSeverityEnum> inputComponent3,
 		params IValidationSet<TOutput, TSeverityEnum>[] validationSets)
 
-		: base(new(
-			inputComponent1, inputComponent2, inputComponent3),
-			validationSets) {
+		: base(
+			new(inputComponent1, inputComponent2, inputComponent3),
+			validationSets)
+	{
 
 		Converter = converter;
 		Inverter = inverter;

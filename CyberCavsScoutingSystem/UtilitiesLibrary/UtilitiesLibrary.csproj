@@ -5,6 +5,7 @@
 		<UseWPF>true</UseWPF>
 		<Nullable>enable</Nullable>
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
+		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 
 </Project>
