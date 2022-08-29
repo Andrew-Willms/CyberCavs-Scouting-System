@@ -174,6 +174,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 		InputComponent1 = inputComponent1;
 		InputComponent2 = inputComponent2;
 		InputComponent3 = inputComponent3;
+
+		Validate();
 	}
 
 	protected override bool IsInvertible(TOutput testValue) {
@@ -276,6 +278,8 @@ public class MultiInput<TOutput, TSeverityEnum,
 		InputComponent2 = inputComponent2;
 		InputComponent3 = inputComponent3;
 		InputComponent4 = inputComponent4;
+
+		Validate();
 	}
 
 	protected override bool IsInvertible(TOutput testValue) {
