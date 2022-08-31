@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Extensions;
-using UtilitiesLibrary.Math;
+using UtilitiesLibrary.Math.Numbers;
 using UtilitiesLibrary.Validation;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
-using Number = UtilitiesLibrary.Math.Number;
+using Number = UtilitiesLibrary.Math.Numbers.Number;
 
-namespace GameMakerWpf.Validation.Conversion; 
+namespace GameMakerWpf.Validation.Conversion;
 
 
 
@@ -214,15 +214,9 @@ public static class StringConversion {
 		Result<T> result = parser.Invoke(number);
 
 		return result switch {
-
-			Failure<T> failure => failure.Error switch {
-				ValueTooLargeError => (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
-				ValueTooSmallError => (Optional.NoValue, new(errorSet.ValueTooSmallErrorGetter(inputString))),
-				_ => throw new ShouldMatchOtherCaseException()
-			},
-
+			Failure<T> {Error: ValueTooLargeError} => (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
+			Failure<T> {Error: ValueTooSmallError} => (Optional.NoValue, new(errorSet.ValueTooSmallErrorGetter(inputString))),
 			Success<T> success => (Optional<T>.FromValue(success.Value), ReadOnlyList<Error>.Empty),
-
 			_ => throw new ShouldMatchOtherCaseException()
 		};
 	} 
@@ -240,15 +234,9 @@ public static class StringConversion {
 		Result<T> result = parser.Invoke(integer);
 
 		return result switch {
-
-			Failure<T> failure => failure.Error switch {
-				ValueTooLargeError => (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
-				ValueTooSmallError => (Optional.NoValue, new(errorSet.ValueTooSmallErrorGetter(inputString))),
-				_ => throw new ShouldMatchOtherCaseException()
-			},
-
+			Failure<T> {Error: ValueTooLargeError} => (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
+			Failure<T> {Error: ValueTooSmallError} => (Optional.NoValue, new(errorSet.ValueTooSmallErrorGetter(inputString))),
 			Success<T> success => (Optional<T>.FromValue(success.Value), ReadOnlyList<Error>.Empty),
-
 			_ => throw new ShouldMatchOtherCaseException()
 		};
 	}
@@ -266,15 +254,9 @@ public static class StringConversion {
 		Result<T> result = parser.Invoke(whole);
 
 		return result switch {
-
-			Failure<T> failure => failure.Error switch {
-				ValueTooLargeError => (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
-				ValueIsNotPositiveError => (Optional.NoValue, new(errorSet.CannotBeNegativeError)),
-				_ => throw new ShouldMatchOtherCaseException()
-			},
-
+			Failure<T> {Error: ValueTooLargeError} => (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
+			Failure<T> {Error: ValueIsNotPositiveError} => (Optional.NoValue, new(errorSet.CannotBeNegativeError)),
 			Success<T> success => (Optional<T>.FromValue(success.Value), ReadOnlyList<Error>.Empty),
-
 			_ => throw new ShouldMatchOtherCaseException()
 		};
 	}

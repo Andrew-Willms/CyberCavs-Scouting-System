@@ -2,15 +2,7 @@
 
 
 
-public abstract class Result<T> {
-
-	public bool WasSuccessful { get; }
-
-	protected Result(bool wasSuccessful) {
-		WasSuccessful = wasSuccessful;
-	}
-
-}
+public abstract class Result<T> { }
 
 
 
@@ -18,16 +10,19 @@ public class Success<T> : Result<T> {
 
 	public T Value { get; }
 
-	public Success(T value) : base(true) {
+	public Success(T value) {
 		Value = value;
 	}
+
 }
+
+
 
 public class Failure<T> : Result<T> {
 
 	public Error Error { get; }
 
-	public Failure(Error error) : base(false) {
+	public Failure(Error error) {
 		Error = error;
 	}
 
@@ -37,13 +32,11 @@ public class Failure<T> : Result<T> {
 
 public class Error {
 
-	public string Message { get; }
+	public string Message { get; } = "";
 
 	public Error? InnerError { get; }
 
-	public Error() {
-		Message = "";
-	}
+	public Error() { }
 
 	public Error(string message) {
 		Message = message;

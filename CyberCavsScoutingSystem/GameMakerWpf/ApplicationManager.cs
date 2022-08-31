@@ -27,7 +27,7 @@ public static class ApplicationManager {
 		throw new NotImplementedException();
 	}
 
-	public static void LoadGameProject(string path) {
+	public static void OpenGameProject(string path) {
 		throw new NotImplementedException();
 	}
 

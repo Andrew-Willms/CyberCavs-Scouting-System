@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
-namespace UtilitiesLibrary.Math; 
+namespace UtilitiesLibrary.Math.Numbers;
 
 
 
 public class Whole : IEquatable<Whole>, IComparable<Whole> {
 
-	protected ReadOnlyCollection<Digit> Digits { get; }
+	protected ReadOnlyCollection<Digit> Digits { get; } // The number 123 would be stored as { 3, 2, 1 }
 	protected int LargestDecimalPosition => Digits.Count - 1;
+
+
 
 	protected Whole(ReadOnlyCollection<Digit> digits) {
 		Digits = digits;
@@ -21,13 +23,9 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		Digits = whole.Digits;
 	}
 
-	protected Digit GetDigitInPosition(int position) {
-		return Digits[position];
-	}
 
 
-
-	private static Whole ToNumeric<T>(T value) where T : INumber<T> {
+	private static Whole FromINumber<T>(T value) where T : INumber<T> {
 
 		List<Digit> digits = new();
 
@@ -41,13 +39,13 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		return new(digits.AsReadOnly());
 	}
 
-	public static implicit operator Whole(byte value) => ToNumeric(value);
-	public static implicit operator Whole(ushort value) => ToNumeric(value);
-	public static implicit operator Whole(uint value) => ToNumeric(value);
-	public static implicit operator Whole(ulong value) => ToNumeric(value);
-	public static implicit operator Whole(short value) => ToNumeric(value);
-	public static implicit operator Whole(int value) => ToNumeric(value);
-	public static implicit operator Whole(long value) => ToNumeric(value);
+	public static implicit operator Whole(byte value) => FromINumber(value);
+	public static implicit operator Whole(ushort value) => FromINumber(value);
+	public static implicit operator Whole(uint value) => FromINumber(value);
+	public static implicit operator Whole(ulong value) => FromINumber(value);
+	public static implicit operator Whole(short value) => FromINumber(value);
+	public static implicit operator Whole(int value) => FromINumber(value);
+	public static implicit operator Whole(long value) => FromINumber(value);
 
 
 
@@ -55,7 +53,8 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		Func<Whole, bool> greaterThanMaxValue,
 		Func<Whole, bool> lessThanMinValue,
 		Func<Digit, T> digitToT,
-		Func<int, T> tenToThe) where T : INumber<T> {
+		Func<int, T> tenToThe)
+		where T : INumber<T> {
 
 		if (greaterThanMaxValue(this)) {
 			return new Failure<T>(new ValueTooLargeError());
@@ -67,7 +66,7 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 
 		T value = T.Zero;
 		for (int position = 0; position <= LargestDecimalPosition; position++) {
-			value += digitToT(GetDigitInPosition(position)) * tenToThe(position);
+			value += digitToT(Digits[position]) * tenToThe(position);
 		}
 
 		return new Success<T>(value);
@@ -78,26 +77,29 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		return whole.ToNumberPrimitive(
 			number => number > byte.MaxValue,
 			number => number < byte.MinValue,
-			digit => digit.ToByte(), i => (byte)System.Math.Pow(10, i)
+			digit => digit.ToByte(),
+			i => (byte)System.Math.Pow(10, i)
 		);
 	}
 
 	public static Result<ushort> ToUshort(Whole whole) {
-		
+
 		return whole.ToNumberPrimitive(
 			number => number > ushort.MaxValue,
 			number => number < ushort.MinValue,
-			digit => digit.ToByte(), i => (ushort)System.Math.Pow(10, i)
+			digit => digit.ToByte(),
+			i => (ushort)System.Math.Pow(10, i)
 		);
 
 	}
 
 	public static Result<uint> ToUint(Whole whole) {
-		
+
 		return whole.ToNumberPrimitive(
 			number => number > uint.MaxValue,
 			number => number < uint.MinValue,
-			digit => digit.ToByte(), i => (uint)System.Math.Pow(10, i)
+			digit => digit.ToByte(),
+			i => (uint)System.Math.Pow(10, i)
 		);
 	}
 
@@ -106,7 +108,8 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		return whole.ToNumberPrimitive(
 			number => number > ulong.MaxValue,
 			number => number < ulong.MinValue,
-			digit => digit.ToByte(), i => (ulong)System.Math.Pow(10, i)
+			digit => digit.ToByte(),
+			i => (ulong)System.Math.Pow(10, i)
 		);
 	}
 
@@ -115,7 +118,8 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		return whole.ToNumberPrimitive(
 			number => number > short.MaxValue,
 			number => number < short.MinValue,
-			digit => digit.ToByte(), i => (short)System.Math.Pow(10, i)
+			digit => digit.ToByte(),
+			i => (short)System.Math.Pow(10, i)
 		);
 	}
 
@@ -124,7 +128,8 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		return whole.ToNumberPrimitive(
 			number => number > int.MaxValue,
 			number => number < int.MinValue,
-			digit => digit.ToByte(), i => (int)System.Math.Pow(10, i)
+			digit => digit.ToByte(),
+			i => (int)System.Math.Pow(10, i)
 		);
 	}
 
@@ -133,36 +138,9 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		return whole.ToNumberPrimitive(
 			number => number > long.MaxValue,
 			number => number < long.MinValue,
-			digit => digit.ToByte(), i => (long)System.Math.Pow(10, i)
+			digit => digit.ToByte(),
+			i => (long)System.Math.Pow(10, i)
 		);
-	}
-
-
-
-	public static Whole? Parse(string? text) {
-
-		if (text is null || text.Length == 0) {
-			return null;
-		}
-
-		if (text.All(x => x == '0')) {
-			return new Whole(new List<Digit> { Digit.Zero }.AsReadOnly());
-		}
-
-		text = text.TrimStart('0');
-
-		List<Digit> digits = new();
-
-		foreach (char character in text.Reverse()) {
-
-			if (!char.IsDigit(character)) {
-				return null;
-			}
-
-			digits.Add(Digit.FromChar(character));
-		}
-
-		return new Whole(digits.AsReadOnly());
 	}
 
 
@@ -205,17 +183,17 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 
 		for (int position = LargestDecimalPosition; position >= 0; position--) {
 
-			if (GetDigitInPosition(position) > other.GetDigitInPosition(position)) {
+			if (Digits[position] > other.Digits[position]) {
 				return 1;
 			}
 
-			if (GetDigitInPosition(position) < other.GetDigitInPosition(position)) {
+			if (Digits[position] < other.Digits[position]) {
 				return -1;
 			}
 		}
 
 		throw new("Since Equality is short-circuit it should not be possible that the two values are the same and" +
-		          " execution should not reach this point.");
+				  " execution should not reach this point.");
 	}
 
 
@@ -244,4 +222,31 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		return left.CompareTo(right) <= 0;
 	}
 
+
+
+	public static Whole? Parse(string? text) {
+
+		if (text is null || text.Length == 0) {
+			return null;
+		}
+
+		if (text.All(x => x == '0')) {
+			return new Whole(new List<Digit> { Digit.Zero }.AsReadOnly());
+		}
+
+		text = text.TrimStart('0');
+
+		List<Digit> digits = new();
+
+		foreach (char character in text.Reverse()) {
+
+			if (!char.IsDigit(character)) {
+				return null;
+			}
+
+			digits.Add(Digit.FromChar(character));
+		}
+
+		return new Whole(digits.AsReadOnly());
+	}
 }

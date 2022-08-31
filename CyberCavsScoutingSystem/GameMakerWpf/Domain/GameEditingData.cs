@@ -25,7 +25,7 @@ public class GameEditingData : INotifyPropertyChanged {
 
 	public ValidationEvent AllianceNameChanged { get; } = new();
 
-	public ObservableCollection<AllianceEditingData> Alliances { get; } // = new();
+	public ObservableCollection<AllianceEditingData> Alliances { get; }
 
 
 
