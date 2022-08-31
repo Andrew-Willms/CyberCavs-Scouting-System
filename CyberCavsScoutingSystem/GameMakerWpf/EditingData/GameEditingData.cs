@@ -15,7 +15,7 @@ namespace GameMakerWpf.EditingData;
 
 public class GameEditingData : INotifyPropertyChanged {
 
-	public GameEditingData() {
+	private GameEditingData() {
 
 		Year = new(GameNumbersValidator.YearConverter, GameNumbersValidator.YearInverter, DateTime.Now.Year.ToString(),
 			new ValidationSet<int, ErrorSeverity>(GameNumbersValidator.YearValidator_YearNotNegative),

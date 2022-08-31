@@ -101,11 +101,6 @@ public static class AllianceValidator {
 
 			Optional<Color> allianceColorOption = otherAlliance.AllianceColor.OutputObject;
 
-			// something not initialized yet
-			if (allianceColorOption is null) {
-				continue;
-			}
-
 			if (allianceColorOption.HasValue == false) {
 				continue;
 			}

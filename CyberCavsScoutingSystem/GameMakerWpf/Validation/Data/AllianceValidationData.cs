@@ -23,7 +23,6 @@ public static class AllianceValidationData {
 
 
 
-
 			public static readonly Error TooShortError =
 				new("Empty Name", ErrorSeverity.Error, "An alliance cannot have a blank name.");
 
@@ -53,8 +52,7 @@ public static class AllianceValidationData {
 
 		public const string ShouldEndWith = " Alliance";
 
-		public static readonly Error DoesNotEndWithCorrectSequenceError
-			= new("Does Not End With \"Alliance\"", ErrorSeverity.Error,
+		public static readonly Error DoesNotEndWithCorrectSequenceError = new("Does Not End With \"Alliance\"", ErrorSeverity.Advisory,
 				"Typically alliance names should follow the format \"{Colour} Alliance\".");
 
 	}
