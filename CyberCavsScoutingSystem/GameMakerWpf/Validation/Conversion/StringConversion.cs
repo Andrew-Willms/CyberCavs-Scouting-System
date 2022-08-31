@@ -14,106 +14,80 @@ namespace GameMakerWpf.Validation.Conversion;
 
 public interface INumberConversionErrorSet {
 
-	//Todo: make required in .net7
-	public Error RequiresValueError { get; /*required*/ init; }
+	public Error RequiresValueError { get; init; }
 
-	//Todo: make required in .net7
-	public Func<char[], Error> InvalidCharactersErrorGetter { get; /*required*/ init; }
+	public Func<char[], Error> InvalidCharactersErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Func<string, Error> ValueTooLargeErrorGetter { get; /*required*/ init; }
+	public Func<string, Error> ValueTooLargeErrorGetter { get; init; }
 }
 
 public interface ISignedNumberConversionErrorSet : INumberConversionErrorSet {
 
-	//Todo: make required in .net7
-	public Error MinusSignMustBeAtStartError { get; /*required*/ init; }
+	public Error MinusSignMustBeAtStartError { get; init; }
 
-	//Todo: make required in .net7
-	public Func<string, Error> ValueTooSmallErrorGetter { get; /*required*/ init; }
+	public Func<string, Error> ValueTooSmallErrorGetter { get; init; }
 }
 
 public interface IUnsignedNumberConversionErrorSet : INumberConversionErrorSet {
 
-	//Todo: make required in .net7
-	public Error CannotBeNegativeError { get; /*required*/ init; }
-
+	public Error CannotBeNegativeError { get; init; }
 }
 
 public interface IIntegerConversionErrorSet : INumberConversionErrorSet {
 
-	//Todo: make required in .net7
-	public Error MustBeIntegerError { get; /*required*/ init; }
-
+	public Error MustBeIntegerError { get; init; }
 }
 
 public interface IFloatConversionErrorSet : INumberConversionErrorSet {
 
-	//Todo: make required in .net7
-	public Error TooManyDecimalPointsError { get; /*required*/ init; }
-
+	public Error TooManyDecimalPointsError { get; init; }
 }
+
+
 
 public class FloatConversionErrorSet : ISignedNumberConversionErrorSet, IFloatConversionErrorSet {
 
-	//Todo: make required in .net7
-	public Error RequiresValueError { get; init; }
+	public required Error RequiresValueError { get; init; }
 
-	//Todo: make required in .net7
-	public Func<char[], Error> InvalidCharactersErrorGetter { get; /*required*/ init; }
+	public required Func<char[], Error> InvalidCharactersErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Func<string, Error> ValueTooLargeErrorGetter { get; /*required*/ init; }
+	public required Func<string, Error> ValueTooLargeErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Func<string, Error> ValueTooSmallErrorGetter { get; /*required*/ init; }
+	public required Func<string, Error> ValueTooSmallErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Error TooManyDecimalPointsError { get; /*required*/ init; }
+	public required Error TooManyDecimalPointsError { get; init; }
 
-	//Todo: make required in .net7
-	public Error MinusSignMustBeAtStartError { get; /*required*/ init; }
+	public required Error MinusSignMustBeAtStartError { get; init; }
 
 }
 
 public class IntegerConversionErrorSet : ISignedNumberConversionErrorSet, IIntegerConversionErrorSet {
 
-	//Todo: make required in .net7
-	public Error RequiresValueError { get; init; }
+	public required Error RequiresValueError { get; init; }
 
-	//Todo: make required in .net7
-	public Func<char[], Error> InvalidCharactersErrorGetter { get; init; }
+	public required Func<char[], Error> InvalidCharactersErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Func<string, Error> ValueTooLargeErrorGetter { get; /*required*/ init; }
+	public required Func<string, Error> ValueTooLargeErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Func<string, Error> ValueTooSmallErrorGetter { get; /*required*/ init; }
+	public required Func<string, Error> ValueTooSmallErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Error MinusSignMustBeAtStartError { get; /*required*/ init; }
+	public required Error MinusSignMustBeAtStartError { get; init; }
 
-	//Todo: make required in .net7
-	public Error MustBeIntegerError { get; /*required*/ init; }
+	public required Error MustBeIntegerError { get; init; }
 
 }
 
 public class WholeConversionErrorSet : IUnsignedNumberConversionErrorSet, IIntegerConversionErrorSet {
 
-	//Todo: make required in .net7
-	public Error RequiresValueError { get; init; }
+	public required Error RequiresValueError { get; init; }
 
-	//Todo: make required in .net7
-	public Func<char[], Error> InvalidCharactersErrorGetter { get; init; }
+	public required Func<char[], Error> InvalidCharactersErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Func<string, Error> ValueTooLargeErrorGetter { get; /*required*/ init; }
+	public required Func<string, Error> ValueTooLargeErrorGetter { get; init; }
 
-	//Todo: make required in .net7
-	public Error MustBeIntegerError { get; /*required*/ init; }
+	public required Error MustBeIntegerError { get; init; }
 	
-	//Todo: make required in .net7
-	public Error CannotBeNegativeError { get; /*required*/ init; }
+	public required Error CannotBeNegativeError { get; init; }
 }
 
 

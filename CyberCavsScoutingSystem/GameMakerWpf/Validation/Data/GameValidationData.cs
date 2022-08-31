@@ -35,12 +35,16 @@ public static class GameValidationData {
 		private static readonly Error MustBeIntegerError = new("Must Be Integer", ErrorSeverity.Error, 
 			"The year must be a whole number.");
 
+		private static readonly Error MinusSignMustBeAtStartError = new("Negative Sign Must Be At Start", ErrorSeverity.Error, 
+			"Negative sign must be at the start of the number");
+
 		public static readonly IntegerConversionErrorSet ConversionErrorSet = new() {
 			RequiresValueError = RequiresValueError,
 			InvalidCharactersErrorGetter = GetInvalidCharactersError,
 			ValueTooLargeErrorGetter = ValueTooLargeErrorGetter,
 			ValueTooSmallErrorGetter = ValueTooNegativeErrorGetter,
-			MustBeIntegerError = MustBeIntegerError
+			MustBeIntegerError = MustBeIntegerError,
+			MinusSignMustBeAtStartError = MinusSignMustBeAtStartError
 		};
 
 
