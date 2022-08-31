@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Windows.Media;
 using System.Collections.Generic;
-using GameMakerWpf.EditingData;
+using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;

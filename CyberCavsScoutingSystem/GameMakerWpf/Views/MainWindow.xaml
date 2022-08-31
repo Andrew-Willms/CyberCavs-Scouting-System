@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameMakerWpf.Views"
         xmlns:views="clr-namespace:GameMakerWpf.Views"
-        xmlns:editingData1="clr-namespace:GameMakerWpf.EditingData"
+        xmlns:domain="clr-namespace:GameMakerWpf.Domain"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        d:DataContext="{d:DesignInstance Type=editingData1:GameEditingData, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
 
     <Window.Resources>
 

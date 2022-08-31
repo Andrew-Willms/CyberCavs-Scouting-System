@@ -1,5 +1,6 @@
 ﻿using System;
-using CCSSDomain;
+using GameMakerWpf.Domain;
+using GameMakerWpf.DomainData;
 using GameMakerWpf.Views;
 
 namespace GameMakerWpf;
@@ -8,9 +9,9 @@ namespace GameMakerWpf;
 
 public static class ApplicationManager {
 
-	public static GameProject GameProject { get; private set; } = new();
+	public static GameEditingData Game { get; private set; } = DefaultEditingDataValues.GetDefaultEditingData();
 
-	public static MainWindow Window { get; private set; } = new();
+	private static MainWindow Window { get; } = new();
 
 	public static bool ApplicationStartup() {
 
@@ -19,11 +20,28 @@ public static class ApplicationManager {
 		return true;
 	}
 
+
+
+
 	public static void SaveGameProject() {
 		throw new NotImplementedException();
 	}
 
 	public static void LoadGameProject(string path) {
+		throw new NotImplementedException();
+	}
+
+	public static void NewGameProject() {
+		throw new NotImplementedException();
+	}
+
+
+
+	public static void AddAlliance() {
+		Game.Alliances.Add(DefaultEditingDataValues.GetNewAlliance(Game));
+	}
+
+	public static void RemoveAlliance(AllianceEditingData alliance) {
 		throw new NotImplementedException();
 	}
 
