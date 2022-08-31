@@ -42,7 +42,7 @@ public static class GameValidationData {
 			RequiresValueError = RequiresValueError,
 			InvalidCharactersErrorGetter = GetInvalidCharactersError,
 			ValueTooLargeErrorGetter = ValueTooLargeErrorGetter,
-			ValueTooSmallErrorGetter = ValueTooNegativeErrorGetter,
+			ValueTooNegativeErrorGetter = ValueTooNegativeErrorGetter,
 			MustBeIntegerError = MustBeIntegerError,
 			MinusSignMustBeAtStartError = MinusSignMustBeAtStartError
 		};

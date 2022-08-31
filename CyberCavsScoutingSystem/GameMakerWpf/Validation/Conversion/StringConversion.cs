@@ -25,7 +25,7 @@ public interface ISignedNumberConversionErrorSet : INumberConversionErrorSet {
 
 	public Error MinusSignMustBeAtStartError { get; init; }
 
-	public Func<string, Error> ValueTooSmallErrorGetter { get; init; }
+	public Func<string, Error> ValueTooNegativeErrorGetter { get; init; }
 }
 
 public interface IUnsignedNumberConversionErrorSet : INumberConversionErrorSet {
@@ -53,7 +53,7 @@ public class FloatConversionErrorSet : ISignedNumberConversionErrorSet, IFloatCo
 
 	public required Func<string, Error> ValueTooLargeErrorGetter { get; init; }
 
-	public required Func<string, Error> ValueTooSmallErrorGetter { get; init; }
+	public required Func<string, Error> ValueTooNegativeErrorGetter { get; init; }
 
 	public required Error TooManyDecimalPointsError { get; init; }
 
@@ -69,7 +69,7 @@ public class IntegerConversionErrorSet : ISignedNumberConversionErrorSet, IInteg
 
 	public required Func<string, Error> ValueTooLargeErrorGetter { get; init; }
 
-	public required Func<string, Error> ValueTooSmallErrorGetter { get; init; }
+	public required Func<string, Error> ValueTooNegativeErrorGetter { get; init; }
 
 	public required Error MinusSignMustBeAtStartError { get; init; }
 
@@ -215,7 +215,7 @@ public static class StringConversion {
 
 		return result switch {
 			Failure<T> {Error: ValueTooLargeError} => (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
-			Failure<T> {Error: ValueTooSmallError} => (Optional.NoValue, new(errorSet.ValueTooSmallErrorGetter(inputString))),
+			Failure<T> {Error: ValueTooSmallError} => (Optional.NoValue, new(errorSet.ValueTooNegativeErrorGetter(inputString))),
 			Success<T> success => (Optional<T>.FromValue(success.Value), ReadOnlyList<Error>.Empty),
 			_ => throw new ShouldMatchOtherCaseException()
 		};
@@ -235,7 +235,7 @@ public static class StringConversion {
 
 		return result switch {
 			Failure<T> {Error: ValueTooLargeError} => (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
-			Failure<T> {Error: ValueTooSmallError} => (Optional.NoValue, new(errorSet.ValueTooSmallErrorGetter(inputString))),
+			Failure<T> {Error: ValueTooSmallError} => (Optional.NoValue, new(errorSet.ValueTooNegativeErrorGetter(inputString))),
 			Success<T> success => (Optional<T>.FromValue(success.Value), ReadOnlyList<Error>.Empty),
 			_ => throw new ShouldMatchOtherCaseException()
 		};

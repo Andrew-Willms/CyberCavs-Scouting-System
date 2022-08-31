@@ -67,4 +67,10 @@ public static class CollectionExtensions {
 		return enumerable.Count(x => x.CompareTo(value) == 0) > 1;
 	}
 
+
+
+	public static string CharArrayToString(this IEnumerable<char> enumerable) {
+		return enumerable.Aggregate("", (current, character) => current + character);
+	}
+
 }
