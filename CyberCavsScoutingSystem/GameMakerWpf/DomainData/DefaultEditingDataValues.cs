@@ -26,7 +26,9 @@ public static class DefaultEditingDataValues {
 
 		Game initialValues = new() {
 			Name = GameNameGenerator.GetRandomGameName(),
-			Year = DateTime.Now.Year
+			Year = DateTime.Now.Year,
+			RobotsPerAlliance = 3,
+			AlliancesPerMatch = 2
 		};
 
 		GameEditingData gameEditingData = new(initialValues);
@@ -37,11 +39,13 @@ public static class DefaultEditingDataValues {
 		return gameEditingData;
 	}
 
-	public static AllianceEditingData GetNewAlliance(GameEditingData gameEditingData) {
+	public static AllianceEditingData GetNewAlliance(IEnumerable<string> allianceNames) {
 
-		HashSet<string> currentAllianceNames = gameEditingData.Alliances.SelectIfHasValue(x => x.Name.OutputObject).ToHashSet();
+		//System.Windows.Media.Colors.
 
-		int newAllianceNumber = 0;
+		HashSet<string> currentAllianceNames = allianceNames.ToHashSet();
+
+		int newAllianceNumber = 1;
 		while (currentAllianceNames.Contains($"Alliance {newAllianceNumber}")) {
 			newAllianceNumber++;
 		}

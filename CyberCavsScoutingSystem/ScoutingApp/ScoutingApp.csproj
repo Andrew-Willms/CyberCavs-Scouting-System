@@ -48,4 +48,10 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="Microsoft.Maui.Controls">
+	    <HintPath>..\..\..\..\.nuget\packages\microsoft.maui.controls.ref.win\6.0.540\ref\net6.0-windows10.0.19041\Microsoft.Maui.Controls.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
 </Project>
