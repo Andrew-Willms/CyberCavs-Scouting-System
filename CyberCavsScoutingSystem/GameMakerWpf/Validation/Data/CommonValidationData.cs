@@ -1,7 +1,6 @@
 ﻿using System;
 using CCSSDomain;
 using UtilitiesLibrary.Extensions;
-
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace GameMakerWpf.Validation.Data; 

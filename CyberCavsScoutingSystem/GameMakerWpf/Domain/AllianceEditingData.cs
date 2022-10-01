@@ -21,7 +21,6 @@ public class AllianceEditingData {
 
 
 
-	// TODO: get the GameEditingData via dependency injection?
 	public AllianceEditingData(GameEditingData editingData, Alliance? initialValues) {
 
 		initialValues ??= new();
