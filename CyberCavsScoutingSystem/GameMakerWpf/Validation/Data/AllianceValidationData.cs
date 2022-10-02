@@ -35,13 +35,13 @@ public static class AllianceValidationData {
 
 
 			public static readonly Error TooLongError
-				= new("Long Name", ErrorSeverity.Advisory, "The alliance name is rather long.");
+				= new("Long Name", ErrorSeverity.Error, $"An alliance name cannot be more than {UpperErrorThreshold} characters.");
 
 			public static readonly Error TooLongWarning
 				= new("Long Name", ErrorSeverity.Warning, "The alliance name is alarmingly long");
 
 			public static readonly Error TooLongAdvisory
-				= new("Long Name", ErrorSeverity.Error, $"An alliance name cannot be more than {UpperErrorThreshold} characters.");
+				= new("Long Name", ErrorSeverity.Advisory, "The alliance name is rather long.");
 
 		}
 

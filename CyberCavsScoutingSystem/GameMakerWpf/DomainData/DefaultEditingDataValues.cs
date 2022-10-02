@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Media;
-using System.Collections.Generic;
 using CCSSDomain.Models;
 using GameMakerWpf.Domain;
 using UtilitiesLibrary.Extensions;
@@ -39,26 +37,9 @@ public static class DefaultEditingDataValues {
 		return gameEditingData;
 	}
 
-	public static AllianceEditingData GetNewAlliance(IEnumerable<string> allianceNames) {
+	public static AllianceEditingData GetNewAlliance(GameEditingData gameEditingData) {
 
-		//System.Windows.Media.Colors.
-
-		HashSet<string> currentAllianceNames = allianceNames.ToHashSet();
-
-		int newAllianceNumber = 1;
-		while (currentAllianceNames.Contains($"Alliance {newAllianceNumber}")) {
-			newAllianceNumber++;
-		}
-
-		Random random = new();
-		byte[] colorValues = new byte[3];
-		random.NextBytes(colorValues);
-
-		Alliance initialValues = new() {
-			Name = $"Alliance {newAllianceNumber}",
-			Color = Color.FromRgb(colorValues[0], colorValues[1], colorValues[2])
-		};
-
+		Alliance initialValues = AllianceGenerator.GenerateAlliance(gameEditingData.Alliances.SelectIfHasValue(x => x.Name.OutputObject));
 		return new(gameEditingData, initialValues);
 	}
 

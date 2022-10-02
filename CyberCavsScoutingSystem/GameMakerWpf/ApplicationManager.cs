@@ -2,7 +2,6 @@
 using GameMakerWpf.Domain;
 using GameMakerWpf.DomainData;
 using GameMakerWpf.Views;
-using UtilitiesLibrary.Extensions;
 
 namespace GameMakerWpf;
 
@@ -39,7 +38,7 @@ public static class ApplicationManager {
 
 
 	public static void AddAlliance() {
-		Game.Alliances.Add(DefaultEditingDataValues.GetNewAlliance(Game.Alliances.SelectIfHasValue(x => x.Name.OutputObject)));
+		Game.Alliances.Add(DefaultEditingDataValues.GetNewAlliance(Game));
 	}
 
 	public static void RemoveAlliance(AllianceEditingData alliance) {
