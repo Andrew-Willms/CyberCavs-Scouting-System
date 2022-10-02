@@ -22,7 +22,7 @@ All while
 
 The primary components are listed below:
 
-- GameMaker: A cross-platform desktop app enabling the specification of custom collection interfaces and schemas.
+- GameMaker: A cross-platform desktop app enabling the specification of custom data collection interfaces and schemas.
 
 - DataHost (working title): A web server for hosting and distributing these specifications.
 
