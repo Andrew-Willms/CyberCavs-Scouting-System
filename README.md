@@ -15,6 +15,7 @@ The goal of the CCSS is to
 
 All while
 - not requiring users to have technical skills such as coding knowledge,
+- not requiring users to have internet connection or cell service,
 - not requiring teams to poses dedicated scouting equipment such as tablets, and
 - generally being of no cost to the teams using it.
 
