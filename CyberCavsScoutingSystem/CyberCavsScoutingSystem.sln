@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSSDomain", "CCSSDomain\CC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMakerWpf", "GameMakerWpf\GameMakerWpf.csproj", "{34A7D979-6226-4C3C-AE82-93FA0DD7A354}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScoutingApp", "ScoutingApp\ScoutingApp.csproj", "{CF920B3A-3477-4D40-8151-63298AAEDE60}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilitiesLibrary", "UtilitiesLibrary\UtilitiesLibrary.csproj", "{FE79F6E8-12D9-442A-B4C0-6B3EF5DAB4D5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMakerWpf.Tests", "GameMakerWpf.Tests\GameMakerWpf.Tests.csproj", "{10EB0ADA-4DDD-44E3-A97A-D1C6E242D3DA}"
@@ -33,12 +31,6 @@ Global
 		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34A7D979-6226-4C3C-AE82-93FA0DD7A354}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF920B3A-3477-4D40-8151-63298AAEDE60}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{FE79F6E8-12D9-442A-B4C0-6B3EF5DAB4D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE79F6E8-12D9-442A-B4C0-6B3EF5DAB4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE79F6E8-12D9-442A-B4C0-6B3EF5DAB4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
