@@ -86,30 +86,37 @@
                     Grid.Column="1">
 
             <Button Content="{Binding AddText, Source={StaticResource AllianceTabData}}"
+                    Click="AddButton_Click"
                     Margin="5,5,5,5"
                     Padding="4,4,4,4"
                     HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Click="AddButton_Click"/>
+                    VerticalAlignment="Top"/>
 
             <Button Content="{Binding RemoveText, Source={StaticResource AllianceTabData}}"
+                    Click="RemoveButton_Click"
+                    IsEnabled="{Binding Path=RemoveButtonIsEnabled}"
+                    Margin="5,5,5,5"
+                    Padding="4,4,4,4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"/>
+
+            <Button Content="{Binding MoveUpText, Source={StaticResource AllianceTabData}}"
+                    Click="MoveUpButton_Click"
                     Margin="5,5,5,5"
                     Padding="4,4,4,4"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Click="RemoveButton_Click"/>
-
-            <Button Content="{Binding MoveUpText, Source={StaticResource AllianceTabData}}"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"/>
+                    IsEnabled="False"
+                    Visibility="Hidden"/>
 
             <Button Content="{Binding MoveDownText, Source={StaticResource AllianceTabData}}"
+                    Click="MoveDownButton_Click"
                     Margin="5,5,5,5"
                     Padding="4,4,4,4"
                     HorizontalAlignment="Left"
-                    VerticalAlignment="Top"/>
+                    VerticalAlignment="Top"
+                    IsEnabled="False"
+                    Visibility="Hidden"/>
 
         </StackPanel>
 
