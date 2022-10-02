@@ -2,43 +2,37 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
-using CCSSDomain;
 using GameMakerWpf.Domain;
-using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Views;
 
 
 
 /// <summary>
-/// Interaction logic for AlliancesTabView.xaml
+/// Interaction logic for DataFieldTabView.xaml
 /// </summary>
-public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
+public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 	public static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
 
-	public ObservableCollection<AllianceEditingData> Alliances => ApplicationManager.GameEditingData.Alliances;
+	public ObservableCollection<AllianceEditingData> DataFields => ApplicationManager.GameEditingData.Alliances;
 
-	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => ApplicationManager.GameEditingData.RobotsPerAlliance;
-
-	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => ApplicationManager.GameEditingData.AlliancesPerMatch;
-
-	private int _SelectedAllianceIndex = -1;
-	public int SelectedAllianceIndex {
-		get => _SelectedAllianceIndex;
+	private int _SelectedDataFieldIndex = -1;
+	public int SelectedDataFieldIndex {
+		get => _SelectedDataFieldIndex;
 		set {
-			_SelectedAllianceIndex = value;
-			OnPropertyChanged(nameof(SelectedAllianceIndex));
+			_SelectedDataFieldIndex = value;
+			OnPropertyChanged(nameof(SelectedDataFieldIndex));
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}
 	}
 
-	public bool RemoveButtonIsEnabled => SelectedAllianceIndex != -1;
+	public bool RemoveButtonIsEnabled => SelectedDataFieldIndex != -1;
 
 
 
-	public AlliancesTabView() {
-
+	public DataFieldTabView() {
+		
 		DataContext = this;
 
 		InitializeComponent();
@@ -46,12 +40,13 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 
 
+
 	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-		ApplicationManager.AddAlliance();
+		throw new NotImplementedException();
 	}
 
 	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-		ApplicationManager.RemoveAlliance(GameEditingData.Alliances[SelectedAllianceIndex]);
+		throw new NotImplementedException();
 	}
 
 	private void MoveUpButton_Click(object sender, System.Windows.RoutedEventArgs e) {
@@ -61,7 +56,6 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 	private void MoveDownButton_Click(object sender, System.Windows.RoutedEventArgs e) {
 		throw new NotImplementedException();
 	}
-
 
 
 

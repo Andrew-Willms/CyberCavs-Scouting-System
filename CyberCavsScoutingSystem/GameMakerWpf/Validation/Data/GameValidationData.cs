@@ -150,7 +150,7 @@ public static class GameValidationData {
 
 
 			public static readonly Error TooShortError =
-				new("Empty Name", ErrorSeverity.Error, "A Game cannot have a blank name.");
+				new("Empty Name", ErrorSeverity.Error, "A GameEditingData cannot have a blank name.");
 
 			public static readonly Error TooShortWarning =
 				new("Short Name", ErrorSeverity.Warning, "The game name is alarmingly short.");

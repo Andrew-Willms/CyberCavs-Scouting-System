@@ -4,6 +4,8 @@
 
 public class MetaTabData {
 
+	public static string TabTitle => "Meta";
+
 	public static string NameText => "Name";
 
 	public static string YearText => "Year";

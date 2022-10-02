@@ -6,12 +6,15 @@
         xmlns:local="clr-namespace:GameMakerWpf.Views"
         xmlns:views="clr-namespace:GameMakerWpf.Views"
         xmlns:domain="clr-namespace:GameMakerWpf.Domain"
+        xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
 
     <Window.Resources>
-
+        <displayData:MetaTabData x:Key="MetaTabData"/>
+        <displayData:AllianceTabData x:Key="AllianceTabData"/>
+        <displayData:DataFieldTabData x:Key="DataFieldTabData"/>
     </Window.Resources>
     
     <Grid>
@@ -28,18 +31,20 @@
             </MenuItem>
         </Menu>
         <TabControl Grid.Row="1">
-            <TabItem Header="Meta">
+            <TabItem Header="{Binding TabTitle, Source={StaticResource MetaTabData}}">
                 <Grid Background="#FFE5E5E5">
                     <local:MetaTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Alliances">
+            <TabItem Header="{Binding TabTitle, Source={StaticResource AllianceTabData}}">
                 <Grid Background="#FFE5E5E5">
                     <views:AlliancesTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Data Fields">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="{Binding TabTitle, Source={StaticResource DataFieldTabData}}">
+                <Grid Background="#FFE5E5E5">
+                    <views:DataFieldTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
             </TabItem>
             <TabItem Header="Sidebar">
                 <Grid Background="#FFE5E5E5"/>

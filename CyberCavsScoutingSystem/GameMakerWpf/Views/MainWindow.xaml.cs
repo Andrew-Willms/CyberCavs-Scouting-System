@@ -11,7 +11,7 @@ public partial class MainWindow : Window {
 
 	public MainWindow() {
 
-		DataContext = ApplicationManager.Game;
+		DataContext = ApplicationManager.GameEditingData;
 
 		InitializeComponent();
 

@@ -10,9 +10,7 @@
              d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
 
     <UserControl.Resources>
-
         <displayData:MetaTabData x:Key="MetaTabData"/>
-
     </UserControl.Resources>
 
     <Grid Margin="5,5,5,5">

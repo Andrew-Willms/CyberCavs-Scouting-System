@@ -3,7 +3,9 @@
 
 
 public class AllianceTabData {
-	
+
+	public static string TabTitle => "Alliances";
+
 	public static string RobotsPerAllianceText => "Robots Per Alliance";
 
 	public static string AlliancesPerMatchText => "Alliances Per Match";
