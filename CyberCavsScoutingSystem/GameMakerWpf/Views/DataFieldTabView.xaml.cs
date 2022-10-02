@@ -8,14 +8,11 @@ namespace GameMakerWpf.Views;
 
 
 
-/// <summary>
-/// Interaction logic for DataFieldTabView.xaml
-/// </summary>
 public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
-	public static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
+	private static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
 
-	public ObservableCollection<AllianceEditingData> DataFields => ApplicationManager.GameEditingData.Alliances;
+	public static ObservableCollection<DataFieldEditingData> DataFields => GameEditingData.DataFields;
 
 	private int _SelectedDataFieldIndex = -1;
 	public int SelectedDataFieldIndex {

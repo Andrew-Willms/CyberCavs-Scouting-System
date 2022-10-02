@@ -21,9 +21,7 @@ public class AllianceEditingData {
 
 
 
-	public AllianceEditingData(GameEditingData editingData, Alliance? initialValues) {
-
-		initialValues ??= new();
+	public AllianceEditingData(GameEditingData editingData, Alliance initialValues) {
 
 		EditingData = editingData;
 

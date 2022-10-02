@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.ComponentModel;
 using System.Collections.ObjectModel;
 using CCSSDomain;
 using CCSSDomain.Models;
@@ -12,7 +11,7 @@ namespace GameMakerWpf.Domain;
 
 
 
-public class GameEditingData : INotifyPropertyChanged {
+public class GameEditingData {
 
 	public MultiInput<Version, ErrorSeverity, uint, uint, uint, string> Version { get; }
 
@@ -24,14 +23,14 @@ public class GameEditingData : INotifyPropertyChanged {
 	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch { get; }
 
 	public ValidationEvent AllianceNameChanged { get; } = new();
+	public ValidationEvent DataFieldNameChanged { get; } = new();
 
 	public ObservableCollection<AllianceEditingData> Alliances { get; }
+	public ObservableCollection<DataFieldEditingData> DataFields { get; }
 
 
 
-	public GameEditingData(Game? initialValues = null) {
-
-		initialValues ??= new();
+	public GameEditingData(Game initialValues) {
 
 		Year = new(GameNumbersValidator.YearConverter, GameNumbersValidator.YearInverter, initialValues.Year.ToString(),
 			new ValidationSet<int, ErrorSeverity>(GameNumbersValidator.YearValidator_YearNotNegative),
@@ -67,14 +66,7 @@ public class GameEditingData : INotifyPropertyChanged {
 			initialValues.AlliancesPerMatch.ToString());
 
 		Alliances = new(initialValues.Alliances.Select(x => new AllianceEditingData(this, x)));
-	}
-
-
-
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	protected void OnPropertyChanged(string propertyName) {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		DataFields = new(initialValues.DataFields.Select(x => new DataFieldEditingData(this, x)));
 	}
 
 }

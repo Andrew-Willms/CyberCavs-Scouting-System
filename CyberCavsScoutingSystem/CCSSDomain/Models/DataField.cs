@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace CCSSDomain.Models;
 
@@ -22,12 +21,10 @@ public class TextDataField : DataField { }
 
 public class DropdownDataField : DataField {
 
-	public ReadOnlyCollection<string> Options { get; init; } = new List<string>().AsReadOnly();
+	public required ReadOnlyCollection<string> Options { get; init; }
 }
 
 public class CounterDataField : DataField {
 
 	public int InitialValue { get; init; }
-
-	public int MaxValue { get; init; }
 }

@@ -6,7 +6,7 @@ namespace CCSSDomain.Models;
 
 public class Alliance {
 
-	public string Name { get; init; } = "";
+	public required string Name { get; init; }
 
-	public Color Color { get; init; } = Colors.Black;
+	public required Color Color { get; init; }
 }

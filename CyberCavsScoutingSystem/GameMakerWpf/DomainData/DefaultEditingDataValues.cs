@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using CCSSDomain.Models;
 using GameMakerWpf.Domain;
+using UtilitiesLibrary;
 using UtilitiesLibrary.Extensions;
 
 namespace GameMakerWpf.DomainData; 
@@ -26,7 +27,9 @@ public static class DefaultEditingDataValues {
 			Name = GameNameGenerator.GetRandomGameName(),
 			Year = DateTime.Now.Year,
 			RobotsPerAlliance = 3,
-			AlliancesPerMatch = 2
+			AlliancesPerMatch = 2,
+			Alliances = new ReadOnlyList<Alliance>(),
+			DataFields = new ReadOnlyList<DataField>()
 		};
 
 		GameEditingData gameEditingData = new(initialValues);

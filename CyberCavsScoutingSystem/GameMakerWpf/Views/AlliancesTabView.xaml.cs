@@ -10,18 +10,15 @@ namespace GameMakerWpf.Views;
 
 
 
-/// <summary>
-/// Interaction logic for AlliancesTabView.xaml
-/// </summary>
 public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
-	public static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
+	private static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
 
-	public ObservableCollection<AllianceEditingData> Alliances => ApplicationManager.GameEditingData.Alliances;
+	public static ObservableCollection<AllianceEditingData> Alliances => GameEditingData.Alliances;
 
-	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => ApplicationManager.GameEditingData.RobotsPerAlliance;
+	public static SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditingData.RobotsPerAlliance;
 
-	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => ApplicationManager.GameEditingData.AlliancesPerMatch;
+	public static SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditingData.AlliancesPerMatch;
 
 	private int _SelectedAllianceIndex = -1;
 	public int SelectedAllianceIndex {
