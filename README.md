@@ -4,28 +4,30 @@
 
 &nbsp;
 
-The CyberCavs Scouting System is a collection of applications and tools designed to enhance the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc) scouting experience. The CCSS was created, and is maintained by [FRC team 4678 CyberCavs](https://www.cybercavs.com/) students, mentors, and alumni and was designed specifically for the needs of the CyberCavs. That being said, due to it's customizable and flexible nature, it is our hope that that the CCSS may be a useful tool for other FRC teams as well.
+The CyberCavs Scouting System is a collection of applications designed to enhance the [FIRST Robotics Competition](https://www.firstinspires.org/robotics/frc) scouting experience. The CCSS was created, and is maintained by [FRC team 4678 CyberCavs](https://www.cybercavs.com/) students, mentors, and alumni and is designed specifically to fit the needs of the CyberCavs. That being said, due to it's customizable nature, it is our hope that that the CCSS may be a useful tool for many FRC teams.
 
 &nbsp;
 
 The goal of the CCSS is to
 - eliminate paper scouting,
 - eliminate manual data entry, and
-- enable teams to easily create their own data formats and data collection interfaces
+- enable teams to easily create custom data collection interfaces and schemas.
 
 All while
 - not requiring users to have technical skills such as coding knowledge,
 - not requiring teams to poses dedicated scouting equipment such as tablets, and
-- generally being of no cost to the teams using it
+- generally being of no cost to the teams using it.
 
 &nbsp;
 
 The primary components are listed below:
 
-- GameMaker: A Windows and Mac application enabling the creation of custom data formats and data collection interfaces.
+- GameMaker: A cross-platform desktop app enabling the specification of custom collection interfaces and schemas.
 
-- DataHost: A web server to host the data collection interface definitions and event schedules.
+- DataHost (working title): A web server for hosting and distributing these specifications.
 
-- ScoutingApp: A cross-platform mobile scouting app.
+- ScoutingApp: A cross-platform mobile app that generates scouting interfaces based on the specifications.
 
-- DataIngester: A tool for transfering data from scouting devices to a central database.
+- DataIngester (working title): A tool for transfering data from scouting devices to a central database.
+
+- DataViewer (working title): A cross-platform app for querying, displaying, and comparing the collected data.
