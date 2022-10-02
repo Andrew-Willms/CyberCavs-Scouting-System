@@ -8,7 +8,7 @@ public class MetaTabData {
 
 	public static string YearText => "Year";
 
-	public static string DescriptionText => "Version Description";
+	public static string DescriptionText => "Description";
 
 	public static string VersionText => "Version";
 
