@@ -33,6 +33,10 @@ public static class AllianceGenerator {
 				break;
 			}
 
+			if (RandomizedColorsUsed == RandomizedColors.Count) {
+				RandomizedColorsUsed = 0;
+			}
+
 		} while (allianceNamesHashed.Contains($"Alliance {colorNamePair.colorName}")) ;
 
 
