@@ -1,6 +1,7 @@
 ﻿using CCSSDomain;
 using GameMakerWpf.Validation.Conversion;
 using UtilitiesLibrary;
+using UtilitiesLibrary.Extensions;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace GameMakerWpf.Validation.Data; 
@@ -101,13 +102,13 @@ public static class AllianceValidationData {
 
 			return colorDifference switch {
 				<= SimilarityErrorThreshold => new Error("Identical Color", ErrorSeverity.Error,
-					$"The alliance color is identical to that of the {otherAllianceName}"),
+					$"The alliance color is identical to that of the {otherAllianceName}").Optionalize(),
 
 				<= SimilarityWarningThreshold => new Error("Similar Color", ErrorSeverity.Warning,
-					$"The alliance color is very similar to that of the {otherAllianceName}"),
+					$"The alliance color is very similar to that of the {otherAllianceName}").Optionalize(),
 
 				<= SimilarityAdvisoryThreshold => new Error("Similar Color", ErrorSeverity.Advisory,
-					$"The alliance color is similar to that of the {otherAllianceName}"),
+					$"The alliance color is similar to that of the {otherAllianceName}").Optionalize(),
 
 				_ => Optional.NoValue
 			};
