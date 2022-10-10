@@ -14,7 +14,15 @@ public class Program {
 		//Console.WriteLine("Test");
 		//Trace.WriteLine("Test");
 
-		Console.WriteLine(char.IsDigit('-'));
+		var test1 = new ObjectInitializerOrderTest() {
+			A = 0,
+			B = 0
+		};
+
+		var test2 = new ObjectInitializerOrderTest() {
+			B = 0,
+			A = 0
+		};
 	}
 
 
@@ -68,6 +76,19 @@ public class Program {
 	public static (int testInt, string testString, double testDouble) test = (1, "1", 1);
 }
 
+public class ObjectInitializerOrderTest {
+
+	public required int A {
+		get => 0;
+		set => Console.WriteLine("A");
+	}
+
+	public required int B {
+		get => 0;
+		set => Console.WriteLine("B");
+	}
+
+}
 
 
 public interface ITestInterface<T1, T2> {}
