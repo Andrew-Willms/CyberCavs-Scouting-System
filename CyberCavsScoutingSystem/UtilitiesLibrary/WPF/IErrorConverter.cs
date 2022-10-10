@@ -19,8 +19,8 @@ public interface IErrorConverter<TSeverityEnum, TConversionType> : IValueConvert
 
 		TSeverityEnum severity;
 
-		if (value is TSeverityEnum valueASeverity) {
-			severity = valueASeverity;
+		if (value is TSeverityEnum valueAsSeverity) {
+			severity = valueAsSeverity;
 		} else {
 			throw new ArgumentException($"The object to be converted is not a {typeof(TSeverityEnum)}");
 		}
