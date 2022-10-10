@@ -9,7 +9,7 @@ namespace GameMakerWpf;
 
 public static class ApplicationManager {
 
-	public static GameEditingData GameEditingData { get; private set; } = DefaultEditingDataValues.GetDefaultEditingData();
+	public static GameEditingData GameEditingData { get; private set; } = DefaultEditingDataValues.DefaultEditingData;
 
 	private static MainWindow Window { get; } = new();
 
@@ -38,11 +38,21 @@ public static class ApplicationManager {
 
 
 	public static void AddAlliance() {
-		GameEditingData.Alliances.Add(DefaultEditingDataValues.GetNewAlliance(GameEditingData));
+		GameEditingData.AddAlliance(DefaultEditingDataValues.GetNewAlliance(GameEditingData));
 	}
 
 	public static void RemoveAlliance(AllianceEditingData alliance) {
-		GameEditingData.Alliances.Remove(alliance);
+		GameEditingData.RemoveAlliance(alliance);
+	}
+
+
+
+	public static void AddDataField() {
+		GameEditingData.AddDataField(DefaultEditingDataValues.GetNewDataField(GameEditingData));
+	}
+
+	public static void RemoveDataField(DataFieldEditingData dataField) {
+		GameEditingData.RemoveDataField(dataField);
 	}
 
 }

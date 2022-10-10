@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CCSSDomain;
 using CCSSDomain.Models;
 using GameMakerWpf.Validation.Validators;
@@ -23,10 +22,17 @@ public class GameEditingData {
 	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch { get; }
 
 	public ValidationEvent AllianceNameChanged { get; } = new();
+	public ValidationEvent AllianceColorChanged { get; } = new();
 	public ValidationEvent DataFieldNameChanged { get; } = new();
 
-	public ObservableCollection<AllianceEditingData> Alliances { get; }
-	public ObservableCollection<DataFieldEditingData> DataFields { get; }
+	private readonly ObservableCollection<AllianceEditingData> _Alliances = new();
+	public ReadOnlyObservableCollection<AllianceEditingData> Alliances => new(_Alliances);
+
+
+	private readonly ObservableCollection<DataFieldEditingData> _DataFields = new();
+	public ReadOnlyObservableCollection<DataFieldEditingData> DataFields => new(_DataFields);
+
+
 
 
 
@@ -65,8 +71,41 @@ public class GameEditingData {
 		AlliancesPerMatch = new(GameNumbersValidator.AlliancesPerMatchConverter, GameNumbersValidator.AlliancesPerMatchInverter,
 			initialValues.AlliancesPerMatch.ToString());
 
-		Alliances = new(initialValues.Alliances.Select(x => new AllianceEditingData(this, x)));
-		DataFields = new(initialValues.DataFields.Select(x => new DataFieldEditingData(this, x)));
+		foreach (Alliance alliance in initialValues.Alliances) {
+			AddAlliance(new(this, alliance));
+		}
+
+		foreach (DataField dataField in initialValues.DataFields) {
+			AddDataField(DataFieldEditingData.DataFieldEditingDataFromDataField(dataField, this));
+		}
+	}
+
+
+
+	public void AddAlliance(AllianceEditingData allianceEditingData) {
+
+		_Alliances.Add(allianceEditingData);
+		AllianceNameChanged.SubscribeTo(allianceEditingData.Name.OutputObjectChanged);
+		AllianceColorChanged.SubscribeTo(allianceEditingData.AllianceColor.OutputObjectChanged);
+	}
+
+	public void RemoveAlliance(AllianceEditingData allianceEditingData) {
+
+		_Alliances.Remove(allianceEditingData);
+		AllianceNameChanged.UnsubscribeFrom(allianceEditingData.Name.OutputObjectChanged);
+		AllianceColorChanged.UnsubscribeFrom(allianceEditingData.AllianceColor.OutputObjectChanged);
+	}
+
+	public void AddDataField(DataFieldEditingData dataFieldEditingData) {
+
+		_DataFields.Add(dataFieldEditingData);
+		DataFieldNameChanged.SubscribeTo(dataFieldEditingData.Name.OutputObjectChanged);
+	}
+
+	public void RemoveDataField(DataFieldEditingData dataFieldEditingData) {
+
+		_DataFields.Remove(dataFieldEditingData);
+		DataFieldNameChanged.UnsubscribeFrom(dataFieldEditingData.Name.OutputObjectChanged);
 	}
 
 }
