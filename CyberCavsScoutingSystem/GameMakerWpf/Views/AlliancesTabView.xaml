@@ -68,10 +68,10 @@
         <ListBox ItemsSource="{Binding Path=Alliances}"
                  SelectedIndex="{Binding Path=SelectedAllianceIndex}"
                  Margin="5,5,5,5"
-                 HorizontalAlignment="Left"
-                 VerticalAlignment="Top"
+                 MinHeight="20"
                  Grid.Row="2"
-                 Grid.Column="1">
+                 Grid.Column="1"
+                 HorizontalContentAlignment="Stretch">
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>

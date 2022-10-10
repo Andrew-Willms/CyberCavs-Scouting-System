@@ -12,7 +12,7 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 	private static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
 
-	public static ObservableCollection<DataFieldEditingData> DataFields => GameEditingData.DataFields;
+	public static ReadOnlyObservableCollection<DataFieldEditingData> DataFields => GameEditingData.DataFields;
 
 	private int _SelectedDataFieldIndex = -1;
 	public int SelectedDataFieldIndex {
@@ -39,11 +39,11 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 
 	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-		throw new NotImplementedException();
+		ApplicationManager.AddDataField();
 	}
 
 	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-		throw new NotImplementedException();
+		ApplicationManager.RemoveDataField(DataFields[SelectedDataFieldIndex]);
 	}
 
 	private void MoveUpButton_Click(object sender, System.Windows.RoutedEventArgs e) {
