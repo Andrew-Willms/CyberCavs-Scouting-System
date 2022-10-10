@@ -3,11 +3,11 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GameMakerWpf.Views"
              xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
-             xmlns:domain="clr-namespace:GameMakerWpf.Domain"
              mc:Ignorable="d" 
 			 d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance Type=local:MetaTabView, IsDesignTimeCreatable=True}">
 
     <UserControl.Resources>
         <displayData:MetaTabData x:Key="MetaTabData"/>
@@ -58,7 +58,7 @@
                    Grid.Row="5"
                    Grid.Column="0"/>
 
-        <TextBox DataContext="{Binding Path=Name}"
+        <TextBox DataContext="{Binding Path=GameName}"
                  Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Top"
