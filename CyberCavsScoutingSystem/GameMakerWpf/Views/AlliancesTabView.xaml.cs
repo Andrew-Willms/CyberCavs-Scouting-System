@@ -14,7 +14,7 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 	private static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
 
-	public static ObservableCollection<AllianceEditingData> Alliances => GameEditingData.Alliances;
+	public static ReadOnlyObservableCollection<AllianceEditingData> Alliances => GameEditingData.Alliances;
 
 	public static SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditingData.RobotsPerAlliance;
 
