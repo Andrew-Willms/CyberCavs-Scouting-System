@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualBasic.CompilerServices;
+using System.Collections.Generic;
 
 namespace UtilitiesLibrary;
 
@@ -31,7 +31,9 @@ public class Optional<T> {
 
 	public bool HasValue { get; }
 
-	public Optional() {
+
+
+	private Optional() {
 
 		HasValue = false;
 		_Value = default!;
@@ -49,16 +51,48 @@ public class Optional<T> {
 		return NoValue;
 	}
 
-	public static implicit operator Optional<T>(T value) {
-		return new(value);
+
+
+	private bool Equals(Optional<T> other) {
+		return EqualityComparer<T>.Default.Equals(_Value, other._Value) && HasValue == other.HasValue;
 	}
 
-	public static Optional<T> FromValue(T value) {
-		return new(value);
+	public override bool Equals(object? obj) {
+
+		if (ReferenceEquals(null, obj)) {
+			return false;
+		}
+
+		if (ReferenceEquals(this, obj)) {
+			return true;
+		}
+
+		return obj.GetType() == GetType() && Equals((Optional<T>)obj);
 	}
 
+	public override int GetHashCode() {
+		return HashCode.Combine(_Value, HasValue);
+	}
 
+	public static bool operator ==(Optional<T> left, T? right) {
 
+		return left.HasValue && left.Value!.Equals(right);
+	}
+
+	public static bool operator !=(Optional<T> left, T? right) {
+
+		return !(left == right);
+	}
+
+	public static bool operator ==(T? left, Optional<T> right) {
+
+		return (right == left);
+	}
+
+	public static bool operator !=(T? left, Optional<T> right) {
+
+		return !(left == right);
+	}
 
 	public static bool operator ==(Optional<T> left, Optional<T> right) {
 
@@ -66,14 +100,12 @@ public class Optional<T> {
 			return !right.HasValue;
 		}
 
-		return right.HasValue && left.Value.Equals(right.Value);
+		return right.HasValue && left.Value!.Equals(right.Value);
 	}
 
 	public static bool operator !=(Optional<T> left, Optional<T> right) {
 		return !(left == right);
 	}
-
-
 
 }
 

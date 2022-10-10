@@ -30,7 +30,7 @@ public class AllianceEditingData {
 			new ValidationSet<string, ErrorSeverity>(AllianceValidator.NameValidator_Length),
 			new ValidationSet<string, IEnumerable<AllianceEditingData>, ErrorSeverity>(
 				AllianceValidator.NameValidator_Uniqueness,
-				() => EditingData.Alliances.Where(x => x != this),
+				() => EditingData.Alliances,
 				EditingData.AllianceNameChanged)
 		);
 
@@ -47,8 +47,8 @@ public class AllianceEditingData {
 
 			new ValidationSet<Color, IEnumerable<AllianceEditingData>, ErrorSeverity>(
 				AllianceValidator.ColorCovalidator_Uniqueness,
-				() => EditingData.Alliances.Where(x => x != this),
-				EditingData.AllianceNameChanged)
+				() => EditingData.Alliances,
+				EditingData.AllianceColorChanged)
 		);
 	}
 

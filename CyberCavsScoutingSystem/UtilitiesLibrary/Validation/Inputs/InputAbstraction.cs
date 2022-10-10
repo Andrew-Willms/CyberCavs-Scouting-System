@@ -16,7 +16,6 @@ public interface IInput<TSeverityEnum> : INotifyPropertyChanged
 
 	public ReadOnlyList<ValidationError<TSeverityEnum>> Errors { get; }
 
-	// There can't be an implementation here because INotifyPropertyChanged does not work when the implementation is inherited from an interface.
 	public TSeverityEnum ErrorLevel { get; }
 
 	public ValidationEvent OutputObjectChanged { get; }
@@ -30,8 +29,6 @@ public interface IInput<TOutput, TSeverityEnum> : IInput<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
 
 	public Optional<TOutput> OutputObject { get; }
-
-	//public void SetOutputValue(TOutput value); // I don't think the input objects you should be able to be changed like this.
 }
 
 
@@ -41,7 +38,7 @@ public abstract class Input<TOutput, TSeverityEnum> : IInput<TOutput, TSeverityE
 
 	public abstract Optional<TOutput> OutputObject { get; protected set; }
 
-	protected abstract List<ValidationError<TSeverityEnum>> ValidationErrors { get; }
+	public abstract List<ValidationError<TSeverityEnum>> ValidationErrors { get; }
 	public abstract ReadOnlyList<ValidationError<TSeverityEnum>> Errors { get; }
 	public abstract TSeverityEnum ErrorLevel { get; }
 
@@ -54,21 +51,21 @@ public abstract class Input<TOutput, TSeverityEnum> : IInput<TOutput, TSeverityE
 	protected ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationSetsToTriggers(
 		IEnumerable<IValidationSet<TOutput, TSeverityEnum>> validationSets) {
 
-		TOutput TargetObjectGetter() {
-
-			if (!OutputObject.HasValue) {
-				throw new NullReferenceException($"Validators should not be called if {nameof(OutputObject)} does not have a value.");
-			}
-
-			return OutputObject.Value;
+		Optional<TOutput> OutputObjectGetter() {
+			return OutputObject;
 		}
 
-		return validationSets.Select(x => x.ToValidationTrigger(TargetObjectGetter, PostValidation)).ToReadOnly();
+		return validationSets.Select(x => x.ToValidationTrigger(OutputObjectGetter, this, PostValidation)).ToReadOnly();
 	}
 
-	protected abstract bool IsInvertible(TOutput testValue);
+	protected abstract bool HasValueAndIsNotInvertible(Optional<TOutput> testValue);
 
 	private void PostValidation(ReadOnlyList<ValidationError<TSeverityEnum>> validationError) {
+
+		if (!validationError.Any()) {
+			return;
+		}
+
 		ValidationErrors.AddRange(validationError);
 		OnErrorsChanged();
 	}

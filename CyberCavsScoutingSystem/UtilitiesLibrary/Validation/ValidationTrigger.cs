@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Validation.Errors;
+using UtilitiesLibrary.Validation.Inputs;
 
 namespace UtilitiesLibrary.Validation;
 
@@ -10,8 +11,6 @@ namespace UtilitiesLibrary.Validation;
 
 public interface IValidationTrigger<TSeverityEnum>
 	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
-
-	public void EventHandler();
 
 	public ReadOnlyList<ValidationError<TSeverityEnum>> InvokeValidator();
 }
@@ -23,14 +22,16 @@ internal class ValidationTrigger<TOutput, TSeverityEnum> : IValidationTrigger<TS
 
 	private InputValidator<TOutput, TSeverityEnum> Validator { get; }
 
-	private Func<TOutput> OutputObjectGetter { get; }
+	private Func<Optional<TOutput>> OutputObjectGetter { get; }
 
 	private Action<ReadOnlyList<ValidationError<TSeverityEnum>>> PostValidationAction { get; }
 
 
 
-	public ValidationTrigger(InputValidator<TOutput, TSeverityEnum> validator,
-		IEnumerable<ValidationEvent> validationEvents, Func<TOutput> outputObjectGetter,
+	public ValidationTrigger(
+		InputValidator<TOutput, TSeverityEnum> validator,
+		IEnumerable<ValidationEvent> validationEvents,
+		Func<Optional<TOutput>> outputObjectGetter,
 		Action<ReadOnlyList<ValidationError<TSeverityEnum>>> postValidationAction) {
 
 		Validator = validator;
@@ -44,18 +45,26 @@ internal class ValidationTrigger<TOutput, TSeverityEnum> : IValidationTrigger<TS
 
 
 
-	public void EventHandler() {
+	private void EventHandler() {
 
-		ReadOnlyList<ValidationError<TSeverityEnum>> validationError = Validator.Invoke(OutputObjectGetter.Invoke());
+		Optional<TOutput> output = OutputObjectGetter.Invoke();
 
-		if (validationError.Any()) {
-			PostValidationAction.Invoke(validationError);
+		List<ValidationError<TSeverityEnum>> validationError = new();
+
+		if (output.HasValue) {
+			validationError.AddRange(Validator.Invoke(output.Value));
 		}
+
+		PostValidationAction.Invoke(validationError.ToReadOnly());
 	}
 
 	public ReadOnlyList<ValidationError<TSeverityEnum>> InvokeValidator() {
 
-		return Validator.Invoke(OutputObjectGetter.Invoke());
+		Optional<TOutput> output = OutputObjectGetter.Invoke();
+
+		return !output.HasValue
+			? ReadOnlyList<ValidationError<TSeverityEnum>>.Empty
+			: Validator.Invoke(output.Value);
 	}
 
 }
@@ -67,7 +76,9 @@ internal class ValidationTrigger<TOutput, TValidationParameter, TSeverityEnum> :
 
 	private InputValidator<TOutput, TValidationParameter, TSeverityEnum> Validator { get; }
 
-	private Func<TOutput> OutputObjectGetter { get; }
+	private Func<Optional<TOutput>> OutputObjectGetter { get; }
+
+	private IInput<TOutput, TSeverityEnum> Validatee { get; }
 
 	private Func<TValidationParameter> ValidationParameterGetter { get; }
 
@@ -75,11 +86,15 @@ internal class ValidationTrigger<TOutput, TValidationParameter, TSeverityEnum> :
 
 
 
-	public ValidationTrigger(InputValidator<TOutput, TValidationParameter, TSeverityEnum> validator,
-		IEnumerable<ValidationEvent> validationEvents, Func<TOutput> outputObjectGetter,
+	public ValidationTrigger(
+		InputValidator<TOutput, TValidationParameter, TSeverityEnum> validator,
+		IInput<TOutput, TSeverityEnum> validatee,
+		IEnumerable<ValidationEvent> validationEvents,
+		Func<Optional<TOutput>> outputObjectGetter,
 		Func<TValidationParameter> validationParameterGetter, Action<ReadOnlyList<ValidationError<TSeverityEnum>>> postValidationAction) {
 
 		Validator = validator;
+		Validatee = validatee;
 		OutputObjectGetter = outputObjectGetter;
 		ValidationParameterGetter = validationParameterGetter;
 		PostValidationAction = postValidationAction;
@@ -91,18 +106,26 @@ internal class ValidationTrigger<TOutput, TValidationParameter, TSeverityEnum> :
 
 
 
-	public void EventHandler() {
+	private void EventHandler() {
 
-		ReadOnlyList<ValidationError<TSeverityEnum>> validationError = Validator.Invoke(OutputObjectGetter.Invoke(), ValidationParameterGetter.Invoke());
+		Optional<TOutput> output = OutputObjectGetter.Invoke();
 
-		if (validationError.Any()) {
-			PostValidationAction.Invoke(validationError);
+		List<ValidationError<TSeverityEnum>> validationError = new();
+
+		if (output.HasValue) {
+			validationError.AddRange(Validator.Invoke(output.Value, Validatee, ValidationParameterGetter.Invoke()));
 		}
+
+		PostValidationAction.Invoke(validationError.ToReadOnly());
 	}
 
 	public ReadOnlyList<ValidationError<TSeverityEnum>> InvokeValidator() {
 
-		return Validator.Invoke(OutputObjectGetter.Invoke(), ValidationParameterGetter.Invoke());
+		Optional<TOutput> output = OutputObjectGetter.Invoke();
+
+		return !output.HasValue
+			? ReadOnlyList<ValidationError<TSeverityEnum>>.Empty
+			: Validator.Invoke(output.Value, Validatee, ValidationParameterGetter.Invoke());
 	}
 
 }

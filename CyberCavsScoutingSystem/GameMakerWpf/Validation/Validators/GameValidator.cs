@@ -1,10 +1,9 @@
 ﻿using System;
-using CCSSDomain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
+using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Validation;
-using UtilitiesLibrary.Validation.Delegates;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 using Version = CCSSDomain.Version;
 
@@ -19,14 +18,14 @@ public static class GameVersionValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(input.description);
 
-		return (new Version(input.major, input.minor, input.path, input.description), ReadOnlyList<Error>.Empty);
+		return (new Version(input.major, input.minor, input.path, input.description).Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 	public static (Optional<(uint, uint, uint, string)>, ReadOnlyList<Error>) Inverter(Version version) {
 
 		NullInputObjectInInverterException.ThrowIfNull(version);
 
-		return ((version.MajorNumber, version.MinorNumber, version.PatchNumber, version.Description), ReadOnlyList<Error>.Empty);
+		return ((version.MajorNumber, version.MinorNumber, version.PatchNumber, version.Description).Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 
@@ -40,7 +39,7 @@ public static class GameVersionValidator {
 
 	public static (Optional<string>, ReadOnlyList<Error>) ComponentNumberInverter(uint versionNumberComponent) {
 
-		return (versionNumberComponent.ToString(), ReadOnlyList<Error>.Empty);
+		return (versionNumberComponent.ToString().Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 
@@ -49,14 +48,14 @@ public static class GameVersionValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString, ReadOnlyList<Error>.Empty);
+		return (inputString.Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 	public static (Optional<string>, ReadOnlyList<Error>) DescriptionInverter(string versionDescription) {
 
 		NullInputObjectInInverterException.ThrowIfNull(versionDescription);
 
-		return (versionDescription, ReadOnlyList<Error>.Empty);
+		return (versionDescription.Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 }
@@ -69,14 +68,14 @@ public static class GameTextValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString, ReadOnlyList<Error>.Empty);
+		return (inputString.Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 	public static (Optional<string>, ReadOnlyList<Error>) NameInverter(string name) {
 
 		NullInputObjectInInverterException.ThrowIfNull(name);
 
-		return (name, ReadOnlyList<Error>.Empty);
+		return (name.Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 
@@ -101,14 +100,14 @@ public static class GameTextValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString, ReadOnlyList<Error>.Empty);
+		return (inputString.Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 	public static (Optional<string>, ReadOnlyList<Error>) DescriptionInverter(string description) {
 
 		NullInputObjectInInverterException.ThrowIfNull(description);
 
-		return (description, ReadOnlyList<Error>.Empty);
+		return (description.Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 }
@@ -126,7 +125,7 @@ public static class GameNumbersValidator {
 
 	public static (Optional<string>, ReadOnlyList<Error>) YearInverter(int year) {
 
-		return (year.ToString(), ReadOnlyList<Error>.Empty);
+		return (year.ToString().Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 
@@ -167,7 +166,7 @@ public static class GameNumbersValidator {
 
 	public static (Optional<string>, ReadOnlyList<Error>) RobotsPerAllianceInverter(uint robotsPerAlliance) {
 
-		return (robotsPerAlliance.ToString(), ReadOnlyList<Error>.Empty);
+		return (robotsPerAlliance.ToString().Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 
@@ -181,7 +180,7 @@ public static class GameNumbersValidator {
 
 	public static (Optional<string>, ReadOnlyList<Error>) AlliancesPerMatchInverter(uint alliancesPerMatch) {
 
-		return (alliancesPerMatch.ToString(), ReadOnlyList<Error>.Empty);
+		return (alliancesPerMatch.ToString().Optionalize(), ReadOnlyList<Error>.Empty);
 	}
 
 }

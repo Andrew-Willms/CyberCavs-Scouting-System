@@ -41,16 +41,8 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 				return;
 			}
 
-
-
-			(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> inversionErrors) = Inverter(value.Value);
-
-			if (inversionErrors.Any(x => x.Severity.IsFatal) || !inversionResult.HasValue) {
+			if (HasValueAndIsNotInvertible(value)) {
 				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to a value that cannot be inverted.");
-			}
-
-			if (!inversionResult.Value.Equals(InputObject)) {
-				InputObject = inversionResult.Value;
 			}
 
 			_OutputObject = value;
@@ -75,9 +67,9 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 	private InputInverter<TOutput, TInput, TSeverityEnum> Inverter { get; }
 
 	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
-
+	
 	private ReadOnlyList<ValidationError<TSeverityEnum>> ConversionErrors { get; set; } = new();
-	protected override List<ValidationError<TSeverityEnum>> ValidationErrors { get; } = new();
+	public override List<ValidationError<TSeverityEnum>> ValidationErrors { get; } = new();
 	public override ReadOnlyList<ValidationError<TSeverityEnum>> Errors => ConversionErrors.CopyAndAddRange(ValidationErrors);
 
 	private TSeverityEnum ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
@@ -107,44 +99,43 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 	public sealed override void Validate() {
 
-		(Optional<TOutput> outputObject, ConversionErrors) = Converter(InputObject);
+		(OutputObject, ConversionErrors) = Converter(InputObject);
 
 		ValidationErrors.Clear();
 
-		if (outputObject.HasValue) {
-
-			OutputObject = outputObject.Value;
+		if (OutputObject.HasValue) {
 
 			foreach (IValidationTrigger<TSeverityEnum> trigger in ValidationTriggers) {
 				ValidationErrors.AddRange(trigger.InvokeValidator());
 			}
-
-		} else {
-			//OutputObject = default;
-			OnOutputObjectChanged();
 		}
 
 		OnErrorsChanged();
 	}
 
-	protected override bool IsInvertible(TOutput testValue) {
+	protected override bool HasValueAndIsNotInvertible(Optional<TOutput> testValue) {
 
-		(Optional<TInput> _, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(testValue);
+		if (!testValue.HasValue) {
+			return false;
+		}
 
-		return !errors.AreFatal();
+		(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(testValue.Value);
+
+		return errors.AreFatal() || !inversionResult.HasValue;
 	}
 
 
+
 	public override event PropertyChangedEventHandler? PropertyChanged;
+
+	private void OnInputChanged() {
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputObject)));
+	}
 
 	private void OnOutputObjectChanged() {
 
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputObject)));
 		OutputObjectChanged.Invoke();
-	}
-
-	private void OnInputChanged() {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputObject)));
 	}
 
 	protected override void OnErrorsChanged() {

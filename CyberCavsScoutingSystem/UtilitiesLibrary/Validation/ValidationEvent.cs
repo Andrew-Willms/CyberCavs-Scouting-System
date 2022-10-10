@@ -17,6 +17,14 @@ public class ValidationEvent {
 		Delegates.Remove(action);
 	}
 
+	public void SubscribeTo(ValidationEvent validationEvent) {
+		validationEvent.Subscribe(Invoke);
+	}
+
+	public void UnsubscribeFrom(ValidationEvent validationEvent) {
+		validationEvent.UnSubscribe(Invoke);
+	}
+
 	public void Invoke() {
 
 		foreach (Action function in Delegates) {
@@ -24,7 +32,7 @@ public class ValidationEvent {
 		}
 	}
 
-	public void EventHandler(object? sender, EventArgs e) {
-		Invoke();
-	}
+	//public void EventHandler(object? sender, EventArgs e) {
+	//	Invoke();
+	//}
 }
