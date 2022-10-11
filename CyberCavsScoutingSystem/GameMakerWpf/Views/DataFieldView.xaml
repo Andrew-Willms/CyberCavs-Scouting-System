@@ -10,28 +10,24 @@
              d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=domain:DataFieldEditingData, IsDesignTimeCreatable=False}">
 
-    <Border BorderThickness="1,1,1,1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
-            Margin="5,5,5,5">
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*" MaxWidth="200" MinWidth="100"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+    <Grid HorizontalAlignment="Stretch"
+          Margin="5">
 
-            <TextBox DataContext="{Binding Path=Name}"
-                     Style="{StaticResource StringInputStyle}"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Top"
-                     TextWrapping="Wrap"
-                     Margin="5,5,5,5"
-                     Width="Auto"
-                     Grid.Column="0"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
 
-        </Grid>
+        <TextBox DataContext="{Binding Path=Name}"
+                 Style="{StaticResource StringInputStyle}"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Top"
+                 TextWrapping="Wrap"
+                 Margin="5,5,5,5"
+                 Width="Auto"
+                 Grid.Column="0"/>
 
-    </Border>
+    </Grid>
 
 </UserControl>
