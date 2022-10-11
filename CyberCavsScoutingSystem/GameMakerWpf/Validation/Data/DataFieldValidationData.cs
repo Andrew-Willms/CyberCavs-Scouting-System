@@ -13,8 +13,6 @@ public static class DataFieldValidationData {
 		public static class Length {
 
 			public const int LowerErrorThreshold = 0;
-			public const int LowerWarningThreshold = 2;
-			public const int LowerAdvisoryThreshold = 4;
 
 			public const int UpperErrorThreshold = 1000;
 			public const int UpperWarningThreshold = 30;
@@ -24,14 +22,6 @@ public static class DataFieldValidationData {
 
 			public static readonly Error TooShortError =
 				new("Empty Name", ErrorSeverity.Error, "An data field cannot have a blank name.");
-
-			public static readonly Error TooShortWarning =
-				new("Short Name", ErrorSeverity.Warning, "The data field name is alarmingly short.");
-
-			public static readonly Error TooShortAdvisory =
-				new("Short Name", ErrorSeverity.Advisory, "The data field name is rather short.");
-
-
 
 			public static readonly Error TooLongError
 				= new("Long Name", ErrorSeverity.Error, $"An data field name cannot be more than {UpperErrorThreshold} characters.");

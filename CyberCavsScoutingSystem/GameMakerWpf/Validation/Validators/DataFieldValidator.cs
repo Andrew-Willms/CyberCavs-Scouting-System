@@ -1,21 +1,23 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using System.Windows.Navigation;
 using CCSSDomain;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
-using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.MiscExtensions;
 
-namespace GameMakerWpf.Validation.Validators; 
+namespace GameMakerWpf.Validation.Validators;
 
 
 
 public static class DataFieldValidator {
-	
+
 	public static (Optional<string>, ReadOnlyList<Error>) NameConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
@@ -35,27 +37,34 @@ public static class DataFieldValidator {
 	public static ReadOnlyList<Error> NameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= DataFieldValidationData.Name.Length.LowerErrorThreshold => new(DataFieldValidationData.Name.Length.TooShortError),
-			<= DataFieldValidationData.Name.Length.LowerWarningThreshold => new(DataFieldValidationData.Name.Length.TooShortWarning),
-			<= DataFieldValidationData.Name.Length.LowerAdvisoryThreshold => new(DataFieldValidationData.Name.Length.TooShortAdvisory),
-			>= DataFieldValidationData.Name.Length.UpperErrorThreshold => new(DataFieldValidationData.Name.Length.TooLongError),
-			>= DataFieldValidationData.Name.Length.UpperWarningThreshold => new(DataFieldValidationData.Name.Length.TooLongWarning),
-			>= DataFieldValidationData.Name.Length.UpperAdvisoryThreshold => new(DataFieldValidationData.Name.Length.TooLongAdvisory),
+			<= DataFieldValidationData.Name.Length.LowerErrorThreshold => new(DataFieldValidationData.Name.Length
+				.TooShortError),
+			>= DataFieldValidationData.Name.Length.UpperErrorThreshold => new(DataFieldValidationData.Name.Length
+				.TooLongError),
+			>= DataFieldValidationData.Name.Length.UpperWarningThreshold => new(DataFieldValidationData.Name.Length
+				.TooLongWarning),
+			>= DataFieldValidationData.Name.Length.UpperAdvisoryThreshold => new(DataFieldValidationData.Name.Length
+				.TooLongAdvisory),
 			_ => ReadOnlyList<Error>.Empty
 		};
 	}
 
 	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
-		IEnumerable<DataFieldEditingData> otherDataFields) {
+		IEnumerable<DataFieldEditingData> dataFields) {
 
-		return otherDataFields
-			.Where(otherDataField => otherDataField.Name.OutputObject.HasValue)
-			.Any(otherDataField => otherDataField.Name.OutputObject.Value == name)
+		if (dataFields.Where(dataField => dataField.Name.OutputObject.HasValue)
+		    .Select(dataField => dataField.Name.OutputObject.Value)
+		    .OnlyOne(name)) {
 
+			return ReadOnlyList<Error>.Empty;
+		}
+
+		bool test = validatee.OutputObject.Value == name;
+
+		return validatee.OutputObject.Value == name
 			? new(DataFieldValidationData.Name.GetDuplicateNameError(name))
 			: ReadOnlyList<Error>.Empty;
 	}
-
 }
 
 public static class SelectionDataFieldValidator {

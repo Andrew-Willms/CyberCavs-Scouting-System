@@ -2,7 +2,8 @@
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
-using UtilitiesLibrary.Extensions;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Validation;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 using Version = CCSSDomain.Version;

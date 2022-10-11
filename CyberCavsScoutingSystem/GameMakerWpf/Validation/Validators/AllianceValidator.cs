@@ -6,10 +6,11 @@ using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
-using UtilitiesLibrary.Extensions;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.MiscExtensions;
 
 namespace GameMakerWpf.Validation.Validators;
 
@@ -30,7 +31,6 @@ public static class AllianceValidator {
 
 		return (name.Optionalize(), ReadOnlyList<Error>.Empty);
 	}
-
 
 
 
@@ -55,9 +55,9 @@ public static class AllianceValidator {
 	}
 
 	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
-		IEnumerable<AllianceEditingData> otherAlliances) {
+		IEnumerable<AllianceEditingData> alliances) {
 
-		return otherAlliances
+		return alliances
 			.Where(otherAlliance => otherAlliance.Name != validatee && otherAlliance.Name.OutputObject.HasValue)
 			.Any(otherAlliance => otherAlliance.Name.OutputObject.Value == name)
 
@@ -70,6 +70,9 @@ public static class AllianceValidator {
 	public static (Optional<byte>, ReadOnlyList<Error>) ColorComponentConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
+
+		(Optional<byte>, ReadOnlyList<Error>) test = StringConversion.ToByte(inputString, AllianceValidationData.Color.Component.ConversionErrorSet);
+		ReadOnlyList<Error> test2 = test.Item2;
 
 		return StringConversion.ToByte(inputString, AllianceValidationData.Color.Component.ConversionErrorSet);
 	}
