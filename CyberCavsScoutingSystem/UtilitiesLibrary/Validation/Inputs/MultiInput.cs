@@ -148,7 +148,7 @@ public class MultiInput<TOutput, TSeverity,
 
 
 
-	public MultiInput(
+	protected internal MultiInput(
 		InputConverter<TOutput,
 			(TInput1, TInput2, TInput3),
 			TSeverity> converter,
@@ -255,7 +255,7 @@ public class MultiInput<TOutput, TSeverity,
 
 
 
-	public MultiInput(
+	protected internal MultiInput(
 		InputConverter<TOutput,
 			(TInput1, TInput2, TInput3, TInput4),
 			TSeverity> converter,

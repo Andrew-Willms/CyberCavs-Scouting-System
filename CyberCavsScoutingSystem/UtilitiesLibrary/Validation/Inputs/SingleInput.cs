@@ -82,7 +82,7 @@ public class SingleInput<TOutput, TInput, TSeverity> : Input<TOutput, TSeverity>
 
 
 
-	public SingleInput(
+	protected internal SingleInput(
 		InputConverter<TOutput, TInput, TSeverity> converter,
 		InputInverter<TOutput, TInput, TSeverity> inverter,
 		TInput initialInput,
