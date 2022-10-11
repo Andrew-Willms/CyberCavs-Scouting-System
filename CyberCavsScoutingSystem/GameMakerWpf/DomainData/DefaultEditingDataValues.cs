@@ -2,8 +2,8 @@
 using System.Windows.Media;
 using CCSSDomain.Models;
 using GameMakerWpf.Domain;
-using UtilitiesLibrary;
-using UtilitiesLibrary.Extensions;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.MiscExtensions;
 
 namespace GameMakerWpf.DomainData; 
 

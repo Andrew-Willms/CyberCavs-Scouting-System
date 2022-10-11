@@ -1,4 +1,4 @@
-﻿namespace UtilitiesLibrary.Extensions; 
+﻿namespace UtilitiesLibrary.MiscExtensions; 
 
 
 

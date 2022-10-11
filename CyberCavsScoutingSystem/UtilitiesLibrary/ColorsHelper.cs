@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Windows.Media;
 using System.Collections.Generic;
-using UtilitiesLibrary.Extensions;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.MiscExtensions;
 
 namespace UtilitiesLibrary;
 

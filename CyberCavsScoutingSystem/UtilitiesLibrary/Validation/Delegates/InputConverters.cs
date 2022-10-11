@@ -1,4 +1,5 @@
-﻿using UtilitiesLibrary.Validation.Errors;
+﻿using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Validation.Errors;
 
 namespace UtilitiesLibrary.Validation.Delegates;
 
