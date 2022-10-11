@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CCSSDomain;
 using CCSSDomain.Models;
 using GameMakerWpf.Validation.Validators;
@@ -23,13 +21,13 @@ public abstract class DataFieldEditingData {
 
 		EditingData = editingData;
 
-		Name = new(DataFieldValidator.NameConverter, DataFieldValidator.NameInverter, initialValues.Name,
-			new ValidationSet<string, ErrorSeverity>(DataFieldValidator.NameValidator_Length),
-			new ValidationSet<string, IEnumerable<DataFieldEditingData>, ErrorSeverity>(
-				DataFieldValidator.NameValidator_Uniqueness,
-				() => EditingData.DataFields.Where(x => x != this),
-				EditingData.DataFieldNameChanged)
-		);
+		Name = new SingleInputCreator<string, string, ErrorSeverity> {
+			Converter = DataFieldValidator.NameConverter,
+			Inverter = DataFieldValidator.NameInverter,
+			InitialInput = initialValues.Name
+		}.AddOnChangeValidator(DataFieldValidator.NameValidator_Length)
+		.AddTriggeredValidator(DataFieldValidator.NameValidator_Uniqueness, () => EditingData.DataFields, EditingData.DataFieldNameChanged)
+		.CreateSingleInput();
 	}
 
 	public static DataFieldEditingData DataFieldEditingDataFromDataField(DataField dataField, GameEditingData gameEditingData) {
@@ -44,10 +42,14 @@ public abstract class DataFieldEditingData {
 
 }
 
+
+
 public class TextDataFieldEditingData : DataFieldEditingData {
 
 	public TextDataFieldEditingData(GameEditingData editingData, TextDataField initialValues) : base(editingData, initialValues) { }
 }
+
+
 
 public class SelectionDataFieldEditingData : DataFieldEditingData {
 
@@ -57,23 +59,20 @@ public class SelectionDataFieldEditingData : DataFieldEditingData {
 
 		foreach (string optionName in initialValues.OptionNames) {
 
-			Options.Add(new(
-				converter: SelectionDataFieldValidator.OptionNameConverter,
-				inverter: SelectionDataFieldValidator.OptionNameInverter,
-				initialInput: optionName,
-				validationSets: new IValidationSet<string, ErrorSeverity>[] {
-					new ValidationSet<string, IEnumerable<SingleInput<string, string, ErrorSeverity>>, ErrorSeverity>(
-						validator: SelectionDataFieldValidator.OptionNameValidator_Uniqueness,
-						validationParameterGetter: () => Options, 
-						validationEvents: EditingData.DataFieldNameChanged),
-					new ValidationSet<string, ErrorSeverity>(
-						validator: SelectionDataFieldValidator.OptionNameValidator_Length),
-				}
-			));
+			Options.Add(new SingleInputCreator<string, string, ErrorSeverity> {
+					Converter = SelectionDataFieldValidator.OptionNameConverter,
+					Inverter = SelectionDataFieldValidator.OptionNameInverter,
+					InitialInput = optionName
+				}.AddOnChangeValidator(SelectionDataFieldValidator.OptionNameValidator_Length)
+				.AddTriggeredValidator(SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, EditingData.DataFieldNameChanged)
+				.CreateSingleInput()
+			);
 		}
 	}
 
 }
+
+
 
 public class IntegerDataFieldEditingData : DataFieldEditingData {
 
@@ -87,23 +86,23 @@ public class IntegerDataFieldEditingData : DataFieldEditingData {
 
 	public IntegerDataFieldEditingData(GameEditingData editingData, IntegerDataField initialValues) : base(editingData, initialValues) {
 
-		InitialValue = new(
-			converter: IntegerDataFieldValidator.IntegerValueConverter,
-			inverter: IntegerDataFieldValidator.IntegerValueInverter,
-			initialInput: initialValues.InitialValue.ToString()
-		);
+		InitialValue = new SingleInputCreator<int, string, ErrorSeverity> {
+				Converter = IntegerDataFieldValidator.IntegerValueConverter,
+				Inverter = IntegerDataFieldValidator.IntegerValueInverter,
+				InitialInput = initialValues.InitialValue.ToString()
+			}.CreateSingleInput();
 
-		MinValue = new(
-			converter: IntegerDataFieldValidator.IntegerValueConverter,
-			inverter: IntegerDataFieldValidator.IntegerValueInverter,
-			initialInput: initialValues.MinValue.ToString()
-		);
+		MinValue = new SingleInputCreator<int, string, ErrorSeverity> {
+				Converter = IntegerDataFieldValidator.IntegerValueConverter,
+				Inverter = IntegerDataFieldValidator.IntegerValueInverter,
+				InitialInput = initialValues.InitialValue.ToString()
+			}.CreateSingleInput();
 
-		MaxValue = new(
-			converter: IntegerDataFieldValidator.IntegerValueConverter,
-			inverter: IntegerDataFieldValidator.IntegerValueInverter,
-			initialInput: initialValues.MaxValue.ToString()
-		);
+		MaxValue = new SingleInputCreator<int, string, ErrorSeverity> {
+				Converter = IntegerDataFieldValidator.IntegerValueConverter,
+				Inverter = IntegerDataFieldValidator.IntegerValueInverter,
+				InitialInput = initialValues.InitialValue.ToString()
+			}.CreateSingleInput();
 	}
 
 }

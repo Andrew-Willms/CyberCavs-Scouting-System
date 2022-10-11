@@ -34,42 +34,73 @@ public class GameEditingData {
 
 
 
-
-
 	public GameEditingData(Game initialValues) {
 
-		Year = new(GameNumbersValidator.YearConverter, GameNumbersValidator.YearInverter, initialValues.Year.ToString(),
-			new ValidationSet<int, ErrorSeverity>(GameNumbersValidator.YearValidator_YearNotNegative),
-			new ValidationSet<int, ErrorSeverity>(GameNumbersValidator.YearValidator_YearNotFarFuture),
-			new ValidationSet<int, ErrorSeverity>(GameNumbersValidator.YearValidator_YearNotPredateFirst)
-		);
+		Year = new SingleInputCreator<int, string, ErrorSeverity> {
+				Converter = GameNumbersValidator.YearConverter,
+				Inverter =  GameNumbersValidator.YearInverter,
+				InitialInput = initialValues.Year.ToString()
+			}.AddOnChangeValidator(GameNumbersValidator.YearValidator_YearNotNegative)
+			.AddOnChangeValidator(GameNumbersValidator.YearValidator_YearNotFarFuture)
+			.AddOnChangeValidator(GameNumbersValidator.YearValidator_YearNotPredateFirst)
+			.CreateSingleInput();
 
-		Name = new(GameTextValidator.NameConverter, GameTextValidator.NameInverter, initialValues.Name,
-			new ValidationSet<string, ErrorSeverity>(GameTextValidator.NameValidator_Length)
-		);
+		Name = new SingleInputCreator<string, string, ErrorSeverity> {
+				Converter = GameTextValidator.NameConverter,
+				Inverter = GameTextValidator.NameInverter,
+				InitialInput = initialValues.Name
+			}.AddOnChangeValidator(GameTextValidator.NameValidator_Length)
+			.CreateSingleInput();
 
-		Description = new(GameTextValidator.DescriptionConverter, GameTextValidator.DescriptionInverter, initialValues.Description);
+		Description = new SingleInputCreator<string, string, ErrorSeverity> {
+				Converter = GameTextValidator.DescriptionConverter,
+				Inverter = GameTextValidator.DescriptionInverter,
+				InitialInput = initialValues.Description
+			}.CreateSingleInput();
 
-		Version = new(GameVersionValidator.Converter, GameVersionValidator.Inverter,
 
-			new SingleInput<uint, string, ErrorSeverity>(GameVersionValidator.ComponentNumberConverter,
-				GameVersionValidator.ComponentNumberInverter, initialValues.Version.MajorNumber.ToString()),
+		Version = new MultiInputCreator<Version, ErrorSeverity, uint, uint, uint, string> {
 
-			new SingleInput<uint, string, ErrorSeverity>(GameVersionValidator.ComponentNumberConverter,
-				GameVersionValidator.ComponentNumberInverter, initialValues.Version.MinorNumber.ToString()),
+				Converter = GameVersionValidator.Converter, 
+				Inverter = GameVersionValidator.Inverter,
 
-			new SingleInput<uint, string, ErrorSeverity>(GameVersionValidator.ComponentNumberConverter,
-				GameVersionValidator.ComponentNumberInverter, initialValues.Version.PatchNumber.ToString()),
+				InputComponent1 = new SingleInputCreator<uint, string, ErrorSeverity> {
+					Converter = GameVersionValidator.ComponentNumberConverter,
+					Inverter =  GameVersionValidator.ComponentNumberInverter,
+					InitialInput = initialValues.Version.MajorNumber.ToString()
+				}.CreateSingleInput(),
 
-			new SingleInput<string, string, ErrorSeverity>(GameVersionValidator.DescriptionConverter,
-				GameVersionValidator.DescriptionInverter, initialValues.Version.Description)
-		);
+				InputComponent2 = new SingleInputCreator<uint, string, ErrorSeverity> {
+					Converter = GameVersionValidator.ComponentNumberConverter,
+					Inverter =  GameVersionValidator.ComponentNumberInverter,
+					InitialInput = initialValues.Version.MinorNumber.ToString()
+				}.CreateSingleInput(),
 
-		RobotsPerAlliance = new(GameNumbersValidator.RobotsPerAllianceConverter, GameNumbersValidator.RobotsPerAllianceInverter,
-			initialValues.RobotsPerAlliance.ToString());
+				InputComponent3 = new SingleInputCreator<uint, string, ErrorSeverity> {
+					Converter = GameVersionValidator.ComponentNumberConverter,
+					Inverter =  GameVersionValidator.ComponentNumberInverter,
+					InitialInput = initialValues.Version.PatchNumber.ToString()
+				}.CreateSingleInput(),
 
-		AlliancesPerMatch = new(GameNumbersValidator.AlliancesPerMatchConverter, GameNumbersValidator.AlliancesPerMatchInverter,
-			initialValues.AlliancesPerMatch.ToString());
+				InputComponent4 = new SingleInputCreator<string, string, ErrorSeverity> {
+					Converter = GameVersionValidator.DescriptionConverter,
+					Inverter =  GameVersionValidator.DescriptionInverter,
+					InitialInput = initialValues.Version.Description
+				}.CreateSingleInput()
+
+			}.CreateSingleInput();
+
+		RobotsPerAlliance = new SingleInputCreator<uint, string, ErrorSeverity> {
+				Converter = GameNumbersValidator.RobotsPerAllianceConverter,
+				Inverter =  GameNumbersValidator.RobotsPerAllianceInverter,
+				InitialInput = initialValues.RobotsPerAlliance.ToString()
+			}.CreateSingleInput();
+
+		AlliancesPerMatch = new SingleInputCreator<uint, string, ErrorSeverity> {
+				Converter = GameNumbersValidator.AlliancesPerMatchConverter,
+				Inverter =  GameNumbersValidator.AlliancesPerMatchInverter,
+				InitialInput = initialValues.AlliancesPerMatch.ToString()
+			}.CreateSingleInput();
 
 		foreach (Alliance alliance in initialValues.Alliances) {
 			AddAlliance(new(this, alliance));
@@ -87,6 +118,9 @@ public class GameEditingData {
 		_Alliances.Add(allianceEditingData);
 		AllianceNameChanged.SubscribeTo(allianceEditingData.Name.OutputObjectChanged);
 		AllianceColorChanged.SubscribeTo(allianceEditingData.AllianceColor.OutputObjectChanged);
+
+		AllianceNameChanged.Invoke();
+		AllianceColorChanged.Invoke();
 	}
 
 	public void RemoveAlliance(AllianceEditingData allianceEditingData) {
@@ -94,18 +128,25 @@ public class GameEditingData {
 		_Alliances.Remove(allianceEditingData);
 		AllianceNameChanged.UnsubscribeFrom(allianceEditingData.Name.OutputObjectChanged);
 		AllianceColorChanged.UnsubscribeFrom(allianceEditingData.AllianceColor.OutputObjectChanged);
+
+		AllianceNameChanged.Invoke();
+		AllianceColorChanged.Invoke();
 	}
 
 	public void AddDataField(DataFieldEditingData dataFieldEditingData) {
 
 		_DataFields.Add(dataFieldEditingData);
 		DataFieldNameChanged.SubscribeTo(dataFieldEditingData.Name.OutputObjectChanged);
+
+		DataFieldNameChanged.Invoke();
 	}
 
 	public void RemoveDataField(DataFieldEditingData dataFieldEditingData) {
 
 		_DataFields.Remove(dataFieldEditingData);
 		DataFieldNameChanged.UnsubscribeFrom(dataFieldEditingData.Name.OutputObjectChanged);
+
+		DataFieldNameChanged.Invoke();
 	}
 
 }

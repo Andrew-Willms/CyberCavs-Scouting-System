@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using System.Windows.Media;
-using System.Collections.Generic;
+﻿using System.Windows.Media;
 using CCSSDomain;
 using CCSSDomain.Models;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain;
@@ -25,31 +22,39 @@ public class AllianceEditingData {
 
 		EditingData = editingData;
 
-		Name = new(AllianceValidator.NameConverter, AllianceValidator.NameInverter, initialValues.Name,
-			new ValidationSet<string, ErrorSeverity>(AllianceValidator.NameValidator_EndsWithAlliance),
-			new ValidationSet<string, ErrorSeverity>(AllianceValidator.NameValidator_Length),
-			new ValidationSet<string, IEnumerable<AllianceEditingData>, ErrorSeverity>(
-				AllianceValidator.NameValidator_Uniqueness,
-				() => EditingData.Alliances,
-				EditingData.AllianceNameChanged)
-		);
+		Name = new SingleInputCreator<string, string, ErrorSeverity> {
+				Converter = AllianceValidator.NameConverter,
+				Inverter = AllianceValidator.NameInverter,
+				InitialInput = initialValues.Name
+			}.AddOnChangeValidator(AllianceValidator.NameValidator_Length)
+			.AddOnChangeValidator(AllianceValidator.NameValidator_EndsWithAlliance)
+			.AddTriggeredValidator(AllianceValidator.NameValidator_Uniqueness, () => EditingData.Alliances, EditingData.AllianceNameChanged)
+			.CreateSingleInput();
 
-		AllianceColor = new(AllianceValidator.ColorConverter, AllianceValidator.ColorInverter,
+		AllianceColor = new MultiInputCreator<Color, ErrorSeverity, byte, byte, byte> {
 
-			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, 
-				AllianceValidator.ColorComponentInverter, initialValues.Color.R.ToString()),
+				Converter = AllianceValidator.ColorConverter, 
+				Inverter = AllianceValidator.ColorInverter,
 
-			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, 
-				AllianceValidator.ColorComponentInverter, initialValues.Color.G.ToString()),
+				InputComponent1 = new SingleInputCreator<byte, string, ErrorSeverity> {
+					Converter = AllianceValidator.ColorComponentConverter,
+					Inverter = AllianceValidator.ColorComponentInverter,
+					InitialInput = initialValues.Color.R.ToString()
+				}.CreateSingleInput(),
 
-			new SingleInput<byte, string, ErrorSeverity>(AllianceValidator.ColorComponentConverter, 
-				AllianceValidator.ColorComponentInverter, initialValues.Color.B.ToString()),
+				InputComponent2 = new SingleInputCreator<byte, string, ErrorSeverity> {
+					Converter = AllianceValidator.ColorComponentConverter,
+					Inverter = AllianceValidator.ColorComponentInverter,
+					InitialInput = initialValues.Color.G.ToString()
+				}.CreateSingleInput(),
 
-			new ValidationSet<Color, IEnumerable<AllianceEditingData>, ErrorSeverity>(
-				AllianceValidator.ColorCovalidator_Uniqueness,
-				() => EditingData.Alliances,
-				EditingData.AllianceColorChanged)
-		);
+				InputComponent3 = new SingleInputCreator<byte, string, ErrorSeverity> {
+					Converter = AllianceValidator.ColorComponentConverter,
+					Inverter = AllianceValidator.ColorComponentInverter,
+					InitialInput = initialValues.Color.B.ToString()
+				}.CreateSingleInput(),
+
+			}.AddTriggeredValidator(AllianceValidator.ColorCovalidator_Uniqueness, () => EditingData.Alliances, EditingData.AllianceColorChanged)
+			.CreateSingleInput();
 	}
-
 }

@@ -4,30 +4,32 @@ using System.ComponentModel;
 using System.Linq;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Validation.Delegates;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.MiscExtensions;
 
 namespace UtilitiesLibrary.Validation.Inputs;
 
 
 
-public interface ISingleInput<TSeverityEnum> : IInput<TSeverityEnum>
-	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> { }
+public interface ISingleInput<TSeverity> : IInput<TSeverity>
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> { }
 
-public interface ISingleInput<TInput, TSeverityEnum> : IInput<TSeverityEnum>, ISingleInput<TSeverityEnum>
-	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
+public interface ISingleInput<TInput, TSeverity> : IInput<TSeverity>, ISingleInput<TSeverity>
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
 	public TInput InputObject { get; set; }
 }
 
-public interface ISingleInput<TOutput, TInput, TSeverityEnum> : IInput<TOutput, TSeverityEnum>, ISingleInput<TInput, TSeverityEnum>
-	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
+public interface ISingleInput<TOutput, TInput, TSeverity> : IInput<TOutput, TSeverity>, ISingleInput<TInput, TSeverity>
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 }
 
 
 
-public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSeverityEnum>, ISingleInput<TOutput, TInput, TSeverityEnum>
+public class SingleInput<TOutput, TInput, TSeverity> : Input<TOutput, TSeverity>, ISingleInput<TOutput, TInput, TSeverity>
 	where TInput : IEquatable<TInput>
 	where TOutput : IEquatable<TOutput>
-	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
 	private Optional<TOutput> _OutputObject = Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
@@ -63,18 +65,15 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 		}
 	}
 
-	private InputConverter<TOutput, TInput, TSeverityEnum> Converter { get; }
-	private InputInverter<TOutput, TInput, TSeverityEnum> Inverter { get; }
+	private InputConverter<TOutput, TInput, TSeverity> Converter { get; }
+	private InputInverter<TOutput, TInput, TSeverity> Inverter { get; }
 
-	private ReadOnlyList<IValidationTrigger<TSeverityEnum>> ValidationTriggers { get; }
-	
-	private ReadOnlyList<ValidationError<TSeverityEnum>> ConversionErrors { get; set; } = new();
-	public override List<ValidationError<TSeverityEnum>> ValidationErrors { get; } = new();
-	public override ReadOnlyList<ValidationError<TSeverityEnum>> Errors => ConversionErrors.CopyAndAddRange(ValidationErrors);
+	private ReadOnlyList<ValidationError<TSeverity>> ConversionErrors { get; set; } = new();
+	public override ReadOnlyList<ValidationError<TSeverity>> Errors => ConversionErrors.AppendRange(ValidationErrors).ToReadOnly();
 
-	private TSeverityEnum ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
-	private TSeverityEnum ValidationErrorLevel => ValidationErrors.Select(x => x.Severity).Max() ?? TSeverityEnum.NoError;
-	public override TSeverityEnum ErrorLevel => Math.Operations.Max(ConversionErrorLevel, ValidationErrorLevel);
+	private TSeverity ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
+	private TSeverity ValidationErrorLevel => ValidationErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
+	public override TSeverity ErrorLevel => Math.Operations.Max(ConversionErrorLevel, ValidationErrorLevel);
 
 	private bool IsConvertible => ConversionErrorLevel.IsFatal == false;
 	public override bool IsValid => ErrorLevel.IsFatal == false;
@@ -83,15 +82,16 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 
 
-	public SingleInput(InputConverter<TOutput, TInput, TSeverityEnum> converter,
-		InputInverter<TOutput, TInput, TSeverityEnum> inverter, TInput initialInput,
-		params IValidationSet<TOutput, TSeverityEnum>[] validationSets) {
+	public SingleInput(
+		InputConverter<TOutput, TInput, TSeverity> converter,
+		InputInverter<TOutput, TInput, TSeverity> inverter,
+		TInput initialInput,
+		IEnumerable<OnChangeValidator<TOutput, TSeverity>> onChangeValidators,
+		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets)
+		: base(onChangeValidators, validationSets) {
 
 		Converter = converter;
 		Inverter = inverter;
-
-		ValidationTriggers = ValidationSetsToTriggers(validationSets);
-
 		InputObject = initialInput;
 	}
 
@@ -99,17 +99,17 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 	public sealed override void Validate() {
 
-		(OutputObject, ConversionErrors) = Converter(InputObject);
+		(Optional<TOutput> outputObject, ConversionErrors) = Converter(InputObject);
 
-		ValidationErrors.Clear();
+		if (outputObject.HasValue) {
 
-		if (OutputObject.HasValue) {
+			foreach (OnChangeValidator<TOutput, TSeverity> validator in OnChangedValidation.Keys) {
 
-			foreach (IValidationTrigger<TSeverityEnum> trigger in ValidationTriggers) {
-				ValidationErrors.AddRange(trigger.InvokeValidator());
+				OnChangedValidation[validator] = validator.Invoke(outputObject.Value);
 			}
 		}
 
+		OutputObject = outputObject;
 		OnErrorsChanged();
 	}
 
@@ -119,7 +119,7 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 			return false;
 		}
 
-		(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverityEnum>> errors) = Inverter(testValue.Value);
+		(Optional<TInput> inversionResult, ReadOnlyList<ValidationError<TSeverity>> errors) = Inverter(testValue.Value);
 
 		return errors.AreFatal() || !inversionResult.HasValue;
 	}
@@ -140,8 +140,65 @@ public class SingleInput<TOutput, TInput, TSeverityEnum> : Input<TOutput, TSever
 
 	protected override void OnErrorsChanged() {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Errors)));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrors)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrorLevel)));
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsValid)));
+	}
+
+}
+
+
+
+public class SingleInputCreator<TOutput, TInput, TSeverity>
+	where TInput : IEquatable<TInput>
+	where TOutput : IEquatable<TOutput>
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
+
+
+
+	public required InputConverter<TOutput, TInput, TSeverity> Converter { get; init; }
+	public required InputInverter<TOutput, TInput, TSeverity> Inverter { get; init; }
+	public required TInput InitialInput { get; init; }
+
+	private readonly List<OnChangeValidator<TOutput, TSeverity>> OnChangeValidators = new();
+	private readonly List<IValidationSet<TOutput, TSeverity>> TriggeredValidators = new();
+
+	public SingleInputCreator<TOutput, TInput, TSeverity> AddOnChangeValidator(
+		OnChangeValidator<TOutput, TSeverity> validator) {
+
+		if (OnChangeValidators.Contains(validator)) {
+			throw new ArgumentException("This validator has already been added");
+		}
+
+		OnChangeValidators.Add(validator);
+		return this;
+	}
+
+	public SingleInputCreator<TOutput, TInput, TSeverity> AddTriggeredValidator<TValidationParameter>(
+		TriggeredValidator<TOutput, TValidationParameter, TSeverity> validator,
+		Func<TValidationParameter> validationParameterGetter,
+		params ValidationEvent[] validationEvents) {
+
+		ValidationSet<TOutput, TValidationParameter, TSeverity> validationSet = new(validator, validationParameterGetter, validationEvents);
+		
+		if (TriggeredValidators.Contains(validationSet)) {
+			throw new ArgumentException("This validator has already been added");
+		}
+
+		TriggeredValidators.Add(validationSet);
+
+		return this;
+	}
+
+	public SingleInput<TOutput, TInput, TSeverity> CreateSingleInput() {
+
+		return new(
+			Converter,
+			Inverter,
+			InitialInput,
+			OnChangeValidators.ToReadOnly(),
+			TriggeredValidators.ToReadOnly());
 	}
 
 }

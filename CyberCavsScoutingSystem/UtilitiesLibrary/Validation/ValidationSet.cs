@@ -1,4 +1,5 @@
 ﻿using System;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Validation.Inputs;
@@ -7,52 +8,21 @@ namespace UtilitiesLibrary.Validation;
 
 
 
-public interface IValidationSet<TOutput, TSeverityEnum> 
-	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
+public interface IValidationSet<TOutput, TSeverity> 
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
-	public IValidationTrigger<TSeverityEnum> ToValidationTrigger(
+	public IValidationTrigger<TSeverity> ToValidationTrigger(
 		Func<Optional<TOutput>> outputObjectGetter,
-		IInput<TOutput, TSeverityEnum> validatee,
-		Action<ReadOnlyList<ValidationError<TSeverityEnum>>> postValidationAction);
+		IInput<TOutput, TSeverity> validatee,
+		Action<IValidationTrigger<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction);
 }
 
 
 
-public class ValidationSet<TOutput, TSeverityEnum> : IValidationSet<TOutput, TSeverityEnum>
-	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
+public class ValidationSet<TOutput, TValidationParameter, TSeverity> : IValidationSet<TOutput, TSeverity>
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
-	private InputValidator<TOutput, TSeverityEnum> Validator { get; }
-
-	private ValidationEvent[] ValidationEvents { get; }
-
-
-
-	public ValidationSet(InputValidator<TOutput, TSeverityEnum> validator, params ValidationEvent[] validationEvents) {
-
-		Validator = validator;
-		ValidationEvents = validationEvents;
-	}
-
-	public IValidationTrigger<TSeverityEnum> ToValidationTrigger(
-		Func<Optional<TOutput>> outputObjectGetter,
-		IInput<TOutput, TSeverityEnum> validatee,
-		Action<ReadOnlyList<ValidationError<TSeverityEnum>>> postValidationAction) {
-
-		return new ValidationTrigger<TOutput, TSeverityEnum>(
-			Validator,
-			ValidationEvents,
-			outputObjectGetter,
-			postValidationAction);
-	}
-
-}
-
-
-
-public class ValidationSet<TOutput, TValidationParameter, TSeverityEnum> : IValidationSet<TOutput, TSeverityEnum>
-	where TSeverityEnum : ValidationErrorSeverityEnum<TSeverityEnum>, IValidationErrorSeverityEnum<TSeverityEnum> {
-
-	private InputValidator<TOutput, TValidationParameter, TSeverityEnum> Validator { get; }
+	private TriggeredValidator<TOutput, TValidationParameter, TSeverity> Validator { get; }
 
 	private ValidationEvent[] ValidationEvents { get; }
 
@@ -60,7 +30,7 @@ public class ValidationSet<TOutput, TValidationParameter, TSeverityEnum> : IVali
 
 
 
-	public ValidationSet(InputValidator<TOutput, TValidationParameter, TSeverityEnum> validator,
+	public ValidationSet(TriggeredValidator<TOutput, TValidationParameter, TSeverity> validator,
 		Func<TValidationParameter> validationParameterGetter, params ValidationEvent[] validationEvents) {
 
 		Validator = validator;
@@ -68,12 +38,12 @@ public class ValidationSet<TOutput, TValidationParameter, TSeverityEnum> : IVali
 		ValidationEvents = validationEvents;
 	}
 
-	public IValidationTrigger<TSeverityEnum> ToValidationTrigger(
+	public IValidationTrigger<TSeverity> ToValidationTrigger(
 		Func<Optional<TOutput>> outputObjectGetter,
-		IInput<TOutput, TSeverityEnum> validatee,
-		Action<ReadOnlyList<ValidationError<TSeverityEnum>>> postValidationAction) {
+		IInput<TOutput, TSeverity> validatee,
+		Action<IValidationTrigger<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction) {
 
-		return new ValidationTrigger<TOutput, TValidationParameter, TSeverityEnum>(
+		return new ValidationTrigger<TOutput, TValidationParameter, TSeverity>(
 			Validator,
 			validatee,
 			ValidationEvents,
