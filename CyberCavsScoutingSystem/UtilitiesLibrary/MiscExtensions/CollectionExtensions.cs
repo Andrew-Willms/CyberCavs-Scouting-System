@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UtilitiesLibrary.Collections;
 
-namespace UtilitiesLibrary.Extensions;
+namespace UtilitiesLibrary.MiscExtensions;
 
 
 
@@ -71,6 +72,14 @@ public static class CollectionExtensions {
 
 	public static string CharArrayToString(this IEnumerable<char> enumerable) {
 		return enumerable.Aggregate("", (current, character) => current + character);
+	}
+
+
+
+	public static ReadOnlyKeysDictionary<TKey, TValue> ToReadOnlyKeysDictionary<TKey, TValue>(
+		this IEnumerable<TKey> keys, TValue defaultValue) where TKey : notnull {
+
+		return new ReadOnlyKeysDictionary<TKey, TValue>(keys, defaultValue);
 	}
 
 }

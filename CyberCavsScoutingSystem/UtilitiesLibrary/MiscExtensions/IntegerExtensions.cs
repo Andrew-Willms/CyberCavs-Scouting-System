@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UtilitiesLibrary.Extensions; 
+namespace UtilitiesLibrary.MiscExtensions; 
 
 
 

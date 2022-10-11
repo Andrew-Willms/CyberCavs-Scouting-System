@@ -32,7 +32,4 @@ public class ValidationEvent {
 		}
 	}
 
-	//public void EventHandler(object? sender, EventArgs e) {
-	//	Invoke();
-	//}
 }
