@@ -19,7 +19,7 @@ public interface IValidationSet<TOutput, TSeverity>
 
 
 
-public class ValidationSet<TOutput, TValidationParameter, TSeverity> : IValidationSet<TOutput, TSeverity>
+internal class ValidationSet<TOutput, TValidationParameter, TSeverity> : IValidationSet<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
 	private TriggeredValidator<TOutput, TValidationParameter, TSeverity> Validator { get; }
