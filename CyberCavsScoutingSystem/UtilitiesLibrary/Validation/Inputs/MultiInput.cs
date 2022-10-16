@@ -353,7 +353,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 	public MultiInput<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3>
-		CreateSingleInput() {
+		CreateMultiInput() {
 
 		return new(
 			Converter,
@@ -422,7 +422,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 	public MultiInput<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3, TInput4>
-		CreateSingleInput() {
+		CreateMultiInput() {
 
 		return new(
 			Converter,

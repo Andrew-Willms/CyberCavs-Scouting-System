@@ -55,6 +55,6 @@ public class AllianceEditingData {
 				}.CreateSingleInput(),
 
 			}.AddTriggeredValidator(AllianceValidator.ColorCovalidator_Uniqueness, () => EditingData.Alliances, EditingData.AllianceColorChanged)
-			.CreateSingleInput();
+			.CreateMultiInput();
 	}
 }

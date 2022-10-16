@@ -88,7 +88,7 @@ public class GameEditingData {
 					InitialInput = initialValues.Version.Description
 				}.CreateSingleInput()
 
-			}.CreateSingleInput();
+			}.CreateMultiInput();
 
 		RobotsPerAlliance = new SingleInputCreator<uint, string, ErrorSeverity> {
 				Converter = GameNumbersValidator.RobotsPerAllianceConverter,
