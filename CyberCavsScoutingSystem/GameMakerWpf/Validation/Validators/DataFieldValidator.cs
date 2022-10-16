@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-using System.Windows.Navigation;
 using CCSSDomain;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
@@ -50,7 +49,7 @@ public static class DataFieldValidator {
 	}
 
 	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
-		IEnumerable<DataFieldEditingData> dataFields) {
+		IEnumerable<GeneralDataFieldEditingData> dataFields) {
 
 		if (dataFields.Where(dataField => dataField.Name.OutputObject.HasValue)
 		    .Select(dataField => dataField.Name.OutputObject.Value)
@@ -58,8 +57,6 @@ public static class DataFieldValidator {
 
 			return ReadOnlyList<Error>.Empty;
 		}
-
-		bool test = validatee.OutputObject.Value == name;
 
 		return validatee.OutputObject.Value == name
 			? new(DataFieldValidationData.Name.GetDuplicateNameError(name))
@@ -84,9 +81,9 @@ public static class SelectionDataFieldValidator {
 	}
 
 	public static ReadOnlyList<Error> OptionNameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
-		IEnumerable<SingleInput<string, string, ErrorSeverity>> otherOptionNames) {
+		IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
 
-		return otherOptionNames.Any(otherOptionName => otherOptionName.OutputObject == name)
+		return optionNames.Any(otherOptionName => otherOptionName.OutputObject == name)
 			? new(DataFieldValidationData.Name.GetDuplicateNameError(name))
 			: ReadOnlyList<Error>.Empty;
 	}

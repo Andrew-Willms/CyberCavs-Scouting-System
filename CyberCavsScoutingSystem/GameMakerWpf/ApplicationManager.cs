@@ -51,8 +51,8 @@ public static class ApplicationManager {
 		GameEditingData.AddDataField(DefaultEditingDataValues.GetNewDataField(GameEditingData));
 	}
 
-	public static void RemoveDataField(DataFieldEditingData dataField) {
-		GameEditingData.RemoveDataField(dataField);
+	public static void RemoveDataField(GeneralDataFieldEditingData generalDataField) {
+		GameEditingData.RemoveDataField(generalDataField);
 	}
 
 }

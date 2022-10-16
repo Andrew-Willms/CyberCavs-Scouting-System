@@ -12,7 +12,7 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 	private static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
 
-	public static ReadOnlyObservableCollection<DataFieldEditingData> DataFields => GameEditingData.DataFields;
+	public static ReadOnlyObservableCollection<GeneralDataFieldEditingData> DataFields => GameEditingData.DataFields;
 
 	private int _SelectedDataFieldIndex = -1;
 	public int SelectedDataFieldIndex {

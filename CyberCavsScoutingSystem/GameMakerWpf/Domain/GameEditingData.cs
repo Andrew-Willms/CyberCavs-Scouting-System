@@ -24,13 +24,13 @@ public class GameEditingData {
 	public ValidationEvent AllianceNameChanged { get; } = new();
 	public ValidationEvent AllianceColorChanged { get; } = new();
 	public ValidationEvent DataFieldNameChanged { get; } = new();
+	public ValidationEvent DataFieldTypeChanged { get; } = new();
 
 	private readonly ObservableCollection<AllianceEditingData> _Alliances = new();
 	public ReadOnlyObservableCollection<AllianceEditingData> Alliances => new(_Alliances);
 
-
-	private readonly ObservableCollection<DataFieldEditingData> _DataFields = new();
-	public ReadOnlyObservableCollection<DataFieldEditingData> DataFields => new(_DataFields);
+	private readonly ObservableCollection<GeneralDataFieldEditingData> _DataFields = new();
+	public ReadOnlyObservableCollection<GeneralDataFieldEditingData> DataFields => new(_DataFields);
 
 
 
@@ -107,12 +107,13 @@ public class GameEditingData {
 		}
 
 		foreach (DataField dataField in initialValues.DataFields) {
-			AddDataField(DataFieldEditingData.DataFieldEditingDataFromDataField(dataField, this));
+			AddDataField(new(this, dataField));
 		}
 	}
 
 
 
+	// Todo: make these return types results
 	public void AddAlliance(AllianceEditingData allianceEditingData) {
 
 		_Alliances.Add(allianceEditingData);
@@ -133,20 +134,29 @@ public class GameEditingData {
 		AllianceColorChanged.Invoke();
 	}
 
-	public void AddDataField(DataFieldEditingData dataFieldEditingData) {
+	public void AddDataField(GeneralDataFieldEditingData generalDataFieldEditingData, int insertionPosition) {
 
-		_DataFields.Add(dataFieldEditingData);
-		DataFieldNameChanged.SubscribeTo(dataFieldEditingData.Name.OutputObjectChanged);
+		_DataFields.Insert(insertionPosition, generalDataFieldEditingData);
+		DataFieldNameChanged.SubscribeTo(generalDataFieldEditingData.Name.OutputObjectChanged);
+		DataFieldTypeChanged.SubscribeTo(generalDataFieldEditingData.Name.OutputObjectChanged);
 
 		DataFieldNameChanged.Invoke();
+		DataFieldTypeChanged.Invoke();
 	}
 
-	public void RemoveDataField(DataFieldEditingData dataFieldEditingData) {
+	public void AddDataField(GeneralDataFieldEditingData generalDataFieldEditingData) {
 
-		_DataFields.Remove(dataFieldEditingData);
-		DataFieldNameChanged.UnsubscribeFrom(dataFieldEditingData.Name.OutputObjectChanged);
+		AddDataField(generalDataFieldEditingData, DataFields.Count);
+	}
+
+	public void RemoveDataField(GeneralDataFieldEditingData generalDataFieldEditingData) {
+
+		_DataFields.Remove(generalDataFieldEditingData);
+		DataFieldNameChanged.UnsubscribeFrom(generalDataFieldEditingData.Name.OutputObjectChanged);
+		DataFieldTypeChanged.UnsubscribeFrom(generalDataFieldEditingData.Name.OutputObjectChanged);
 
 		DataFieldNameChanged.Invoke();
+		DataFieldTypeChanged.Invoke();
 	}
 
 }

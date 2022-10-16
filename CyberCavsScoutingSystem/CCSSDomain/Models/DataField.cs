@@ -7,6 +7,12 @@ namespace CCSSDomain.Models;
 public abstract class DataField {
 
 	public required string Name { get; init; }
+
+	public enum DataFieldType {
+		Text,
+		Selection,
+		Integer
+	}
 }
 
 public class TextDataField : DataField { }

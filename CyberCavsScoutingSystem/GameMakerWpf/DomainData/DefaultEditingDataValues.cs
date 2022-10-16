@@ -21,6 +21,25 @@ public static class DefaultEditingDataValues {
 		Color = Colors.Blue
 	};
 
+
+
+	public static readonly TextDataField DefaultTextDataField = new() {
+		Name = "New Data Field"
+	};
+
+	public static readonly SelectionDataField DefaultSelectionDataField = new() {
+		Name = "New Data Field",
+		OptionNames = ReadOnlyList<string>.Empty
+	};
+
+	public static readonly IntegerDataField DefaultIntegerDataField = new() {
+		Name = "New Data Field"
+	};
+	
+	public static readonly DataField DefaultDataField = DefaultTextDataField;
+
+
+
 	public static GameEditingData DefaultEditingData {
 
 		get {
@@ -48,10 +67,9 @@ public static class DefaultEditingDataValues {
 		return new(gameEditingData, initialValues);
 	}
 
-	public static DataFieldEditingData GetNewDataField(GameEditingData gameEditingData) {
+	public static GeneralDataFieldEditingData GetNewDataField(GameEditingData gameEditingData) {
 
-		TextDataField initialValues = new() { Name = "New Data Field" };
-		return new TextDataFieldEditingData(gameEditingData, initialValues);
+		return new(gameEditingData, DefaultDataField);
 	}
 
 }
