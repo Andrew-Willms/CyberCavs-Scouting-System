@@ -2,18 +2,11 @@
 // ReSharper disable RedundantAssignment
 // ReSharper disable UnusedVariable
 // ReSharper disable NotAccessedVariable
-
-using System;
-using System.ComponentModel.Design;
 // ReSharper disable ConvertIfStatementToSwitchStatement
 
 // ReSharper disable ConvertToConstant.Local
 #pragma warning disable CS8600
 #pragma warning disable CS0219
-
-#pragma warning disable CS8321
-
-
 
 
 
@@ -133,3 +126,17 @@ if (name == "Andrew Veldhuise") {
 } else {
 	Console.WriteLine("Hello" + name + ".");
 }
+
+
+
+/*
+ * Ideas for programming activities:
+ * - Write a function that finds the largest number in a list of integers.
+ * - Write a function that determines if an integer parameter is prime.
+ * - Write a function that multiplies two integers together without using the multiplication sign
+ * - Make a person class with a Name, a Player child class with a goals scored property,
+ *   and a team class with a Coach and Matches won property.
+ *
+ *
+ *
+ */
