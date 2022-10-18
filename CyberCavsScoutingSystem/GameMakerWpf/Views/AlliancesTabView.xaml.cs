@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using CCSSDomain;
+using CCSSDomain.Models;
 using GameMakerWpf.Domain;
+using GameMakerWpf.DomainData;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Views;
@@ -20,17 +22,17 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 	public static SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditingData.AlliancesPerMatch;
 
-	private int _SelectedAllianceIndex = -1;
-	public int SelectedAllianceIndex {
-		get => _SelectedAllianceIndex;
+	private AllianceEditingData? _SelectedAlliance;
+	public AllianceEditingData? SelectedAlliance {
+		get => _SelectedAlliance;
 		set {
-			_SelectedAllianceIndex = value;
-			OnPropertyChanged(nameof(SelectedAllianceIndex));
+			_SelectedAlliance = value;
+			OnPropertyChanged(nameof(SelectedAlliance));
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}
 	}
 
-	public bool RemoveButtonIsEnabled => SelectedAllianceIndex != -1;
+	public bool RemoveButtonIsEnabled => _SelectedAlliance is not null;
 
 
 
@@ -44,11 +46,16 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 
 	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-		ApplicationManager.AddAlliance();
+		GameEditingData.AddGeneratedAlliance();
 	}
 
 	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-		ApplicationManager.RemoveAlliance(GameEditingData.Alliances[SelectedAllianceIndex]);
+
+		if (SelectedAlliance is null) {
+			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
+		}
+
+		GameEditingData.RemoveAlliance(SelectedAlliance);
 	}
 
 	private void MoveUpButton_Click(object sender, System.Windows.RoutedEventArgs e) {
@@ -58,7 +65,6 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 	private void MoveDownButton_Click(object sender, System.Windows.RoutedEventArgs e) {
 		throw new NotImplementedException();
 	}
-
 
 
 

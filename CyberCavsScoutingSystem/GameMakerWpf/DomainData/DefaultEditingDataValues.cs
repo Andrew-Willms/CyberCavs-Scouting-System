@@ -72,4 +72,16 @@ public static class DefaultEditingDataValues {
 		return new(gameEditingData, DefaultDataField);
 	}
 
+
+
+	public static void AddGeneratedAlliance(this GameEditingData gameEditingData) {
+
+		gameEditingData.AddAlliance(GetNewAlliance(gameEditingData));
+	}
+
+	public static void AddGeneratedDataField(this GameEditingData gameEditingData) {
+
+		gameEditingData.AddDataField(GetNewDataField(gameEditingData));
+	}
+
 }
