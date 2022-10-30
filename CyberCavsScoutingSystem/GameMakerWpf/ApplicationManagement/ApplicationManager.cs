@@ -62,6 +62,35 @@ public static class ApplicationManager {
 
 
 
+	private static void PromptIfUnsaved(out bool cancelOperation) {
+
+		if (ProjectIsSaved) {
+			cancelOperation = false;
+			return;
+		}
+
+		SavePromptResult savePromptResult = SavePrompter.PromptSave();
+
+		switch (savePromptResult) {
+
+			case SavePromptResult.CancelOperation:
+				cancelOperation = true;
+				return;
+
+			case SavePromptResult.SaveAndContinue:
+				SaveGameProject();
+				cancelOperation = false;
+				return;
+
+			case SavePromptResult.ContinueWithoutSaving:
+				cancelOperation = false;
+				return;
+
+			default:
+				throw new InvalidEnumArgumentException();
+		}
+	}
+
 	public static void SaveGameProject() {
 
 		if (!Saver.ProjectHasSaveLocation) {
@@ -79,25 +108,9 @@ public static class ApplicationManager {
 
 	public static void OpenGameProject() {
 
-		if (!ProjectIsSaved) {
-
-			SavePromptResult savePromptResult = SavePrompter.PromptSave();
-
-			switch (savePromptResult) {
-
-				case SavePromptResult.CancelOperation:
-					return;
-
-				case SavePromptResult.SaveAndContinue:
-					Saver.Save(GameEditingData);
-					break;
-
-				case SavePromptResult.ContinueWithoutSaving:
-					break;
-
-				default:
-					throw new InvalidEnumArgumentException();
-			}
+		PromptIfUnsaved(out bool cancelOperation);
+		if (cancelOperation) {
+			return;
 		}
 
 		Result<GameEditingData, ISaver.OpenError> openResult = Saver.Open();
@@ -118,17 +131,9 @@ public static class ApplicationManager {
 
 	public static void NewGameProject() {
 
-		if (!ProjectIsSaved) {
-
-			SavePromptResult savePromptResult = SavePrompter.PromptSave();
-
-			if (savePromptResult == SavePromptResult.CancelOperation) {
-				return;
-			}
-
-			if (savePromptResult == SavePromptResult.SaveAndContinue) {
-				Saver.Save(GameEditingData);
-			}
+		PromptIfUnsaved(out bool cancelOperation);
+		if (cancelOperation) {
+			return;
 		}
 
 		GameEditingData = DefaultEditingDataValues.DefaultEditingData;

@@ -8,13 +8,12 @@ namespace GameMakerWpf.ApplicationManagement;
 public interface IGameMakerMainView {
 
 	public void Show();
+
 }
 
 
 
 public interface ISavePrompter {
-
-	public class SavePromptError : Error<SavePromptResult> { }
 
 	public enum SavePromptResult {
 		SaveAndContinue,

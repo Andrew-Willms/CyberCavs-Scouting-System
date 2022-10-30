@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using UtilitiesLibrary.Validation;
 
 namespace GameMakerWpf.ApplicationManagement; 
@@ -19,7 +20,9 @@ public class SavePrompter : ISavePrompter {
 			MessageBoxResult.Yes => ISavePrompter.SavePromptResult.ContinueWithoutSaving,
 			MessageBoxResult.No => ISavePrompter.SavePromptResult.SaveAndContinue,
 			MessageBoxResult.Cancel => ISavePrompter.SavePromptResult.CancelOperation,
-			_ => throw new ShouldMatchOtherCaseException()
+			MessageBoxResult.None => throw new ShouldMatchOtherCaseException(),
+			MessageBoxResult.OK => throw new ShouldMatchOtherCaseException(),
+			_ => throw new InvalidEnumArgumentException()
 		};
 	}
 
