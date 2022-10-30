@@ -6,15 +6,15 @@
              xmlns:wpfUtilities="clr-namespace:UtilitiesLibrary;assembly=UtilitiesLibrary"
              xmlns:wpf="clr-namespace:UtilitiesLibrary.WPF;assembly=UtilitiesLibrary"
 			 xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
-			 xmlns:converters="clr-namespace:GameMakerWpf.Converters"
+             xmlns:wpfConverters="clr-namespace:GameMakerWpf.WpfConverters"
 			 Startup="ApplicationStartup">
 	<Application.Resources>
 
-        <converters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
-		<converters:ErrorToMouseOverBrushConverter x:Key="ErrorToMouseOverBrushConverter"/>
-		<converters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
-		<converters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
-        <converters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+        <wpfConverters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
+		<wpfConverters:ErrorToMouseOverBrushConverter x:Key="ErrorToMouseOverBrushConverter"/>
+		<wpfConverters:ErrorToFocusedBrushConverter x:Key="ErrorToFocusedBrushConverter"/>
+		<wpfConverters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
+        <wpfConverters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
 
         <Style x:Key="StringInputStyle" TargetType="{x:Type TypeName=TextBox}">
             <d:Style.DataContext>

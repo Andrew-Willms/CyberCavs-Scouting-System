@@ -4,7 +4,9 @@ using System.Windows.Data;
 using System.Windows.Media;
 using UtilitiesLibrary;
 
-namespace GameMakerWpf.Converters; 
+namespace GameMakerWpf.WpfConverters; 
+
+
 
 public class ColorToBrushConverter  : IValueConverter {
 	

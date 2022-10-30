@@ -1,7 +1,9 @@
 ﻿using CCSSDomain;
 using UtilitiesLibrary.WPF;
 
-namespace GameMakerWpf.Converters;
+namespace GameMakerWpf.WpfConverters;
+
+
 
 public class ErrorGreaterThanConverter : EnumGreaterThanConverter<ErrorSeverity> { }
 
