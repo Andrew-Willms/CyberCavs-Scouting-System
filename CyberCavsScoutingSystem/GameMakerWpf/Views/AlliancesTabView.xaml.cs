@@ -4,8 +4,8 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using CCSSDomain;
 using GameMakerWpf.Domain;
-using GameMakerWpf.DomainData;
 using UtilitiesLibrary.Validation.Inputs;
+using GameMakerWpf.Domain.DomainData;
 
 namespace GameMakerWpf.Views;
 

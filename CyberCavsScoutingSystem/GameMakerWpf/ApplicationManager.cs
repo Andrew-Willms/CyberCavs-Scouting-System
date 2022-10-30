@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using GameMakerWpf.Domain;
-using GameMakerWpf.DomainData;
+using GameMakerWpf.Domain.DomainData;
 using GameMakerWpf.Views;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;

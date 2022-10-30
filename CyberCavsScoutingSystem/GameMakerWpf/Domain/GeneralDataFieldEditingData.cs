@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using CCSSDomain;
 using CCSSDomain.Models;
-using GameMakerWpf.DomainData;
+using GameMakerWpf.Domain.DomainData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 using static CCSSDomain.Models.DataField;
 
-namespace GameMakerWpf.Domain; 
+namespace GameMakerWpf.Domain;
 
 
 
