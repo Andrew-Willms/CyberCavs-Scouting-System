@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.DomainData;
+using GameMakerWpf.ApplicationManagement;
 
 namespace GameMakerWpf.Views;
 

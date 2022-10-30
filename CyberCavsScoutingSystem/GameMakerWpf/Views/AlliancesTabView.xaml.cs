@@ -6,6 +6,7 @@ using CCSSDomain;
 using GameMakerWpf.Domain;
 using UtilitiesLibrary.Validation.Inputs;
 using GameMakerWpf.Domain.DomainData;
+using GameMakerWpf.ApplicationManagement;
 
 namespace GameMakerWpf.Views;
 
