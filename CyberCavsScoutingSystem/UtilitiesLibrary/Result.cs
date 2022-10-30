@@ -110,8 +110,3 @@ public abstract class Error<TErrorEnum> : Error where TErrorEnum : Enum {
 
 	public required TErrorEnum ErrorType { get; init; }
 }
-
-//public class MultiError<TErrorEnum> : Error where TErrorEnum : Enum {
-//
-//	public required ReadOnlyList<Error<TErrorEnum>> InternalErrors { get; init; }
-//}

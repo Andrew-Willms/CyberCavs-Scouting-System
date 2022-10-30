@@ -12,145 +12,126 @@ namespace GameMakerWpf.ApplicationManagement;
 
 
 
-public static class ApplicationManager
-{
+public static class ApplicationManager {
 
-    private static GameEditingData _GameEditingData = DefaultEditingDataValues.DefaultEditingData;
-    public static GameEditingData GameEditingData
-    {
+	private static GameEditingData _GameEditingData = DefaultEditingDataValues.DefaultEditingData;
+	public static GameEditingData GameEditingData {
 
-        get => _GameEditingData;
+		get => _GameEditingData;
 
-        private set
-        {
-            value.AnythingChanged.Subscribe(MarkProjectUnsaved);
-            _GameEditingData = value;
-            ProjectIsSaved = false;
-            InvokeGameProjectChangeActions();
-        }
-    }
+		private set {
+			value.AnythingChanged.Subscribe(MarkProjectUnsaved);
+			_GameEditingData = value;
+			ProjectIsSaved = false;
+			InvokeGameProjectChangeActions();
+		}
+	}
 
-    private static readonly List<Action> GameProjectChangeActions = new();
+	private static readonly List<Action> GameProjectChangeActions = new();
 
-    private static IGameMakerMainView MainView { get; } = new MainWindow();
+	private static IGameMakerMainView MainView { get; } = new MainWindow();
 
-    private static IGameSaver Saver { get; } = new GameProjectSaver();
+	private static ISaver Saver { get; } = new Saver();
 
-    private static ISavePrompter SavePrompter { get; } = new GameSavePrompter();
+	private static ISavePrompter SavePrompter { get; } = new SavePrompter();
 
-    private static bool ProjectIsSaved { get; set; }
+	private static bool ProjectIsSaved { get; set; }
 
 
 
-    public static void ApplicationStartup()
-    {
-        MainView.Show();
-    }
+	public static void ApplicationStartup() {
+		MainView.Show();
+	}
 
 
 
-    public static void RegisterGameProjectChangeAction(Action action)
-    {
-        GameProjectChangeActions.Add(action);
-    }
+	public static void RegisterGameProjectChangeAction(Action action) {
+		GameProjectChangeActions.Add(action);
+	}
 
-    private static void InvokeGameProjectChangeActions()
-    {
+	private static void InvokeGameProjectChangeActions() {
 
-        foreach (Action action in GameProjectChangeActions)
-        {
-            action.Invoke();
-        }
-    }
+		foreach (Action action in GameProjectChangeActions) {
+			action.Invoke();
+		}
+	}
 
-    private static void MarkProjectUnsaved()
-    {
-        ProjectIsSaved = false;
-    }
+	private static void MarkProjectUnsaved() {
+		ProjectIsSaved = false;
+	}
 
 
 
-    public static void SaveGameProject()
-    {
+	public static void SaveGameProject() {
 
-        if (!Saver.ProjectHasSaveLocation)
-        {
-            SaveGameProjectAs();
-            return;
-        }
+		if (!Saver.ProjectHasSaveLocation) {
+			SaveGameProjectAs();
+			return;
+		}
 
-        Saver.Save(GameEditingData);
-        ProjectIsSaved = true;
-    }
+		Saver.Save(GameEditingData);
+		ProjectIsSaved = true;
+	}
 
-    public static void SaveGameProjectAs()
-    {
-        Saver.SaveAs(GameEditingData);
-    }
+	public static void SaveGameProjectAs() {
+		Saver.SaveAs(GameEditingData);
+	}
 
-    public static void OpenGameProject()
-    {
+	public static void OpenGameProject() {
 
-        if (!ProjectIsSaved)
-        {
+		if (!ProjectIsSaved) {
 
-            SavePromptResult savePromptResult = SavePrompter.PromptSave();
+			SavePromptResult savePromptResult = SavePrompter.PromptSave();
 
-            switch (savePromptResult)
-            {
+			switch (savePromptResult) {
 
-                case SavePromptResult.CancelOperation:
-                    return;
+				case SavePromptResult.CancelOperation:
+					return;
 
-                case SavePromptResult.SaveAndContinue:
-                    Saver.Save(GameEditingData);
-                    break;
+				case SavePromptResult.SaveAndContinue:
+					Saver.Save(GameEditingData);
+					break;
 
-                case SavePromptResult.ContinueWithoutSaving:
-                    break;
+				case SavePromptResult.ContinueWithoutSaving:
+					break;
 
-                default:
-                    throw new InvalidEnumArgumentException();
-            }
-        }
+				default:
+					throw new InvalidEnumArgumentException();
+			}
+		}
 
-        Result<GameEditingData, IGameSaver.OpenError> openResult = Saver.Open();
+		Result<GameEditingData, ISaver.OpenError> openResult = Saver.Open();
 
-        switch (openResult.Resolve())
-        {
+		switch (openResult.Resolve()) {
 
-            case GameEditingData newGameEditingData:
-                GameEditingData = newGameEditingData;
-                return;
+			case GameEditingData newGameEditingData:
+				GameEditingData = newGameEditingData;
+				return;
 
-            case IGameSaver.OpenError:
-                return;
+			case ISaver.OpenError:
+				return;
 
-            default:
-                throw new ShouldMatchOtherCaseException();
-        }
-    }
+			default:
+				throw new ShouldMatchOtherCaseException();
+		}
+	}
 
-    public static void NewGameProject()
-    {
+	public static void NewGameProject() {
 
-        if (!ProjectIsSaved)
-        {
+		if (!ProjectIsSaved) {
 
-            SavePromptResult savePromptResult = SavePrompter.PromptSave();
+			SavePromptResult savePromptResult = SavePrompter.PromptSave();
 
-            if (savePromptResult == SavePromptResult.CancelOperation)
-            {
-                return;
-            }
+			if (savePromptResult == SavePromptResult.CancelOperation) {
+				return;
+			}
 
-            if (savePromptResult == SavePromptResult.SaveAndContinue)
-            {
-                Saver.Save(GameEditingData);
-            }
-        }
+			if (savePromptResult == SavePromptResult.SaveAndContinue) {
+				Saver.Save(GameEditingData);
+			}
+		}
 
-        GameEditingData = DefaultEditingDataValues.DefaultEditingData;
-    }
+		GameEditingData = DefaultEditingDataValues.DefaultEditingData;
+	}
 
 }
