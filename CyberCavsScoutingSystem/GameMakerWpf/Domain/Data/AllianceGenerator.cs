@@ -1,55 +1,49 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
-using System.Collections.Generic;
 using CCSSDomain.Models;
 using UtilitiesLibrary;
 
-namespace GameMakerWpf.Domain.DomainData;
+namespace GameMakerWpf.Domain.Data;
 
 
 
-public static class AllianceGenerator
-{
+public static class AllianceGenerator {
 
-    private const int NamesTriedUntilDuplicateAllianceNameAccepted = 10;
+	private const int NamesTriedUntilDuplicateAllianceNameAccepted = 10;
 
-    private static int RandomizedColorsUsed;
+	private static int RandomizedColorsUsed;
 
-    private static readonly List<(string, Color)> RandomizedColors = ColorsHelper.DefaultColorsRandomized();
+	private static readonly List<(string, Color)> RandomizedColors = ColorsHelper.DefaultColorsRandomized();
 
-    public static Alliance GenerateAlliance(IEnumerable<string> allianceNames)
-    {
+	public static Alliance GenerateAlliance(IEnumerable<string> allianceNames) {
 
-        HashSet<string> allianceNamesHashed = allianceNames.ToHashSet();
+		HashSet<string> allianceNamesHashed = allianceNames.ToHashSet();
 
-        int namesTried = 0;
-        (string colorName, Color color) colorNamePair;
+		int namesTried = 0;
+		(string colorName, Color color) colorNamePair;
 
-        do
-        {
+		do {
 
-            colorNamePair = RandomizedColors[RandomizedColorsUsed];
-            RandomizedColorsUsed++;
-            namesTried++;
+			colorNamePair = RandomizedColors[RandomizedColorsUsed];
+			RandomizedColorsUsed++;
+			namesTried++;
 
-            if (namesTried == NamesTriedUntilDuplicateAllianceNameAccepted)
-            {
-                break;
-            }
+			if (namesTried == NamesTriedUntilDuplicateAllianceNameAccepted) {
+				break;
+			}
 
-            if (RandomizedColorsUsed == RandomizedColors.Count)
-            {
-                RandomizedColorsUsed = 0;
-            }
+			if (RandomizedColorsUsed == RandomizedColors.Count) {
+				RandomizedColorsUsed = 0;
+			}
 
-        } while (allianceNamesHashed.Contains($"Alliance {colorNamePair.colorName}"));
+		} while (allianceNamesHashed.Contains($"Alliance {colorNamePair.colorName}"));
 
 
-        return new()
-        {
-            Name = $"{colorNamePair.colorName} Alliance",
-            Color = colorNamePair.color
-        };
-    }
+		return new() {
+			Name = $"{colorNamePair.colorName} Alliance",
+			Color = colorNamePair.color
+		};
+	}
 
 }

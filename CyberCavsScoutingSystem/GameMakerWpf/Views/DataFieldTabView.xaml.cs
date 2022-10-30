@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using GameMakerWpf.Domain;
-using GameMakerWpf.Domain.DomainData;
 using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.Domain.Data;
 
 namespace GameMakerWpf.Views;
 

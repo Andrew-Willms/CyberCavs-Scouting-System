@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using CCSSDomain;
 using CCSSDomain.Models;
-using GameMakerWpf.Domain.DomainData;
+using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;

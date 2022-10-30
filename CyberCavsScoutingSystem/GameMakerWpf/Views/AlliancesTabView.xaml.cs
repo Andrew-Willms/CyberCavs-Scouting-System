@@ -5,8 +5,8 @@ using System.Collections.ObjectModel;
 using CCSSDomain;
 using GameMakerWpf.Domain;
 using UtilitiesLibrary.Validation.Inputs;
-using GameMakerWpf.Domain.DomainData;
 using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.Domain.Data;
 
 namespace GameMakerWpf.Views;
 
