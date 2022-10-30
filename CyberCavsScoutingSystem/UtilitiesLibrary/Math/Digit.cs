@@ -1,7 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Numerics;
 using UtilitiesLibrary.SmartEnum;
-using UtilitiesLibrary.Validation;
 
 namespace UtilitiesLibrary.Math; 
 
@@ -23,52 +23,40 @@ public class Digit : OrderedSmartEnum<Digit> {
 	private Digit(string name, int value) : base(name, value) { }
 
 
+	
+	public static T ToINumber<T>(Digit digit) where T : INumber<T> {
 
-	public byte ToByte() {
-
-		if (this == Zero) return 0;
-		if (this == One) return 1;
-		if (this == Two) return 2;
-		if (this == Three) return 3;
-		if (this == Four) return 4;
-		if (this == Five) return 5;
-		if (this == Six) return 6;
-		if (this == Seven) return 7;
-		if (this == Eight) return 8;
-		if (this == Nine) return 9;
-
-		throw new ShouldNotReachException();
-	}
-
-	public static Digit FromByte(byte number) {
-
-		return number switch {
-			0 => Zero,
-			1 => One,
-			2 => Two,
-			3 => Three,
-			4 => Four,
-			5 => Five,
-			6 => Six,
-			7 => Seven,
-			8 => Eight,
-			9 => Nine,
-			_ => throw new ShouldMatchOtherCaseException()
+		return digit.Value switch {
+			0 => T.Zero,
+			1 => T.One,
+			2 => Constants.Numbers<T>.Two,
+			3 => Constants.Numbers<T>.Three,
+			4 => Constants.Numbers<T>.Four,
+			5 => Constants.Numbers<T>.Five,
+			6 => Constants.Numbers<T>.Six,
+			7 => Constants.Numbers<T>.Seven,
+			8 => Constants.Numbers<T>.Eight,
+			9 => Constants.Numbers<T>.Nine,
+			_ => throw new InvalidEnumArgumentException()
 		};
 	}
 
 	public static Digit FromINumber<T>(T number) where T : INumber<T> {
 
+		if (number < T.Zero) {
+			number *= Constants.Numbers<T>.MinusOne;
+		}
+
 		if (number == T.Zero) return Zero;
 		if (number == T.One) return One;
-		if (number == Constants.NumberInterface<T>.Two) return Two;
-		if (number == Constants.NumberInterface<T>.Three) return Three;
-		if (number == Constants.NumberInterface<T>.Four) return Four;
-		if (number == Constants.NumberInterface<T>.Five) return Five;
-		if (number == Constants.NumberInterface<T>.Six) return Six;
-		if (number == Constants.NumberInterface<T>.Seven) return Seven;
-		if (number == Constants.NumberInterface<T>.Eight) return Eight;
-		if (number == Constants.NumberInterface<T>.Nine) return Nine;
+		if (number == Constants.Numbers<T>.Two) return Two;
+		if (number == Constants.Numbers<T>.Three) return Three;
+		if (number == Constants.Numbers<T>.Four) return Four;
+		if (number == Constants.Numbers<T>.Five) return Five;
+		if (number == Constants.Numbers<T>.Six) return Six;
+		if (number == Constants.Numbers<T>.Seven) return Seven;
+		if (number == Constants.Numbers<T>.Eight) return Eight;
+		if (number == Constants.Numbers<T>.Nine) return Nine;
 
 		throw new InvalidOperationException(
 			"You are trying to convert a INumber that is not a single digit to a Digit enum.");
@@ -98,8 +86,11 @@ public class Digit : OrderedSmartEnum<Digit> {
 
 	public static Digit GetOnesColumn<T>(T number) where T : INumber<T> {
 
-		T lowestValue = number % Constants.NumberInterface<T>.Ten;
-		return FromINumber(lowestValue);
+		T onesColumnAndDecimals = number % Constants.Numbers<T>.Ten;
+
+		T onesColumn = onesColumnAndDecimals - number % T.One;
+
+		return FromINumber(onesColumn);
 	}
 
 }

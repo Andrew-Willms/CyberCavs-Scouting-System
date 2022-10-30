@@ -9,303 +9,232 @@ namespace UtilitiesLibrary.Math.Numbers;
 
 
 
-public class Integer : Whole, IEquatable<Integer>, IComparable<Integer>
-{
+public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 
-    public bool IsNegative { get; }
+	private bool IsNegative { get; }
 
 
 
-    private Integer(bool isNegative, ReadOnlyCollection<Digit> digits) : base(digits)
-    {
-        IsNegative = isNegative;
-    }
+	private Integer(bool isNegative, ReadOnlyCollection<Digit> digits) : base(digits) {
+		IsNegative = isNegative;
+	}
 
-    private Integer(bool isNegative, Whole whole) : base(whole)
-    {
-        IsNegative = isNegative;
-    }
+	private Integer(bool isNegative, Whole whole) : base(whole) {
+		IsNegative = isNegative;
+	}
 
 
 
-    private static Integer ToNumeric<T>(T value) where T : INumber<T>
-    {
+	private new static Integer FromINumber<T>(T value) where T : INumber<T> {
 
-        List<Digit> digits = new();
+		bool isNegative = value < T.Zero;
 
-        bool isNegative = value > T.Zero;
+		List<Digit> digits = new();
+		while (value >= T.One || value <= Constants.Numbers<T>.MinusOne) {
 
-        while (value > T.Zero)
-        {
+			digits.Add(Digit.GetOnesColumn(value));
 
-            digits.Add(Digit.GetOnesColumn(value));
+			value /= Constants.Numbers<T>.Ten;
+		}
 
-            value /= Constants.NumberInterface<T>.Ten;
-        }
+		return new(isNegative, digits.ToReadOnly());
+	}
 
-        return new(isNegative, digits.AsReadOnly());
-    }
+	public static implicit operator Integer(byte value) => FromINumber(value);
+	public static implicit operator Integer(ushort value) => FromINumber(value);
+	public static implicit operator Integer(uint value) => FromINumber(value);
+	public static implicit operator Integer(ulong value) => FromINumber(value);
+	public static implicit operator Integer(short value) => FromINumber(value);
+	public static implicit operator Integer(int value) => FromINumber(value);
+	public static implicit operator Integer(long value) => FromINumber(value);
 
-    public static implicit operator Integer(byte value) => ToNumeric(value);
-    public static implicit operator Integer(ushort value) => ToNumeric(value);
-    public static implicit operator Integer(uint value) => ToNumeric(value);
-    public static implicit operator Integer(ulong value) => ToNumeric(value);
-    public static implicit operator Integer(short value) => ToNumeric(value);
-    public static implicit operator Integer(int value) => ToNumeric(value);
-    public static implicit operator Integer(long value) => ToNumeric(value);
 
 
+	private Result<T, IntegerToPrimitiveError> ToNumberPrimitive<T>(
+		Integer typeMinValue, Integer typeMaxValue, Func<Digit, T> digitToT, Func<int, T> tenToThe) where T : INumber<T> {
 
-    private new Result<T> ToNumberPrimitive<T>(
-        Func<Whole, bool> greaterThanMaxValue,
-        Func<Whole, bool> lessThanMinValue,
-        Func<Digit, T> digitToT,
-        Func<int, T> tenToThe) where T : INumber<T>
-    {
+		if (this < typeMinValue) {
+			return new IntegerToPrimitiveError { ErrorType = IntegerToPrimitiveError.Types.ValueBelowMin };
+		}
 
-        Result<T> result = base.ToNumberPrimitive(greaterThanMaxValue, lessThanMinValue, digitToT, tenToThe);
+		if (this > typeMaxValue) {
+			return new IntegerToPrimitiveError { ErrorType = IntegerToPrimitiveError.Types.ValueAboveMax };
+		}
 
-        if (result is not Success<T> success)
-        {
-            return result;
-        }
+		T value = T.Zero;
+		for (int position = 0; position < Digits.Count; position++) {
+			value += digitToT(Digits[position]) * tenToThe(position);
+		}
 
-        return IsNegative switch
-        {
-            true => new Success<T>(success.Value * (T.Zero - T.One)),
-            false => result
-        };
-    }
+		if (IsNegative) {
+			value *= Constants.Numbers<T>.MinusOne;
+		}
 
-    public static Result<byte> ToByte(Integer integer)
-    {
+		return value;
+	}
 
-        return integer.ToNumberPrimitive(
-            number => number > byte.MaxValue,
-            number => number < byte.MinValue,
-            digit => digit.ToByte(), i => (byte)System.Math.Pow(10, i)
-        );
-    }
+	public static Result<byte, IntegerToPrimitiveError> ToByte(Integer integer) {
 
-    public static Result<ushort> ToUshort(Integer integer)
-    {
+		return integer.ToNumberPrimitive(byte.MinValue, byte.MaxValue, Digit.ToINumber<byte>, i => (byte)System.Math.Pow(10, i));
+	}
 
-        return integer.ToNumberPrimitive(
-            number => number > ushort.MaxValue,
-            number => number < ushort.MinValue,
-            digit => digit.ToByte(), i => (ushort)System.Math.Pow(10, i)
-        );
+	public static Result<ushort, IntegerToPrimitiveError> ToUshort(Integer integer) {
 
-    }
+		return integer.ToNumberPrimitive(ushort.MinValue, ushort.MaxValue, Digit.ToINumber<ushort>, i => (ushort)System.Math.Pow(10, i));
+	}
 
-    public static Result<uint> ToUint(Integer integer)
-    {
+	public static Result<uint, IntegerToPrimitiveError> ToUint(Integer integer) {
 
-        return integer.ToNumberPrimitive(
-            number => number > uint.MaxValue,
-            number => number < uint.MinValue,
-            digit => digit.ToByte(), i => (uint)System.Math.Pow(10, i)
-        );
-    }
+		return integer.ToNumberPrimitive(uint.MinValue, uint.MaxValue, Digit.ToINumber<uint>, i => (uint)System.Math.Pow(10, i));
+	}
 
-    public static Result<ulong> ToUlong(Integer integer)
-    {
+	public static Result<ulong, IntegerToPrimitiveError> ToUlong(Integer integer) {
 
-        return integer.ToNumberPrimitive(
-            number => number > ulong.MaxValue,
-            number => number < ulong.MinValue,
-            digit => digit.ToByte(), i => (ulong)System.Math.Pow(10, i)
-        );
-    }
+		return integer.ToNumberPrimitive(ulong.MinValue, ulong.MaxValue, Digit.ToINumber<ulong>, i => (ulong)System.Math.Pow(10, i));
+	}
 
-    public static Result<short> ToShort(Integer integer)
-    {
+	public static Result<short, IntegerToPrimitiveError> ToShort(Integer integer) {
 
-        return integer.ToNumberPrimitive(
-            number => number > short.MaxValue,
-            number => number < short.MinValue,
-            digit => digit.ToByte(), i => (short)System.Math.Pow(10, i)
-        );
-    }
+		return integer.ToNumberPrimitive(short.MinValue, short.MaxValue, Digit.ToINumber<short>, i => (short)System.Math.Pow(10, i));
+	}
 
-    public static Result<int> ToInt(Integer integer)
-    {
+	public static Result<int, IntegerToPrimitiveError> ToInt(Integer integer) {
 
-        return integer.ToNumberPrimitive(
-            number => number > int.MaxValue,
-            number => number < int.MinValue,
-            digit => digit.ToByte(), i => (int)System.Math.Pow(10, i)
-        );
-    }
+		return integer.ToNumberPrimitive(int.MinValue, int.MaxValue, Digit.ToINumber<int>, i => (int)System.Math.Pow(10, i));
+	}
 
-    public static Result<long> ToLong(Integer integer)
-    {
+	public static Result<long, IntegerToPrimitiveError> ToLong(Integer integer) {
 
-        return integer.ToNumberPrimitive(
-            number => number > long.MaxValue,
-            number => number < long.MinValue,
-            digit => digit.ToByte(), i => (long)System.Math.Pow(10, i)
-        );
-    }
+		return integer.ToNumberPrimitive(long.MinValue, long.MaxValue, Digit.ToINumber<long>, i => (long)System.Math.Pow(10, i));
+	}
 
 
 
-    public new static Integer? Parse(string? text)
-    {
+	public new static Integer? Parse(string? text) {
 
-        if (text is null || text.Length == 0)
-        {
-            return null;
-        }
+		if (text is null || text.Length == 0) {
+			return null;
+		}
 
-        if (text.All(x => x == '0'))
-        {
-            return new Integer(false, new List<Digit> { Digit.Zero }.AsReadOnly());
-        }
+		if (text.All(x => x == '0')) {
+			return new Integer(false, new List<Digit> { Digit.Zero }.AsReadOnly());
+		}
 
-        if (text.Multiple('-'))
-        {
-            return null;
-        }
+		if (text.Multiple('-')) {
+			return null;
+		}
 
-        bool isNegative = false;
+		bool isNegative = false;
 
-        if (text.Contains('-'))
-        {
+		if (text.Contains('-')) {
+			if (!text.StartsWith('-')) {
+				return null;
+			}
 
-            if (!text.StartsWith('-'))
-            {
-                return null;
-            }
+			text = text[1..];
+			isNegative = true;
+		}
 
-            text = text[1..];
-            isNegative = true;
-        }
+		text = text.TrimStart('0');
 
-        text = text.TrimStart('0');
+		List<Digit> digits = new();
 
-        List<Digit> digits = new();
+		foreach (char character in text.Reverse()) {
+			if (!char.IsDigit(character)) {
+				return null;
+			}
 
-        foreach (char character in text.Reverse())
-        {
+			digits.Add(Digit.FromChar(character));
+		}
 
-            if (!char.IsDigit(character))
-            {
-                return null;
-            }
+		return new(isNegative, digits.AsReadOnly());
+	}
 
-            digits.Add(Digit.FromChar(character));
-        }
 
-        return new Integer(isNegative, digits.AsReadOnly());
-    }
 
+	public override int GetHashCode() {
+		return HashCode.Combine(IsNegative, Digits);
+	}
 
+	public override bool Equals(object? obj) {
+		return obj is Integer other && Equals(other);
+	}
 
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(IsNegative, Digits);
-    }
-
-    public override bool Equals(object? obj)
-    {
-        return obj is Integer other && Equals(other);
-    }
-
-    public bool Equals(Integer? other)
-    {
-
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
-        return other is not null &&
-               IsNegative == other.IsNegative &&
-               Digits.SequenceEqual(other.Digits);
-    }
-
-    public int CompareTo(Integer? other)
-    {
-
-        if (other is null)
-        {
-            throw new ArgumentNullException(nameof(other));
-        }
-
-        if (Equals(other))
-        {
-            return 0;
-        }
-
-        if (IsNegative && !other.IsNegative)
-        {
-            return -1;
-        }
-
-        if (!IsNegative && other.IsNegative)
-        {
-            return 1;
-        }
-
-        if (LargestDecimalPosition > other.LargestDecimalPosition)
-        {
-            return 1;
-        }
-
-        if (LargestDecimalPosition < other.LargestDecimalPosition)
-        {
-            return -1;
-        }
-
-        for (int position = LargestDecimalPosition; position >= 0; position--)
-        {
-
-            if (Digits[position] > other.Digits[position])
-            {
-                return 1;
-            }
-
-            if (Digits[position] < other.Digits[position])
-            {
-                return -1;
-            }
-        }
-
-        throw new("Since Equality is short-circuit it should not be possible that the two values are the same and" +
-                  " execution should not reach this point.");
-    }
-
-
-
-    public static bool operator ==(Integer left, Integer right)
-    {
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(Integer left, Integer right)
-    {
-        return !(left == right);
-    }
-
-    public static bool operator >(Integer left, Integer right)
-    {
-        return left.CompareTo(right) > 0;
-    }
-
-    public static bool operator <(Integer left, Integer right)
-    {
-        return left.CompareTo(right) < 0;
-    }
-
-    public static bool operator >=(Integer left, Integer right)
-    {
-        return left.CompareTo(right) >= 0;
-    }
-
-    public static bool operator <=(Integer left, Integer right)
-    {
-        return left.CompareTo(right) <= 0;
-    }
+	public bool Equals(Integer? other) {
+
+		if (ReferenceEquals(this, other)) {
+			return true;
+		}
+
+		return other is not null &&
+		       IsNegative == other.IsNegative &&
+		       Digits.SequenceEqual(other.Digits);
+	}
+
+	public int CompareTo(Integer? other) {
+
+		if (other is null) {
+			throw new ArgumentNullException(nameof(other));
+		}
+
+		if (Equals(other)) {
+			return 0;
+		}
+
+		if (IsNegative && !other.IsNegative) {
+			return -1;
+		}
+
+		if (!IsNegative && other.IsNegative) {
+			return 1;
+		}
+
+		if (Digits.Count > other.Digits.Count) {
+			return 1;
+		}
+
+		if (Digits.Count < other.Digits.Count) {
+			return -1;
+		}
+
+		for (int position = Digits.Count - 1; position >= 0; position--) {
+			if (Digits[position] > other.Digits[position]) {
+				return 1;
+			}
+
+			if (Digits[position] < other.Digits[position]) {
+				return -1;
+			}
+		}
+
+		throw new("Since Equality is short-circuit it should not be possible that the two values are the same and" +
+		          " execution should not reach this point.");
+	}
+
+
+
+	public static bool operator ==(Integer left, Integer right) {
+		return left.Equals(right);
+	}
+
+	public static bool operator !=(Integer left, Integer right) {
+		return !(left == right);
+	}
+
+	public static bool operator >(Integer left, Integer right) {
+		return left.CompareTo(right) > 0;
+	}
+
+	public static bool operator <(Integer left, Integer right) {
+		return left.CompareTo(right) < 0;
+	}
+
+	public static bool operator >=(Integer left, Integer right) {
+		return left.CompareTo(right) >= 0;
+	}
+
+	public static bool operator <=(Integer left, Integer right) {
+		return left.CompareTo(right) <= 0;
+	}
 
 }

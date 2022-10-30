@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using CCSSDomain;
-using CCSSDomain.Models;
 using GameMakerWpf.Domain;
 using GameMakerWpf.DomainData;
 using UtilitiesLibrary.Validation.Inputs;
@@ -14,13 +13,11 @@ namespace GameMakerWpf.Views;
 
 public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
-	private static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
-
-	public static ReadOnlyObservableCollection<AllianceEditingData> Alliances => GameEditingData.Alliances;
-
-	public static SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditingData.RobotsPerAlliance;
-
-	public static SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditingData.AlliancesPerMatch;
+	// These can't be static or PropertyChanged events on them won't work.
+	private GameEditingData GameEditingData => ApplicationManager.GameEditingData;
+	public ReadOnlyObservableCollection<AllianceEditingData> Alliances => GameEditingData.Alliances;
+	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditingData.RobotsPerAlliance;
+	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditingData.AlliancesPerMatch;
 
 	private AllianceEditingData? _SelectedAlliance;
 	public AllianceEditingData? SelectedAlliance {
@@ -41,6 +38,8 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 		DataContext = this;
 
 		InitializeComponent();
+
+		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
 	}
 
 
@@ -72,6 +71,10 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 	private void OnPropertyChanged(string? propertyName = null) {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	private void GameProjectChanged() {
+		PropertyChanged?.Invoke(this, new(""));
 	}
 
 }

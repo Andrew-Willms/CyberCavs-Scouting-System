@@ -10,8 +10,11 @@ namespace UtilitiesLibrary.Math.Numbers;
 
 public class Whole : IEquatable<Whole>, IComparable<Whole> {
 
-	protected ReadOnlyCollection<Digit> Digits { get; } // The number 123 would be stored as { 3, 2, 1 }
-	protected int LargestDecimalPosition => Digits.Count - 1;
+	/// <summary>
+	/// Stores the digits of the number from least to most significant.
+	/// </summary>
+	protected ReadOnlyCollection<Digit> Digits { get; }
+	//protected int LargestDecimalPosition => Digits.Count - 1;
 
 
 
@@ -29,11 +32,11 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 
 		List<Digit> digits = new();
 
-		while (value > T.Zero) {
+		while (value >= T.One) {
 
 			digits.Add(Digit.GetOnesColumn(value));
 
-			value /= Constants.NumberInterface<T>.Ten;
+			value /= Constants.Numbers<T>.Ten;
 		}
 
 		return new(digits.AsReadOnly());
@@ -43,104 +46,64 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 	public static implicit operator Whole(ushort value) => FromINumber(value);
 	public static implicit operator Whole(uint value) => FromINumber(value);
 	public static implicit operator Whole(ulong value) => FromINumber(value);
-	public static implicit operator Whole(short value) => FromINumber(value);
-	public static implicit operator Whole(int value) => FromINumber(value);
-	public static implicit operator Whole(long value) => FromINumber(value);
+	public static explicit operator Whole(short value) => FromINumber(value);
+	public static explicit operator Whole(int value) => FromINumber(value);
+	public static explicit operator Whole(long value) => FromINumber(value);
 
 
 
-	protected Result<T> ToNumberPrimitive<T>(
-		Func<Whole, bool> greaterThanMaxValue,
-		Func<Whole, bool> lessThanMinValue,
-		Func<Digit, T> digitToT,
-		Func<int, T> tenToThe)
-		where T : INumber<T> {
+	private Result<T, IntegerToPrimitiveError> ToNumberPrimitive<T>(
+		Whole typeMinValue, Whole typeMaxValue, Func<Digit, T> digitToT, Func<int, T> tenToThe) where T : INumber<T> {
 
-		if (greaterThanMaxValue(this)) {
-			return new Failure<T>(new ValueTooLargeError());
+		if (this < typeMinValue) {
+			return new IntegerToPrimitiveError { ErrorType = IntegerToPrimitiveError.Types.ValueBelowMin };
 		}
 
-		if (lessThanMinValue(this)) {
-			return new Failure<T>(new ValueTooSmallError());
+		if (this > typeMaxValue) {
+			return new IntegerToPrimitiveError { ErrorType = IntegerToPrimitiveError.Types.ValueAboveMax };
 		}
 
 		T value = T.Zero;
-		for (int position = 0; position <= LargestDecimalPosition; position++) {
+		for (int position = 0; position < Digits.Count; position++) {
 			value += digitToT(Digits[position]) * tenToThe(position);
 		}
 
-		return new Success<T>(value);
+		return value;
 	}
 
-	public static Result<byte> ToByte(Whole whole) {
+	public static Result<byte, IntegerToPrimitiveError> ToByte(Whole whole) {
 
-		return whole.ToNumberPrimitive(
-			number => number > byte.MaxValue,
-			number => number < byte.MinValue,
-			digit => digit.ToByte(),
-			i => (byte)System.Math.Pow(10, i)
-		);
+		return whole.ToNumberPrimitive(byte.MinValue, byte.MaxValue, Digit.ToINumber<byte>, i => (byte)System.Math.Pow(10, i));
 	}
 
-	public static Result<ushort> ToUshort(Whole whole) {
+	public static Result<ushort, IntegerToPrimitiveError> ToUshort(Whole whole) {
 
-		return whole.ToNumberPrimitive(
-			number => number > ushort.MaxValue,
-			number => number < ushort.MinValue,
-			digit => digit.ToByte(),
-			i => (ushort)System.Math.Pow(10, i)
-		);
-
+		return whole.ToNumberPrimitive(ushort.MinValue, ushort.MaxValue, Digit.ToINumber<ushort>, i => (ushort)System.Math.Pow(10, i));
 	}
 
-	public static Result<uint> ToUint(Whole whole) {
+	public static Result<uint, IntegerToPrimitiveError> ToUint(Whole whole) {
 
-		return whole.ToNumberPrimitive(
-			number => number > uint.MaxValue,
-			number => number < uint.MinValue,
-			digit => digit.ToByte(),
-			i => (uint)System.Math.Pow(10, i)
-		);
+		return whole.ToNumberPrimitive(uint.MinValue, uint.MaxValue, Digit.ToINumber<uint>, i => (uint)System.Math.Pow(10, i));
 	}
 
-	public static Result<ulong> ToUlong(Whole whole) {
+	public static Result<ulong, IntegerToPrimitiveError> ToUlong(Whole whole) {
 
-		return whole.ToNumberPrimitive(
-			number => number > ulong.MaxValue,
-			number => number < ulong.MinValue,
-			digit => digit.ToByte(),
-			i => (ulong)System.Math.Pow(10, i)
-		);
+		return whole.ToNumberPrimitive(ulong.MinValue, ulong.MaxValue, Digit.ToINumber<ulong>, i => (ulong)System.Math.Pow(10, i));
 	}
 
-	public static Result<short> ToShort(Whole whole) {
+	public static Result<short, IntegerToPrimitiveError> ToShort(Whole whole) {
 
-		return whole.ToNumberPrimitive(
-			number => number > short.MaxValue,
-			number => number < short.MinValue,
-			digit => digit.ToByte(),
-			i => (short)System.Math.Pow(10, i)
-		);
+		return whole.ToNumberPrimitive(0, (Whole)short.MaxValue, Digit.ToINumber<short>, i => (short)System.Math.Pow(10, i));
 	}
 
-	public static Result<int> ToInt(Whole whole) {
+	public static Result<int, IntegerToPrimitiveError> ToInt(Whole whole) {
 
-		return whole.ToNumberPrimitive(
-			number => number > int.MaxValue,
-			number => number < int.MinValue,
-			digit => digit.ToByte(),
-			i => (int)System.Math.Pow(10, i)
-		);
+		return whole.ToNumberPrimitive(0, int.MaxValue, Digit.ToINumber<int>, i => (int)System.Math.Pow(10, i));
 	}
 
-	public static Result<long> ToLong(Whole whole) {
-
-		return whole.ToNumberPrimitive(
-			number => number > long.MaxValue,
-			number => number < long.MinValue,
-			digit => digit.ToByte(),
-			i => (long)System.Math.Pow(10, i)
-		);
+	public static Result<long, IntegerToPrimitiveError> ToLong(Whole whole) {
+		
+		return whole.ToNumberPrimitive(0, long.MaxValue, Digit.ToINumber<long>, i => (long)System.Math.Pow(10, i));
 	}
 
 
@@ -173,15 +136,15 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 			return 0;
 		}
 
-		if (LargestDecimalPosition > other.LargestDecimalPosition) {
+		if (Digits.Count > other.Digits.Count) {
 			return 1;
 		}
 
-		if (LargestDecimalPosition < other.LargestDecimalPosition) {
+		if (Digits.Count < other.Digits.Count) {
 			return -1;
 		}
 
-		for (int position = LargestDecimalPosition; position >= 0; position--) {
+		for (int position = Digits.Count - 1; position >= 0; position--) {
 
 			if (Digits[position] > other.Digits[position]) {
 				return 1;
@@ -249,4 +212,5 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 
 		return new Whole(digits.AsReadOnly());
 	}
+
 }

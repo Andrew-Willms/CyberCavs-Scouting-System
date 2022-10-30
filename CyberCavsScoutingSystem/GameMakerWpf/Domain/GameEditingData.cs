@@ -21,6 +21,7 @@ public class GameEditingData {
 	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance { get; }
 	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch { get; }
 
+	public ValidationEvent AnythingChanged { get; } = new();
 	public ValidationEvent AllianceNameChanged { get; } = new();
 	public ValidationEvent AllianceColorChanged { get; } = new();
 	public ValidationEvent DataFieldNameChanged { get; } = new();
@@ -109,6 +110,11 @@ public class GameEditingData {
 		foreach (DataField dataField in initialValues.DataFields) {
 			AddDataField(new(this, dataField));
 		}
+
+		AnythingChanged.SubscribeTo(AllianceNameChanged);
+		AnythingChanged.SubscribeTo(AllianceColorChanged);
+		AnythingChanged.SubscribeTo(DataFieldNameChanged);
+		AnythingChanged.SubscribeTo(DataFieldTypeChanged);
 	}
 
 

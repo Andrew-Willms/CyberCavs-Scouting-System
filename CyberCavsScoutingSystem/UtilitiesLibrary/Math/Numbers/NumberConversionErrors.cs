@@ -2,56 +2,35 @@
 
 
 
-public class InvalidCharactersError : Error {
+public class InvalidCharactersError : Error { }
 
-	public InvalidCharactersError() { }
+public class ArgumentNullError : Error { }
 
-	public InvalidCharactersError(string message) : base(message) { }
+public class ValueTooLargeError : Error { }
 
-	public InvalidCharactersError(string message, Error innerError) : base(message, innerError) { }
+public class ValueTooSmallError : Error { }
+
+public class ValueIsNotWholeNumberError : Error { }
+
+public class ValueIsNotPositiveError : Error { }
+
+
+
+public class IntegerToPrimitiveError : Error<IntegerToPrimitiveError.Types> {
+
+	public enum Types {
+		ValueBelowMin,
+		ValueAboveMax
+	}
+
 }
 
-public class ArgumentNullError : Error {
+public class NumberToPrimitiveError : Error<NumberToPrimitiveError.Types> {
 
-	public ArgumentNullError() { }
+	public enum Types {
+		ValueBelowMin,
+		ValueAboveMax,
+		//DecimalsCannotBeRepresented
+	}
 
-	public ArgumentNullError(string message) : base(message) { }
-
-	public ArgumentNullError(string message, Error innerError) : base(message, innerError) { }
-}
-
-public class ValueTooLargeError : Error {
-
-	public ValueTooLargeError() { }
-
-	public ValueTooLargeError(string message) : base(message) { }
-
-	public ValueTooLargeError(string message, Error innerError) : base(message, innerError) { }
-}
-
-public class ValueTooSmallError : Error {
-
-	public ValueTooSmallError() { }
-
-	public ValueTooSmallError(string message) : base(message) { }
-
-	public ValueTooSmallError(string message, Error innerError) : base(message, innerError) { }
-}
-
-public class ValueIsNotWholeNumberError : Error {
-
-	public ValueIsNotWholeNumberError() { }
-
-	public ValueIsNotWholeNumberError(string message) : base(message) { }
-
-	public ValueIsNotWholeNumberError(string message, Error innerError) : base(message, innerError) { }
-}
-
-public class ValueIsNotPositiveError : Error {
-
-	public ValueIsNotPositiveError() { }
-
-	public ValueIsNotPositiveError(string message) : base(message) { }
-
-	public ValueIsNotPositiveError(string message, Error innerError) : base(message, innerError) { }
 }

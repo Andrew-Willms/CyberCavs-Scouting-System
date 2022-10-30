@@ -1,50 +1,117 @@
-﻿namespace UtilitiesLibrary;
+﻿using System;
+using UtilitiesLibrary.MiscExtensions;
+using UtilitiesLibrary.Validation;
+
+namespace UtilitiesLibrary;
 
 
 
-public abstract class Result<T> { }
+public class Result<TError> where TError : Error {
 
+	private Optional<Success> Success { get; }
+	private Optional<Error> Error { get; }
 
+	public object Resolve() {
 
-public class Success<T> : Result<T> {
+		if (Success.HasValue) {
+			return Success.Value;
+		}
 
-	public T Value { get; }
+		if (Error.HasValue) {
+			return Error.Value;
+		}
 
-	public Success(T value) {
-		Value = value;
+		throw new ShouldNotReachException();
+	}
+
+	private Result(Success success) {
+		Success = success.Optionalize();
+		Error = Optional.NoValue;
+	}
+
+	private Result(Error error) {
+		Success = Optional.NoValue;
+		Error = error.Optionalize();
+	}
+
+	public static implicit operator Result<TError>(Success success) {
+		return new(success);
+	}
+
+	public static implicit operator Result<TError>(TError error) {
+		return new(error);
 	}
 
 }
 
 
 
-public class Failure<T> : Result<T> {
+public class Result<TValue, TError> where TError : Error {
 
-	public Error Error { get; }
+	private Optional<Success<TValue>> Success { get; }
+	private Optional<TError> Error { get; }
 
-	public Failure(Error error) {
-		Error = error;
+	public object Resolve() {
+
+		if (Success.HasValue) {
+			return Success.Value.Value!;
+		}
+
+		if (Error.HasValue) {
+			return Error.Value;
+		}
+
+		throw new ShouldNotReachException();
 	}
 
+	private Result(Success<TValue> success) {
+		Success = success.Optionalize();
+		Error = Optional.NoValue;
+	}
+
+	private Result(TError error) {
+		Success = Optional.NoValue;
+		Error = error.Optionalize();
+	}
+
+	public static implicit operator Result<TValue, TError>(TValue value) {
+		return new(new Success<TValue> { Value = value });
+	}
+
+	public static implicit operator Result<TValue, TError>(Success<TValue> success) {
+		return new(success);
+	}
+
+	public static implicit operator Result<TValue, TError>(TError error) {
+		return new(error);
+	}
+
+}
+
+
+
+public class Success { }
+
+public class Success<T>  {
+
+	public required T Value { get; init; }
 }
 
 
 
 public class Error {
 
-	public string Message { get; } = "";
+	public string Message { get; init; } = "";
 
-	public Error? InnerError { get; }
-
-	public Error() { }
-
-	public Error(string message) {
-		Message = message;
-	}
-
-	public Error(string message, Error innerError) {
-		Message = message;
-		InnerError = innerError;
-	}
-
+	public Optional<Error> InnerError { get; init; } = Optional.NoValue;
 }
+
+public abstract class Error<TErrorEnum> : Error where TErrorEnum : Enum {
+
+	public required TErrorEnum ErrorType { get; init; }
+}
+
+//public class MultiError<TErrorEnum> : Error where TErrorEnum : Enum {
+//
+//	public required ReadOnlyList<Error<TErrorEnum>> InternalErrors { get; init; }
+//}

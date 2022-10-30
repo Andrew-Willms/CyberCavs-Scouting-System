@@ -24,10 +24,10 @@
         </Grid.RowDefinitions>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Save"/>
-                <MenuItem Header="Save _As"/>
-                <MenuItem Header="_Open"/>
-                <MenuItem Header="_New"/>
+                <MenuItem Header="_Save" Click="Save_Clicked" />
+                <MenuItem Header="Save_As" Click="SaveAs_Clicked"/>
+                <MenuItem Header="_Open" Click="Open_Clicked"/>
+                <MenuItem Header="_New" Click="New_Clicked"/>
             </MenuItem>
         </Menu>
         <TabControl Grid.Row="1">

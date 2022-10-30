@@ -11,9 +11,9 @@ namespace GameMakerWpf.Views;
 
 public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
-	private static GameEditingData GameEditingData => ApplicationManager.GameEditingData;
-
-	public static ReadOnlyObservableCollection<GeneralDataFieldEditingData> DataFields => GameEditingData.DataFields;
+	// These can't be static or PropertyChanged events on them won't work.
+	private GameEditingData GameEditingData => ApplicationManager.GameEditingData;
+	public ReadOnlyObservableCollection<GeneralDataFieldEditingData> DataFields => GameEditingData.DataFields;
 
 	private GeneralDataFieldEditingData? _SelectedDataField;
 	public GeneralDataFieldEditingData? SelectedDataField {
@@ -34,8 +34,9 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 		DataContext = this;
 
 		InitializeComponent();
-	}
 
+		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
+	}
 
 
 
@@ -67,6 +68,10 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 	private void OnPropertyChanged(string? propertyName = null) {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	private void GameProjectChanged() {
+		PropertyChanged?.Invoke(this, new(""));
 	}
 
 }
