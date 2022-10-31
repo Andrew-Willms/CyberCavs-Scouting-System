@@ -13,12 +13,20 @@ public interface IGameMakerMainView {
 
 
 
+public interface IErrorPresenter {
+
+	public void DisplayError(string caption, string message);
+
+}
+
+
+
 public interface ISavePrompter {
 
 	public enum SavePromptResult {
 		SaveAndContinue,
 		ContinueWithoutSaving,
-		CancelOperation
+		Cancel
 	}
 
 	public SavePromptResult PromptSave();
@@ -32,14 +40,14 @@ public interface ISaver {
 	public class SaveError : Error<SaveError.Types> {
 
 		public enum Types {
-			ProjectHasNoSaveLocation,
-			ProjectCouldNotBeSerialized,
-			SaveLocationCouldNotBeWrittenTo
+			NoSaveLocationSpecified,
+			SerializationFailed,
+			SaveLocationInaccessible
 		}
 
 	}
 
-	public class SaveAsError : Error<SaveAsError.Types> {
+	public class SetSaveLocationError : Error<SetSaveLocationError.Types> {
 
 		public enum Types {
 			Aborted,
@@ -52,7 +60,7 @@ public interface ISaver {
 
 		public enum Types {
 			Aborted,
-			SaveLocationCouldNotBeRead,
+			SaveLocationInaccessible,
 			SavedDataCouldNotBeConverted
 		}
 
@@ -64,7 +72,7 @@ public interface ISaver {
 
 	public Result<SaveError> Save(GameEditingData gameEditingData);
 
-	public Result<SaveAsError> SaveAs(GameEditingData gameEditingData);
+	public Result<SetSaveLocationError> SetSaveLocation();
 
 	public Result<GameEditingData, OpenError> Open();
 

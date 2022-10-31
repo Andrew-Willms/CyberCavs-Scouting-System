@@ -111,6 +111,13 @@ public class GameEditingData {
 			AddDataField(new(this, dataField));
 		}
 
+		AnythingChanged.SubscribeTo(Year.OutputObjectChanged);
+		AnythingChanged.SubscribeTo(Name.OutputObjectChanged);
+		AnythingChanged.SubscribeTo(Description.OutputObjectChanged);
+		AnythingChanged.SubscribeTo(Version.OutputObjectChanged);
+		AnythingChanged.SubscribeTo(RobotsPerAlliance.OutputObjectChanged);
+		AnythingChanged.SubscribeTo(AlliancesPerMatch.OutputObjectChanged);
+
 		AnythingChanged.SubscribeTo(AllianceNameChanged);
 		AnythingChanged.SubscribeTo(AllianceColorChanged);
 		AnythingChanged.SubscribeTo(DataFieldNameChanged);

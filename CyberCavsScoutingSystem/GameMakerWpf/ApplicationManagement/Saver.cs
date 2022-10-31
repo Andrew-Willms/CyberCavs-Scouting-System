@@ -21,7 +21,7 @@ public class Saver : ISaver {
 		if (!FilePath.HasValue) {
 
 			return new ISaver.SaveError {
-				ErrorType = ISaver.SaveError.Types.ProjectHasNoSaveLocation
+				ErrorType = ISaver.SaveError.Types.NoSaveLocationSpecified
 			};
 		}
 
@@ -32,7 +32,7 @@ public class Saver : ISaver {
 		} catch {
 
 			return new ISaver.SaveError {
-				ErrorType = ISaver.SaveError.Types.ProjectCouldNotBeSerialized
+				ErrorType = ISaver.SaveError.Types.SerializationFailed
 			};
 		}
 
@@ -42,21 +42,21 @@ public class Saver : ISaver {
 		} catch {
 
 			return new ISaver.SaveError {
-				ErrorType = ISaver.SaveError.Types.SaveLocationCouldNotBeWrittenTo
+				ErrorType = ISaver.SaveError.Types.SaveLocationInaccessible
 			};
 		}
 
 		return new Success();
 	}
 
-	public Result<ISaver.SaveAsError> SaveAs(GameEditingData gameEditingData) {
+	public Result<ISaver.SetSaveLocationError> SetSaveLocation() {
 
 		SaveFileDialog saveFileDialog = SaveFileDialog;
 
 		bool? proceed = saveFileDialog.ShowDialog();
 
 		if (proceed is null or false) {
-			return new ISaver.SaveAsError { ErrorType = ISaver.SaveAsError.Types.Aborted };
+			return new ISaver.SetSaveLocationError { ErrorType = ISaver.SetSaveLocationError.Types.Aborted };
 		}
 
 		string filePath = saveFileDialog.FileName;
@@ -64,7 +64,7 @@ public class Saver : ISaver {
 		string folderPath = string.Join("\\", filePathPieces[..^1]);
 
 		if (!Directory.Exists(folderPath)) {
-			return new ISaver.SaveAsError { ErrorType = ISaver.SaveAsError.Types.SaveLocationIsInvalid };
+			return new ISaver.SetSaveLocationError { ErrorType = ISaver.SetSaveLocationError.Types.SaveLocationIsInvalid };
 		}
 
 		FilePath = filePath.Optionalize();
@@ -89,7 +89,7 @@ public class Saver : ISaver {
 			serializedGameEditingData = File.ReadAllText(filePath);
 
 		} catch {
-			return new ISaver.OpenError { ErrorType = ISaver.OpenError.Types.SaveLocationCouldNotBeRead };
+			return new ISaver.OpenError { ErrorType = ISaver.OpenError.Types.SaveLocationInaccessible };
 		}
 
 		try {

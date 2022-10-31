@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Views;
@@ -30,10 +31,9 @@ public static class ApplicationManager {
 	private static readonly List<Action> GameProjectChangeActions = new();
 
 	private static IGameMakerMainView MainView { get; } = new MainWindow();
-
 	private static ISaver Saver { get; } = new Saver();
-
-	private static ISavePrompter SavePrompter { get; } = new SavePrompter();
+	private static ISavePrompter SavePrompter => new SavePrompter();
+	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 	private static bool ProjectIsSaved { get; set; }
 
@@ -73,7 +73,7 @@ public static class ApplicationManager {
 
 		switch (savePromptResult) {
 
-			case SavePromptResult.CancelOperation:
+			case SavePromptResult.Cancel:
 				cancelOperation = true;
 				return;
 
@@ -98,12 +98,53 @@ public static class ApplicationManager {
 			return;
 		}
 
-		Saver.Save(GameEditingData);
-		ProjectIsSaved = true;
+		Result<ISaver.SaveError> result = Saver.Save(GameEditingData);
+
+		switch (result.Resolve()) {
+			
+			case Success:
+				ProjectIsSaved = true;
+				return;
+
+			case ISaver.SaveError { ErrorType: ISaver.SaveError.Types.NoSaveLocationSpecified }:
+				ErrorPresenter.DisplayError(ErrorData.SaveError.NoSaveLocationSpecifiedCaption, ErrorData.SaveError.NoSaveLocationSpecifiedMessage);
+				return;
+
+			case ISaver.SaveError { ErrorType: ISaver.SaveError.Types.SerializationFailed }:
+				ErrorPresenter.DisplayError(ErrorData.SaveError.SerializationFailedCaption, ErrorData.SaveError.SerializationFailedMessage);
+				return;
+
+			case ISaver.SaveError { ErrorType: ISaver.SaveError.Types.SaveLocationInaccessible }:
+				ErrorPresenter.DisplayError(ErrorData.SaveError.SaveLocationInaccessibleCaption, ErrorData.SaveError.SaveLocationInaccessibleMessage);
+				return;
+
+			default:
+				throw new ShouldMatchOtherCaseException();
+		}
 	}
 
 	public static void SaveGameProjectAs() {
-		Saver.SaveAs(GameEditingData);
+
+		Result<ISaver.SetSaveLocationError> result = Saver.SetSaveLocation();
+
+		switch (result.Resolve()) {
+			
+			case Success:
+				ProjectIsSaved = true;
+				break;
+
+			case ISaver.SetSaveLocationError { ErrorType: ISaver.SetSaveLocationError.Types.Aborted }:
+				return;
+
+			case ISaver.SetSaveLocationError { ErrorType: ISaver.SetSaveLocationError.Types.SaveLocationIsInvalid }:
+				ErrorPresenter.DisplayError(ErrorData.SaveAsError.SaveLocationIsInvalidCaption, ErrorData.SaveAsError.SaveLocationIsInvalidMessage);
+				return;
+
+			default:
+				throw new ShouldMatchOtherCaseException();
+		}
+
+		SaveGameProject();
 	}
 
 	public static void OpenGameProject() {
@@ -121,7 +162,15 @@ public static class ApplicationManager {
 				GameEditingData = newGameEditingData;
 				return;
 
-			case ISaver.OpenError:
+			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.Aborted }:
+				return;
+				
+			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.SaveLocationInaccessible }:
+				ErrorPresenter.DisplayError(ErrorData.OpenError.SaveLocationInaccessibleCaption, ErrorData.OpenError.SaveLocationInaccessibleMessage);
+				return;
+
+			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.SavedDataCouldNotBeConverted }:
+				ErrorPresenter.DisplayError(ErrorData.OpenError.SavedDataCouldNotBeConvertedCaption, ErrorData.OpenError.SavedDataCouldNotBeConvertedMessage);
 				return;
 
 			default:
