@@ -5,9 +5,10 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpfUtilities="clr-namespace:UtilitiesLibrary;assembly=UtilitiesLibrary"
              xmlns:wpf="clr-namespace:UtilitiesLibrary.WPF;assembly=UtilitiesLibrary"
-			 xmlns:domain="clr-namespace:CCSSDomain;assembly=CCSSDomain"
              xmlns:wpfConverters="clr-namespace:GameMakerWpf.WpfConverters"
-			 Startup="ApplicationStartup">
+             xmlns:ccssDomain="clr-namespace:CCSSDomain"
+             xmlns:models="clr-namespace:CCSSDomain.Models;assembly=CCSSDomain"
+             Startup="ApplicationStartup">
 	<Application.Resources>
 
         <wpfConverters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
@@ -70,7 +71,7 @@
 						<TextBlock Text="Description stuff here."/>
 						<ItemsControl ItemsSource="{Binding Errors}">
 							<ItemsControl.ItemTemplate>
-								<DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
+								<DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=ccssDomain:ErrorSeverity}">
                                     <!--<DataTemplate.DataType>d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}"</DataTemplate.DataType>-->
                                     <DataTemplate.Resources>
 										<Style TargetType="TextBlock">
@@ -91,7 +92,7 @@
 
 		<Style x:Key="MultiStringInputBorderStyle" TargetType="Border">
 			<d:Style.DataContext>
-                <d:DesignInstance Type="{wpf:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T1=domain:Version, T2=domain:ErrorSeverity}"/>
+                <d:DesignInstance Type="{wpf:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T1=models:Version, T2=ccssDomain:ErrorSeverity}"/>
                 <!--<d:DesignInstance Type="wpfUtilities:MultiStringInput, IsDesignTimeCreatable=True"/>-->
 			</d:Style.DataContext>
 
@@ -105,7 +106,7 @@
 						<TextBlock Text="Description stuff here."/>
                         <ItemsControl ItemsSource="{Binding ValidationErrors}">
 							<ItemsControl.ItemTemplate>
-                                <DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
+                                <DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=ccssDomain:ErrorSeverity}">
                                     <DataTemplate.Resources>
 										<Style TargetType="TextBlock">
 											<Setter Property="Foreground"

@@ -4,7 +4,7 @@ using CCSSDomain.Models;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
-using Version = CCSSDomain.Version;
+using Version = CCSSDomain.Models.Version;
 
 namespace GameMakerWpf.Domain;
 

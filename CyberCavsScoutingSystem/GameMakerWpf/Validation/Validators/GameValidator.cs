@@ -6,7 +6,7 @@ using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Validation;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
-using Version = CCSSDomain.Version;
+using Version = CCSSDomain.Models.Version;
 
 namespace GameMakerWpf.Validation.Validators;
 
