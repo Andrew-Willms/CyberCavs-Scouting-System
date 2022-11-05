@@ -101,12 +101,11 @@ public class SingleInput<TOutput, TInput, TSeverity> : Input<TOutput, TSeverity>
 
 		(Optional<TOutput> outputObject, ConversionErrors) = Converter(InputObject);
 
-		if (outputObject.HasValue) {
+		foreach (OnChangeValidator<TOutput, TSeverity> validator in OnChangedValidation.Keys) {
 
-			foreach (OnChangeValidator<TOutput, TSeverity> validator in OnChangedValidation.Keys) {
-
-				OnChangedValidation[validator] = validator.Invoke(outputObject.Value);
-			}
+			OnChangedValidation[validator] = outputObject.HasValue
+				? validator.Invoke(outputObject.Value)
+				: ReadOnlyList<ValidationError<TSeverity>>.Empty;
 		}
 
 		OutputObject = outputObject;

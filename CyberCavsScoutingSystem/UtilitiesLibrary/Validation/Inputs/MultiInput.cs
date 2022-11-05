@@ -58,12 +58,11 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 
 		(Optional<TOutput> outputObject, ConversionErrors) = ConverterInvoker;
 
-		if (OutputObject.HasValue) {
+		foreach (OnChangeValidator<TOutput, TSeverity> validator in OnChangedValidation.Keys) {
 
-			foreach (OnChangeValidator<TOutput, TSeverity> validator in OnChangedValidation.Keys) {
-
-				OnChangedValidation[validator] = validator.Invoke(OutputObject.Value);
-			}
+			OnChangedValidation[validator] = outputObject.HasValue
+				? validator.Invoke(outputObject.Value)
+				: ReadOnlyList<ValidationError<TSeverity>>.Empty;
 		}
 
 		OutputObject = outputObject;
