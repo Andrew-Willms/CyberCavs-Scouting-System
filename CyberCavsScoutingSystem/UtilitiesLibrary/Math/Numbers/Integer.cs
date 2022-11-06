@@ -190,11 +190,11 @@ public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 		}
 
 		if (Digits.Count > other.Digits.Count) {
-			return 1;
+			return IsNegative ? -1 : 1;
 		}
 
 		if (Digits.Count < other.Digits.Count) {
-			return -1;
+			return IsNegative ? 1 : -1;
 		}
 
 		for (int position = Digits.Count - 1; position >= 0; position--) {

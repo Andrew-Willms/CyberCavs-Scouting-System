@@ -311,11 +311,11 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 		}
 
 		if (LargestDecimalPosition > other.LargestDecimalPosition) {
-			return 1;
+			return IsNegative ? -1 : 1;
 		}
-
+		
 		if (LargestDecimalPosition < other.LargestDecimalPosition) {
-			return -1;
+			return IsNegative ? 1 : -1;
 		}
 
 		int smallestDecimalPosition = System.Math.Min(SmallestDecimalPosition, other.SmallestDecimalPosition);
