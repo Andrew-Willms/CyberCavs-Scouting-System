@@ -7,9 +7,10 @@
         xmlns:views="clr-namespace:GameMakerWpf.Views"
         xmlns:domain="clr-namespace:GameMakerWpf.Domain"
         xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
+        xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        d:DataContext="{d:DesignInstance Type=domain:GameEditingData, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance Type=editors:GameEditor, IsDesignTimeCreatable=True}">
 
     <Window.Resources>
         <displayData:MetaTabData x:Key="MetaTabData"/>

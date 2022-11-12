@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using CCSSDomain;
-using GameMakerWpf.Domain;
 using UtilitiesLibrary.Validation.Inputs;
 using GameMakerWpf.ApplicationManagement;
 using GameMakerWpf.Domain.Data;
+using GameMakerWpf.Domain.Editors;
 
 namespace GameMakerWpf.Views;
 
@@ -15,13 +15,13 @@ namespace GameMakerWpf.Views;
 public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditingData GameEditingData => ApplicationManager.GameEditingData;
-	public ReadOnlyObservableCollection<AllianceEditingData> Alliances => GameEditingData.Alliances;
-	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditingData.RobotsPerAlliance;
-	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditingData.AlliancesPerMatch;
+	private GameEditor GameEditor => ApplicationManager.GameEditor;
+	public ReadOnlyObservableCollection<AllianceEditor> Alliances => GameEditor.Alliances;
+	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditor.RobotsPerAlliance;
+	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditor.AlliancesPerMatch;
 
-	private AllianceEditingData? _SelectedAlliance;
-	public AllianceEditingData? SelectedAlliance {
+	private AllianceEditor? _SelectedAlliance;
+	public AllianceEditor? SelectedAlliance {
 		get => _SelectedAlliance;
 		set {
 			_SelectedAlliance = value;
@@ -46,7 +46,7 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 
 	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-		GameEditingData.AddGeneratedAlliance();
+		GameEditor.AddGeneratedAlliance();
 	}
 
 	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
@@ -55,7 +55,7 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
 		}
 
-		GameEditingData.RemoveAlliance(SelectedAlliance);
+		GameEditor.RemoveAlliance(SelectedAlliance);
 	}
 
 	private void MoveUpButton_Click(object sender, System.Windows.RoutedEventArgs e) {

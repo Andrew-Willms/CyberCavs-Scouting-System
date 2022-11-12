@@ -9,7 +9,7 @@ public partial class MainWindow : Window, IGameMakerMainView {
 
 	public MainWindow() {
 
-		DataContext = ApplicationManager.GameEditingData;
+		DataContext = ApplicationManager.GameEditor;
 
 		InitializeComponent();
 	}

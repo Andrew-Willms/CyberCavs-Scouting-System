@@ -13,6 +13,7 @@ public abstract class DataField {
 		Selection,
 		Integer
 	}
+
 }
 
 public class TextDataField : DataField { }

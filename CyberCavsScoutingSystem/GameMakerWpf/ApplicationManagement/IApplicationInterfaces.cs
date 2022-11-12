@@ -1,4 +1,4 @@
-﻿using GameMakerWpf.Domain;
+﻿using GameMakerWpf.Domain.EditingData;
 using UtilitiesLibrary;
 
 namespace GameMakerWpf.ApplicationManagement;

@@ -2,7 +2,6 @@
 using System.Windows.Media;
 using System.Collections.Generic;
 using CCSSDomain;
-using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
@@ -11,6 +10,7 @@ using UtilitiesLibrary.Validation.Inputs;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
+using GameMakerWpf.Domain.Editors;
 
 namespace GameMakerWpf.Validation.Validators;
 
@@ -55,7 +55,7 @@ public static class AllianceValidator {
 	}
 
 	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
-		IEnumerable<AllianceEditingData> alliances) {
+		IEnumerable<AllianceEditor> alliances) {
 
 		return alliances
 			.Where(otherAlliance => otherAlliance.Name != validatee && otherAlliance.Name.OutputObject.HasValue)
@@ -98,11 +98,11 @@ public static class AllianceValidator {
 
 
 	public static ReadOnlyList<Error> ColorCovalidator_Uniqueness(Color color, IInput<Color, ErrorSeverity> validatee,
-		IEnumerable<AllianceEditingData> otherAlliances) {
+		IEnumerable<AllianceEditor> otherAlliances) {
 
 		List<Error> validationErrors = new();
 
-		foreach (AllianceEditingData otherAlliance in otherAlliances) {
+		foreach (AllianceEditor otherAlliance in otherAlliances) {
 
 			if (otherAlliance.AllianceColor == validatee) {
 				continue;

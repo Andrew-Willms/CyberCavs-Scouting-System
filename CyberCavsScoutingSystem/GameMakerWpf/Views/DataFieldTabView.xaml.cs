@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
-using GameMakerWpf.Domain;
 using GameMakerWpf.ApplicationManagement;
 using GameMakerWpf.Domain.Data;
+using GameMakerWpf.Domain.Editors;
 
 namespace GameMakerWpf.Views;
 
@@ -13,11 +13,11 @@ namespace GameMakerWpf.Views;
 public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditingData GameEditingData => ApplicationManager.GameEditingData;
-	public ReadOnlyObservableCollection<GeneralDataFieldEditingData> DataFields => GameEditingData.DataFields;
+	private GameEditor GameEditor => ApplicationManager.GameEditor;
+	public ReadOnlyObservableCollection<DataFieldEditor> DataFields => GameEditor.DataFields;
 
-	private GeneralDataFieldEditingData? _SelectedDataField;
-	public GeneralDataFieldEditingData? SelectedDataField {
+	private DataFieldEditor? _SelectedDataField;
+	public DataFieldEditor? SelectedDataField {
 		get => _SelectedDataField;
 		set {
 			_SelectedDataField = value;
@@ -43,7 +43,7 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
 
-		GameEditingData.AddGeneratedDataField();
+		GameEditor.AddGeneratedDataField();
 	}
 
 	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
@@ -52,7 +52,7 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no DataField is selected.");
 		}
 
-		GameEditingData.RemoveDataField(SelectedDataField);
+		GameEditor.RemoveDataField(SelectedDataField);
 	}
 
 	private void MoveUpButton_Click(object sender, System.Windows.RoutedEventArgs e) {

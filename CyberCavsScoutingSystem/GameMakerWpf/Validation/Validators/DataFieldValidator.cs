@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using CCSSDomain;
-using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
@@ -10,6 +9,7 @@ using UtilitiesLibrary.Validation.Inputs;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
+using GameMakerWpf.Domain.Editors;
 
 namespace GameMakerWpf.Validation.Validators;
 
@@ -49,7 +49,7 @@ public static class DataFieldValidator {
 	}
 
 	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
-		IEnumerable<GeneralDataFieldEditingData> dataFields) {
+		IEnumerable<DataFieldEditor> dataFields) {
 
 		if (dataFields.Where(dataField => dataField.Name.OutputObject.HasValue)
 		    .Select(dataField => dataField.Name.OutputObject.Value)

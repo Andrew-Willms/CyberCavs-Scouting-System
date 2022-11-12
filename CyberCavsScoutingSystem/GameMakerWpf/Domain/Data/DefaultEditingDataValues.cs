@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Windows.Media;
+using System.Collections.Generic;
 using CCSSDomain.Models;
+using GameMakerWpf.Domain.EditingData;
+using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 
@@ -10,77 +12,94 @@ namespace GameMakerWpf.Domain.Data;
 
 public static class DefaultEditingDataValues {
 
-	private static readonly Alliance DefaultRedAlliance = new() {
+	private static readonly AllianceEditingData DefaultRedAlliance = new() {
 		Name = "Red Alliance",
-		Color = Colors.Red
+		RedColorValue = $"{255}",
+		GreenColorValue = $"{0}",
+		BlueColorValue = $"{0}"
 	};
 
-	private static readonly Alliance DefaultBlueAlliance = new() {
+	private static readonly AllianceEditingData DefaultBlueAlliance = new() {
 		Name = "Blue Alliance",
-		Color = Colors.Blue
+		RedColorValue = $"{0}",
+		GreenColorValue = $"{0}",
+		BlueColorValue = $"{255}",
 	};
 
 
 
-	public static readonly TextDataField DefaultTextDataField = new() {
-		Name = "New Data Field"
-	};
-
-	public static readonly SelectionDataField DefaultSelectionDataField = new() {
+	public static readonly TextDataFieldEditingData DefaultTextDataFieldEditingData = new() {
 		Name = "New Data Field",
-		OptionNames = ReadOnlyList<string>.Empty
+		DataFieldType = DataField.DataFieldType.Text
 	};
 
-	public static readonly IntegerDataField DefaultIntegerDataField = new() {
-		Name = "New Data Field"
+	public static readonly SelectionDataFieldEditingData DefaultSelectionDataFieldEditingData = new() {
+		Name = "New Data Field",
+		OptionNames = ReadOnlyList<string>.Empty,
+		DataFieldType = DataField.DataFieldType.Selection
 	};
 
-	public static readonly DataField DefaultDataField = DefaultTextDataField;
+	public static readonly IntegerDataFieldEditingData DefaultIntegerDataFieldEditingData = new() {
+		Name = "New Data Field",
+		InitialValue = $"{0}",
+		MinValue = $"{int.MinValue}",
+		MaxValue = $"{int.MaxValue}",
+		DataFieldType = DataField.DataFieldType.Integer
+	};
+
+	public static readonly DataFieldEditingData DefaultDataFieldEditingData = DefaultTextDataFieldEditingData;
 
 
 
-	public static GameEditingData DefaultEditingData {
+	public static GameEditingData BlankGameEditingData => new() {
 
-		get {
-			Game initialValues = new() {
-				Name = GameNameGenerator.GetRandomGameName(),
-				Year = DateTime.Now.Year,
-				RobotsPerAlliance = 3,
-				AlliancesPerMatch = 2,
-				Alliances = new ReadOnlyList<Alliance>(),
-				DataFields = new ReadOnlyList<DataField>()
-			};
+		Name = "",
+		Year = "",
+		Description = "",
 
-			GameEditingData gameEditingData = new(initialValues);
+		VersionMajorNumber = $"{0}",
+		VersionMinorNumber = $"{0}",
+		VersionPatchNumber = $"{0}",
+		VersionDescription = "",
 
-			gameEditingData.AddAlliance(new(gameEditingData, DefaultRedAlliance));
-			gameEditingData.AddAlliance(new(gameEditingData, DefaultBlueAlliance));
+		RobotsPerAlliance = $"{0}",
+		AlliancesPerMatch = $"{0}",
+		Alliances = new List<AllianceEditingData>(),
+		DataFields = new List<DataFieldEditingData>(),
+	};
 
-			return gameEditingData;
-		}
+	public static GameEditingData DefaultGameEditingData => new() {
+
+		Name = GameNameGenerator.GetRandomGameName(),
+		Year = DateTime.Now.Year.ToString(),
+		Description = "",
+
+		VersionMajorNumber = $"{1}",
+		VersionMinorNumber = $"{0}",
+		VersionPatchNumber = $"{0}",
+		VersionDescription = "",
+
+		RobotsPerAlliance = $"{3}",
+		AlliancesPerMatch = $"{2}",
+		Alliances = new List<AllianceEditingData> { DefaultRedAlliance, DefaultBlueAlliance },
+		DataFields = new List<DataFieldEditingData>(),
+	};
+
+	public static AllianceEditingData GetNewAllianceEditingData(GameEditor gameEditor) {
+
+		return AllianceGenerator.GenerateAllianceEditingData(gameEditor.Alliances.SelectIfHasValue(x => x.Name.OutputObject));
 	}
 
-	public static AllianceEditingData GetNewAlliance(GameEditingData gameEditingData) {
 
-		Alliance initialValues = AllianceGenerator.GenerateAlliance(gameEditingData.Alliances.SelectIfHasValue(x => x.Name.OutputObject));
-		return new(gameEditingData, initialValues);
+
+	public static void AddGeneratedAlliance(this GameEditor gameEditor) {
+
+		gameEditor.AddAlliance(GetNewAllianceEditingData(gameEditor));
 	}
 
-	public static GeneralDataFieldEditingData GetNewDataField(GameEditingData gameEditingData) {
+	public static void AddGeneratedDataField(this GameEditor gameEditor) {
 
-		return new(gameEditingData, DefaultDataField);
-	}
-
-
-
-	public static void AddGeneratedAlliance(this GameEditingData gameEditingData) {
-
-		gameEditingData.AddAlliance(GetNewAlliance(gameEditingData));
-	}
-
-	public static void AddGeneratedDataField(this GameEditingData gameEditingData) {
-
-		gameEditingData.AddDataField(GetNewDataField(gameEditingData));
+		gameEditor.AddDataField(DefaultDataFieldEditingData);
 	}
 
 }

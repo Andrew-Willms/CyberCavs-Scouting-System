@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:GameMakerWpf.Views"
              xmlns:domain="clr-namespace:GameMakerWpf.Domain"
+             xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
              mc:Ignorable="d" 
              d:DesignHeight="40"
              d:DesignWidth="500"
-             d:DataContext="{d:DesignInstance Type=domain:AllianceEditingData, IsDesignTimeCreatable=False}">
+             d:DataContext="{d:DesignInstance Type=editors:AllianceEditor, IsDesignTimeCreatable=False}">
 
     <Grid HorizontalAlignment="Stretch"
           Margin="5">

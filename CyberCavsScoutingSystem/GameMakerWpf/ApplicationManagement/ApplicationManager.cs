@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using GameMakerWpf.DisplayData;
-using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Data;
+using GameMakerWpf.Domain.EditingData;
+using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Views;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
@@ -15,14 +16,14 @@ namespace GameMakerWpf.ApplicationManagement;
 
 public static class ApplicationManager {
 
-	private static GameEditingData _GameEditingData = DefaultEditingDataValues.DefaultEditingData;
-	public static GameEditingData GameEditingData {
+	private static GameEditor _GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
+	public static GameEditor GameEditor {
 
-		get => _GameEditingData;
+		get => _GameEditor;
 
 		private set {
 			value.AnythingChanged.Subscribe(MarkProjectUnsaved);
-			_GameEditingData = value;
+			_GameEditor = value;
 			ProjectIsSaved = false;
 			InvokeGameProjectChangeActions();
 		}
@@ -98,7 +99,7 @@ public static class ApplicationManager {
 			return;
 		}
 
-		Result<ISaver.SaveError> result = Saver.Save(GameEditingData);
+		Result<ISaver.SaveError> result = Saver.Save(GameEditor.ToEditingData());
 
 		switch (result.Resolve()) {
 			
@@ -159,7 +160,7 @@ public static class ApplicationManager {
 		switch (openResult.Resolve()) {
 
 			case GameEditingData newGameEditingData:
-				GameEditingData = newGameEditingData;
+				GameEditor = new(newGameEditingData);
 				return;
 
 			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.Aborted }:
@@ -185,7 +186,7 @@ public static class ApplicationManager {
 			return;
 		}
 
-		GameEditingData = DefaultEditingDataValues.DefaultEditingData;
+		GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
 	}
 
 }

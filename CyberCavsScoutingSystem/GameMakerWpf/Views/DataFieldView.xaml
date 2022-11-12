@@ -7,11 +7,12 @@
              xmlns:domain="clr-namespace:GameMakerWpf.Domain"
              xmlns:models="clr-namespace:CCSSDomain.Models;assembly=CCSSDomain"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
              x:Class="GameMakerWpf.Views.DataFieldView"
              mc:Ignorable="d" 
              d:DesignHeight="450"
              d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type domain:GeneralDataFieldEditingData}}">
+             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=False, Type={x:Type editors:DataFieldEditor}}">
 
     <UserControl.Resources>
         <ObjectDataProvider x:Key="DataFieldTypes" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
@@ -43,19 +44,19 @@
                   SelectedItem="{Binding DataFieldType}"
                   Grid.Column="1" />
 
-        <ContentPresenter Content="{Binding Path=DataFieldTypeEditingData}"
+        <ContentPresenter Content="{Binding Path=DataFieldTypeEditor}"
                           Grid.Column="2" >
 
             <ContentPresenter.Resources>
-                <DataTemplate DataType="{x:Type domain:TextDataFieldEditingData}">
+                <DataTemplate DataType="{x:Type editors:TextDataFieldEditor}">
                     <Label Content="Test 1"/>
                     <!--<local:DataFieldView/>-->
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type domain:SelectionDataFieldEditingData}">
+                <DataTemplate DataType="{x:Type editors:SelectionDataFieldEditor}">
                     <Label Content="Test 2"/>
                     <!--<local:DataFieldView/>-->
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type domain:IntegerDataFieldEditingData}">
+                <DataTemplate DataType="{x:Type editors:IntegerDataFieldEditor}">
                     <Label Content="Test 3"/>
                     <!--<local:DataFieldView/>-->
                 </DataTemplate>

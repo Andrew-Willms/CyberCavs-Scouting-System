@@ -1,12 +1,13 @@
 ﻿using System.Data;
 using System.IO;
 using System.Text.Json;
+using GameMakerWpf.Domain.EditingData;
 using Microsoft.Win32;
-using GameMakerWpf.Domain;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary;
+using GameMakerWpf.Domain.Editors;
 
-namespace GameMakerWpf.ApplicationManagement; 
+namespace GameMakerWpf.ApplicationManagement;
 
 
 

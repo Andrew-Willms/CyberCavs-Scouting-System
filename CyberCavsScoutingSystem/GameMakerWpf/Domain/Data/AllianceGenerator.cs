@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using CCSSDomain.Models;
+using GameMakerWpf.Domain.EditingData;
 using UtilitiesLibrary;
 
 namespace GameMakerWpf.Domain.Data;
@@ -16,7 +16,7 @@ public static class AllianceGenerator {
 
 	private static readonly List<(string, Color)> RandomizedColors = ColorsHelper.DefaultColorsRandomized();
 
-	public static Alliance GenerateAlliance(IEnumerable<string> allianceNames) {
+	public static AllianceEditingData GenerateAllianceEditingData(IEnumerable<string> allianceNames) {
 
 		HashSet<string> allianceNamesHashed = allianceNames.ToHashSet();
 
@@ -42,7 +42,10 @@ public static class AllianceGenerator {
 
 		return new() {
 			Name = $"{colorNamePair.colorName} Alliance",
-			Color = colorNamePair.color
+			RedColorValue = colorNamePair.color.R.ToString(),
+			GreenColorValue = colorNamePair.color.G.ToString(),
+			BlueColorValue = colorNamePair.color.B.ToString(),
+
 		};
 	}
 
