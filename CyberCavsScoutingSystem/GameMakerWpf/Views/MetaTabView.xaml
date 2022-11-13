@@ -105,41 +105,46 @@
 
             <StackPanel Orientation="Horizontal">
 
-                <TextBox DataContext="{Binding Path=InputComponent1}"
-                         Style="{StaticResource StringInputStyle}"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top"
-                         TextWrapping="Wrap"
-                         Margin="5,5,2,5"
-                         Width="Auto"/>
+                <TextBox
+                    DataContext="{Binding Path=DataContext.VersionMajorNumber, RelativeSource={RelativeSource AncestorType={x:Type local:MetaTabView}, Mode=FindAncestor}}"
+                    Style="{StaticResource StringInputStyle}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    TextWrapping="Wrap"
+                    Margin="5,5,2,5"
+                    Width="Auto"/>
 
-                <TextBlock Text="."
-                           Margin="0,5,0,5"/>
+                <TextBlock
+                    Text="."
+                    Margin="0,5,0,5"/>
 
-                <TextBox DataContext="{Binding Path=InputComponent2}"
-                         Style="{StaticResource StringInputStyle}"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top"
-                         TextWrapping="Wrap"
-                         Margin="2,5,2,5"
-                         Width="Auto"/>
+                <TextBox
+                    DataContext="{Binding Path=DataContext.VersionMinorNumber, RelativeSource={RelativeSource AncestorType={x:Type local:MetaTabView}, Mode=FindAncestor}}"
+                    Style="{StaticResource StringInputStyle}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    TextWrapping="Wrap"
+                    Margin="2,5,2,5"
+                    Width="Auto"/>
 
-                <TextBlock Text="."
-                           Margin="0,5,0,5"/>
+                <TextBlock
+                    Text="."
+                    Margin="0,5,0,5"/>
 
-                <TextBox DataContext="{Binding Path=InputComponent3}"
-                         Style="{StaticResource StringInputStyle}"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top"
-                         TextWrapping="Wrap"
-                         Margin="2,5,5,5"
-                         Width="Auto"/>
+                <TextBox
+                    DataContext="{Binding Path=DataContext.VersionPatchNumber, RelativeSource={RelativeSource AncestorType={x:Type local:MetaTabView}, Mode=FindAncestor}}"
+                    Style="{StaticResource StringInputStyle}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    TextWrapping="Wrap"
+                    Margin="2,5,5,5"
+                    Width="Auto"/>
 
             </StackPanel>
 
         </Border>
 
-        <TextBox DataContext="{Binding Path=Version.InputComponent4}"
+        <TextBox DataContext="{Binding Path=VersionDescription}"
                  Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"

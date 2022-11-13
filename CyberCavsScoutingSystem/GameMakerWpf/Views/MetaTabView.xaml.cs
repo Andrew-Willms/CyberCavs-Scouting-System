@@ -17,8 +17,12 @@ public partial class MetaTabView : UserControl, INotifyPropertyChanged {
 	public SingleInput<string, string, ErrorSeverity> GameName => GameEditor.Name;
 	public SingleInput<string, string, ErrorSeverity> Description => GameEditor.Description;
 	public SingleInput<int, string, ErrorSeverity> Year => GameEditor.Year;
-	public MultiInput<Version, ErrorSeverity, uint, uint, uint, string> Version => GameEditor.Version;
 
+	public MultiInput<Version, ErrorSeverity, uint, uint, uint, string> Version => GameEditor.Version;
+	public SingleInput<uint, string, ErrorSeverity> VersionMajorNumber => GameEditor.VersionMajorNumber;
+	public SingleInput<uint, string, ErrorSeverity> VersionMinorNumber => GameEditor.VersionMinorNumber;
+	public SingleInput<uint, string, ErrorSeverity> VersionPatchNumber => GameEditor.VersionPatchNumber;
+	public SingleInput<string, string, ErrorSeverity> VersionDescription => GameEditor.VersionDescription;
 
 
 	public MetaTabView() {

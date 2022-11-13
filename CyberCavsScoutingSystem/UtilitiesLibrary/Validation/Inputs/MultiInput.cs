@@ -141,10 +141,9 @@ public class MultiInput<TOutput, TSeverity,
 		(TInput1, TInput2, TInput3),
 		TSeverity> Inverter { get; }
 
-	// TODO: make these private and make the views bind to the newly exposed sub inputs
-	public IInput<TInput1, TSeverity> InputComponent1 { get; }
-	public IInput<TInput2, TSeverity> InputComponent2 { get; }
-	public IInput<TInput3, TSeverity> InputComponent3 { get; }
+	private IInput<TInput1, TSeverity> InputComponent1 { get; }
+	private IInput<TInput2, TSeverity> InputComponent2 { get; }
+	private IInput<TInput3, TSeverity> InputComponent3 { get; }
 
 
 
@@ -247,10 +246,10 @@ public class MultiInput<TOutput, TSeverity,
 		(TInput1, TInput2, TInput3, TInput4),
 		TSeverity> Inverter { get; }
 
-	public IInput<TInput1, TSeverity> InputComponent1 { get; }
-	public IInput<TInput2, TSeverity> InputComponent2 { get; }
-	public IInput<TInput3, TSeverity> InputComponent3 { get; }
-	public IInput<TInput4, TSeverity> InputComponent4 { get; }
+	private IInput<TInput1, TSeverity> InputComponent1 { get; }
+	private IInput<TInput2, TSeverity> InputComponent2 { get; }
+	private IInput<TInput3, TSeverity> InputComponent3 { get; }
+	private IInput<TInput4, TSeverity> InputComponent4 { get; }
 
 
 
