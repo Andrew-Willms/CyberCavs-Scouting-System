@@ -16,7 +16,7 @@ public static class AllianceGenerator {
 
 	private static readonly List<(string, Color)> RandomizedColors = ColorsHelper.DefaultColorsRandomized();
 
-	public static AllianceEditingData GenerateAllianceEditingData(IEnumerable<string> allianceNames) {
+	public static AllianceEditingData GenerateUniqueAlliance(IEnumerable<string> allianceNames) {
 
 		HashSet<string> allianceNamesHashed = allianceNames.ToHashSet();
 

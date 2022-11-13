@@ -45,4 +45,18 @@ public class ErrorData {
 			"Please contact the creators of the CCSS if you receive this error.";
 	}
 
+	public class RemoveAllianceError {
+
+		public static string AllianceNotFoundCaption => "Alliance Not Found";
+		public static string AllianceNotFoundMessage =>
+			"The Alliance you are trying to remove from the Game Project was not found in the Game Project.";
+	}
+
+	public class RemoveDataFieldError {
+		
+		public static string DataFieldNotFoundCaption => "Data Field Not Found";
+		public static string DataFieldNotFoundMessage => 
+			"The Data Field you are trying to remove from the Game Project was not found in the Game Project.";
+	}
+
 }

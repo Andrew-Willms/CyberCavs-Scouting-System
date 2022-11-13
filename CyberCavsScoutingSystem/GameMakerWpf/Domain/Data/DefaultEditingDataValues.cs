@@ -51,23 +51,6 @@ public static class DefaultEditingDataValues {
 
 
 
-	public static GameEditingData BlankGameEditingData => new() {
-
-		Name = "",
-		Year = "",
-		Description = "",
-
-		VersionMajorNumber = $"{0}",
-		VersionMinorNumber = $"{0}",
-		VersionPatchNumber = $"{0}",
-		VersionDescription = "",
-
-		RobotsPerAlliance = $"{0}",
-		AlliancesPerMatch = $"{0}",
-		Alliances = ReadOnlyList.Empty,
-		DataFields = ReadOnlyList.Empty,
-	};
-
 	public static GameEditingData DefaultGameEditingData => new() {
 
 		Name = GameNameGenerator.GetRandomGameName(),
@@ -85,21 +68,11 @@ public static class DefaultEditingDataValues {
 		DataFields = ReadOnlyList.Empty,
 	};
 
-	public static AllianceEditingData GetNewAllianceEditingData(GameEditor gameEditor) {
-
-		return AllianceGenerator.GenerateAllianceEditingData(gameEditor.Alliances.SelectIfHasValue(x => x.Name.OutputObject));
-	}
 
 
+	public static void AddUniqueAlliance(this GameEditor gameEditor) {
 
-	public static void AddGeneratedAlliance(this GameEditor gameEditor) {
-
-		gameEditor.AddAlliance(GetNewAllianceEditingData(gameEditor));
-	}
-
-	public static void AddGeneratedDataField(this GameEditor gameEditor) {
-
-		gameEditor.AddDataField(DefaultDataFieldEditingData);
+		gameEditor.AddAlliance(AllianceGenerator.GenerateUniqueAlliance(gameEditor.Alliances.SelectIfHasValue(x => x.Name.OutputObject)));
 	}
 
 }

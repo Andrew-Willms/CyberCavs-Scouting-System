@@ -5,14 +5,19 @@ using System.Collections.ObjectModel;
 using CCSSDomain;
 using UtilitiesLibrary.Validation.Inputs;
 using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.Editors;
+using UtilitiesLibrary;
+using UtilitiesLibrary.Validation;
 
 namespace GameMakerWpf.Views;
 
 
 
 public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
+
+	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => ApplicationManager.GameEditor;
@@ -46,7 +51,7 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 
 	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-		GameEditor.AddGeneratedAlliance();
+		GameEditor.AddUniqueAlliance();
 	}
 
 	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
@@ -55,7 +60,20 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
 		}
 
-		GameEditor.RemoveAlliance(SelectedAlliance);
+		Result<GameEditor.RemoveAllianceError> result = GameEditor.RemoveAlliance(SelectedAlliance);
+
+		switch (result.Resolve()) {
+			
+			case Success:
+				return;
+
+			case GameEditor.RemoveAllianceError { ErrorType: GameEditor.RemoveAllianceError.Types.AllianceNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveAllianceError.AllianceNotFoundCaption, ErrorData.RemoveAllianceError.AllianceNotFoundMessage);
+				return;
+
+			default:
+				throw new ShouldMatchOtherCaseException();
+		}
 	}
 
 	private void MoveUpButton_Click(object sender, System.Windows.RoutedEventArgs e) {

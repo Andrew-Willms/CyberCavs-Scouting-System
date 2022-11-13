@@ -3,6 +3,7 @@ using System.Linq;
 using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
+using UtilitiesLibrary;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
@@ -154,7 +155,6 @@ public class GameEditor {
 
 
 
-	// Todo: make these return types results
 	public void AddAlliance(AllianceEditingData allianceEditingData) {
 
 		AllianceEditor allianceEditor = new(this, allianceEditingData);
@@ -167,14 +167,19 @@ public class GameEditor {
 		AllianceColorChanged.Invoke();
 	}
 
-	public void RemoveAlliance(AllianceEditor allianceEditor) {
+	public Result<RemoveAllianceError> RemoveAlliance(AllianceEditor allianceEditor) {
 
-		_Alliances.Remove(allianceEditor);
+		if (!_Alliances.Remove(allianceEditor)) {
+			return new RemoveAllianceError { ErrorType = RemoveAllianceError.Types.AllianceNotFound };
+		}
+
 		AllianceNameChanged.UnsubscribeFrom(allianceEditor.Name.OutputObjectChanged);
 		AllianceColorChanged.UnsubscribeFrom(allianceEditor.AllianceColor.OutputObjectChanged);
 
 		AllianceNameChanged.Invoke();
 		AllianceColorChanged.Invoke();
+
+		return new Success();
 	}
 
 	public void AddDataField(DataFieldEditingData dataFieldEditingData) {
@@ -189,14 +194,37 @@ public class GameEditor {
 		DataFieldTypeChanged.Invoke();
 	}
 
-	public void RemoveDataField(DataFieldEditor dataFieldEditor) {
+	public Result<RemoveDataFieldError> RemoveDataField(DataFieldEditor dataFieldEditor) {
 
-		_DataFields.Remove(dataFieldEditor);
+		if (!_DataFields.Remove(dataFieldEditor)) {
+			return new RemoveDataFieldError { ErrorType = RemoveDataFieldError.Types.DataFieldNotFound };
+		}
+		
 		DataFieldNameChanged.UnsubscribeFrom(dataFieldEditor.Name.OutputObjectChanged);
 		DataFieldTypeChanged.UnsubscribeFrom(dataFieldEditor.Name.OutputObjectChanged);
 
 		DataFieldNameChanged.Invoke();
 		DataFieldTypeChanged.Invoke();
+
+		return new Success();
+	}
+
+
+
+	public class RemoveAllianceError : Error<RemoveAllianceError.Types> {
+
+		public enum Types {
+			AllianceNotFound
+		}
+
+	}
+
+	public class RemoveDataFieldError : Error<RemoveDataFieldError.Types> {
+
+		public enum Types {
+			DataFieldNotFound
+		}
+
 	}
 
 }

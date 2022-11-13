@@ -3,14 +3,19 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.Editors;
+using UtilitiesLibrary;
+using UtilitiesLibrary.Validation;
 
 namespace GameMakerWpf.Views;
 
 
 
 public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
+
+	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => ApplicationManager.GameEditor;
@@ -43,7 +48,7 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
 
-		GameEditor.AddGeneratedDataField();
+		GameEditor.AddDataField(DefaultEditingDataValues.DefaultDataFieldEditingData);
 	}
 
 	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
@@ -52,7 +57,20 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no DataField is selected.");
 		}
 
-		GameEditor.RemoveDataField(SelectedDataField);
+		Result<GameEditor.RemoveDataFieldError> result = GameEditor.RemoveDataField(SelectedDataField);
+
+		switch (result.Resolve()) {
+			
+			case Success:
+				return;
+
+			case GameEditor.RemoveDataFieldError { ErrorType: GameEditor.RemoveDataFieldError.Types.DataFieldNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveDataFieldError.DataFieldNotFoundCaption, ErrorData.RemoveDataFieldError.DataFieldNotFoundMessage);
+				return;
+
+			default:
+				throw new ShouldMatchOtherCaseException();
+		}
 	}
 
 	private void MoveUpButton_Click(object sender, System.Windows.RoutedEventArgs e) {
