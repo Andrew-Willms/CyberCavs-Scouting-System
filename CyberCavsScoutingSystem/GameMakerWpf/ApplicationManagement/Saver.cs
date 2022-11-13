@@ -1,11 +1,10 @@
 ﻿using System.Data;
 using System.IO;
-using System.Text.Json;
 using GameMakerWpf.Domain.EditingData;
 using Microsoft.Win32;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary;
-using GameMakerWpf.Domain.Editors;
+using Newtonsoft.Json;
 
 namespace GameMakerWpf.ApplicationManagement;
 
@@ -28,7 +27,7 @@ public class Saver : ISaver {
 
 		string serializedProject;
 		try {
-			serializedProject = JsonSerializer.Serialize(gameEditingData, SavingSerializerDefaults);
+			serializedProject = JsonConvert.SerializeObject(gameEditingData, JsonSerializerSettings);
 
 		} catch {
 
@@ -94,7 +93,7 @@ public class Saver : ISaver {
 		}
 
 		try {
-			GameEditingData? newGameEditingData = JsonSerializer.Deserialize<GameEditingData>(serializedGameEditingData);
+			GameEditingData? newGameEditingData = JsonConvert.DeserializeObject<GameEditingData>(serializedGameEditingData, JsonSerializerSettings);
 			return newGameEditingData ?? throw new NoNullAllowedException();
 
 		} catch {
@@ -103,9 +102,9 @@ public class Saver : ISaver {
 	}
 
 
-
-	private static readonly JsonSerializerOptions SavingSerializerDefaults = new() {
-		WriteIndented = true,
+	private static readonly JsonSerializerSettings JsonSerializerSettings = new() {
+		TypeNameHandling = TypeNameHandling.All,
+		Formatting = Formatting.Indented
 	};
 
 	private static readonly OpenFileDialog OpenFileDialog = new() {

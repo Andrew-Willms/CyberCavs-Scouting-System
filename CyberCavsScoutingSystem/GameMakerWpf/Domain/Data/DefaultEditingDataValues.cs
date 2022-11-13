@@ -35,7 +35,7 @@ public static class DefaultEditingDataValues {
 
 	public static readonly SelectionDataFieldEditingData DefaultSelectionDataFieldEditingData = new() {
 		Name = "New Data Field",
-		OptionNames = ReadOnlyList<string>.Empty,
+		OptionNames = ReadOnlyList.Empty,
 		DataFieldType = DataField.DataFieldType.Selection
 	};
 
@@ -64,8 +64,8 @@ public static class DefaultEditingDataValues {
 
 		RobotsPerAlliance = $"{0}",
 		AlliancesPerMatch = $"{0}",
-		Alliances = new List<AllianceEditingData>(),
-		DataFields = new List<DataFieldEditingData>(),
+		Alliances = ReadOnlyList.Empty,
+		DataFields = ReadOnlyList.Empty,
 	};
 
 	public static GameEditingData DefaultGameEditingData => new() {
@@ -81,8 +81,8 @@ public static class DefaultEditingDataValues {
 
 		RobotsPerAlliance = $"{3}",
 		AlliancesPerMatch = $"{2}",
-		Alliances = new List<AllianceEditingData> { DefaultRedAlliance, DefaultBlueAlliance },
-		DataFields = new List<DataFieldEditingData>(),
+		Alliances = new List<AllianceEditingData> { DefaultRedAlliance, DefaultBlueAlliance }.ToReadOnly(),
+		DataFields = ReadOnlyList.Empty,
 	};
 
 	public static AllianceEditingData GetNewAllianceEditingData(GameEditor gameEditor) {

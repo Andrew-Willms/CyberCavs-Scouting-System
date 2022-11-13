@@ -10,6 +10,7 @@ public class Optional {
 	private Optional() { }
 
 	public static readonly Optional NoValue = new();
+
 }
 
 
@@ -47,7 +48,12 @@ public class Optional<T> {
 
 	private static readonly Optional<T> NoValue = new();
 
-	public static implicit operator Optional<T>(Optional _) {
+	public static implicit operator Optional<T>(Optional noValue) {
+
+		if (noValue != Optional.NoValue) {
+			throw new ArgumentException($"This casting operator should only be used with {nameof(Optional.NoValue)}", nameof(noValue));
+		}
+
 		return NoValue;
 	}
 

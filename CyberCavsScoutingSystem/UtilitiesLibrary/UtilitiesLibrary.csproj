@@ -7,5 +7,9 @@
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
+	
+	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
 </Project>

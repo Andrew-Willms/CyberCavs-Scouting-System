@@ -72,7 +72,7 @@ internal class ValidationTrigger<TOutput, TValidationParameter, TSeverity> : IVa
 		Optional<TOutput> output = OutputObjectGetter.Invoke();
 
 		return !output.HasValue
-			? ReadOnlyList<ValidationError<TSeverity>>.Empty
+			? ReadOnlyList.Empty
 			: Validator.Invoke(output.Value, Validatee, ValidationParameterGetter.Invoke());
 	}
 

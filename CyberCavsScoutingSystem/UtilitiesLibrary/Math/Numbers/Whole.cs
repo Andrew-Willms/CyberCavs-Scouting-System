@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Numerics;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.MiscExtensions;
 
 namespace UtilitiesLibrary.Math.Numbers;
 
@@ -13,12 +14,12 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 	/// <summary>
 	/// Stores the digits of the number from least to most significant.
 	/// </summary>
-	protected ReadOnlyCollection<Digit> Digits { get; }
+	protected ReadOnlyList<Digit> Digits { get; }
 	//protected int LargestDecimalPosition => Digits.Count - 1;
 
 
 
-	protected Whole(ReadOnlyCollection<Digit> digits) {
+	protected Whole(ReadOnlyList<Digit> digits) {
 		Digits = digits;
 	}
 
@@ -39,7 +40,7 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 			value /= Constants.Numbers<T>.Ten;
 		}
 
-		return new(digits.AsReadOnly());
+		return new(digits.ToReadOnly());
 	}
 
 	public static implicit operator Whole(byte value) => FromINumber(value);
@@ -194,7 +195,7 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 		}
 
 		if (text.All(x => x == '0')) {
-			return new Whole(new List<Digit> { Digit.Zero }.AsReadOnly());
+			return new(Digit.Zero.ReadOnlyListify());
 		}
 
 		text = text.TrimStart('0');
@@ -210,7 +211,7 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 			digits.Add(Digit.FromChar(character));
 		}
 
-		return new Whole(digits.AsReadOnly());
+		return new Whole(digits.ToReadOnly());
 	}
 
 }

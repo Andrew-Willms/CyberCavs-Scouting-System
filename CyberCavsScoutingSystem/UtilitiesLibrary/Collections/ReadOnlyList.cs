@@ -1,33 +1,62 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 using UtilitiesLibrary.MiscExtensions;
 
 namespace UtilitiesLibrary.Collections;
 
 
 
-public class ReadOnlyList<T> : ReadOnlyCollection<T>, IEnumerable<T>
-{
+public class ReadOnlyList {
 
-    public ReadOnlyList(IList<T> list) : base(list) { }
+	public static readonly ReadOnlyList Empty = new();
 
-    public ReadOnlyList(params T[] items) : base(items.ToList()) { }
+    private ReadOnlyList() { }
 
-    public ReadOnlyList<T> CopyAndAdd(T newItem)
-    {
+}
 
-        T[] array = new T[Count + 1];
 
-        CopyTo(array, 0);
 
-        array[Count] = newItem;
+[JsonObject]
+public class ReadOnlyList<T> : IEnumerable<T> {
 
-        return array.ToList().ToReadOnly();
-    }
+	[JsonProperty]
+	private readonly T[] Collection;
 
-    public ReadOnlyList<T> CopyAndAddRange(IEnumerable<T> newItems)
-    {
+    [JsonIgnore]
+	public int Count => Collection.Length;
+
+    [JsonIgnore]
+	public T this[int index] => Collection[index];
+
+
+
+	public static readonly ReadOnlyList<T> Empty = new();
+	public static implicit operator ReadOnlyList<T>(ReadOnlyList empty) {
+
+		if (empty != ReadOnlyList.Empty) {
+			throw new ArgumentException($"This casting operator should only be used with {nameof(ReadOnlyList.Empty)}", nameof(empty));
+		}
+
+		return Empty;
+	}
+
+
+
+	private ReadOnlyList() {
+		Collection = Array.Empty<T>();
+	}
+
+	public ReadOnlyList(IEnumerable<T> collection) {
+		Collection = collection.ToArray();
+	}
+
+
+
+
+    public ReadOnlyList<T> CopyAndAddRange(IEnumerable<T> newItems) {
 
         IEnumerable<T> enumerable = newItems.ToList();
 
@@ -45,18 +74,28 @@ public class ReadOnlyList<T> : ReadOnlyCollection<T>, IEnumerable<T>
         return array.ToList().ToReadOnly();
     }
 
-    public ReadOnlyList<T> CopyAndAddRange(params T[] newItems)
-    {
+    public ReadOnlyList<T> CopyAndAddRange(params T[] newItems) {
 
         return CopyAndAddRange(newItems.AsEnumerable());
     }
 
-    public ReadOnlyList<T> CopyAndAddRanges(params IEnumerable<T>[] newItems)
-    {
+    public ReadOnlyList<T> CopyAndAddRanges(params IEnumerable<T>[] newItems) {
 
         return CopyAndAddRange(newItems.SelectMany(x => x)); // I think this should work
     }
 
-    public static readonly ReadOnlyList<T> Empty = new();
+
+
+    public IEnumerator<T> GetEnumerator() {
+	    return ((IEnumerable<T>)Collection).GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() {
+	    return GetEnumerator();
+    }
+
+    public void CopyTo(T[] array, int arrayIndex) {
+	    Collection.CopyTo(array, arrayIndex);
+    }
 
 }

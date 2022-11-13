@@ -9,9 +9,14 @@ namespace UtilitiesLibrary.MiscExtensions;
 
 public static class CollectionExtensions {
 
+	public static List<T> Listify<T>(this T item) {
+
+		return new() { item };
+	}
+
 	public static ReadOnlyList<T> ToReadOnly<T>(this IEnumerable<T> enumerable) {
 
-		return new(enumerable.ToList());
+		return new(enumerable);
 	}
 
 	public static void AddIfNotNull<T>(this List<T> enumerable, T? newValue) {

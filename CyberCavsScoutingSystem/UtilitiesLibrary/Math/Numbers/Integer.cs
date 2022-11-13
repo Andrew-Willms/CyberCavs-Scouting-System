@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 
 namespace UtilitiesLibrary.Math.Numbers;
@@ -15,7 +16,7 @@ public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 
 
 
-	private Integer(bool isNegative, ReadOnlyCollection<Digit> digits) : base(digits) {
+	private Integer(bool isNegative, ReadOnlyList<Digit> digits) : base(digits) {
 		IsNegative = isNegative;
 	}
 
@@ -117,7 +118,7 @@ public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 		}
 
 		if (text.All(x => x == '0')) {
-			return new Integer(false, new List<Digit> { Digit.Zero }.AsReadOnly());
+			return new(false, Digit.Zero.ReadOnlyListify());
 		}
 
 		if (text.Multiple('-')) {
@@ -147,7 +148,7 @@ public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 			digits.Add(Digit.FromChar(character));
 		}
 
-		return new(isNegative, digits.AsReadOnly());
+		return new(isNegative, digits.ToReadOnly());
 	}
 
 

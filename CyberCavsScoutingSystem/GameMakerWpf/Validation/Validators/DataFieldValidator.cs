@@ -21,14 +21,14 @@ public static class DataFieldValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString.Optionalize(), ReadOnlyList<Error>.Empty);
+		return (inputString.Optionalize(), ReadOnlyList.Empty);
 	}
 
 	public static (Optional<string>, ReadOnlyList<Error>) NameInverter(string name) {
 
 		NullInputObjectInInverterException.ThrowIfNull(name);
 
-		return (name.Optionalize(), ReadOnlyList<Error>.Empty);
+		return (name.Optionalize(), ReadOnlyList.Empty);
 	}
 
 
@@ -36,15 +36,11 @@ public static class DataFieldValidator {
 	public static ReadOnlyList<Error> NameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= DataFieldValidationData.Name.Length.LowerErrorThreshold => new(DataFieldValidationData.Name.Length
-				.TooShortError),
-			>= DataFieldValidationData.Name.Length.UpperErrorThreshold => new(DataFieldValidationData.Name.Length
-				.TooLongError),
-			>= DataFieldValidationData.Name.Length.UpperWarningThreshold => new(DataFieldValidationData.Name.Length
-				.TooLongWarning),
-			>= DataFieldValidationData.Name.Length.UpperAdvisoryThreshold => new(DataFieldValidationData.Name.Length
-				.TooLongAdvisory),
-			_ => ReadOnlyList<Error>.Empty
+			<= DataFieldValidationData.Name.Length.LowerErrorThreshold => DataFieldValidationData.Name.Length.TooShortError.ReadOnlyListify(),
+			>= DataFieldValidationData.Name.Length.UpperErrorThreshold => DataFieldValidationData.Name.Length.TooLongError.ReadOnlyListify(),
+			>= DataFieldValidationData.Name.Length.UpperWarningThreshold => DataFieldValidationData.Name.Length.TooLongWarning.ReadOnlyListify(),
+			>= DataFieldValidationData.Name.Length.UpperAdvisoryThreshold => DataFieldValidationData.Name.Length.TooLongAdvisory.ReadOnlyListify(),
+			_ => ReadOnlyList.Empty
 		};
 	}
 
@@ -55,12 +51,12 @@ public static class DataFieldValidator {
 		    .Select(dataField => dataField.Name.OutputObject.Value)
 		    .OnlyOne(name)) {
 
-			return ReadOnlyList<Error>.Empty;
+			return ReadOnlyList.Empty;
 		}
 
 		return validatee.OutputObject.Value == name
-			? new(DataFieldValidationData.Name.GetDuplicateNameError(name))
-			: ReadOnlyList<Error>.Empty;
+			? DataFieldValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
+			: ReadOnlyList.Empty;
 	}
 }
 
@@ -70,32 +66,32 @@ public static class SelectionDataFieldValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString.Optionalize(), ReadOnlyList<Error>.Empty);
+		return (inputString.Optionalize(), ReadOnlyList.Empty);
 	}
 
 	public static (Optional<string>, ReadOnlyList<Error>) OptionNameInverter(string name) {
 
 		NullInputObjectInInverterException.ThrowIfNull(name);
 
-		return (name.Optionalize(), ReadOnlyList<Error>.Empty);
+		return (name.Optionalize(), ReadOnlyList.Empty);
 	}
 
 	public static ReadOnlyList<Error> OptionNameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
 		IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
 
 		return optionNames.Any(otherOptionName => otherOptionName.OutputObject == name)
-			? new(DataFieldValidationData.Name.GetDuplicateNameError(name))
-			: ReadOnlyList<Error>.Empty;
+			? DataFieldValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
+			: ReadOnlyList.Empty;
 	}
 
 	public static ReadOnlyList<Error> OptionNameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= DataFieldValidationData.Option.LowerErrorThreshold => new(DataFieldValidationData.Name.Length.TooShortError),
-			>= DataFieldValidationData.Option.UpperErrorThreshold => new(DataFieldValidationData.Name.Length.TooLongError),
-			>= DataFieldValidationData.Option.UpperWarningThreshold => new(DataFieldValidationData.Name.Length.TooLongWarning),
-			>= DataFieldValidationData.Option.UpperAdvisoryThreshold => new(DataFieldValidationData.Name.Length.TooLongAdvisory),
-			_ => ReadOnlyList<Error>.Empty
+			<= DataFieldValidationData.Option.LowerErrorThreshold => DataFieldValidationData.Name.Length.TooShortError.ReadOnlyListify(),
+			>= DataFieldValidationData.Option.UpperErrorThreshold => DataFieldValidationData.Name.Length.TooLongError.ReadOnlyListify(),
+			>= DataFieldValidationData.Option.UpperWarningThreshold => DataFieldValidationData.Name.Length.TooLongWarning.ReadOnlyListify(),
+			>= DataFieldValidationData.Option.UpperAdvisoryThreshold => DataFieldValidationData.Name.Length.TooLongAdvisory.ReadOnlyListify(),
+			_ => ReadOnlyList.Empty
 		};
 	}
 
@@ -112,7 +108,7 @@ public static class IntegerDataFieldValidator {
 
 	public static (Optional<string>, ReadOnlyList<Error>) IntegerValueInverter(int integerValue) {
 
-		return (integerValue.ToString().Optionalize(), ReadOnlyList<Error>.Empty);
+		return (integerValue.ToString().Optionalize(), ReadOnlyList.Empty);
 	}
 
 }

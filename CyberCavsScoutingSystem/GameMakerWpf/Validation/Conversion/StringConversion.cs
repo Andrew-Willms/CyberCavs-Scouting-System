@@ -98,7 +98,7 @@ public static class StringConversion {
 	private static (Optional<Number>, ReadOnlyList<ValidationError>) ToFloat(string inputString, FloatConversionErrorSet errorSet) {
 
 		if (inputString.Length == 0) {
-			return (Optional.NoValue, new(errorSet.RequiresValueError));
+			return (Optional.NoValue, errorSet.RequiresValueError.ReadOnlyListify());
 		}
 
 		char[] invalidCharacters = inputString.Where(x => !char.IsDigit(x) && x != '-' && x != '.').ToArray();
@@ -127,13 +127,13 @@ public static class StringConversion {
 			throw new InvalidOperationException($"Somehow parsing the input as a {typeof(Number)} failed.");
 		}
 
-		return (number.Optionalize(), ReadOnlyList<ValidationError>.Empty);
+		return (number.Optionalize(), ReadOnlyList.Empty);
 	}
 
 	private static (Optional<Integer>, ReadOnlyList<ValidationError>) ToInteger(string inputString, IntegerConversionErrorSet errorSet) {
 
 		if (inputString.Length == 0) {
-			return (Optional.NoValue, new(errorSet.RequiresValueError));
+			return (Optional.NoValue, errorSet.RequiresValueError.ReadOnlyListify());
 		}
 
 		char[] invalidCharacters = inputString.Where(x => !char.IsDigit(x) && x != '-' && x != '.').ToArray();
@@ -162,13 +162,13 @@ public static class StringConversion {
 			throw new InvalidOperationException($"Somehow parsing the input as a {typeof(Integer)} failed.");
 		}
 
-		return (integer.Optionalize(), ReadOnlyList<ValidationError>.Empty);
+		return (integer.Optionalize(), ReadOnlyList.Empty);
 	}
 
 	private static (Optional<Whole>, ReadOnlyList<ValidationError>) ToWhole(string inputString, WholeConversionErrorSet errorSet) {
 
 		if (inputString.Length == 0) {
-			return (Optional.NoValue, new(errorSet.RequiresValueError));
+			return (Optional.NoValue, errorSet.RequiresValueError.ReadOnlyListify());
 		}
 
 		char[] invalidCharacters = inputString.Where(x => !char.IsDigit(x)).ToArray();
@@ -197,7 +197,7 @@ public static class StringConversion {
 			throw new InvalidOperationException($"Somehow parsing the input as a {typeof(Whole)} failed.");
 		}
 
-		return (natural.Optionalize(), ReadOnlyList<ValidationError>.Empty);
+		return (natural.Optionalize(), ReadOnlyList.Empty);
 	}
 
 
@@ -217,12 +217,12 @@ public static class StringConversion {
 		return result.Resolve() switch {
 
 			NumberToPrimitiveError { ErrorType: NumberToPrimitiveError.Types.ValueBelowMin}
-				=> (Optional.NoValue, new(errorSet.ValueTooNegativeErrorGetter(inputString))),
+				=> (Optional.NoValue, errorSet.ValueTooNegativeErrorGetter(inputString).ReadOnlyListify()),
 
 			NumberToPrimitiveError { ErrorType: NumberToPrimitiveError.Types.ValueAboveMax}
-				=> (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
+				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			T success => (success.Optionalize(), ReadOnlyList<ValidationError>.Empty),
+			T success => (success.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};
@@ -243,12 +243,12 @@ public static class StringConversion {
 		return result.Resolve() switch {
 
 			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueBelowMin}
-				=> (Optional.NoValue, new(errorSet.ValueTooNegativeErrorGetter(inputString))),
+				=> (Optional.NoValue, errorSet.ValueTooNegativeErrorGetter(inputString).ReadOnlyListify()),
 
 			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueAboveMax}
-				=> (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
+				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			T success => (success.Optionalize(), ReadOnlyList<ValidationError>.Empty),
+			T success => (success.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};
@@ -269,12 +269,12 @@ public static class StringConversion {
 		return result.Resolve() switch {
 
 			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueBelowMin}
-				=> (Optional.NoValue, new(errorSet.CannotBeNegativeError)),
+				=> (Optional.NoValue, errorSet.CannotBeNegativeError.ReadOnlyListify()),
 
 			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueAboveMax}
-				=> (Optional.NoValue, new(errorSet.ValueTooLargeErrorGetter(inputString))),
+				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			T success => (success.Optionalize(), ReadOnlyList<ValidationError>.Empty),
+			T success => (success.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};

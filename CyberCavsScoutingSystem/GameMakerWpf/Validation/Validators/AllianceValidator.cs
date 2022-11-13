@@ -22,14 +22,14 @@ public static class AllianceValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		return (inputString.Optionalize(), ReadOnlyList<Error>.Empty);
+		return (inputString.Optionalize(), ReadOnlyList.Empty);
 	}
 
 	public static (Optional<string>, ReadOnlyList<Error>) NameInverter(string name) {
 
 		NullInputObjectInInverterException.ThrowIfNull(name);
 
-		return (name.Optionalize(), ReadOnlyList<Error>.Empty);
+		return (name.Optionalize(), ReadOnlyList.Empty);
 	}
 
 
@@ -37,20 +37,20 @@ public static class AllianceValidator {
 	public static ReadOnlyList<Error> NameValidator_EndsWithAlliance(string name) {
 
 		return name.EndsWith(AllianceValidationData.Name.ShouldEndWith)
-			? ReadOnlyList<Error>.Empty
-			: new(AllianceValidationData.Name.DoesNotEndWithCorrectSequenceError);
+			? ReadOnlyList.Empty
+			: AllianceValidationData.Name.DoesNotEndWithCorrectSequenceError.ReadOnlyListify();
 	}
 
 	public static ReadOnlyList<Error> NameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= AllianceValidationData.Name.Length.LowerErrorThreshold => new(AllianceValidationData.Name.Length.TooShortError),
-			<= AllianceValidationData.Name.Length.LowerWarningThreshold => new(AllianceValidationData.Name.Length.TooShortWarning),
-			<= AllianceValidationData.Name.Length.LowerAdvisoryThreshold => new(AllianceValidationData.Name.Length.TooShortAdvisory),
-			>= AllianceValidationData.Name.Length.UpperErrorThreshold => new(AllianceValidationData.Name.Length.TooLongError),
-			>= AllianceValidationData.Name.Length.UpperWarningThreshold => new(AllianceValidationData.Name.Length.TooLongWarning),
-			>= AllianceValidationData.Name.Length.UpperAdvisoryThreshold => new(AllianceValidationData.Name.Length.TooLongAdvisory),
-			_ => ReadOnlyList<Error>.Empty
+			<= AllianceValidationData.Name.Length.LowerErrorThreshold => AllianceValidationData.Name.Length.TooShortError.ReadOnlyListify(),
+			<= AllianceValidationData.Name.Length.LowerWarningThreshold => AllianceValidationData.Name.Length.TooShortWarning.ReadOnlyListify(),
+			<= AllianceValidationData.Name.Length.LowerAdvisoryThreshold => AllianceValidationData.Name.Length.TooShortAdvisory.ReadOnlyListify(),
+			>= AllianceValidationData.Name.Length.UpperErrorThreshold => AllianceValidationData.Name.Length.TooLongError.ReadOnlyListify(),
+			>= AllianceValidationData.Name.Length.UpperWarningThreshold => AllianceValidationData.Name.Length.TooLongWarning.ReadOnlyListify(),
+			>= AllianceValidationData.Name.Length.UpperAdvisoryThreshold => AllianceValidationData.Name.Length.TooLongAdvisory.ReadOnlyListify(),
+			_ => ReadOnlyList.Empty
 		};
 	}
 
@@ -61,8 +61,8 @@ public static class AllianceValidator {
 			.Where(otherAlliance => otherAlliance.Name != validatee && otherAlliance.Name.OutputObject.HasValue)
 			.Any(otherAlliance => otherAlliance.Name.OutputObject.Value == name)
 
-			? new(AllianceValidationData.Name.GetDuplicateNameError(name))
-			: ReadOnlyList<Error>.Empty;
+			? AllianceValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
+			: ReadOnlyList.Empty;
 	}
 
 
@@ -71,28 +71,25 @@ public static class AllianceValidator {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
 
-		(Optional<byte>, ReadOnlyList<Error>) test = StringConversion.ToByte(inputString, AllianceValidationData.Color.Component.ConversionErrorSet);
-		ReadOnlyList<Error> test2 = test.Item2;
-
 		return StringConversion.ToByte(inputString, AllianceValidationData.Color.Component.ConversionErrorSet);
 	}
 
 	public static (Optional<string>, ReadOnlyList<Error>) ColorComponentInverter(byte colourComponentValue) {
 
-		return (colourComponentValue.ToString().Optionalize(), ReadOnlyList<Error>.Empty);
+		return (colourComponentValue.ToString().Optionalize(), ReadOnlyList.Empty);
 	}
 
 
 
 	public static (Optional<Color>, ReadOnlyList<Error>) ColorConverter((byte redValue, byte greenValue, byte blueValue) input) {
 
-		return (Color.FromRgb(input.redValue, input.greenValue, input.blueValue).Optionalize(), ReadOnlyList<Error>.Empty);
+		return (Color.FromRgb(input.redValue, input.greenValue, input.blueValue).Optionalize(), ReadOnlyList.Empty);
 	}
 
 	public static (Optional<(byte redValue, byte greenValue, byte blueValue)> invertedValues, ReadOnlyList<Error>) ColorInverter
 		(Color color) {
 
-		return ((color.R, color.G, color.B).Optionalize(), ReadOnlyList<Error>.Empty);
+		return ((color.R, color.G, color.B).Optionalize(), ReadOnlyList.Empty);
 	}
 
 

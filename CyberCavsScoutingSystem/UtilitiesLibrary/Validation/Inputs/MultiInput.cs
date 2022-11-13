@@ -26,7 +26,7 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 
 	protected abstract (Optional<TOutput>, ReadOnlyList<ValidationError<TSeverity>>) ConverterInvoker { get; }
 
-	private ReadOnlyList<ValidationError<TSeverity>> ConversionErrors { get; set; } = new();
+	private ReadOnlyList<ValidationError<TSeverity>> ConversionErrors { get; set; } = ReadOnlyList.Empty;
 	private ReadOnlyList<ValidationError<TSeverity>> ComponentErrors => InputComponents.SelectMany(x => x.Errors).ToReadOnly();
 	public override ReadOnlyList<ValidationError<TSeverity>> Errors => ConversionErrors.CopyAndAddRanges(ValidationErrors, ComponentErrors);
 
@@ -62,7 +62,7 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 
 			OnChangedValidation[validator] = outputObject.HasValue
 				? validator.Invoke(outputObject.Value)
-				: ReadOnlyList<ValidationError<TSeverity>>.Empty;
+				: ReadOnlyList.Empty;
 		}
 
 		OutputObject = outputObject;
@@ -132,7 +132,7 @@ public class MultiInput<TOutput, TSeverity,
 					InputComponent3.OutputObject.Value));
 			}
 
-			return (Optional.NoValue, ReadOnlyList<ValidationError<TSeverity>>.Empty);
+			return (Optional.NoValue, ReadOnlyList.Empty);
 
 		}
 	}
@@ -141,6 +141,7 @@ public class MultiInput<TOutput, TSeverity,
 		(TInput1, TInput2, TInput3),
 		TSeverity> Inverter { get; }
 
+	// TODO: make these private and make the views bind to the newly exposed sub inputs
 	public IInput<TInput1, TSeverity> InputComponent1 { get; }
 	public IInput<TInput2, TSeverity> InputComponent2 { get; }
 	public IInput<TInput3, TSeverity> InputComponent3 { get; }
@@ -161,9 +162,8 @@ public class MultiInput<TOutput, TSeverity,
 		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets)
 
 		: base(
-			new(inputComponent1, inputComponent2, inputComponent3),
-			onChangeValidators, validationSets)
-	{
+			new List<IInput<TSeverity>> { inputComponent1, inputComponent2, inputComponent3 }.ToReadOnly(),
+			onChangeValidators, validationSets) {
 
 		Converter = converter;
 		Inverter = inverter;
@@ -237,7 +237,7 @@ public class MultiInput<TOutput, TSeverity,
 					InputComponent4.OutputObject.Value));
 			}
 
-			return (Optional.NoValue, ReadOnlyList<ValidationError<TSeverity>>.Empty);
+			return (Optional.NoValue, ReadOnlyList.Empty);
 
 		}
 	}
@@ -269,9 +269,8 @@ public class MultiInput<TOutput, TSeverity,
 		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets)
 
 		: base(
-			new(inputComponent1, inputComponent2, inputComponent3, inputComponent4),
-			onChangeValidators, validationSets)
-	{
+			new List<IInput<TSeverity>> { inputComponent1, inputComponent2, inputComponent3, inputComponent4 }.ToReadOnly(),
+			onChangeValidators, validationSets) {
 
 		Converter = converter;
 		Inverter = inverter;

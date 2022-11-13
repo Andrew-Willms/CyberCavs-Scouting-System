@@ -68,7 +68,7 @@ public class SingleInput<TOutput, TInput, TSeverity> : Input<TOutput, TSeverity>
 	private InputConverter<TOutput, TInput, TSeverity> Converter { get; }
 	private InputInverter<TOutput, TInput, TSeverity> Inverter { get; }
 
-	private ReadOnlyList<ValidationError<TSeverity>> ConversionErrors { get; set; } = new();
+	private ReadOnlyList<ValidationError<TSeverity>> ConversionErrors { get; set; } = ReadOnlyList.Empty;
 	public override ReadOnlyList<ValidationError<TSeverity>> Errors => ConversionErrors.AppendRange(ValidationErrors).ToReadOnly();
 
 	private TSeverity ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
@@ -105,7 +105,7 @@ public class SingleInput<TOutput, TInput, TSeverity> : Input<TOutput, TSeverity>
 
 			OnChangedValidation[validator] = outputObject.HasValue
 				? validator.Invoke(outputObject.Value)
-				: ReadOnlyList<ValidationError<TSeverity>>.Empty;
+				: ReadOnlyList.Empty;
 		}
 
 		OutputObject = outputObject;
