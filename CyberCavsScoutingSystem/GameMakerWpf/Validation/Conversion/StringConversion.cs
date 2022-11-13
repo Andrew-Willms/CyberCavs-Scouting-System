@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Math.Numbers;
@@ -203,7 +204,7 @@ public static class StringConversion {
 
 
 	private static (Optional<T>, ReadOnlyList<ValidationError>) ToFloatPrimitive<T>(
-		string inputString, Func<Number, Result<T, NumberToPrimitiveError>> parser, FloatConversionErrorSet errorSet) {
+		string inputString, Func<Number, Result<T, NumberToPrimitiveError>> parser, FloatConversionErrorSet errorSet) where T : INumber<T> {
 
 		(Optional<Number> option, ReadOnlyList<ValidationError> numberConversionErrors) = ToFloat(inputString, errorSet);
 
@@ -222,14 +223,14 @@ public static class StringConversion {
 			NumberToPrimitiveError { ErrorType: NumberToPrimitiveError.Types.ValueAboveMax}
 				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			T success => (success.Optionalize(), ReadOnlyList.Empty),
+			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};
 	} 
 
 	private static (Optional<T>, ReadOnlyList<ValidationError>) ToIntegerPrimitive<T>(
-		string inputString, Func<Integer, Result<T, IntegerToPrimitiveError>> parser, IntegerConversionErrorSet errorSet) {
+		string inputString, Func<Integer, Result<T, IntegerToPrimitiveError>> parser, IntegerConversionErrorSet errorSet) where T : INumber<T> {
 
 		(Optional<Integer> option, ReadOnlyList<ValidationError> numberConversionErrors) = ToInteger(inputString, errorSet);
 
@@ -248,14 +249,14 @@ public static class StringConversion {
 			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueAboveMax}
 				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			T success => (success.Optionalize(), ReadOnlyList.Empty),
+			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};
 	}
 
 	private static (Optional<T>, ReadOnlyList<ValidationError>) ToWholePrimitive<T>(
-		string inputString, Func<Whole, Result<T, IntegerToPrimitiveError>> parser, WholeConversionErrorSet errorSet) {
+		string inputString, Func<Whole, Result<T, IntegerToPrimitiveError>> parser, WholeConversionErrorSet errorSet) where T : INumber<T> {
 
 		(Optional<Whole> option, ReadOnlyList<ValidationError> numberConversionErrors) = ToWhole(inputString, errorSet);
 
@@ -274,7 +275,7 @@ public static class StringConversion {
 			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueAboveMax}
 				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			T success => (success.Optionalize(), ReadOnlyList.Empty),
+			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new ShouldMatchOtherCaseException()
 		};

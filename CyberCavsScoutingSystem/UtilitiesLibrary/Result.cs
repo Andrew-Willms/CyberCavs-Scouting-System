@@ -11,7 +11,7 @@ public class Result<TError> where TError : Error {
 	private Optional<Success> Success { get; }
 	private Optional<Error> Error { get; }
 
-	public object Resolve() {
+	public Result Resolve() {
 
 		if (Success.HasValue) {
 			return Success.Value;
@@ -51,10 +51,10 @@ public class Result<TValue, TError> where TError : Error {
 	private Optional<Success<TValue>> Success { get; }
 	private Optional<TError> Error { get; }
 
-	public object Resolve() {
+	public Result Resolve() {
 
 		if (Success.HasValue) {
-			return Success.Value.Value!;
+			return Success.Value;
 		}
 
 		if (Error.HasValue) {
@@ -90,23 +90,30 @@ public class Result<TValue, TError> where TError : Error {
 
 
 
-public class Success { }
+public class Result { }
 
-public class Success<T>  {
+
+
+public class Success : Result { }
+
+public class Success<T> : Result {
 
 	public required T Value { get; init; }
+
 }
 
 
 
-public class Error {
+public class Error : Result {
 
 	public string Message { get; init; } = "";
 
 	public Optional<Error> InnerError { get; init; } = Optional.NoValue;
+
 }
 
 public abstract class Error<TErrorEnum> : Error where TErrorEnum : Enum {
 
 	public required TErrorEnum ErrorType { get; init; }
+
 }

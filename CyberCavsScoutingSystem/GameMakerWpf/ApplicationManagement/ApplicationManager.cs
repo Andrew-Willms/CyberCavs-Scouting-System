@@ -159,8 +159,8 @@ public static class ApplicationManager {
 
 		switch (openResult.Resolve()) {
 
-			case GameEditingData newGameEditingData:
-				GameEditor = new(newGameEditingData);
+			case Success<GameEditingData> newGameEditingData:
+				GameEditor = new(newGameEditingData.Value);
 				return;
 
 			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.Aborted }:
