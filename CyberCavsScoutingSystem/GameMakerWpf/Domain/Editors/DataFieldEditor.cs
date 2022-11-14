@@ -5,6 +5,7 @@ using CCSSDomain;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
+using UtilitiesLibrary;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
@@ -133,15 +134,44 @@ public class SelectionDataFieldEditor : DataFieldTypeEditor {
 
 		foreach (string optionName in initialValues.OptionNames) {
 
-			_Options.Add(new SingleInputCreator<string, string, ErrorSeverity> { 
-					Converter = SelectionDataFieldValidator.OptionNameConverter,
-					Inverter = SelectionDataFieldValidator.OptionNameInverter,
-					InitialInput = optionName
-				}.AddOnChangeValidator(SelectionDataFieldValidator.OptionNameValidator_Length)
-				.AddTriggeredValidator(SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, OptionNameChanged)
-				.CreateSingleInput()
-			);
+			AddOption(optionName);
 		}
+	}
+
+	public void AddOption(string optionName) {
+
+		SingleInput<string, string, ErrorSeverity> option = new SingleInputCreator<string, string, ErrorSeverity> {
+			Converter = SelectionDataFieldValidator.OptionNameConverter,
+			Inverter = SelectionDataFieldValidator.OptionNameInverter,
+			InitialInput = optionName
+		}.AddOnChangeValidator(SelectionDataFieldValidator.OptionNameValidator_Length)
+		.AddTriggeredValidator(SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, OptionNameChanged)
+		.CreateSingleInput();
+
+		_Options.Add(option);
+
+		OptionNameChanged.SubscribeTo(option.OutputObjectChanged);
+		OptionNameChanged.Invoke();
+	}
+
+	public Result<RemoveOptionError> RemoveOption(SingleInput<string, string, ErrorSeverity> option) {
+
+		if (!_Options.Remove(option)) {
+			return new RemoveOptionError { ErrorType = RemoveOptionError.Types.OptionNotFound };
+		}
+
+		OptionNameChanged.UnsubscribeFrom(option.OutputObjectChanged);
+		OptionNameChanged.Invoke();
+
+		return new Success();
+	}
+
+	public class RemoveOptionError : Error<RemoveOptionError.Types> {
+
+		public enum Types {
+			OptionNotFound
+		}
+
 	}
 
 }
@@ -169,13 +199,13 @@ public class IntegerDataFieldEditor : DataFieldTypeEditor {
 		MinValue = new SingleInputCreator<int, string, ErrorSeverity> {
 			Converter = IntegerDataFieldValidator.IntegerValueConverter,
 			Inverter = IntegerDataFieldValidator.IntegerValueInverter,
-			InitialInput = initialValues.InitialValue
+			InitialInput = initialValues.MinValue
 		}.CreateSingleInput();
 
 		MaxValue = new SingleInputCreator<int, string, ErrorSeverity> {
 			Converter = IntegerDataFieldValidator.IntegerValueConverter,
 			Inverter = IntegerDataFieldValidator.IntegerValueInverter,
-			InitialInput = initialValues.InitialValue
+			InitialInput = initialValues.MaxValue
 		}.CreateSingleInput();
 	}
 

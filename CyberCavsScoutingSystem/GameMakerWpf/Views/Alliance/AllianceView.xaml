@@ -1,10 +1,9 @@
-﻿<UserControl x:Class="GameMakerWpf.Views.AllianceView"
+﻿<UserControl x:Class="GameMakerWpf.Views.Alliance.AllianceView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:views="clr-namespace:GameMakerWpf.Views"
-             xmlns:domain="clr-namespace:GameMakerWpf.Domain"
+             xmlns:local="clr-namespace:GameMakerWpf.Views.Alliance"
              xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
              mc:Ignorable="d" 
              d:DesignHeight="40"
@@ -41,7 +40,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox DataContext="{Binding Path=DataContext.RedColorValue, RelativeSource={RelativeSource AncestorType={x:Type views:AllianceView}, Mode=FindAncestor}}"
+                <TextBox DataContext="{Binding Path=DataContext.RedColorValue, RelativeSource={RelativeSource AncestorType={x:Type local:AllianceView}, Mode=FindAncestor}}"
                          Style="{StaticResource StringInputStyle}"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Top"
@@ -50,7 +49,7 @@
                          Width="Auto"
                          Grid.Column="0"/>
 
-                <TextBox DataContext="{Binding Path=DataContext.GreenColorValue, RelativeSource={RelativeSource AncestorType={x:Type views:AllianceView}, Mode=FindAncestor}}"
+                <TextBox DataContext="{Binding Path=DataContext.GreenColorValue, RelativeSource={RelativeSource AncestorType={x:Type local:AllianceView}, Mode=FindAncestor}}"
                          Style="{StaticResource StringInputStyle}"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Top"
@@ -59,7 +58,7 @@
                          Width="Auto"
                          Grid.Column="1"/>
 
-                <TextBox DataContext="{Binding Path=DataContext.BlueColorValue, RelativeSource={RelativeSource AncestorType={x:Type views:AllianceView}, Mode=FindAncestor}}"
+                <TextBox DataContext="{Binding Path=DataContext.BlueColorValue, RelativeSource={RelativeSource AncestorType={x:Type local:AllianceView}, Mode=FindAncestor}}"
                          Style="{StaticResource StringInputStyle}"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Top"

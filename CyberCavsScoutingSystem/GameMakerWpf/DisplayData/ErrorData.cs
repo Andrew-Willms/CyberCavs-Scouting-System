@@ -49,14 +49,21 @@ public class ErrorData {
 
 		public static string AllianceNotFoundCaption => "Alliance Not Found";
 		public static string AllianceNotFoundMessage =>
-			"The Alliance you are trying to remove from the Game Project was not found in the Game Project.";
+			"The Alliance you are trying to remove from the Game Project could not be found.";
 	}
 
 	public class RemoveDataFieldError {
 		
 		public static string DataFieldNotFoundCaption => "Data Field Not Found";
 		public static string DataFieldNotFoundMessage => 
-			"The Data Field you are trying to remove from the Game Project was not found in the Game Project.";
+			"The Data Field you are trying to remove from the Game Project could not be found.";
+	}
+
+	public class RemoveOptionError {
+		
+		public static string OptionNotFoundCaption => "Option Not Found";
+		public static string OptionNotFoundMessage => 
+			"The Option you are trying to remove from the Selection Data Field could not be found.";
 	}
 
 }

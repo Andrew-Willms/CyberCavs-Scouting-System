@@ -3,12 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GameMakerWpf.Views"
-             xmlns:domain="clr-namespace:GameMakerWpf.Domain"
              xmlns:models="clr-namespace:CCSSDomain.Models;assembly=CCSSDomain"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
-             x:Class="GameMakerWpf.Views.DataFieldView"
+             x:Class="GameMakerWpf.Views.DataField.DataFieldView"
              mc:Ignorable="d" 
              d:DesignHeight="450"
              d:DesignWidth="800"
@@ -26,9 +24,8 @@
           Margin="5">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
         <TextBox DataContext="{Binding Name}"
@@ -42,27 +39,9 @@
 
         <ComboBox ItemsSource="{Binding Source={StaticResource DataFieldTypes}}"
                   SelectedItem="{Binding DataFieldType}"
+                  VerticalAlignment="Top"
+                  Margin="5,5,5,5"
                   Grid.Column="1" />
-
-        <ContentPresenter Content="{Binding Path=DataFieldTypeEditor}"
-                          Grid.Column="2" >
-
-            <ContentPresenter.Resources>
-                <DataTemplate DataType="{x:Type editors:TextDataFieldEditor}">
-                    <Label Content="Test 1"/>
-                    <!--<local:DataFieldView/>-->
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type editors:SelectionDataFieldEditor}">
-                    <Label Content="Test 2"/>
-                    <!--<local:DataFieldView/>-->
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type editors:IntegerDataFieldEditor}">
-                    <Label Content="Test 3"/>
-                    <!--<local:DataFieldView/>-->
-                </DataTemplate>
-            </ContentPresenter.Resources>
-
-        </ContentPresenter>
 
     </Grid>
 

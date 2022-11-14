@@ -79,9 +79,12 @@ public static class SelectionDataFieldValidator {
 	public static ReadOnlyList<Error> OptionNameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
 		IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
 
-		return optionNames.Any(otherOptionName => otherOptionName.OutputObject == name)
+		return optionNames
+			.Where(otherOptionName => otherOptionName != validatee && otherOptionName.OutputObject.HasValue)
+			.Any(otherOptionName => otherOptionName.OutputObject.Value == name)
+
 			? DataFieldValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
-			: ReadOnlyList.Empty;
+			: ReadOnlyList<Error>.Empty;
 	}
 
 	public static ReadOnlyList<Error> OptionNameValidator_Length(string name) {

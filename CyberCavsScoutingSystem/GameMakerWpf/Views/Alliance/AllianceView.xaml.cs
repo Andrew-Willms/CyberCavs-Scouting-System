@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace GameMakerWpf.Views;
+namespace GameMakerWpf.Views.Alliance;
 
 
 

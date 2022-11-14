@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GameMakerWpf.Views"
-        xmlns:views="clr-namespace:GameMakerWpf.Views"
-        xmlns:domain="clr-namespace:GameMakerWpf.Domain"
         xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
         xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
+        xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataField"
+        xmlns:alliance="clr-namespace:GameMakerWpf.Views.Alliance"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=editors:GameEditor, IsDesignTimeCreatable=True}">
@@ -39,12 +39,12 @@
             </TabItem>
             <TabItem Header="{Binding TabTitle, Source={StaticResource AllianceTabData}}">
                 <Grid Background="#FFE5E5E5">
-                    <views:AlliancesTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <alliance:AlliancesTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding TabTitle, Source={StaticResource DataFieldTabData}}">
                 <Grid Background="#FFE5E5E5">
-                    <views:DataFieldTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <dataField:DataFieldTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Sidebar">
