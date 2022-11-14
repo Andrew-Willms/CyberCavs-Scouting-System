@@ -7,6 +7,7 @@
              xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
              xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataField"
              xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
+             xmlns:dataFieldEditors="clr-namespace:GameMakerWpf.Domain.Editors.DataFieldEditors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=local:DataFieldTabView, IsDesignTimeCreatable=True}">
@@ -119,11 +120,11 @@
 
                 <ContentPresenter.Resources>
 
-                    <DataTemplate DataType="{x:Type editors:TextDataFieldEditor}">
+                    <DataTemplate DataType="{x:Type dataFieldEditors:TextDataFieldEditor}">
                         <local:TextDataFieldView/>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type editors:SelectionDataFieldEditor}">
+                    <DataTemplate DataType="{x:Type dataFieldEditors:SelectionDataFieldEditor}">
                         <local:SelectionDataFieldView>
                             <local:SelectionDataFieldView.SelectionDataFieldEditor>
                                 <Binding Path="SelectedDataField.DataFieldTypeEditor"
@@ -132,7 +133,7 @@
                         </local:SelectionDataFieldView>
                     </DataTemplate>
 
-                    <DataTemplate DataType="{x:Type editors:IntegerDataFieldEditor}">
+                    <DataTemplate DataType="{x:Type dataFieldEditors:IntegerDataFieldEditor}">
                         <local:IntegerDataFieldView/>
                     </DataTemplate>
 

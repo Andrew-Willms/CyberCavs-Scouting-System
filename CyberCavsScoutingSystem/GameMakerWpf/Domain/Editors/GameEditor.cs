@@ -2,6 +2,7 @@
 using System.Linq;
 using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
+using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary;
 using UtilitiesLibrary.MiscExtensions;

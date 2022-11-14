@@ -10,6 +10,7 @@ using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.Erro
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using GameMakerWpf.Domain.Editors;
+using GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 namespace GameMakerWpf.Validation.Validators;
 

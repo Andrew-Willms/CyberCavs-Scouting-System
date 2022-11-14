@@ -1,0 +1,62 @@
+﻿using System.Collections.ObjectModel;
+using CCSSDomain;
+using GameMakerWpf.Domain.EditingData;
+using GameMakerWpf.Validation.Validators;
+using UtilitiesLibrary;
+using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Validation.Inputs;
+
+namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
+
+public class SelectionDataFieldEditor : DataFieldTypeEditor {
+
+	private ObservableCollection<SingleInput<string, string, ErrorSeverity>> _Options { get; } = new();
+	public ReadOnlyObservableCollection<SingleInput<string, string, ErrorSeverity>> Options => new(_Options);
+
+	public ValidationEvent OptionNameChanged { get; } = new();
+
+	public SelectionDataFieldEditor(SelectionDataFieldEditingData initialValues) {
+
+		foreach (string optionName in initialValues.OptionNames) {
+
+			AddOption(optionName);
+		}
+	}
+
+	public void AddOption(string optionName) {
+
+		SingleInput<string, string, ErrorSeverity> option = new SingleInputCreator<string, string, ErrorSeverity> {
+				Converter = SelectionDataFieldValidator.OptionNameConverter,
+				Inverter = SelectionDataFieldValidator.OptionNameInverter,
+				InitialInput = optionName
+			}.AddOnChangeValidator(SelectionDataFieldValidator.OptionNameValidator_Length)
+			.AddTriggeredValidator(SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, OptionNameChanged)
+			.CreateSingleInput();
+
+		_Options.Add(option);
+
+		OptionNameChanged.SubscribeTo(option.OutputObjectChanged);
+		OptionNameChanged.Invoke();
+	}
+
+	public Result<RemoveOptionError> RemoveOption(SingleInput<string, string, ErrorSeverity> option) {
+
+		if (!_Options.Remove(option)) {
+			return new RemoveOptionError { ErrorType = RemoveOptionError.Types.OptionNotFound };
+		}
+
+		OptionNameChanged.UnsubscribeFrom(option.OutputObjectChanged);
+		OptionNameChanged.Invoke();
+
+		return new Success();
+	}
+
+	public class RemoveOptionError : Error<RemoveOptionError.Types> {
+
+		public enum Types {
+			OptionNotFound
+		}
+
+	}
+
+}

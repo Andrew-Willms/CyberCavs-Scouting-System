@@ -6,6 +6,7 @@ using CCSSDomain;
 using GameMakerWpf.ApplicationManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Editors;
+using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;

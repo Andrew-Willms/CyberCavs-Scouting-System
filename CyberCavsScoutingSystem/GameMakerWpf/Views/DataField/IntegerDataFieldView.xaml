@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
              xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
+             xmlns:dataFieldEditors="clr-namespace:GameMakerWpf.Domain.Editors.DataFieldEditors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type editors:IntegerDataFieldEditor}}">
+             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type dataFieldEditors:IntegerDataFieldEditor}}">
 
     <UserControl.Resources>
         <displayData:IntegerDataFieldData x:Key="IntegerDataFieldData"/>

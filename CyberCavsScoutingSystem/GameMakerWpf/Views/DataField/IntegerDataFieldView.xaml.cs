@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using GameMakerWpf.Domain.Editors;
+using GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 namespace GameMakerWpf.Views.DataField;
 

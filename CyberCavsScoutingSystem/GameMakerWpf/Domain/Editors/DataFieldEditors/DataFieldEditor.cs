@@ -1,17 +1,15 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using CCSSDomain;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 using static CCSSDomain.Models.DataField;
 
-namespace GameMakerWpf.Domain.Editors;
+namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 
 
@@ -108,105 +106,6 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 	private void OnPropertyChanged(string propertyName) {
 		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
-
-}
-
-
-
-
-public abstract class DataFieldTypeEditor { }
-
-
-
-public class TextDataFieldEditor : DataFieldTypeEditor { }
-
-
-
-public class SelectionDataFieldEditor : DataFieldTypeEditor {
-
-	private ObservableCollection<SingleInput<string, string, ErrorSeverity>> _Options { get; } = new();
-	public ReadOnlyObservableCollection<SingleInput<string, string, ErrorSeverity>> Options => new(_Options);
-
-	public ValidationEvent OptionNameChanged { get; } = new();
-
-	public SelectionDataFieldEditor(SelectionDataFieldEditingData initialValues) {
-
-		foreach (string optionName in initialValues.OptionNames) {
-
-			AddOption(optionName);
-		}
-	}
-
-	public void AddOption(string optionName) {
-
-		SingleInput<string, string, ErrorSeverity> option = new SingleInputCreator<string, string, ErrorSeverity> {
-			Converter = SelectionDataFieldValidator.OptionNameConverter,
-			Inverter = SelectionDataFieldValidator.OptionNameInverter,
-			InitialInput = optionName
-		}.AddOnChangeValidator(SelectionDataFieldValidator.OptionNameValidator_Length)
-		.AddTriggeredValidator(SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, OptionNameChanged)
-		.CreateSingleInput();
-
-		_Options.Add(option);
-
-		OptionNameChanged.SubscribeTo(option.OutputObjectChanged);
-		OptionNameChanged.Invoke();
-	}
-
-	public Result<RemoveOptionError> RemoveOption(SingleInput<string, string, ErrorSeverity> option) {
-
-		if (!_Options.Remove(option)) {
-			return new RemoveOptionError { ErrorType = RemoveOptionError.Types.OptionNotFound };
-		}
-
-		OptionNameChanged.UnsubscribeFrom(option.OutputObjectChanged);
-		OptionNameChanged.Invoke();
-
-		return new Success();
-	}
-
-	public class RemoveOptionError : Error<RemoveOptionError.Types> {
-
-		public enum Types {
-			OptionNotFound
-		}
-
-	}
-
-}
-
-
-
-public class IntegerDataFieldEditor : DataFieldTypeEditor {
-
-	public SingleInput<int, string, ErrorSeverity> InitialValue { get; }
-
-	public SingleInput<int, string, ErrorSeverity> MinValue { get; }
-
-	public SingleInput<int, string, ErrorSeverity> MaxValue { get; }
-
-
-
-	public IntegerDataFieldEditor(IntegerDataFieldEditingData initialValues) {
-
-		InitialValue = new SingleInputCreator<int, string, ErrorSeverity> {
-			Converter = IntegerDataFieldValidator.IntegerValueConverter,
-			Inverter = IntegerDataFieldValidator.IntegerValueInverter,
-			InitialInput = initialValues.InitialValue
-		}.CreateSingleInput();
-
-		MinValue = new SingleInputCreator<int, string, ErrorSeverity> {
-			Converter = IntegerDataFieldValidator.IntegerValueConverter,
-			Inverter = IntegerDataFieldValidator.IntegerValueInverter,
-			InitialInput = initialValues.MinValue
-		}.CreateSingleInput();
-
-		MaxValue = new SingleInputCreator<int, string, ErrorSeverity> {
-			Converter = IntegerDataFieldValidator.IntegerValueConverter,
-			Inverter = IntegerDataFieldValidator.IntegerValueInverter,
-			InitialInput = initialValues.MaxValue
-		}.CreateSingleInput();
 	}
 
 }
