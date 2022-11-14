@@ -17,6 +17,7 @@
 	<ItemGroup>
 	  <Folder Include="DisplayData\" />
 	  <Folder Include="Domain\EditingData\" />
+	  <Folder Include="Views\Commands\" />
 	</ItemGroup>
 	
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">

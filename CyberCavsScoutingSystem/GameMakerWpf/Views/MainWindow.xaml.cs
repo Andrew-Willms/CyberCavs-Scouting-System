@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 using GameMakerWpf.ApplicationManagement;
 
 namespace GameMakerWpf.Views;
@@ -16,22 +17,22 @@ public partial class MainWindow : Window, IGameMakerMainView {
 
 
 
-	private void Save_Clicked(object sender, RoutedEventArgs e) {
+	private void Save_Execute(object sender, RoutedEventArgs e) {
 
 		ApplicationManager.SaveGameProject();
 	}
 
-	private void SaveAs_Clicked(object sender, RoutedEventArgs e) {
+	private void SaveAs_Execute(object sender, RoutedEventArgs e) {
 
 		ApplicationManager.SaveGameProjectAs();
 	}
 
-	private void Open_Clicked(object sender, RoutedEventArgs e) {
+	private void Open_Execute(object sender, RoutedEventArgs e) {
 
 		ApplicationManager.OpenGameProject();
 	}
 
-	private void New_Clicked(object sender, RoutedEventArgs e) {
+	private void New_Execute(object sender, RoutedEventArgs e) {
 
 		ApplicationManager.NewGameProject();
 	}

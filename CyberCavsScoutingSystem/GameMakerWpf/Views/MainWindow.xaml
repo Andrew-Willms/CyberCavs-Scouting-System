@@ -8,6 +8,7 @@
         xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
         xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataField"
         xmlns:alliance="clr-namespace:GameMakerWpf.Views.Alliance"
+        xmlns:commands="clr-namespace:GameMakerWpf.Views.Commands"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=editors:GameEditor, IsDesignTimeCreatable=True}">
@@ -18,6 +19,13 @@
         <displayData:DataFieldTabData x:Key="DataFieldTabData"/>
     </Window.Resources>
     
+    <Window.CommandBindings>
+        <CommandBinding Command="Save" Executed="Save_Execute"/>
+        <CommandBinding Command="commands:Commands.SaveAs" Executed="SaveAs_Execute"/>
+        <CommandBinding Command="Open" Executed="Open_Execute"/>
+        <CommandBinding Command="New" Executed="New_Execute"/>
+    </Window.CommandBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -25,10 +33,10 @@
         </Grid.RowDefinitions>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="_Save" Click="Save_Clicked" />
-                <MenuItem Header="Save_As" Click="SaveAs_Clicked"/>
-                <MenuItem Header="_Open" Click="Open_Clicked"/>
-                <MenuItem Header="_New" Click="New_Clicked"/>
+                <MenuItem Command="Save"/>
+                <MenuItem Command="commands:Commands.SaveAs"/>
+                <MenuItem Command="Open"/>
+                <MenuItem Command="New"/>
             </MenuItem>
         </Menu>
         <TabControl Grid.Row="1">
@@ -47,16 +55,10 @@
                     <dataField:DataFieldTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Sidebar">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
             <TabItem Header="Field Image">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
             <TabItem Header="Field Buttons">
-                <Grid Background="#FFE5E5E5"/>
-            </TabItem>
-            <TabItem Header="Timer">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
