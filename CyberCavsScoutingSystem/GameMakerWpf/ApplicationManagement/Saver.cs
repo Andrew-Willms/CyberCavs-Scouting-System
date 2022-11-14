@@ -93,8 +93,12 @@ public class Saver : ISaver {
 		}
 
 		try {
-			GameEditingData? newGameEditingData = JsonConvert.DeserializeObject<GameEditingData>(serializedGameEditingData, JsonSerializerSettings);
-			return newGameEditingData ?? throw new NoNullAllowedException();
+			GameEditingData newGameEditingData =
+				JsonConvert.DeserializeObject<GameEditingData>(serializedGameEditingData, JsonSerializerSettings)
+				?? throw new NoNullAllowedException();
+
+			FilePath = filePath.Optionalize();
+			return newGameEditingData;
 
 		} catch {
 			return new ISaver.OpenError { ErrorType = ISaver.OpenError.Types.SavedDataCouldNotBeConverted };

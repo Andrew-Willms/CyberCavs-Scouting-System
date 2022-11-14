@@ -36,7 +36,7 @@ public static class ApplicationManager {
 	private static ISavePrompter SavePrompter => new SavePrompter();
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
-	private static bool ProjectIsSaved { get; set; }
+	private static bool ProjectIsSaved { get; set; } = true;
 
 
 
@@ -131,7 +131,6 @@ public static class ApplicationManager {
 		switch (result.Resolve()) {
 			
 			case Success:
-				ProjectIsSaved = true;
 				break;
 
 			case ISaver.SetSaveLocationError { ErrorType: ISaver.SetSaveLocationError.Types.Aborted }:
@@ -187,6 +186,7 @@ public static class ApplicationManager {
 		}
 
 		GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
+		ProjectIsSaved = true;
 	}
 
 }
