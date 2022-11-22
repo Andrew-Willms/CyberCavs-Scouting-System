@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace GameMakerWpf.Views.DataField;
+namespace GameMakerWpf.Views.DataTemplates.DataField;
 
 
 

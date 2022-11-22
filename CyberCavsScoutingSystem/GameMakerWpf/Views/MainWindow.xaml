@@ -6,17 +6,19 @@
         xmlns:local="clr-namespace:GameMakerWpf.Views"
         xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
         xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
-        xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataField"
-        xmlns:alliance="clr-namespace:GameMakerWpf.Views.Alliance"
         xmlns:commands="clr-namespace:GameMakerWpf.Views.Commands"
+        xmlns:tabs="clr-namespace:GameMakerWpf.Views.Tabs"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Game Maker"
+        Height="450" Width="800"
         d:DataContext="{d:DesignInstance Type=editors:GameEditor, IsDesignTimeCreatable=True}">
 
     <Window.Resources>
         <displayData:MetaTabData x:Key="MetaTabData"/>
         <displayData:AllianceTabData x:Key="AllianceTabData"/>
         <displayData:DataFieldTabData x:Key="DataFieldTabData"/>
+        <displayData:SetupTabData x:Key="SetupTabData"/>
+        <displayData:AutoTabData x:Key="AutoTabData"/>
     </Window.Resources>
     
     <Window.CommandBindings>
@@ -47,18 +49,31 @@
             </TabItem>
             <TabItem Header="{Binding TabTitle, Source={StaticResource AllianceTabData}}">
                 <Grid Background="#FFE5E5E5">
-                    <alliance:AlliancesTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <tabs:AlliancesTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding TabTitle, Source={StaticResource DataFieldTabData}}">
                 <Grid Background="#FFE5E5E5">
-                    <dataField:DataFieldTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <tabs:DataFieldTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Field Image">
+            <TabItem Header="{Binding TabTitle, Source={StaticResource SetupTabData}}">
+                <Grid Background="#FFE5E5E5">
+                    <tabs:SetupTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding TabTitle, Source={StaticResource AutoTabData}}">
+                <Grid Background="#FFE5E5E5">
+                    <tabs:AutoTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Teleop Tab">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
-            <TabItem Header="Field Buttons">
+            <TabItem Header="Endgame Tab">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="Publish">
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>

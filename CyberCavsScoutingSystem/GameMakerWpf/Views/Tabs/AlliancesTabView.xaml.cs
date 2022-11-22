@@ -2,71 +2,73 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Controls;
+using CCSSDomain;
 using GameMakerWpf.ApplicationManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.Editors;
-using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Validation.Inputs;
 
-namespace GameMakerWpf.Views.DataField;
+namespace GameMakerWpf.Views.Tabs;
 
 
 
-public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
+public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => ApplicationManager.GameEditor;
-	public ReadOnlyObservableCollection<DataFieldEditor> DataFields => GameEditor.DataFields;
+	public ReadOnlyObservableCollection<AllianceEditor> Alliances => GameEditor.Alliances;
+	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditor.RobotsPerAlliance;
+	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditor.AlliancesPerMatch;
 
-	private DataFieldEditor? _SelectedDataField;
-	public DataFieldEditor? SelectedDataField {
-		get => _SelectedDataField;
+	private AllianceEditor? _SelectedAlliance;
+	public AllianceEditor? SelectedAlliance {
+		get => _SelectedAlliance;
 		set {
-			_SelectedDataField = value;
-			OnPropertyChanged(nameof(SelectedDataField));
+			_SelectedAlliance = value;
+			OnPropertyChanged(nameof(SelectedAlliance));
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}
 	}
 
-	public bool RemoveButtonIsEnabled => SelectedDataField is not null;
+	public bool RemoveButtonIsEnabled => _SelectedAlliance is not null;
 
 
 
-	public DataFieldTabView() {
-		
+	public AlliancesTabView() {
+
 		DataContext = this;
 
-		InitializeComponent();
-
 		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
+
+		InitializeComponent();
 	}
 
 
 
 	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
-
-		GameEditor.AddDataField(DefaultEditingDataValues.DefaultDataFieldEditingData);
+		GameEditor.AddUniqueAlliance();
 	}
 
 	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
 
-		if (SelectedDataField is null) {
-			throw new InvalidOperationException("The RemoveButton should not be enabled if no DataField is selected.");
+		if (SelectedAlliance is null) {
+			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
 		}
 
-		Result<GameEditor.RemoveDataFieldError> result = GameEditor.RemoveDataField(SelectedDataField);
+		Result<GameEditor.RemoveError> result = GameEditor.RemoveAlliance(SelectedAlliance);
 
 		switch (result.Resolve()) {
 			
 			case Success:
 				return;
 
-			case GameEditor.RemoveDataFieldError { ErrorType: GameEditor.RemoveDataFieldError.Types.DataFieldNotFound }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveDataFieldError.DataFieldNotFoundCaption, ErrorData.RemoveDataFieldError.DataFieldNotFoundMessage);
+			case GameEditor.RemoveError { ErrorType: GameEditor.RemoveError.Types.ItemNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveAllianceError.AllianceNotFoundCaption, ErrorData.RemoveAllianceError.AllianceNotFoundMessage);
 				return;
 
 			default:

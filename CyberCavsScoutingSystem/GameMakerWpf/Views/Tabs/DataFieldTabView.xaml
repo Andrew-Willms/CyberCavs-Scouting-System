@@ -1,13 +1,13 @@
-﻿<UserControl x:Class="GameMakerWpf.Views.DataField.DataFieldTabView"
+﻿<UserControl x:Class="GameMakerWpf.Views.Tabs.DataFieldTabView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GameMakerWpf.Views.DataField"
+             xmlns:local="clr-namespace:GameMakerWpf.Views.Tabs"
              xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
-             xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataField"
-             xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
              xmlns:dataFieldEditors="clr-namespace:GameMakerWpf.Domain.Editors.DataFieldEditors"
+             xmlns:tabs="clr-namespace:GameMakerWpf.Views.Tabs"
+             xmlns:dataField1="clr-namespace:GameMakerWpf.Views.DataTemplates.DataField"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=local:DataFieldTabView, IsDesignTimeCreatable=True}">
@@ -53,7 +53,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <dataField:DataFieldView/>
+                        <dataField1:DataFieldView/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
 
@@ -121,20 +121,20 @@
                 <ContentPresenter.Resources>
 
                     <DataTemplate DataType="{x:Type dataFieldEditors:TextDataFieldEditor}">
-                        <local:TextDataFieldView/>
+                        <dataField1:TextDataFieldView/>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type dataFieldEditors:SelectionDataFieldEditor}">
-                        <local:SelectionDataFieldView>
-                            <local:SelectionDataFieldView.SelectionDataFieldEditor>
+                        <dataField1:SelectionDataFieldView>
+                            <dataField1:SelectionDataFieldView.SelectionDataFieldEditor>
                                 <Binding Path="SelectedDataField.DataFieldTypeEditor"
-                                         RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type local:DataFieldTabView}, Mode=FindAncestor}" />
-                            </local:SelectionDataFieldView.SelectionDataFieldEditor>
-                        </local:SelectionDataFieldView>
+                                         RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type tabs:DataFieldTabView}, Mode=FindAncestor}" />
+                            </dataField1:SelectionDataFieldView.SelectionDataFieldEditor>
+                        </dataField1:SelectionDataFieldView>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type dataFieldEditors:IntegerDataFieldEditor}">
-                        <local:IntegerDataFieldView/>
+                        <dataField1:IntegerDataFieldView/>
                     </DataTemplate>
 
                 </ContentPresenter.Resources>
