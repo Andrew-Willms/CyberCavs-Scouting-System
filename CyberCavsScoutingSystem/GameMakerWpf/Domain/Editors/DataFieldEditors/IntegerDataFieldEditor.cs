@@ -5,6 +5,8 @@ using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
+
+
 public class IntegerDataFieldEditor : DataFieldTypeEditor {
 
 	public SingleInput<int, string, ErrorSeverity> InitialValue { get; }

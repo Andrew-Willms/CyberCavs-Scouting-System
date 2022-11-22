@@ -51,6 +51,18 @@ public static class DefaultEditingDataValues {
 
 
 
+	public static readonly ButtonEditingData DefaultButtonEditingData = new() {
+		DataFieldName = "",
+		IncrementAmount = "1",
+		ButtonText = "Button Text",
+		XPosition = "0.5",
+		YPosition = "0.5",
+		Height = "0.1",
+		Width = "0.1",
+	};
+
+
+
 	public static GameEditingData DefaultGameEditingData => new() {
 
 		Name = GameNameGenerator.GetRandomGameName(),
@@ -66,6 +78,14 @@ public static class DefaultEditingDataValues {
 		AlliancesPerMatch = $"{2}",
 		Alliances = new List<AllianceEditingData> { DefaultRedAlliance, DefaultBlueAlliance }.ToReadOnly(),
 		DataFields = ReadOnlyList.Empty,
+
+		SetupTabInputs = ReadOnlyList.Empty,
+		AutoTabInputs = ReadOnlyList.Empty,
+		TeleTabInputs = ReadOnlyList.Empty,
+		EndgameTabInputs = ReadOnlyList.Empty,
+
+		AutoButtonEditingData = ReadOnlyList.Empty,
+		TeleButtonEditingData = ReadOnlyList.Empty,
 	};
 
 

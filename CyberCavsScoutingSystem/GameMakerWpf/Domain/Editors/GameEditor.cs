@@ -41,6 +41,24 @@ public class GameEditor {
 	private readonly ObservableCollection<DataFieldEditor> _DataFields = new();
 	public ReadOnlyObservableCollection<DataFieldEditor> DataFields => new(_DataFields);
 
+	private readonly ObservableCollection<InputEditor> _SetupTabInputs = new();
+	public ReadOnlyObservableCollection<InputEditor> SetupTabInputs => new(_SetupTabInputs);
+
+	private readonly ObservableCollection<InputEditor> _AutoTabInputs = new();
+	public ReadOnlyObservableCollection<InputEditor> AutoTabInputs => new(_AutoTabInputs);
+
+	private readonly ObservableCollection<InputEditor> _TeleTabInputs = new();
+	public ReadOnlyObservableCollection<InputEditor> TeleTabInputs => new(_TeleTabInputs);
+
+	private readonly ObservableCollection<InputEditor> _EndgameTabInputs = new();
+	public ReadOnlyObservableCollection<InputEditor> EndgameTabInputs => new(_EndgameTabInputs);
+
+	private readonly ObservableCollection<ButtonEditor> _AutoButtons = new();
+	public ReadOnlyObservableCollection<ButtonEditor> AutoButtons => new(_AutoButtons);
+
+	private readonly ObservableCollection<ButtonEditor> _TeleButtons = new();
+	public ReadOnlyObservableCollection<ButtonEditor> TeleButtons => new(_TeleButtons);
+
 
 
 	public GameEditor(GameEditingData initialValues) {
@@ -149,7 +167,15 @@ public class GameEditor {
 			AlliancesPerMatch = AlliancesPerMatch.InputObject,
 
 			Alliances = Alliances.Select(x => x.ToEditingData()).ToReadOnly(),
-			DataFields = DataFields.Select(x => x.ToEditingData()).ToReadOnly()
+			DataFields = DataFields.Select(x => x.ToEditingData()).ToReadOnly(),
+
+			SetupTabInputs = SetupTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
+			AutoTabInputs = AutoTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
+			TeleTabInputs = TeleTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
+			EndgameTabInputs = EndgameTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
+
+			AutoButtonEditingData = AutoButtons.Select(x => x.ToEditingData()).ToReadOnly(),
+			TeleButtonEditingData = TeleButtons.Select(x => x.ToEditingData()).ToReadOnly(),
 		};
 
 	}
@@ -168,10 +194,10 @@ public class GameEditor {
 		AllianceColorChanged.Invoke();
 	}
 
-	public Result<RemoveAllianceError> RemoveAlliance(AllianceEditor allianceEditor) {
+	public Result<RemoveError> RemoveAlliance(AllianceEditor allianceEditor) {
 
 		if (!_Alliances.Remove(allianceEditor)) {
-			return new RemoveAllianceError { ErrorType = RemoveAllianceError.Types.AllianceNotFound };
+			return RemoveError.NotFound;
 		}
 
 		AllianceNameChanged.UnsubscribeFrom(allianceEditor.Name.OutputObjectChanged);
@@ -195,10 +221,10 @@ public class GameEditor {
 		DataFieldTypeChanged.Invoke();
 	}
 
-	public Result<RemoveDataFieldError> RemoveDataField(DataFieldEditor dataFieldEditor) {
+	public Result<RemoveError> RemoveDataField(DataFieldEditor dataFieldEditor) {
 
 		if (!_DataFields.Remove(dataFieldEditor)) {
-			return new RemoveDataFieldError { ErrorType = RemoveDataFieldError.Types.DataFieldNotFound };
+			return RemoveError.NotFound;
 		}
 		
 		DataFieldNameChanged.UnsubscribeFrom(dataFieldEditor.Name.OutputObjectChanged);
@@ -210,21 +236,47 @@ public class GameEditor {
 		return new Success();
 	}
 
+	public void AddAutoButton(ButtonEditingData buttonEditingData) {
 
+		ButtonEditor buttonEditor = new(this, buttonEditingData);
 
-	public class RemoveAllianceError : Error<RemoveAllianceError.Types> {
-
-		public enum Types {
-			AllianceNotFound
-		}
-
+		_AutoButtons.Add(buttonEditor);
 	}
 
-	public class RemoveDataFieldError : Error<RemoveDataFieldError.Types> {
+	public Result<RemoveError> RemoveAutoButton(ButtonEditor buttonEditor) {
+
+		if (!_AutoButtons.Remove(buttonEditor)) {
+			return RemoveError.NotFound;
+		}
+
+		return new Success();
+	}
+
+	public void AddTeleButton(ButtonEditingData buttonEditingData) {
+
+		ButtonEditor buttonEditor = new(this, buttonEditingData);
+
+		_TeleButtons.Add(buttonEditor);
+	}
+
+	public Result<RemoveError> RemoveTeleButton(ButtonEditor buttonEditor) {
+
+		if (!_TeleButtons.Remove(buttonEditor)) {
+			return RemoveError.NotFound;
+		}
+
+		return new Success();
+	}
+
+
+
+	public class RemoveError : Error<RemoveError.Types> {
 
 		public enum Types {
-			DataFieldNotFound
+			ItemNotFound
 		}
+
+		public static RemoveError NotFound => new() { ErrorType = Types.ItemNotFound };
 
 	}
 

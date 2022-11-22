@@ -21,4 +21,12 @@ public class GameEditingData {
 	public required ReadOnlyList<AllianceEditingData> Alliances { get; init; }
 	public required ReadOnlyList<DataFieldEditingData> DataFields { get; init; }
 
+	public required ReadOnlyList<InputEditingData> SetupTabInputs { get; init; }
+	public required ReadOnlyList<InputEditingData> AutoTabInputs { get; init; }
+	public required ReadOnlyList<InputEditingData> TeleTabInputs { get; init; }
+	public required ReadOnlyList<InputEditingData> EndgameTabInputs { get; init; }
+
+	public required ReadOnlyList<ButtonEditingData> AutoButtonEditingData { get; init; }
+	public required ReadOnlyList<ButtonEditingData> TeleButtonEditingData { get; init; }
+
 }
