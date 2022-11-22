@@ -16,7 +16,6 @@
 	
 	<ItemGroup>
 	  <Folder Include="DisplayData\" />
-	  <Folder Include="Domain\EditingData\" />
 	</ItemGroup>
 	
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
