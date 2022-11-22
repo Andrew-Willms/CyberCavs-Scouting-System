@@ -65,6 +65,8 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 		if (e.Property.Name == nameof(Editor)) {
 			control.Editor = (e.NewValue as SelectionDataFieldEditor)!;
 		}
+
+		control.EditorChanged();
 	}
 
 
@@ -109,7 +111,11 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 	public event PropertyChangedEventHandler? PropertyChanged;
 	
 	private void OnPropertyChanged(string? propertyName = null) {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		PropertyChanged?.Invoke(this, new(propertyName));
+	}
+
+	private void EditorChanged() {
+		PropertyChanged?.Invoke(this, new(""));
 	}
 
 	private void GameProjectChanged() {
