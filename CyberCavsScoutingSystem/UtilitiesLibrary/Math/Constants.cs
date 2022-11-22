@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace UtilitiesLibrary.Math; 
 
@@ -18,7 +19,30 @@ public static class Constants {
 		public static readonly T Nine = Eight + T.One;
 		public static readonly T Ten = Nine + T.One;
 
+		public static T TenToThe(int exponent) {
+
+			T value = T.One;
+
+			Func<T, T> operation = exponent > 0 
+				? x => x * Ten
+				: x => x / Ten;
+
+			for (int i = 0; i < exponent; i++) {
+
+				value = operation(value);
+			}
+
+			return value;
+		}
+
 		public static readonly T MinusOne = T.Zero - T.One;
+
+		public static T Abs(T value) {
+
+			return value > T.Zero
+				? value
+				: value * MinusOne;
+		}
 	}
 
 }

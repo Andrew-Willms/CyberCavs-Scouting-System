@@ -211,7 +211,7 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 			digits.Add(Digit.FromChar(character));
 		}
 
-		return new Whole(digits.ToReadOnly());
+		return new(digits.ToReadOnly());
 	}
 
 }

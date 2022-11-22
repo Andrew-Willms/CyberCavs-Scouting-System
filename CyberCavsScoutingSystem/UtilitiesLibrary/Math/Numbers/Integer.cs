@@ -26,7 +26,7 @@ public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 
 
 
-	private new static Integer FromINumber<T>(T value) where T : INumber<T> {
+	private static Integer FromINumber<T>(T value) where T : INumber<T> {
 
 		bool isNegative = value < T.Zero;
 

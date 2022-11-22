@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Validation;
 
 namespace UtilitiesLibrary.Math.Numbers;
@@ -13,9 +14,15 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 
 	public bool IsNegative { get; }
 
+	/// <summary>
+	/// How many digits are there to the right of the decimal point.
+	/// </summary>
 	private int DecimalPosition { get; }
 
-	private ReadOnlyCollection<Digit> Digits { get; }
+	/// <summary>
+	/// Stores the digits of the number from least to most significant.
+	/// </summary>
+	private ReadOnlyList<Digit> Digits { get; }
 
 	public bool IsInteger => DecimalPosition == 0;
 
@@ -24,7 +31,7 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 
 
 
-	private Number(bool isNegative, int decimalPosition, ReadOnlyCollection<Digit> digits) {
+	private Number(bool isNegative, int decimalPosition, ReadOnlyList<Digit> digits) {
 		IsNegative = isNegative;
 		DecimalPosition = decimalPosition;
 		Digits = digits;
@@ -44,155 +51,41 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 
 
 
-	public static implicit operator Number(byte value) {
+	private static Number FromINumber<T>(T value) where T : INumber<T> {
 
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(false, 0, digits.AsReadOnly());
-	}
-
-	public static implicit operator Number(ushort value) {
-
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(false, 0, digits.AsReadOnly());
-	}
-
-	public static implicit operator Number(uint value) {
-
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(false, 0, digits.AsReadOnly());
-	}
-
-	public static implicit operator Number(ulong value) {
-
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(false, 0, digits.AsReadOnly());
-	}
-
-	public static implicit operator Number(short value) {
-
-		bool isNegative = value < 0;
-
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(isNegative, 0, digits.AsReadOnly());
-	}
-
-	public static implicit operator Number(int value) {
-
-		bool isNegative = value < 0;
-
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(isNegative, 0, digits.AsReadOnly());
-	}
-
-	public static implicit operator Number(long value) {
-
-		bool isNegative = value < 0;
-
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(isNegative, 0, digits.AsReadOnly());
-	}
-
-	public static implicit operator Number(float value) {
-
-		bool isNegative = value < 0;
+		bool isNegative = value < T.Zero;
 
 		int placesRightOfDecimalPoint = 0;
-		while (System.Math.Abs(value % 1 - value) > 1e-10) {
+		T valueDecimals = Constants.Numbers<T>.Abs(value - value % T.One);
+
+		while (valueDecimals > Constants.Numbers<T>.TenToThe(-10)) {
+
 			placesRightOfDecimalPoint++;
-			value *= 10;
+			valueDecimals *= Constants.Numbers<T>.Ten;
+			valueDecimals -= valueDecimals % T.One;
 		}
 
 		List<Digit> digits = new();
+		while (value >= T.One || value <= Constants.Numbers<T>.MinusOne) {
 
-		while (value > 0) {
 			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
+
+			value /= Constants.Numbers<T>.Ten;
 		}
 
-		return new(isNegative, placesRightOfDecimalPoint, digits.AsReadOnly());
+		return new(isNegative, placesRightOfDecimalPoint, digits.ToReadOnly());
 	}
 
-	public static implicit operator Number(double value) {
-
-		bool isNegative = value < 0;
-
-		int placesRightOfDecimalPoint = 0;
-		while (System.Math.Abs(value % 1 - value) > 1e-10) {
-			placesRightOfDecimalPoint++;
-			value *= 10;
-		}
-
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(isNegative, placesRightOfDecimalPoint, digits.AsReadOnly());
-	}
-
-	public static implicit operator Number(decimal value) {
-
-		bool isNegative = value < 0;
-
-		int placesRightOfDecimalPoint = 0;
-		while (System.Math.Abs(value % 1 - value) > 1e-10M) {
-			placesRightOfDecimalPoint++;
-			value *= 10;
-		}
-
-		List<Digit> digits = new();
-
-		while (value > 0) {
-			digits.Add(Digit.GetOnesColumn(value));
-			value /= 10;
-		}
-
-		return new(isNegative, placesRightOfDecimalPoint, digits.AsReadOnly());
-	}
+	public static implicit operator Number(byte value) => FromINumber(value);
+	public static implicit operator Number(ushort value)  => FromINumber(value);
+	public static implicit operator Number(uint value) => FromINumber(value);
+	public static implicit operator Number(ulong value) => FromINumber(value);
+	public static implicit operator Number(short value)  => FromINumber(value);
+	public static implicit operator Number(int value) => FromINumber(value);
+	public static implicit operator Number(long value) => FromINumber(value);
+	public static implicit operator Number(float value) => FromINumber(value);
+	public static implicit operator Number(double value) => FromINumber(value);
+	public static implicit operator Number(decimal value) => FromINumber(value);
 
 
 
@@ -262,12 +155,6 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 	public static Result<double, NumberToPrimitiveError> ToDouble(Number number) {
 
 		return number.ToNumberPrimitive(double.MinValue, double.MaxValue, Digit.ToINumber<double>, i => System.Math.Pow(10, i));
-	}
-
-
-
-	public static Number Parse(string text) {
-		throw new NotImplementedException();
 	}
 
 
@@ -357,6 +244,50 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 
 	public static bool operator <=(Number left, Number right) {
 		return left.CompareTo(right) <= 0;
+	}
+
+
+
+	public static Number? Parse(string? text) {
+
+		if (text is null || text.Length == 0) {
+			return null;
+		}
+
+		if (text.Any(x => !char.IsDigit(x) && x is not '.' or '-')) {
+			return null;
+		}
+
+		if (text.Multiple('.')) {
+			return null;
+		}
+
+		if (text.Multiple('-') || (text.Contains('-') && !text.StartsWith('-'))) {
+			return null;
+		}
+
+		// After this point the string should be a valid number.
+
+		if (text.Where(x => x is not '.' or '-').All(x => x == '0')) {
+			return new(false, 0, Digit.Zero.ReadOnlyListify());
+		}
+
+		bool isNegative = text.First() is '-';
+		int decimalPosition = 0;
+		List<Digit> digits = new();
+		
+		for (int i = text.Length - 1; i >= 0; i--) {
+
+			if (text[i] is '.') {
+
+				decimalPosition = text.Length - 1 - i;
+				continue;
+			}
+
+			digits.Add(Digit.FromChar(text[i]));
+		}
+
+		return new(isNegative, decimalPosition, digits.ToReadOnly());
 	}
 
 }
