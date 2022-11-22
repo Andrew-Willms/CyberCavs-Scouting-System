@@ -42,7 +42,14 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <dataTemplates:ButtonView/>
+                    <Grid>
+                        <dataTemplates:ButtonView>
+                            <dataTemplates:ButtonView.Editor>
+                                <Binding Path="DataContext"
+                                         RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Grid}, Mode=FindAncestor}" />
+                            </dataTemplates:ButtonView.Editor>
+                        </dataTemplates:ButtonView>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 
