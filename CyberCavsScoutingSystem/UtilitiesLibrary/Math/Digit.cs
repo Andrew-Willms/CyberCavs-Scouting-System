@@ -29,14 +29,14 @@ public class Digit : OrderedSmartEnum<Digit> {
 		return digit.Value switch {
 			0 => T.Zero,
 			1 => T.One,
-			2 => Constants.Numbers<T>.Two,
-			3 => Constants.Numbers<T>.Three,
-			4 => Constants.Numbers<T>.Four,
-			5 => Constants.Numbers<T>.Five,
-			6 => Constants.Numbers<T>.Six,
-			7 => Constants.Numbers<T>.Seven,
-			8 => Constants.Numbers<T>.Eight,
-			9 => Constants.Numbers<T>.Nine,
+			2 => Numbers<T>.Two,
+			3 => Numbers<T>.Three,
+			4 => Numbers<T>.Four,
+			5 => Numbers<T>.Five,
+			6 => Numbers<T>.Six,
+			7 => Numbers<T>.Seven,
+			8 => Numbers<T>.Eight,
+			9 => Numbers<T>.Nine,
 			_ => throw new InvalidEnumArgumentException()
 		};
 	}
@@ -44,19 +44,19 @@ public class Digit : OrderedSmartEnum<Digit> {
 	public static Digit FromINumber<T>(T number) where T : INumber<T> {
 
 		if (number < T.Zero) {
-			number *= Constants.Numbers<T>.MinusOne;
+			number *= Numbers<T>.MinusOne;
 		}
 
 		if (number == T.Zero) return Zero;
 		if (number == T.One) return One;
-		if (number == Constants.Numbers<T>.Two) return Two;
-		if (number == Constants.Numbers<T>.Three) return Three;
-		if (number == Constants.Numbers<T>.Four) return Four;
-		if (number == Constants.Numbers<T>.Five) return Five;
-		if (number == Constants.Numbers<T>.Six) return Six;
-		if (number == Constants.Numbers<T>.Seven) return Seven;
-		if (number == Constants.Numbers<T>.Eight) return Eight;
-		if (number == Constants.Numbers<T>.Nine) return Nine;
+		if (number == Numbers<T>.Two) return Two;
+		if (number == Numbers<T>.Three) return Three;
+		if (number == Numbers<T>.Four) return Four;
+		if (number == Numbers<T>.Five) return Five;
+		if (number == Numbers<T>.Six) return Six;
+		if (number == Numbers<T>.Seven) return Seven;
+		if (number == Numbers<T>.Eight) return Eight;
+		if (number == Numbers<T>.Nine) return Nine;
 
 		throw new InvalidOperationException(
 			"You are trying to convert a INumber that is not a single digit to a Digit enum.");
@@ -86,7 +86,7 @@ public class Digit : OrderedSmartEnum<Digit> {
 
 	public static Digit GetOnesColumn<T>(T number) where T : INumber<T> {
 
-		T onesColumnAndDecimals = number % Constants.Numbers<T>.Ten;
+		T onesColumnAndDecimals = number % Numbers<T>.Ten;
 
 		T onesColumn = onesColumnAndDecimals - number % T.One;
 

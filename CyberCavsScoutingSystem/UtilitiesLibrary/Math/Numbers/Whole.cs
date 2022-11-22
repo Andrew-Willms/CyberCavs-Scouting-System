@@ -37,7 +37,7 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 
 			digits.Add(Digit.GetOnesColumn(value));
 
-			value /= Constants.Numbers<T>.Ten;
+			value /= Numbers<T>.Ten;
 		}
 
 		return new(digits.ToReadOnly());

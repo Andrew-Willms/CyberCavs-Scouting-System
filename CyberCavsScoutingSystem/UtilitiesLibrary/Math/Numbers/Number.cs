@@ -56,21 +56,21 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 		bool isNegative = value < T.Zero;
 
 		int placesRightOfDecimalPoint = 0;
-		T valueDecimals = Constants.Numbers<T>.Abs(value - value % T.One);
+		T valueDecimals = Numbers<T>.Abs(value - value % T.One);
 
-		while (valueDecimals > Constants.Numbers<T>.TenToThe(-10)) {
+		while (valueDecimals > Numbers<T>.TenToThe(-10)) {
 
 			placesRightOfDecimalPoint++;
-			valueDecimals *= Constants.Numbers<T>.Ten;
+			valueDecimals *= Numbers<T>.Ten;
 			valueDecimals -= valueDecimals % T.One;
 		}
 
 		List<Digit> digits = new();
-		while (value >= T.One || value <= Constants.Numbers<T>.MinusOne) {
+		while (value >= T.One || value <= Numbers<T>.MinusOne) {
 
 			digits.Add(Digit.GetOnesColumn(value));
 
-			value /= Constants.Numbers<T>.Ten;
+			value /= Numbers<T>.Ten;
 		}
 
 		return new(isNegative, placesRightOfDecimalPoint, digits.ToReadOnly());
@@ -106,7 +106,7 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 		}
 
 		if (IsNegative) {
-			value *= Constants.Numbers<T>.MinusOne;
+			value *= Numbers<T>.MinusOne;
 		}
 
 		return value;
