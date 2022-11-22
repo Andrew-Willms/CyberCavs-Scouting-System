@@ -66,4 +66,18 @@ public class ErrorData {
 			"The Option you are trying to remove from the Selection Data Field could not be found.";
 	}
 
+	public class RemoveAutoButtonError {
+		
+		public static string ButtonNotFoundCaption => "Auto Button Not Found";
+		public static string ButtonNotFoundMessage => 
+			"The Button you are trying to remove from the Auto Tab Buttons could not be found.";
+	}
+
+	public class RemoveTeleButtonError {
+		
+		public static string ButtonNotFoundCaption => "Tele Button Not Found";
+		public static string ButtonNotFoundMessage => 
+			"The Button you are trying to remove from the Tele Tab Buttons could not be found.";
+	}
+
 }

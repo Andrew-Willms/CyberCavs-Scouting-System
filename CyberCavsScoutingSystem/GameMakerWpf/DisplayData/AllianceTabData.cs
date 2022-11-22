@@ -19,4 +19,5 @@ public class AllianceTabData {
 	public static string MoveUpText => "Move Up";
 
 	public static string MoveDownText => "MoveDown";
+
 }
