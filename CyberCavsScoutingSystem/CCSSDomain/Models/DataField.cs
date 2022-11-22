@@ -21,6 +21,7 @@ public class TextDataField : DataField { }
 public class SelectionDataField : DataField {
 
 	public required ReadOnlyCollection<string> OptionNames { get; init; }
+
 }
 
 public class IntegerDataField : DataField {
@@ -30,4 +31,5 @@ public class IntegerDataField : DataField {
 	public int MinValue { get; init; } = int.MinValue;
 
 	public int MaxValue { get; init; } = int.MaxValue;
+
 }

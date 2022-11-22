@@ -21,4 +21,13 @@ public class Game {
 	public required ReadOnlyCollection<Alliance> Alliances { get; init; }
 
 	public required ReadOnlyCollection<DataField> DataFields { get; init; }
+
+	public required ReadOnlyCollection<Input> SetupTabInputs { get; init; }
+	public required ReadOnlyCollection<Input> AutoTabInputs { get; init; }
+	public required ReadOnlyCollection<Input> TeleTabInputs { get; init; }
+	public required ReadOnlyCollection<Input> EndgameTabInputs { get; init; }
+
+	public required ReadOnlyCollection<Button> AutoButtons { get; init; }
+	public required ReadOnlyCollection<Button> TeleButtons { get; init; }
+
 }
