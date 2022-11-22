@@ -7,7 +7,7 @@
              xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
              xmlns:dataFieldEditors="clr-namespace:GameMakerWpf.Domain.Editors.DataFieldEditors"
              xmlns:tabs="clr-namespace:GameMakerWpf.Views.Tabs"
-             xmlns:dataField1="clr-namespace:GameMakerWpf.Views.DataTemplates.DataField"
+             xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataTemplates.DataField"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance Type=local:DataFieldTabView, IsDesignTimeCreatable=True}">
@@ -53,7 +53,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <dataField1:DataFieldView/>
+                        <dataField:DataFieldView/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
 
@@ -121,20 +121,20 @@
                 <ContentPresenter.Resources>
 
                     <DataTemplate DataType="{x:Type dataFieldEditors:TextDataFieldEditor}">
-                        <dataField1:TextDataFieldView/>
+                        <dataField:TextDataFieldView/>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type dataFieldEditors:SelectionDataFieldEditor}">
-                        <dataField1:SelectionDataFieldView>
-                            <dataField1:SelectionDataFieldView.SelectionDataFieldEditor>
+                        <dataField:SelectionDataFieldView>
+                            <dataField:SelectionDataFieldView.Editor>
                                 <Binding Path="SelectedDataField.DataFieldTypeEditor"
                                          RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type tabs:DataFieldTabView}, Mode=FindAncestor}" />
-                            </dataField1:SelectionDataFieldView.SelectionDataFieldEditor>
-                        </dataField1:SelectionDataFieldView>
+                            </dataField:SelectionDataFieldView.Editor>
+                        </dataField:SelectionDataFieldView>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type dataFieldEditors:IntegerDataFieldEditor}">
-                        <dataField1:IntegerDataFieldView/>
+                        <dataField:IntegerDataFieldView/>
                     </DataTemplate>
 
                 </ContentPresenter.Resources>

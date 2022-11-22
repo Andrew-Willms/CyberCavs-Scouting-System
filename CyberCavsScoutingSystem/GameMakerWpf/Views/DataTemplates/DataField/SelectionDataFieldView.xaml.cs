@@ -44,13 +44,14 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 	}
 
 
-	public SelectionDataFieldEditor SelectionDataFieldEditor {
-		get => (SelectionDataFieldEditor) GetValue(SelectionDataFieldEditorProperty);
-		set => SetValue(SelectionDataFieldEditorProperty, value);
+
+	public SelectionDataFieldEditor Editor {
+		get => (SelectionDataFieldEditor) GetValue(EditorProperty);
+		set => SetValue(EditorProperty, value);
 	}
 
-	public static readonly DependencyProperty SelectionDataFieldEditorProperty = DependencyProperty.Register(
-		name: nameof(SelectionDataFieldEditor),
+	public static readonly DependencyProperty EditorProperty = DependencyProperty.Register(
+		name: nameof(Editor),
 		propertyType: typeof(SelectionDataFieldEditor),
 		ownerType: typeof(SelectionDataFieldView),
 		typeMetadata: new FrameworkPropertyMetadata(DependencyPropertiesChanged));
@@ -61,8 +62,8 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 			return;
 		}
 
-		if (e.Property.Name == nameof(SelectionDataFieldEditor)) {
-			control.SelectionDataFieldEditor = (e.NewValue as SelectionDataFieldEditor)!;
+		if (e.Property.Name == nameof(Editor)) {
+			control.Editor = (e.NewValue as SelectionDataFieldEditor)!;
 		}
 	}
 
@@ -70,7 +71,7 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 
 	private void AddButton_Click(object sender, RoutedEventArgs e) {
 		
-		SelectionDataFieldEditor.AddOption("Test");
+		Editor.AddOption("Test");
 	}
 
 	private void RemoveButton_Click(object sender, RoutedEventArgs e) {
@@ -79,7 +80,7 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 			throw new InvalidOperationException("You should not be able to press the remove button while there is no Option selected.");
 		}
 
-		Result<SelectionDataFieldEditor.RemoveOptionError> result = SelectionDataFieldEditor.RemoveOption(SelectedOption);
+		Result<SelectionDataFieldEditor.RemoveOptionError> result = Editor.RemoveOption(SelectedOption);
 
 		switch (result.Resolve()) {
 			
