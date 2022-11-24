@@ -3,7 +3,6 @@ using System.Linq;
 using System.Numerics;
 using System.Collections.Generic;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.MiscExtensions;
 
 namespace UtilitiesLibrary.Math.Numbers;
 

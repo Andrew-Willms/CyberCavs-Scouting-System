@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using System.Collections.Generic;
 using CCSSDomain;
 using GameMakerWpf.Validation.Conversion;
@@ -57,10 +56,7 @@ public static class AllianceValidator {
 	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
 		IEnumerable<AllianceEditor> alliances) {
 
-		return alliances
-			.Where(otherAlliance => otherAlliance.Name != validatee && otherAlliance.Name.OutputObject.HasValue)
-			.Any(otherAlliance => otherAlliance.Name.OutputObject.Value == name)
-
+		return alliances.Multiple(x => x.Name.OutputObject.HasValue && x.Name.OutputObject.Value == name)
 			? AllianceValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
 			: ReadOnlyList.Empty;
 	}

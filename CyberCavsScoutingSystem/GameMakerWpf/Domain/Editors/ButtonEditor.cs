@@ -33,7 +33,8 @@ public class ButtonEditor {
 			Converter = ButtonValidators.DataFieldNameConverter,
 			Inverter = ButtonValidators.DataFieldNameInverter,
 			InitialInput = initialValues.DataFieldName
-		}.AddTriggeredValidator(ButtonValidators.DataFieldNameValidator_DataFieldOfNameExists,
+		}.AddParameteredOnChangeValidator(ButtonValidators.DataFieldNameValidator_DataFieldOfNameExists, () => GameEditor.DataFields)
+		.AddTriggeredValidator(ButtonValidators.DataFieldNameValidator_DataFieldOfNameExists,
 			() => GameEditor.DataFields, GameEditor.DataFieldNameChanged, GameEditor.DataFieldTypeChanged)
 		.CreateSingleInput();
 

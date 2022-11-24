@@ -13,7 +13,7 @@ using GameMakerWpf.Validation.Conversion;
 using UtilitiesLibrary.Validation.Errors;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
-namespace GameMakerWpf.Validation.Validators; 
+namespace GameMakerWpf.Validation.Validators;
 
 
 
@@ -35,6 +35,11 @@ public static class ButtonValidators {
 
 	public static ReadOnlyList<Error> DataFieldNameValidator_DataFieldOfNameExists(string name, IInput<string, ErrorSeverity> _,
 		IEnumerable<DataFieldEditor> dataFields) {
+
+		return DataFieldNameValidator_DataFieldOfNameExists(name, dataFields);
+	}
+
+	public static ReadOnlyList<Error> DataFieldNameValidator_DataFieldOfNameExists(string name, IEnumerable<DataFieldEditor> dataFields) {
 
 		return dataFields.Any(otherDataField => otherDataField.Name.OutputObject.Value == name)
 			? AllianceValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()

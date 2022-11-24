@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UtilitiesLibrary.Collections;
 
-namespace UtilitiesLibrary.MiscExtensions;
+namespace UtilitiesLibrary.Collections;
 
 
 
@@ -63,6 +62,21 @@ public static class CollectionExtensions {
 
 
 
+	public static bool IsEmpty<T>(this IEnumerable<T> enumerable) where T : IComparable {
+
+		return !enumerable.Any();
+	}
+
+	public static bool None<T>(this IEnumerable<T> enumerable, T value) where T : IComparable {
+
+		return enumerable.Count(x => x.CompareTo(value) == 0) == 0;
+	}
+
+	public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) where T : IComparable {
+
+		return !enumerable.Any(predicate);
+	}
+
 	public static bool OnlyOne<T>(this IEnumerable<T> enumerable, T value) where T : IComparable {
 
 		return enumerable.Count(x => x.CompareTo(value) == 0) == 1;
@@ -73,9 +87,15 @@ public static class CollectionExtensions {
 		return enumerable.Count(x => x.CompareTo(value) == 0) > 1;
 	}
 
+	public static bool Multiple<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) {
+
+		return enumerable.Count(predicate) > 1;
+	}
+
 
 
 	public static string CharArrayToString(this IEnumerable<char> enumerable) {
+
 		return enumerable.Aggregate("", (current, character) => current + character);
 	}
 

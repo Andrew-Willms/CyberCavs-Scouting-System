@@ -4,7 +4,7 @@ using CCSSDomain;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary.MiscExtensions;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 using static CCSSDomain.Models.DataField;

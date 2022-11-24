@@ -4,7 +4,6 @@ using CCSSDomain.Models;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.MiscExtensions;
 
 namespace GameMakerWpf.Domain.Data;
 

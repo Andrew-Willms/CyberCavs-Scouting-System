@@ -14,6 +14,12 @@ public delegate
 
 public delegate
 	ReadOnlyList<ValidationError<TSeverity>>
+	ParameteredOnChangeValidator<in TOutput, in TValidationParameter, TSeverity>
+	(TOutput outputObject, TValidationParameter parameter)
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity>;
+
+public delegate
+	ReadOnlyList<ValidationError<TSeverity>>
 	TriggeredValidator<TOutput, in TValidationParameter, TSeverity>
 	(TOutput outputObject, IInput<TOutput, TSeverity> validatee, TValidationParameter parameter)
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity>;
