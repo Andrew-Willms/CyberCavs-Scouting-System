@@ -8,6 +8,13 @@ namespace GameMakerWpf.Validation.Data;
 
 public static class ButtonValidationData {
 
+	public static class DataField {
+
+		public static readonly Error DataFieldDoesNotExistError =
+			new("Data Field Does not Exist", ErrorSeverity.Error, "An Integer type DataField of the given name does not exist.");
+
+	}
+
 	public static class ButtonTextLength {
 
 		public const int UpperErrorThreshold = 1000;

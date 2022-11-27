@@ -21,28 +21,18 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 
 	private ReadOnlyList<IInput<TSeverity>> InputComponents { get; }
 
-	public override ValidationEvent OutputObjectChanged { get; } = new();
-
 	protected abstract (Optional<TOutput>, ReadOnlyList<ValidationError<TSeverity>>) ConverterInvoker { get; }
 
-	private ReadOnlyList<ValidationError<TSeverity>> ConversionErrors { get; set; } = ReadOnlyList.Empty;
-	private ReadOnlyList<ValidationError<TSeverity>> ComponentErrors => InputComponents.SelectMany(x => x.Errors).ToReadOnly();
+	public ReadOnlyList<ValidationError<TSeverity>> ComponentErrors => InputComponents.SelectMany(x => x.Errors).ToReadOnly();
 	public override ReadOnlyList<ValidationError<TSeverity>> Errors => ConversionErrors.CopyAndAddRanges(ValidationErrors, ComponentErrors);
 
-	private TSeverity ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
-	public TSeverity ValidationErrorLevel => ValidationErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
-	private TSeverity ComponentErrorLevel => ComponentErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
-	public override TSeverity ErrorLevel => Math.Operations.Max(ConversionErrorLevel, ValidationErrorLevel, ComponentErrorLevel);
-
-	protected bool IsConvertible => ConversionErrorLevel.IsFatal == false;
-	public override bool IsValid => ErrorLevel.IsFatal == false;
+	public TSeverity ComponentErrorLevel => ComponentErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
 
 
 
 	protected MultiInput(ReadOnlyList<IInput<TSeverity>> inputComponents,
-		IEnumerable<OnChangeValidator<TOutput, TSeverity>> onChangeValidators,
 		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets) 
-		: base(onChangeValidators, validationSets) {
+		: base(validationSets) {
 
 		InputComponents = inputComponents;
 
@@ -57,30 +47,26 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 
 		(Optional<TOutput> outputObject, ConversionErrors) = ConverterInvoker;
 
-		foreach (OnChangeValidator<TOutput, TSeverity> validator in OnChangedValidation.Keys) {
-
-			OnChangedValidation[validator] = outputObject.HasValue
-				? validator.Invoke(outputObject.Value)
-				: ReadOnlyList.Empty;
-		}
-
 		OutputObject = outputObject;
 		OnErrorsChanged();
 	}
 
-	public override event PropertyChangedEventHandler? PropertyChanged;
+	public new event PropertyChangedEventHandler? PropertyChanged;
 
 	protected void OnOutputObjectChanged() {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(OutputObject)));
+		PropertyChanged?.Invoke(this, new(nameof(OutputObject)));
 		OutputObjectChanged.Invoke();
 	}
 
 	protected override void OnErrorsChanged() {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Errors)));
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrors)));
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ErrorLevel)));
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ValidationErrorLevel)));
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsValid)));
+
+		PropertyChanged?.Invoke(this, new(nameof(Errors)));
+		PropertyChanged?.Invoke(this, new(nameof(ValidationErrors)));
+		PropertyChanged?.Invoke(this, new(nameof(ComponentErrors)));
+		PropertyChanged?.Invoke(this, new(nameof(ErrorLevel)));
+		PropertyChanged?.Invoke(this, new(nameof(ValidationErrorLevel)));
+		PropertyChanged?.Invoke(this, new(nameof(ComponentErrorLevel)));
+		PropertyChanged?.Invoke(this, new(nameof(IsValid)));
 	}
 
 }
@@ -96,7 +82,7 @@ public class MultiInput<TOutput, TSeverity,
 	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
-		get => IsConvertible ? _OutputObject : Optional.NoValue;
+		get => _OutputObject;
 
 		protected set {
 
@@ -156,12 +142,11 @@ public class MultiInput<TOutput, TSeverity,
 		IInput<TInput1, TSeverity> inputComponent1,
 		IInput<TInput2, TSeverity> inputComponent2,
 		IInput<TInput3, TSeverity> inputComponent3,
-		IEnumerable<OnChangeValidator<TOutput, TSeverity>> onChangeValidators,
 		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets)
 
 		: base(
 			new List<IInput<TSeverity>> { inputComponent1, inputComponent2, inputComponent3 }.ToReadOnly(),
-			onChangeValidators, validationSets) {
+			validationSets) {
 
 		Converter = converter;
 		Inverter = inverter;
@@ -198,7 +183,7 @@ public class MultiInput<TOutput, TSeverity,
 	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
-		get => IsConvertible ? _OutputObject : Optional.NoValue;
+		get => _OutputObject;
 
 		protected set {
 
@@ -263,12 +248,11 @@ public class MultiInput<TOutput, TSeverity,
 		IInput<TInput2, TSeverity> inputComponent2,
 		IInput<TInput3, TSeverity> inputComponent3,
 		IInput<TInput4, TSeverity> inputComponent4,
-		IEnumerable<OnChangeValidator<TOutput, TSeverity>> onChangeValidators,
 		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets)
 
 		: base(
 			new List<IInput<TSeverity>> { inputComponent1, inputComponent2, inputComponent3, inputComponent4 }.ToReadOnly(),
-			onChangeValidators, validationSets) {
+			validationSets) {
 
 		Converter = converter;
 		Inverter = inverter;

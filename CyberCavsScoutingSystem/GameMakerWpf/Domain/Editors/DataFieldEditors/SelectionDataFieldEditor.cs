@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
@@ -29,8 +30,9 @@ public class SelectionDataFieldEditor : DataFieldTypeEditor {
 				Converter = SelectionDataFieldValidator.OptionNameConverter,
 				Inverter = SelectionDataFieldValidator.OptionNameInverter,
 				InitialInput = optionName
-			}.AddOnChangeValidator(SelectionDataFieldValidator.OptionNameValidator_Length)
-			.AddTriggeredValidator(SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, OptionNameChanged)
+			}.AddValidationRule(SelectionDataFieldValidator.OptionNameValidator_Length)
+			.AddValidationRule<IEnumerable<SingleInput<string, string, ErrorSeverity>>>(
+				SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, false, OptionNameChanged)
 			.CreateSingleInput();
 
 		_Options.Add(option);

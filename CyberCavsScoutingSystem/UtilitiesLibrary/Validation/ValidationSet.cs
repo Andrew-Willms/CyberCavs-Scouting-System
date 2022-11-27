@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Validation.Errors;
-using UtilitiesLibrary.Validation.Inputs;
 
 namespace UtilitiesLibrary.Validation;
 
@@ -11,45 +12,40 @@ namespace UtilitiesLibrary.Validation;
 public interface IValidationSet<TOutput, TSeverity> 
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
-	public IValidationTrigger<TSeverity> ToValidationTrigger(
-		Func<Optional<TOutput>> outputObjectGetter,
-		IInput<TOutput, TSeverity> validatee,
-		Action<IValidationTrigger<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction);
+	public IValidator<TSeverity> ToValidator(
+		Func<Optional<TOutput>> outputObjectGetter, ValidationEvent outputObjectChanged, 
+		Action<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction);
 }
 
 
 
-internal class ValidationSet<TOutput, TValidationParameter, TSeverity> : IValidationSet<TOutput, TSeverity>
+
+internal class ValidationSet<TOutput, TSeverity> : IValidationSet<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
-	private TriggeredValidator<TOutput, TValidationParameter, TSeverity> Validator { get; }
+	private bool ValidateOnChange { get; }
 
+	private ValidationRule<TOutput, TSeverity> ValidationRule { get; }
 	private ValidationEvent[] ValidationEvents { get; }
 
-	private Func<TValidationParameter> ValidationParameterGetter { get; }
+	public ValidationSet(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange, params ValidationEvent[] validationEvents) {
 
-
-
-	public ValidationSet(TriggeredValidator<TOutput, TValidationParameter, TSeverity> validator,
-		Func<TValidationParameter> validationParameterGetter, params ValidationEvent[] validationEvents) {
-
-		Validator = validator;
-		ValidationParameterGetter = validationParameterGetter;
+		ValidationRule = validationRule;
+		ValidateOnChange = validateOnChange;
 		ValidationEvents = validationEvents;
 	}
 
-	public IValidationTrigger<TSeverity> ToValidationTrigger(
-		Func<Optional<TOutput>> outputObjectGetter,
-		IInput<TOutput, TSeverity> validatee,
-		Action<IValidationTrigger<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction) {
+	public IValidator<TSeverity> ToValidator(
+		Func<Optional<TOutput>> outputObjectGetter, ValidationEvent outputObjectChanged, 
+		Action<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction) {
 
-		return new ValidationTrigger<TOutput, TValidationParameter, TSeverity>(
-			Validator,
-			validatee,
-			ValidationEvents,
-			outputObjectGetter,
-			ValidationParameterGetter,
-			postValidationAction);
+		List<ValidationEvent> validationEvents = ValidationEvents.ToList();
+
+		if (ValidateOnChange) {
+			validationEvents.Add(outputObjectChanged);
+		}
+
+		return new Validator<TOutput, TSeverity>(ValidationRule, outputObjectGetter, validationEvents, postValidationAction);
 	}
 
 }

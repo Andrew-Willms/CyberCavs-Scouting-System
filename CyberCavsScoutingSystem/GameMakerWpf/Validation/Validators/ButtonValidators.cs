@@ -1,7 +1,7 @@
 ﻿using CCSSDomain;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+using CCSSDomain.Models;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
@@ -33,16 +33,13 @@ public static class ButtonValidators {
 		return (name.Optionalize(), ReadOnlyList.Empty);
 	}
 
-	public static ReadOnlyList<Error> DataFieldNameValidator_DataFieldOfNameExists(string name, IInput<string, ErrorSeverity> _,
-		IEnumerable<DataFieldEditor> dataFields) {
-
-		return DataFieldNameValidator_DataFieldOfNameExists(name, dataFields);
-	}
-
 	public static ReadOnlyList<Error> DataFieldNameValidator_DataFieldOfNameExists(string name, IEnumerable<DataFieldEditor> dataFields) {
 
-		return dataFields.Any(otherDataField => otherDataField.Name.OutputObject.Value == name)
-			? AllianceValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
+		return dataFields.None(x => x.Name.OutputObject.HasValue &&
+		                           x.Name.OutputObject.Value == name &&
+		                           x.DataFieldType == DataField.DataFieldType.Integer)
+
+			? ButtonValidationData.DataField.DataFieldDoesNotExistError.ReadOnlyListify()
 			: ReadOnlyList.Empty;
 	}
 

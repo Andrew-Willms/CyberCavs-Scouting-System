@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Validation.Delegates;
 
 namespace UtilitiesLibrary.Validation.Inputs;
 
@@ -38,49 +37,50 @@ public abstract class Input<TOutput, TSeverity> : IInput<TOutput, TSeverity>
 
 	public abstract Optional<TOutput> OutputObject { get; protected set; }
 
-	protected ReadOnlyKeysDictionary<OnChangeValidator<TOutput, TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> OnChangedValidation { get; }
-	protected ReadOnlyKeysDictionary<IValidationTrigger<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> TriggeredValidation { get; }
+	private ReadOnlyKeysDictionary<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> Validators { get; }
 
-	public ReadOnlyList<ValidationError<TSeverity>> ValidationErrors => OnChangedValidation.Values.Flatten().AppendRanges(TriggeredValidation.Values).ToReadOnly();
+	protected ReadOnlyList<ValidationError<TSeverity>> ConversionErrors { get; set; } = ReadOnlyList.Empty;
+	protected ReadOnlyList<ValidationError<TSeverity>> ValidationErrors => Validators.Values.Flatten().ToReadOnly();
 	public abstract ReadOnlyList<ValidationError<TSeverity>> Errors { get; }
-	public abstract TSeverity ErrorLevel { get; }
 
-	public abstract bool IsValid { get; }
+	public TSeverity ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
+	public TSeverity ValidationErrorLevel => ValidationErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
+	public TSeverity ErrorLevel => Errors.Select(x => x.Severity).Max() ?? TSeverity.NoError;
 
-	public abstract ValidationEvent OutputObjectChanged { get; }
+	public bool IsValid => ErrorLevel.IsFatal == false;
+
+	public ValidationEvent OutputObjectChanged { get; } = new();
 
 
 
-	protected Input(IEnumerable<OnChangeValidator<TOutput, TSeverity>> onChangeValidators,
-		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets) {
+	protected Input(IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets) {
 
-		OnChangedValidation = onChangeValidators.ToReadOnlyKeysDictionary(ReadOnlyList<ValidationError<TSeverity>>.Empty);
-
-		TriggeredValidation = ValidationSetsToTriggers(validationSets).ToReadOnlyKeysDictionary(ReadOnlyList<ValidationError<TSeverity>>.Empty);
+		Validators = ValidationSetsToTriggers(validationSets).ToReadOnlyKeysDictionary(ReadOnlyList<ValidationError<TSeverity>>.Empty);
 	}
 
 
 
-	protected ReadOnlyList<IValidationTrigger<TSeverity>> ValidationSetsToTriggers(
+	private ReadOnlyList<IValidator<TSeverity>> ValidationSetsToTriggers(
 		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets) {
 
 		Optional<TOutput> OutputObjectGetter() {
 			return OutputObject;
 		}
 
-		return validationSets.Select(x => x.ToValidationTrigger(OutputObjectGetter, this, PostValidation)).ToReadOnly();
+		return validationSets.Select(x => x.ToValidator(OutputObjectGetter, OutputObjectChanged, PostValidation)).ToReadOnly();
 	}
 
 	protected abstract bool HasValueAndIsNotInvertible(Optional<TOutput> testValue);
 
-	private void PostValidation(IValidationTrigger<TSeverity> validationTrigger, ReadOnlyList<ValidationError<TSeverity>> validationError) {
+	private void PostValidation(IValidator<TSeverity> validator, ReadOnlyList<ValidationError<TSeverity>> validationError) {
 
-		TriggeredValidation[validationTrigger] = validationError;
+		Validators[validator] = validationError;
 		OnErrorsChanged();
 	}
 
 	public abstract void Validate();
-	public abstract event PropertyChangedEventHandler? PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
 	protected abstract void OnErrorsChanged();
+
 }

@@ -1,4 +1,6 @@
-﻿using System.Windows.Media;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Media;
 using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
@@ -29,9 +31,9 @@ public class AllianceEditor {
 			Converter = AllianceValidator.NameConverter,
 			Inverter = AllianceValidator.NameInverter,
 			InitialInput = initialValues.Name
-		}.AddOnChangeValidator(AllianceValidator.NameValidator_Length)
-		.AddOnChangeValidator(AllianceValidator.NameValidator_EndsWithAlliance)
-		.AddTriggeredValidator(AllianceValidator.NameValidator_Uniqueness, () => GameEditor.Alliances, GameEditor.AllianceNameChanged)
+		}.AddValidationRule(AllianceValidator.NameValidator_Length)
+		.AddValidationRule(AllianceValidator.NameValidator_EndsWithAlliance)
+		.AddValidationRule(AllianceValidator.NameValidator_Uniqueness, () => GameEditor.Alliances, false, GameEditor.AllianceNameChanged)
 		.CreateSingleInput();
 
 		RedColorValue = new SingleInputCreator<byte, string, ErrorSeverity> {
@@ -58,7 +60,8 @@ public class AllianceEditor {
 			InputComponent1 = RedColorValue,
 			InputComponent2 = GreenColorValue,
 			InputComponent3 = BlueColorValue
-		}.AddTriggeredValidator(AllianceValidator.ColorCovalidator_Uniqueness, () => GameEditor.Alliances, GameEditor.AllianceColorChanged)
+		}.AddValidationRule<IEnumerable<AllianceEditor>>(AllianceValidator.ColorCovalidator_Uniqueness,
+				() => GameEditor.Alliances.Where(x => x != this), false, GameEditor.AllianceColorChanged)
 		.CreateMultiInput();
 	}
 

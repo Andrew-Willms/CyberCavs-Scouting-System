@@ -1,6 +1,5 @@
 ﻿using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation.Errors;
-using UtilitiesLibrary.Validation.Inputs;
 
 namespace UtilitiesLibrary.Validation.Delegates;
 
@@ -8,18 +7,12 @@ namespace UtilitiesLibrary.Validation.Delegates;
 
 public delegate
 	ReadOnlyList<ValidationError<TSeverity>>
-	OnChangeValidator<in TOutput, TSeverity>
+	ValidationRule<in TOutput, TSeverity>
 	(TOutput outputObject)
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity>;
 
 public delegate
 	ReadOnlyList<ValidationError<TSeverity>>
-	ParameteredOnChangeValidator<in TOutput, in TValidationParameter, TSeverity>
+	ValidationRule<in TOutput, in TValidationParameter, TSeverity>
 	(TOutput outputObject, TValidationParameter parameter)
-	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity>;
-
-public delegate
-	ReadOnlyList<ValidationError<TSeverity>>
-	TriggeredValidator<TOutput, in TValidationParameter, TSeverity>
-	(TOutput outputObject, IInput<TOutput, TSeverity> validatee, TValidationParameter parameter)
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity>;

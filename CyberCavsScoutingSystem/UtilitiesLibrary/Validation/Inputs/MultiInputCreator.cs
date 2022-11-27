@@ -8,8 +8,35 @@ namespace UtilitiesLibrary.Validation.Inputs;
 
 
 
+public abstract class MultiInputCreator<TOutput, TSeverity>
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
+
+	internal readonly List<ValidationSet<TOutput, TSeverity>> ValidationSets = new();
+
+	protected void AddValidationRule(
+		ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+
+		ValidationSets.Add(new(validationRule, validateOnChange, validationEvents));
+	}
+
+	protected void AddValidationRule<TValidationParameter>(
+		ValidationRule<TOutput, TValidationParameter, TSeverity> validator, Func<TValidationParameter> validationParameterGetter, 
+		bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+
+		ReadOnlyList<ValidationError<TSeverity>> SimplifiedValidationRule(TOutput outputObject) {
+			return validator.Invoke(outputObject, validationParameterGetter.Invoke());
+		}
+
+		ValidationSets.Add(new(SimplifiedValidationRule, validateOnChange, validationEvents));
+	}
+
+}
+
+
+
 public class MultiInputCreator<TOutput, TSeverity, 
-	TInput1, TInput2, TInput3>
+	TInput1, TInput2, TInput3> : 
+	MultiInputCreator<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
 	public required IInput<TInput1, TSeverity> InputComponent1 { get; init; }
@@ -24,39 +51,26 @@ public class MultiInputCreator<TOutput, TSeverity,
 		(TInput1, TInput2, TInput3),
 		TSeverity> Inverter { get; init; }
 
-	private readonly List<OnChangeValidator<TOutput, TSeverity>> OnChangeValidators = new();
-	private readonly List<IValidationSet<TOutput, TSeverity>> TriggeredValidators = new();
 
 
-
-	public MultiInputCreator<TOutput, TSeverity,
+	public new MultiInputCreator<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3>
-		AddOnChangeValidator(OnChangeValidator<TOutput, TSeverity> validator) {
+		AddValidationRule(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
 
-		if (OnChangeValidators.Contains(validator)) {
-			throw new ArgumentException("This validator has already been added");
-		}
-
-		OnChangeValidators.Add(validator);
+		base.AddValidationRule(validationRule, validateOnChange, validationEvents);
 		return this;
 	}
 
-	public MultiInputCreator<TOutput, TSeverity, 
+	public new MultiInputCreator<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3>
-		AddTriggeredValidator<TValidationParameter>(TriggeredValidator<TOutput, TValidationParameter, TSeverity> validator,
-			Func<TValidationParameter> validationParameterGetter, 
-			params ValidationEvent[] validationEvents) {
+		AddValidationRule<TValidationParameter>(ValidationRule<TOutput, TValidationParameter, TSeverity> validator,
+			Func<TValidationParameter> validationParameterGetter, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
 
-		ValidationSet<TOutput, TValidationParameter, TSeverity> validationSet = new(validator, validationParameterGetter, validationEvents);
-		
-		if (TriggeredValidators.Contains(validationSet)) {
-			throw new ArgumentException("This validator has already been added");
-		}
-
-		TriggeredValidators.Add(validationSet);
-
+		base.AddValidationRule(validator, validationParameterGetter, validateOnChange, validationEvents);
 		return this;
 	}
+
+
 
 	public MultiInput<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3>
@@ -68,8 +82,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 			InputComponent1,
 			InputComponent2,
 			InputComponent3,
-			OnChangeValidators.ToReadOnly(),
-			TriggeredValidators.ToReadOnly());
+			ValidationSets.ToReadOnly());
 	}
 
 }
@@ -77,7 +90,8 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 
 public class MultiInputCreator<TOutput, TSeverity, 
-	TInput1, TInput2, TInput3, TInput4>
+	TInput1, TInput2, TInput3, TInput4> : 
+	MultiInputCreator<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
 	public required IInput<TInput1, TSeverity> InputComponent1 { get; init; }
@@ -93,39 +107,26 @@ public class MultiInputCreator<TOutput, TSeverity,
 		(TInput1, TInput2, TInput3, TInput4),
 		TSeverity> Inverter { get; init; }
 
-	private readonly List<OnChangeValidator<TOutput, TSeverity>> OnChangeValidators = new();
-	private readonly List<IValidationSet<TOutput, TSeverity>> TriggeredValidators = new();
 
 
-
-	public MultiInputCreator<TOutput, TSeverity,
+	public new MultiInputCreator<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3, TInput4>
-		AddOnChangeValidator(OnChangeValidator<TOutput, TSeverity> validator) {
+		AddValidationRule(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
 
-		if (OnChangeValidators.Contains(validator)) {
-			throw new ArgumentException("This validator has already been added");
-		}
-
-		OnChangeValidators.Add(validator);
+		base.AddValidationRule(validationRule, validateOnChange, validationEvents);
 		return this;
 	}
 
-	public MultiInputCreator<TOutput, TSeverity, 
+	public new MultiInputCreator<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3, TInput4>
-		AddTriggeredValidator<TValidationParameter>(TriggeredValidator<TOutput, TValidationParameter, TSeverity> validator,
-			Func<TValidationParameter> validationParameterGetter, 
-			params ValidationEvent[] validationEvents) {
+		AddValidationRule<TValidationParameter>(ValidationRule<TOutput, TValidationParameter, TSeverity> validator,
+			Func<TValidationParameter> validationParameterGetter, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
 
-		ValidationSet<TOutput, TValidationParameter, TSeverity> validationSet = new(validator, validationParameterGetter, validationEvents);
-		
-		if (TriggeredValidators.Contains(validationSet)) {
-			throw new ArgumentException("This validator has already been added");
-		}
-
-		TriggeredValidators.Add(validationSet);
-
+		base.AddValidationRule(validator, validationParameterGetter, validateOnChange, validationEvents);
 		return this;
 	}
+
+
 
 	public MultiInput<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3, TInput4>
@@ -138,8 +139,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 			InputComponent2,
 			InputComponent3,
 			InputComponent4,
-			OnChangeValidators.ToReadOnly(),
-			TriggeredValidators.ToReadOnly());
+			ValidationSets.ToReadOnly());
 	}
 
 }

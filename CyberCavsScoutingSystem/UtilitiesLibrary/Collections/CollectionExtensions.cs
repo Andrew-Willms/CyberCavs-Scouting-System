@@ -62,7 +62,7 @@ public static class CollectionExtensions {
 
 
 
-	public static bool IsEmpty<T>(this IEnumerable<T> enumerable) where T : IComparable {
+	public static bool IsEmpty<T>(this IEnumerable<T> enumerable) {
 
 		return !enumerable.Any();
 	}
@@ -72,14 +72,29 @@ public static class CollectionExtensions {
 		return enumerable.Count(x => x.CompareTo(value) == 0) == 0;
 	}
 
-	public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) where T : IComparable {
+	public static bool None<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) {
 
 		return !enumerable.Any(predicate);
+	}
+
+	public static bool OnlyOne<T>(this IEnumerable<T> enumerable) {
+
+		return enumerable.Count() == 1;
 	}
 
 	public static bool OnlyOne<T>(this IEnumerable<T> enumerable, T value) where T : IComparable {
 
 		return enumerable.Count(x => x.CompareTo(value) == 0) == 1;
+	}
+
+	public static bool OnlyOne<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate) {
+
+		return enumerable.Count(predicate) == 1;
+	}
+
+	public static bool Multiple<T>(this IEnumerable<T> enumerable) {
+
+		return enumerable.Count() > 1;
 	}
 
 	public static bool Multiple<T>(this IEnumerable<T> enumerable, T value) where T : IComparable {

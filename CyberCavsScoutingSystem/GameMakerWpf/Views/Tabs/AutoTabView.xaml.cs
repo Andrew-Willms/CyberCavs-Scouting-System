@@ -76,11 +76,11 @@ public partial class AutoTabView : UserControl, INotifyPropertyChanged {
 	}
 
 	private void MoveUpButton_Click(object sender, RoutedEventArgs e) {
-		throw new System.NotImplementedException();
+		throw new NotImplementedException();
 	}
 
 	private void MoveDownButton_Click(object sender, RoutedEventArgs e) {
-		throw new System.NotImplementedException();
+		throw new NotImplementedException();
 	}
 	
 

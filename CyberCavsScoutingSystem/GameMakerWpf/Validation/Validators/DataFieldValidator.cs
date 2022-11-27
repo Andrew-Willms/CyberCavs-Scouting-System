@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CCSSDomain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
@@ -9,7 +8,6 @@ using UtilitiesLibrary.Validation.Inputs;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
-using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 namespace GameMakerWpf.Validation.Validators;
@@ -45,17 +43,9 @@ public static class DataFieldValidator {
 		};
 	}
 
-	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
-		IEnumerable<DataFieldEditor> dataFields) {
+	public static ReadOnlyList<Error> NameValidator_Uniqueness(string name, IEnumerable<DataFieldEditor> dataFields) {
 
-		if (dataFields.Where(dataField => dataField.Name.OutputObject.HasValue)
-		    .Select(dataField => dataField.Name.OutputObject.Value)
-		    .OnlyOne(name)) {
-
-			return ReadOnlyList.Empty;
-		}
-
-		return validatee.OutputObject.Value == name
+		return dataFields.Multiple(x => x.Name.OutputObject.HasValue && x.Name.OutputObject.Value == name)
 			? DataFieldValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
 			: ReadOnlyList.Empty;
 	}
@@ -77,15 +67,11 @@ public static class SelectionDataFieldValidator {
 		return (name.Optionalize(), ReadOnlyList.Empty);
 	}
 
-	public static ReadOnlyList<Error> OptionNameValidator_Uniqueness(string name, IInput<string, ErrorSeverity> validatee,
-		IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
+	public static ReadOnlyList<Error> OptionNameValidator_Uniqueness(string name, IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
 
-		return optionNames
-			.Where(otherOptionName => otherOptionName != validatee && otherOptionName.OutputObject.HasValue)
-			.Any(otherOptionName => otherOptionName.OutputObject.Value == name)
-
+		return optionNames.Multiple(x => x.OutputObject.HasValue && x.OutputObject.Value == name)
 			? DataFieldValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
-			: ReadOnlyList<Error>.Empty;
+			: ReadOnlyList.Empty;
 	}
 
 	public static ReadOnlyList<Error> OptionNameValidator_Length(string name) {

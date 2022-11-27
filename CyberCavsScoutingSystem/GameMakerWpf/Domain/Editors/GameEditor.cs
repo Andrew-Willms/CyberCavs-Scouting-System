@@ -67,16 +67,16 @@ public class GameEditor {
 			Converter = GameNumbersValidator.YearConverter,
 			Inverter =  GameNumbersValidator.YearInverter,
 			InitialInput = initialValues.Year
-		}.AddOnChangeValidator(GameNumbersValidator.YearValidator_YearNotNegative)
-		.AddOnChangeValidator(GameNumbersValidator.YearValidator_YearNotFarFuture)
-		.AddOnChangeValidator(GameNumbersValidator.YearValidator_YearNotPredateFirst)
+		}.AddValidationRule(GameNumbersValidator.YearValidator_YearNotNegative)
+		.AddValidationRule(GameNumbersValidator.YearValidator_YearNotFarFuture)
+		.AddValidationRule(GameNumbersValidator.YearValidator_YearNotPredateFirst)
 		.CreateSingleInput();
 
 		Name = new SingleInputCreator<string, string, ErrorSeverity> {
 			Converter = GameTextValidator.NameConverter,
 			Inverter = GameTextValidator.NameInverter,
 			InitialInput = initialValues.Name
-		}.AddOnChangeValidator(GameTextValidator.NameValidator_Length)
+		}.AddValidationRule(GameTextValidator.NameValidator_Length)
 		.CreateSingleInput();
 
 		Description = new SingleInputCreator<string, string, ErrorSeverity> {

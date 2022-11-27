@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using CCSSDomain;
 using GameMakerWpf.Domain.Data;
@@ -56,8 +57,8 @@ public class DataFieldEditor : INotifyPropertyChanged {
 			Converter = DataFieldValidator.NameConverter,
 			Inverter = DataFieldValidator.NameInverter,
 			InitialInput = initialValues.Name
-		}.AddOnChangeValidator(DataFieldValidator.NameValidator_Length)
-		.AddTriggeredValidator(DataFieldValidator.NameValidator_Uniqueness, () => GameEditor.DataFields, GameEditor.DataFieldNameChanged)
+		}.AddValidationRule(DataFieldValidator.NameValidator_Length)
+		.AddValidationRule<IEnumerable<DataFieldEditor>>(DataFieldValidator.NameValidator_Uniqueness, () => GameEditor.DataFields, false, GameEditor.DataFieldNameChanged)
 		.CreateSingleInput();
 	}
 

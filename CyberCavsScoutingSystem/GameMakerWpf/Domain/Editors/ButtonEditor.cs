@@ -1,5 +1,7 @@
-﻿using CCSSDomain;
+﻿using System.Collections.Generic;
+using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
+using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation.Inputs;
 
@@ -33,16 +35,15 @@ public class ButtonEditor {
 			Converter = ButtonValidators.DataFieldNameConverter,
 			Inverter = ButtonValidators.DataFieldNameInverter,
 			InitialInput = initialValues.DataFieldName
-		}.AddParameteredOnChangeValidator(ButtonValidators.DataFieldNameValidator_DataFieldOfNameExists, () => GameEditor.DataFields)
-		.AddTriggeredValidator(ButtonValidators.DataFieldNameValidator_DataFieldOfNameExists,
-			() => GameEditor.DataFields, GameEditor.DataFieldNameChanged, GameEditor.DataFieldTypeChanged)
+		}.AddValidationRule<IEnumerable<DataFieldEditor>>(ButtonValidators.DataFieldNameValidator_DataFieldOfNameExists, () => GameEditor.DataFields, 
+			true, GameEditor.DataFieldNameChanged, GameEditor.DataFieldTypeChanged)
 		.CreateSingleInput();
 
 		ButtonText = new SingleInputCreator<string, string, ErrorSeverity> { 
 			Converter = ButtonValidators.ButtonTextConverter,
 			Inverter = ButtonValidators.ButtonTextInverter,
 			InitialInput = initialValues.ButtonText
-		}.AddOnChangeValidator(ButtonValidators.ButtonTextValidator_Length)
+		}.AddValidationRule(ButtonValidators.ButtonTextValidator_Length)
 		.CreateSingleInput();
 
 		IncrementAmount = new SingleInputCreator<int, string, ErrorSeverity> {
@@ -55,28 +56,28 @@ public class ButtonEditor {
 			Converter = ButtonValidators.PositionConverter,
 			Inverter = ButtonValidators.PositionInverter,
 			InitialInput = initialValues.IncrementAmount
-		}.AddOnChangeValidator(ButtonValidators.PositionValidator_BetweenZeroAndOne)
+		}.AddValidationRule(ButtonValidators.PositionValidator_BetweenZeroAndOne)
 		.CreateSingleInput();
 
 		YPosition = new SingleInputCreator<double, string, ErrorSeverity> {
 			Converter = ButtonValidators.PositionConverter,
 			Inverter = ButtonValidators.PositionInverter,
 			InitialInput = initialValues.IncrementAmount
-		}.AddOnChangeValidator(ButtonValidators.PositionValidator_BetweenZeroAndOne)
+		}.AddValidationRule(ButtonValidators.PositionValidator_BetweenZeroAndOne)
 		.CreateSingleInput();
 
 		Width = new SingleInputCreator<double, string, ErrorSeverity> {
 			Converter = ButtonValidators.PositionConverter,
 			Inverter = ButtonValidators.PositionInverter,
 			InitialInput = initialValues.IncrementAmount
-		}.AddOnChangeValidator(ButtonValidators.PositionValidator_BetweenZeroAndOne)
+		}.AddValidationRule(ButtonValidators.PositionValidator_BetweenZeroAndOne)
 		.CreateSingleInput();
 
 		Height = new SingleInputCreator<double, string, ErrorSeverity> {
 			Converter = ButtonValidators.PositionConverter,
 			Inverter = ButtonValidators.PositionInverter,
 			InitialInput = initialValues.IncrementAmount
-		}.AddOnChangeValidator(ButtonValidators.PositionValidator_BetweenZeroAndOne)
+		}.AddValidationRule(ButtonValidators.PositionValidator_BetweenZeroAndOne)
 		.CreateSingleInput();
 	}
 

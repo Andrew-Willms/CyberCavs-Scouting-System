@@ -18,49 +18,26 @@ public class SingleInputCreator<TOutput, TInput, TSeverity>
 	public required InputConverter<TOutput, TInput, TSeverity> Converter { get; init; }
 	public required InputInverter<TOutput, TInput, TSeverity> Inverter { get; init; }
 	public required TInput InitialInput { get; init; }
+	private readonly List<ValidationSet<TOutput, TSeverity>> ValidationSets = new();
 
-	private readonly List<OnChangeValidator<TOutput, TSeverity>> OnChangeValidators = new();
-	private readonly List<IValidationSet<TOutput, TSeverity>> TriggeredValidators = new();
 
-	public SingleInputCreator<TOutput, TInput, TSeverity> AddOnChangeValidator(OnChangeValidator<TOutput, TSeverity> validator) {
 
-		if (OnChangeValidators.Contains(validator)) {
-			throw new ArgumentException("This validator has already been added");
-		}
+	public SingleInputCreator<TOutput, TInput, TSeverity> AddValidationRule(
+		ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
 
-		OnChangeValidators.Add(validator);
+		ValidationSets.Add(new(validationRule, validateOnChange, validationEvents));
 		return this;
 	}
 
-	public SingleInputCreator<TOutput, TInput, TSeverity> AddParameteredOnChangeValidator<TValidationParameter>(
-		ParameteredOnChangeValidator<TOutput, TValidationParameter, TSeverity> validator,
-		Func<TValidationParameter> validationParameterGetter) {
+	public SingleInputCreator<TOutput, TInput, TSeverity> AddValidationRule<TValidationParameter>(
+		ValidationRule<TOutput, TValidationParameter, TSeverity> validator, Func<TValidationParameter> validationParameterGetter, 
+		bool validateOnChange = true, params ValidationEvent[] validationEvents) {
 
-		ReadOnlyList<ValidationError<TSeverity>> ParameteredValidator(TOutput outputObject) {
+		ReadOnlyList<ValidationError<TSeverity>> SimplifiedValidationRule(TOutput outputObject) {
 			return validator.Invoke(outputObject, validationParameterGetter.Invoke());
 		}
 
-		if (OnChangeValidators.Contains(ParameteredValidator)) {
-			throw new ArgumentException("This validator has already been added");
-		}
-
-		OnChangeValidators.Add(ParameteredValidator);
-		return this;
-	}
-
-	public SingleInputCreator<TOutput, TInput, TSeverity> AddTriggeredValidator<TValidationParameter>(
-		TriggeredValidator<TOutput, TValidationParameter, TSeverity> validator,
-		Func<TValidationParameter> validationParameterGetter,
-		params ValidationEvent[] validationEvents) {
-
-		ValidationSet<TOutput, TValidationParameter, TSeverity> validationSet = new(validator, validationParameterGetter, validationEvents);
-		
-		if (TriggeredValidators.Contains(validationSet)) {
-			throw new ArgumentException("This validator has already been added");
-		}
-
-		TriggeredValidators.Add(validationSet);
-
+		ValidationSets.Add(new(SimplifiedValidationRule, validateOnChange, validationEvents));
 		return this;
 	}
 
@@ -70,8 +47,7 @@ public class SingleInputCreator<TOutput, TInput, TSeverity>
 			converter: Converter,
 			inverter: Inverter,
 			initialInput: InitialInput,
-			onChangeValidators: OnChangeValidators.ToReadOnly(),
-			validationSets: TriggeredValidators.ToReadOnly());
+			validationSets: ValidationSets.ToReadOnly());
 	}
 
 }
