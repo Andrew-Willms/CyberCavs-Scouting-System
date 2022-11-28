@@ -130,13 +130,8 @@ public class GameEditor {
 			InitialInput = initialValues.AlliancesPerMatch
 		}.CreateSingleInput();
 
-		foreach (AllianceEditingData allianceEditingData in initialValues.Alliances) {
-			AddAlliance(allianceEditingData);
-		}
-
-		foreach (DataFieldEditingData dataFieldEditingData in initialValues.DataFields) {
-			AddDataField(dataFieldEditingData);
-		}
+		initialValues.Alliances.Foreach(AddAlliance);
+		initialValues.DataFields.Foreach(AddDataField);
 
 		AnythingChanged.SubscribeTo(Year.OutputObjectChanged);
 		AnythingChanged.SubscribeTo(Name.OutputObjectChanged);

@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using GameMakerWpf.ApplicationManagement;
-
 using GameMakerWpf.Domain.Editors;
+using GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 namespace GameMakerWpf.Views.Tabs;
 
@@ -16,17 +16,17 @@ public partial class SetupTabView : UserControl, INotifyPropertyChanged {
 	private GameEditor GameEditor => ApplicationManager.GameEditor;
 	public ReadOnlyObservableCollection<InputEditor> Inputs => GameEditor.SetupTabInputs;
 
-	private AllianceEditor? _SelectedInput;
-	public AllianceEditor? SelectedInput {
-		get => _SelectedInput;
+	//private DataFieldEditor? _SelectedInput;
+	public DataFieldEditor? SelectedInput {
+		get => ApplicationManager.SelectedDataField;
 		set {
-			_SelectedInput = value;
+			ApplicationManager.SelectedDataField = value;
 			OnPropertyChanged(nameof(SelectedInput));
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}
 	}
 
-	public bool RemoveButtonIsEnabled => _SelectedInput is not null;
+	public bool RemoveButtonIsEnabled => ApplicationManager.SelectedDataField is not null;
 
 
 
@@ -61,8 +61,8 @@ public partial class SetupTabView : UserControl, INotifyPropertyChanged {
 	
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	private void OnPropertyChanged(string? propertyName = null) {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	private void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
 	}
 
 	private void GameProjectChanged() {

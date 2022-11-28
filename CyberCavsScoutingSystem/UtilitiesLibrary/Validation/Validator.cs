@@ -36,9 +36,7 @@ internal class Validator<TOutput, TSeverity> : IValidator<TSeverity>
 		OutputObjectGetter = outputObjectGetter;
 		PostValidationAction = postValidationAction;
 
-		foreach (ValidationEvent validationEvent in validationEvents) {
-			validationEvent.Subscribe(EventHandler);
-		}
+		validationEvents.Foreach(x => x.Subscribe(EventHandler));
 	}
 
 

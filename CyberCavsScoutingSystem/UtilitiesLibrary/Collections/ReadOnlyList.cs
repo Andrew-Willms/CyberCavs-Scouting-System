@@ -64,8 +64,7 @@ public class ReadOnlyList<T> : IEnumerable<T> {
         CopyTo(array, 0);
 
         int currentIndex = Count;
-        foreach (T item in enumerable)
-        {
+        foreach (T item in enumerable) {
             array[currentIndex] = item;
             currentIndex++;
         }

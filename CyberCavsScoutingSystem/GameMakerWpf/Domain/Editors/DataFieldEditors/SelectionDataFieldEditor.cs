@@ -4,10 +4,13 @@ using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
+
+
 
 public class SelectionDataFieldEditor : DataFieldTypeEditor {
 
@@ -18,10 +21,7 @@ public class SelectionDataFieldEditor : DataFieldTypeEditor {
 
 	public SelectionDataFieldEditor(SelectionDataFieldEditingData initialValues) {
 
-		foreach (string optionName in initialValues.OptionNames) {
-
-			AddOption(optionName);
-		}
+		initialValues.OptionNames.Foreach(AddOption);
 	}
 
 	public void AddOption(string optionName) {

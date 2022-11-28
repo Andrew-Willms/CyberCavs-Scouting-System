@@ -66,7 +66,7 @@ public partial class AutoTabView : UserControl, INotifyPropertyChanged {
 				return;
 
 			case GameEditor.RemoveError { ErrorType: GameEditor.RemoveError.Types.ItemNotFound }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveAutoButtonError.ButtonNotFoundCaption, ErrorData.RemoveAutoButtonError.ButtonNotFoundMessage);
+				ErrorPresenter.DisplayError(ErrorData.RemoveAutoButtonError.ButtonNotFoundCaption,ErrorData.RemoveAutoButtonError.ButtonNotFoundMessage);
 				return;
 
 			default:

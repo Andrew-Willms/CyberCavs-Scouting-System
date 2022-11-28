@@ -140,6 +140,7 @@ public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 		List<Digit> digits = new();
 
 		foreach (char character in text.Reverse()) {
+
 			if (!char.IsDigit(character)) {
 				return null;
 			}

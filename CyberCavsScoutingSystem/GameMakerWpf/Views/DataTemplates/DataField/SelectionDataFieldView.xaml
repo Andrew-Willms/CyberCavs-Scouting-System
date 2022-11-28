@@ -25,29 +25,31 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding OptionsText, Source={StaticResource SelectionDataFieldData}}"
-                   Margin="5,5,5,5"
-                   Width="auto"
-                   Grid.Row="0"
-                   Grid.Column="0"/>
+        <TextBlock
+            Text="{Binding OptionsText, Source={StaticResource SelectionDataFieldData}}"
+            Margin="5,5,5,5"
+            Width="auto"
+            Grid.Row="0"
+            Grid.Column="0"/>
 
-        <ListBox ItemsSource="{Binding Path=Editor.Options}"
-                 SelectedItem="{Binding Path=SelectedOption}"
-                 Margin="5,5,5,5"
-                 MinHeight="20"
-                 Grid.Row="0"
-                 Grid.Column="1"
-                 HorizontalContentAlignment="Stretch">
+        <ListBox
+            ItemsSource="{Binding Path=Options}"
+            SelectedItem="{Binding Path=SelectedOption}"
+            Margin="5,5,5,5"
+            MinHeight="20"
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalContentAlignment="Stretch">
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBox 
-                             Style="{StaticResource StringInputStyle}"
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Top"
-                             TextWrapping="Wrap"
-                             Margin="5,5,5,5"
-                             MinWidth="100"/>
+                        Style="{StaticResource StringInputStyle}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top"
+                        TextWrapping="Wrap"
+                        Margin="5,5,5,5"
+                        MinWidth="100"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 

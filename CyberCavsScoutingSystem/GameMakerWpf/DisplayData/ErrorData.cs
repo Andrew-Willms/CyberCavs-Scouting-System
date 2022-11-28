@@ -2,9 +2,9 @@
 
 
 
-public class ErrorData {
+public static class ErrorData {
 
-	public class SaveError {
+	public static class SaveError {
 
 		public static string NoSaveLocationSpecifiedCaption => "No Save Location";
 		public static string NoSaveLocationSpecifiedMessage =>
@@ -23,7 +23,7 @@ public class ErrorData {
 			"Alternately, try specifying a different save location using \"SetSaveLocation\".";
 	}
 
-	public class SaveAsError {
+	public static class SaveAsError {
 
 		public static string SaveLocationIsInvalidCaption => "Save Location Invalid";
 		public static string SaveLocationIsInvalidMessage =>
@@ -31,7 +31,7 @@ public class ErrorData {
 			"Alternately, try specifying a different save location using \"SetSaveLocation\".";
 	}
 
-	public class OpenError {
+	public static class OpenError {
 
 		public static string SaveLocationInaccessibleCaption => "Save Location Inaccessible";
 		public static string SaveLocationInaccessibleMessage =>
@@ -45,35 +45,35 @@ public class ErrorData {
 			"Please contact the creators of the CCSS if you receive this error.";
 	}
 
-	public class RemoveAllianceError {
+	public static class RemoveAllianceError {
 
 		public static string AllianceNotFoundCaption => "Alliance Not Found";
 		public static string AllianceNotFoundMessage =>
 			"The Alliance you are trying to remove from the Game Project could not be found.";
 	}
 
-	public class RemoveDataFieldError {
+	public static class RemoveDataFieldError {
 		
 		public static string DataFieldNotFoundCaption => "Data Field Not Found";
 		public static string DataFieldNotFoundMessage => 
 			"The Data Field you are trying to remove from the Game Project could not be found.";
 	}
 
-	public class RemoveOptionError {
+	public static class RemoveOptionError {
 		
 		public static string OptionNotFoundCaption => "Option Not Found";
 		public static string OptionNotFoundMessage => 
 			"The Option you are trying to remove from the Selection Data Field could not be found.";
 	}
 
-	public class RemoveAutoButtonError {
+	public static class RemoveAutoButtonError {
 		
 		public static string ButtonNotFoundCaption => "Auto Button Not Found";
 		public static string ButtonNotFoundMessage => 
 			"The Button you are trying to remove from the Auto Tab Buttons could not be found.";
 	}
 
-	public class RemoveTeleButtonError {
+	public static class RemoveTeleButtonError {
 		
 		public static string ButtonNotFoundCaption => "Tele Button Not Found";
 		public static string ButtonNotFoundMessage => 

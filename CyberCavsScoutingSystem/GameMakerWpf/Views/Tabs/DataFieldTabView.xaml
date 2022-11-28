@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:GameMakerWpf.Views.Tabs"
              xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
              xmlns:dataFieldEditors="clr-namespace:GameMakerWpf.Domain.Editors.DataFieldEditors"
-             xmlns:tabs="clr-namespace:GameMakerWpf.Views.Tabs"
              xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataTemplates.DataField"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
@@ -125,12 +124,7 @@
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type dataFieldEditors:SelectionDataFieldEditor}">
-                        <dataField:SelectionDataFieldView>
-                            <dataField:SelectionDataFieldView.Editor>
-                                <Binding Path="SelectedDataField.DataFieldTypeEditor"
-                                         RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type tabs:DataFieldTabView}, Mode=FindAncestor}" />
-                            </dataField:SelectionDataFieldView.Editor>
-                        </dataField:SelectionDataFieldView>
+                        <dataField:SelectionDataFieldView/>
                     </DataTemplate>
 
                     <DataTemplate DataType="{x:Type dataFieldEditors:IntegerDataFieldEditor}">

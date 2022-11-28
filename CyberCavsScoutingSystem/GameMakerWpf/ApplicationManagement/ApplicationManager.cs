@@ -5,6 +5,7 @@ using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
+using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Views;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
@@ -24,12 +25,21 @@ public static class ApplicationManager {
 		private set {
 			value.AnythingChanged.Subscribe(MarkProjectUnsaved);
 			_GameEditor = value;
-			ProjectIsSaved = false;
 			InvokeGameProjectChangeActions();
 		}
 	}
 
+	private static DataFieldEditor? _SelectedDataField;
+	public static DataFieldEditor? SelectedDataField {
+		get => _SelectedDataField;
+		set {
+			_SelectedDataField = value;
+			InvokeSelectedDataFieldChangeActions();
+		}
+	}
+
 	private static readonly List<Action> GameProjectChangeActions = new();
+	private static readonly List<Action> SelectedDataFieldChangeActions = new();
 
 	private static IGameMakerMainView MainView { get; } = new MainWindow();
 	private static ISaver Saver { get; } = new Saver();
@@ -50,11 +60,18 @@ public static class ApplicationManager {
 		GameProjectChangeActions.Add(action);
 	}
 
+	public static void RegisterSelectedDataFieldChangeAction(Action action) {
+		SelectedDataFieldChangeActions.Add(action);
+	}
+
 	private static void InvokeGameProjectChangeActions() {
 
-		foreach (Action action in GameProjectChangeActions) {
-			action.Invoke();
-		}
+		GameProjectChangeActions.ForEach(x => x.Invoke());
+	}
+
+	private static void InvokeSelectedDataFieldChangeActions() {
+
+		SelectedDataFieldChangeActions.ForEach(x => x.Invoke());
 	}
 
 	private static void MarkProjectUnsaved() {
@@ -102,7 +119,7 @@ public static class ApplicationManager {
 		Result<ISaver.SaveError> result = Saver.Save(GameEditor.ToEditingData());
 
 		switch (result.Resolve()) {
-			
+
 			case Success:
 				ProjectIsSaved = true;
 				return;
@@ -188,5 +205,4 @@ public static class ApplicationManager {
 		GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
 		ProjectIsSaved = true;
 	}
-
 }

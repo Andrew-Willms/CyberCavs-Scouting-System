@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +20,10 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 
+
+	private SelectionDataFieldEditor? Editor => ApplicationManager.SelectedDataField?.DataFieldTypeEditor as SelectionDataFieldEditor;
+	
+	public ReadOnlyObservableCollection<SingleInput<string, string, ErrorSeverity>>? Options => Editor?.Options;
 
 	private SingleInput<string, string, ErrorSeverity>? _SelectedOption;
 	public SingleInput<string, string, ErrorSeverity>? SelectedOption {
@@ -41,38 +46,17 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 		InitializeComponent();
 
 		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
-	}
-
-
-
-	public SelectionDataFieldEditor Editor {
-		get => (SelectionDataFieldEditor) GetValue(EditorProperty);
-		set => SetValue(EditorProperty, value);
-	}
-
-	public static readonly DependencyProperty EditorProperty = DependencyProperty.Register(
-		name: nameof(Editor),
-		propertyType: typeof(SelectionDataFieldEditor),
-		ownerType: typeof(SelectionDataFieldView),
-		typeMetadata: new FrameworkPropertyMetadata(DependencyPropertiesChanged));
-
-	private static void DependencyPropertiesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-		
-		if (d is not SelectionDataFieldView control) {
-			return;
-		}
-
-		if (e.Property.Name == nameof(Editor)) {
-			control.Editor = (e.NewValue as SelectionDataFieldEditor)!;
-		}
-
-		control.EditorChanged();
+		ApplicationManager.RegisterSelectedDataFieldChangeAction(EditorChanged);
 	}
 
 
 
 	private void AddButton_Click(object sender, RoutedEventArgs e) {
-		
+
+		if (Editor is null) {
+			throw new InvalidOperationException($"You should not be able to remove an option when the {nameof(Editor)} is null.");
+		}
+
 		Editor.AddOption("Test");
 	}
 
@@ -80,6 +64,10 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 
 		if (SelectedOption is null) {
 			throw new InvalidOperationException("You should not be able to press the remove button while there is no Option selected.");
+		}
+
+		if (Editor is null) {
+			throw new InvalidOperationException($"You should not be able to remove an option when the {nameof(Editor)} is null.");
 		}
 
 		Result<SelectionDataFieldEditor.RemoveOptionError> result = Editor.RemoveOption(SelectedOption);

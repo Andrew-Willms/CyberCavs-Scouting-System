@@ -35,10 +35,7 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 		: base(validationSets) {
 
 		InputComponents = inputComponents;
-
-		foreach (IInput<TSeverity> inputString in InputComponents) {
-			inputString.OutputObjectChanged.Subscribe(Validate);
-		}
+		InputComponents.Foreach(x => x.OutputObjectChanged.Subscribe(Validate));
 	}
 
 

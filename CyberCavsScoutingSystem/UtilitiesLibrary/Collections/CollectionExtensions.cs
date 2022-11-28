@@ -62,6 +62,15 @@ public static class CollectionExtensions {
 
 
 
+	public static void Foreach<T>(this IEnumerable<T> enumerable, Action<T> predicate) {
+
+		foreach (T item in enumerable) {
+			predicate(item);
+		}
+	}
+
+
+
 	public static bool IsEmpty<T>(this IEnumerable<T> enumerable) {
 
 		return !enumerable.Any();

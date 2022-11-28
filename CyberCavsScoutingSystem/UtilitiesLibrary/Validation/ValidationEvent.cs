@@ -27,9 +27,7 @@ public class ValidationEvent {
 
 	public void Invoke() {
 
-		foreach (Action function in Delegates) {
-			function.Invoke();
-		}
+		Delegates.ForEach(x => x.Invoke());
 	}
 
 }

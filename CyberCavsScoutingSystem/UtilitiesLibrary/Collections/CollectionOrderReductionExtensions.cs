@@ -11,9 +11,7 @@ public static class CollectionOrderReductionExtensions {
 
 		List<T> flattenedList = new();
 
-		foreach (IEnumerable<T> enumerable in twoDimensionalEnumerable) {
-			flattenedList.AddRange(enumerable);
-		}
+		twoDimensionalEnumerable.Foreach(flattenedList.AddRange);
 
 		return flattenedList.ToReadOnly();
 	}

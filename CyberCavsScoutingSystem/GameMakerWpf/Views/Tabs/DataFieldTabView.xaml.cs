@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using GameMakerWpf.ApplicationManagement;
 using GameMakerWpf.DisplayData;
@@ -22,17 +23,23 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 	private GameEditor GameEditor => ApplicationManager.GameEditor;
 	public ReadOnlyObservableCollection<DataFieldEditor> DataFields => GameEditor.DataFields;
 
-	private DataFieldEditor? _SelectedDataField;
 	public DataFieldEditor? SelectedDataField {
-		get => _SelectedDataField;
+
+		get => ApplicationManager.SelectedDataField;
 		set {
-			_SelectedDataField = value;
+			if (value != ApplicationManager.SelectedDataField) {
+				ApplicationManager.SelectedDataField = value;
+			}
+
 			OnPropertyChanged(nameof(SelectedDataField));
+			OnPropertyChanged(nameof(SelectedDataFieldType));
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}
 	}
 
 	public bool RemoveButtonIsEnabled => SelectedDataField is not null;
+
+	public DataFieldTypeEditor? SelectedDataFieldType => SelectedDataField?.DataFieldTypeEditor;
 
 
 
@@ -43,16 +50,17 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 		InitializeComponent();
 
 		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
+		ApplicationManager.RegisterSelectedDataFieldChangeAction(SelectedDataFieldChanged);
 	}
 
 
 
-	private void AddButton_Click(object sender, System.Windows.RoutedEventArgs e) {
+	private void AddButton_Click(object sender, RoutedEventArgs e) {
 
 		GameEditor.AddDataField(DefaultEditingDataValues.DefaultDataFieldEditingData);
 	}
 
-	private void RemoveButton_Click(object sender, System.Windows.RoutedEventArgs e) {
+	private void RemoveButton_Click(object sender, RoutedEventArgs e) {
 
 		if (SelectedDataField is null) {
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no DataField is selected.");
@@ -74,11 +82,11 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 		}
 	}
 
-	private void MoveUpButton_Click(object sender, System.Windows.RoutedEventArgs e) {
+	private void MoveUpButton_Click(object sender, RoutedEventArgs e) {
 		throw new NotImplementedException();
 	}
 
-	private void MoveDownButton_Click(object sender, System.Windows.RoutedEventArgs e) {
+	private void MoveDownButton_Click(object sender, RoutedEventArgs e) {
 		throw new NotImplementedException();
 	}
 
@@ -86,12 +94,16 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-	private void OnPropertyChanged(string? propertyName = null) {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	private void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
 	}
 
 	private void GameProjectChanged() {
 		PropertyChanged?.Invoke(this, new(""));
+	}
+
+	private void SelectedDataFieldChanged() {
+		PropertyChanged?.Invoke(this, new(nameof(SelectedDataField)));
 	}
 
 }
