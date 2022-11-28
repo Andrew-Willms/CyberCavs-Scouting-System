@@ -205,4 +205,5 @@ public static class ApplicationManager {
 		GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
 		ProjectIsSaved = true;
 	}
+
 }
