@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
@@ -9,78 +7,64 @@ using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Views;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
-using static GameMakerWpf.ApplicationManagement.ISavePrompter;
+using UtilitiesLibrary.WPF;
+using static GameMakerWpf.AppManagement.ISavePrompter;
 
-namespace GameMakerWpf.ApplicationManagement;
+namespace GameMakerWpf.AppManagement;
 
 
 
-public static class ApplicationManager {
+public abstract class AppManagerDependent: DependentControl<AppManager> {
 
-	private static GameEditor _GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
-	public static GameEditor GameEditor {
+	protected override AppManager SingletonGetter => App.Manager;
 
+}
+
+
+
+public class AppManager : INotifyPropertyChanged {
+
+	private GameEditor _GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
+	public GameEditor GameEditor {
 		get => _GameEditor;
-
 		private set {
-			value.AnythingChanged.Subscribe(MarkProjectUnsaved);
+			value.AnythingChanged.Subscribe(() => ProjectIsSaved = false);
 			_GameEditor = value;
-			InvokeGameProjectChangeActions();
+			OnPropertyChanged(nameof(GameEditor));
 		}
 	}
 
-	private static DataFieldEditor? _SelectedDataField;
-	public static DataFieldEditor? SelectedDataField {
+	private DataFieldEditor? _SelectedDataField;
+	public DataFieldEditor? SelectedDataField {
 		get => _SelectedDataField;
 		set {
 			_SelectedDataField = value;
-			InvokeSelectedDataFieldChangeActions();
+			OnPropertyChanged(nameof(SelectedDataField));
 		}
 	}
 
-	private static readonly List<Action> GameProjectChangeActions = new();
-	private static readonly List<Action> SelectedDataFieldChangeActions = new();
+	private IGameMakerMainView MainView { get; set; } = null!;
+	private ISaver Saver { get; set; } = null!;
+	private ISavePrompter SavePrompter { get; set; } = null!;
+	private IErrorPresenter ErrorPresenter { get; set; } = null!;
 
-	private static IGameMakerMainView MainView { get; } = new MainWindow();
-	private static ISaver Saver { get; } = new Saver();
-	private static ISavePrompter SavePrompter => new SavePrompter();
-	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
-
-	private static bool ProjectIsSaved { get; set; } = true;
+	private bool ProjectIsSaved { get; set; } = true;
 
 
 
-	public static void ApplicationStartup() {
+	public void ApplicationStartup() {
+
+		MainView = new MainWindow();
+		Saver = new Saver();
+		SavePrompter = new SavePrompter();
+		ErrorPresenter = new ErrorPresenter();
+
 		MainView.Show();
 	}
 
 
 
-	public static void RegisterGameProjectChangeAction(Action action) {
-		GameProjectChangeActions.Add(action);
-	}
-
-	public static void RegisterSelectedDataFieldChangeAction(Action action) {
-		SelectedDataFieldChangeActions.Add(action);
-	}
-
-	private static void InvokeGameProjectChangeActions() {
-
-		GameProjectChangeActions.ForEach(x => x.Invoke());
-	}
-
-	private static void InvokeSelectedDataFieldChangeActions() {
-
-		SelectedDataFieldChangeActions.ForEach(x => x.Invoke());
-	}
-
-	private static void MarkProjectUnsaved() {
-		ProjectIsSaved = false;
-	}
-
-
-
-	private static void PromptIfUnsaved(out bool cancelOperation) {
+	private void PromptIfUnsaved(out bool cancelOperation) {
 
 		if (ProjectIsSaved) {
 			cancelOperation = false;
@@ -109,7 +93,7 @@ public static class ApplicationManager {
 		}
 	}
 
-	public static void SaveGameProject() {
+	public void SaveGameProject() {
 
 		if (!Saver.ProjectHasSaveLocation) {
 			SaveGameProjectAs();
@@ -141,7 +125,7 @@ public static class ApplicationManager {
 		}
 	}
 
-	public static void SaveGameProjectAs() {
+	public void SaveGameProjectAs() {
 
 		Result<ISaver.SetSaveLocationError> result = Saver.SetSaveLocation();
 
@@ -164,7 +148,7 @@ public static class ApplicationManager {
 		SaveGameProject();
 	}
 
-	public static void OpenGameProject() {
+	public void OpenGameProject() {
 
 		PromptIfUnsaved(out bool cancelOperation);
 		if (cancelOperation) {
@@ -195,7 +179,7 @@ public static class ApplicationManager {
 		}
 	}
 
-	public static void NewGameProject() {
+	public void NewGameProject() {
 
 		PromptIfUnsaved(out bool cancelOperation);
 		if (cancelOperation) {
@@ -204,6 +188,14 @@ public static class ApplicationManager {
 
 		GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
 		ProjectIsSaved = true;
+	}
+
+
+
+	public event PropertyChangedEventHandler? PropertyChanged;
+
+	private void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
 	}
 
 }

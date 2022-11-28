@@ -2,11 +2,11 @@
 using System.IO;
 using GameMakerWpf.Domain.EditingData;
 using Microsoft.Win32;
-using UtilitiesLibrary.MiscExtensions;
-using UtilitiesLibrary;
 using Newtonsoft.Json;
+using UtilitiesLibrary;
+using UtilitiesLibrary.MiscExtensions;
 
-namespace GameMakerWpf.ApplicationManagement;
+namespace GameMakerWpf.AppManagement;
 
 
 

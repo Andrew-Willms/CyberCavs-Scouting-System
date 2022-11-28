@@ -2,44 +2,37 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.Tabs;
 
 
 
-public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
+public partial class DataFieldTabView : AppManagerDependent, INotifyPropertyChanged {
 
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditor GameEditor => ApplicationManager.GameEditor;
+	private GameEditor GameEditor => App.Manager.GameEditor;
+
+	[Dependent(nameof(AppManager.GameEditor))]
 	public ReadOnlyObservableCollection<DataFieldEditor> DataFields => GameEditor.DataFields;
 
+	[Dependent(nameof(AppManager.SelectedDataField))]
 	public DataFieldEditor? SelectedDataField {
-
-		get => ApplicationManager.SelectedDataField;
-		set {
-			if (value != ApplicationManager.SelectedDataField) {
-				ApplicationManager.SelectedDataField = value;
-			}
-
-			OnPropertyChanged(nameof(SelectedDataField));
-			OnPropertyChanged(nameof(SelectedDataFieldType));
-			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
-		}
+		get => App.Manager.SelectedDataField;
+		set => App.Manager.SelectedDataField = value;
 	}
 
+	[Dependent(nameof(AppManager.SelectedDataField))]
 	public bool RemoveButtonIsEnabled => SelectedDataField is not null;
-
-	public DataFieldTypeEditor? SelectedDataFieldType => SelectedDataField?.DataFieldTypeEditor;
 
 
 
@@ -48,9 +41,6 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 		DataContext = this;
 
 		InitializeComponent();
-
-		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
-		ApplicationManager.RegisterSelectedDataFieldChangeAction(SelectedDataFieldChanged);
 	}
 
 
@@ -92,18 +82,10 @@ public partial class DataFieldTabView : UserControl, INotifyPropertyChanged {
 
 
 
-	public event PropertyChangedEventHandler? PropertyChanged;
+	public override event PropertyChangedEventHandler? PropertyChanged;
 
-	private void OnPropertyChanged(string propertyName) {
+	protected override void OnPropertyChanged(string propertyName) {
 		PropertyChanged?.Invoke(this, new(propertyName));
-	}
-
-	private void GameProjectChanged() {
-		PropertyChanged?.Invoke(this, new(""));
-	}
-
-	private void SelectedDataFieldChanged() {
-		PropertyChanged?.Invoke(this, new(nameof(SelectedDataField)));
 	}
 
 }

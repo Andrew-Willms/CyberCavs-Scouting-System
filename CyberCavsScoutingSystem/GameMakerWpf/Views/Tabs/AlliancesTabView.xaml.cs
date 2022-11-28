@@ -1,28 +1,34 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Controls;
 using CCSSDomain;
-using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
+using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.Tabs;
 
 
 
-public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
+public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChanged {
 
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditor GameEditor => ApplicationManager.GameEditor;
+	private GameEditor GameEditor => App.Manager.GameEditor;
+
+	[Dependent(nameof(AppManager.GameEditor))]
 	public ReadOnlyObservableCollection<AllianceEditor> Alliances => GameEditor.Alliances;
+
+	[Dependent(nameof(AppManager.GameEditor))]
 	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditor.RobotsPerAlliance;
+
+	[Dependent(nameof(AppManager.GameEditor))]
 	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditor.AlliancesPerMatch;
 
 	private AllianceEditor? _SelectedAlliance;
@@ -42,8 +48,6 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 	public AlliancesTabView() {
 
 		DataContext = this;
-
-		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
 
 		InitializeComponent();
 	}
@@ -86,14 +90,10 @@ public partial class AlliancesTabView : UserControl, INotifyPropertyChanged {
 
 
 
-	public event PropertyChangedEventHandler? PropertyChanged;
+	public override event PropertyChangedEventHandler? PropertyChanged;
 
-	private void OnPropertyChanged(string? propertyName = null) {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
-
-	private void GameProjectChanged() {
-		PropertyChanged?.Invoke(this, new(""));
+	protected override void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
 	}
 
 }

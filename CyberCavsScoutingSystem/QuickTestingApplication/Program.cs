@@ -14,20 +14,14 @@ public class Program {
 		//Console.WriteLine("Test");
 		//Trace.WriteLine("Test");
 
-		var test1 = new ObjectInitializerOrderTest() {
-			A = 0,
-			B = 0
-		};
+		Child test = new Child();
 
-		var test2 = new ObjectInitializerOrderTest() {
-			B = 0,
-			A = 0
-		};
+		//TestGenericTypeMatching();
 	}
 
 
 
-	public void TestGenericTypeMatching() {
+	public static void TestGenericTypeMatching() {
 
 		ITestInterface<int, int> test = new TestClass1<int, int>();
 
@@ -45,23 +39,6 @@ public class Program {
 
 
 
-	private static void TestReadonlyCollection() {
-
-		List<string> testList = new() { "test1", "test2" };
-
-		PrintList(testList);
-
-		IReadOnlyList<string> testAsStringOnly = testList.AsReadOnly();
-
-		//List<string> castOfReadonly = (List<string>)testAsStringOnly; // This cast causes an exception
-		List<string> castOfReadonly = testAsStringOnly.ToList(); // This creates a copy
-
-		castOfReadonly.Add("test3");
-
-		PrintList(castOfReadonly);
-		PrintList(testList);
-	}
-
 	private static void PrintList(List<string> list) {
 
 		Console.Write("{ ");
@@ -73,20 +50,21 @@ public class Program {
 		Console.WriteLine(list[^1] + " }");
 	}
 
-	public static (int testInt, string testString, double testDouble) test = (1, "1", 1);
 }
 
-public class ObjectInitializerOrderTest {
 
-	public required int A {
-		get => 0;
-		set => Console.WriteLine("A");
+
+public class Parent {
+
+	public Parent() {
+
+		Console.WriteLine(GetType() == typeof(Parent));
+		Console.WriteLine(GetType() == typeof(Child));
 	}
 
-	public required int B {
-		get => 0;
-		set => Console.WriteLine("B");
-	}
+}
+
+public class Child : Parent {
 
 }
 

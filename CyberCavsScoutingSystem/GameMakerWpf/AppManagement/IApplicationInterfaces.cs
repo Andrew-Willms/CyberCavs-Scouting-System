@@ -1,7 +1,7 @@
 ﻿using GameMakerWpf.Domain.EditingData;
 using UtilitiesLibrary;
 
-namespace GameMakerWpf.ApplicationManagement;
+namespace GameMakerWpf.AppManagement;
 
 
 

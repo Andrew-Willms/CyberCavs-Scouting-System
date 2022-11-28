@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.AppManagement;
 
 namespace GameMakerWpf.Views;
 
@@ -9,7 +9,7 @@ public partial class MainWindow : Window, IGameMakerMainView {
 
 	public MainWindow() {
 
-		DataContext = ApplicationManager.GameEditor;
+		DataContext = App.Manager.GameEditor;
 
 		InitializeComponent();
 	}
@@ -18,22 +18,22 @@ public partial class MainWindow : Window, IGameMakerMainView {
 
 	private void Save_Execute(object sender, RoutedEventArgs e) {
 
-		ApplicationManager.SaveGameProject();
+		App.Manager.SaveGameProject();
 	}
 
 	private void SaveAs_Execute(object sender, RoutedEventArgs e) {
 
-		ApplicationManager.SaveGameProjectAs();
+		App.Manager.SaveGameProjectAs();
 	}
 
 	private void Open_Execute(object sender, RoutedEventArgs e) {
 
-		ApplicationManager.OpenGameProject();
+		App.Manager.OpenGameProject();
 	}
 
 	private void New_Execute(object sender, RoutedEventArgs e) {
 
-		ApplicationManager.NewGameProject();
+		App.Manager.NewGameProject();
 	}
 
 }

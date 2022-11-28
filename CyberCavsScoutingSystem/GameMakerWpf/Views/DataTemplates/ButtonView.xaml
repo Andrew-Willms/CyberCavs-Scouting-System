@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GameMakerWpf.Views.DataTemplates"
+             xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type local:ButtonView}}">
+             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type editors:ButtonEditor}}">
 
     <Grid>
 
@@ -65,7 +65,7 @@
                  Width="Auto"
                  Grid.Column="4"/>
 
-        <TextBox DataContext="{Binding ButtonWidth}"
+        <TextBox DataContext="{Binding Width}"
                  Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"
@@ -74,7 +74,7 @@
                  Width="Auto"
                  Grid.Column="5"/>
 
-        <TextBox DataContext="{Binding ButtonHeight}"
+        <TextBox DataContext="{Binding Height}"
                  Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"

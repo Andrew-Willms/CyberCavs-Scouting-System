@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.AppManagement;
 
 namespace GameMakerWpf;
 
@@ -7,9 +7,11 @@ namespace GameMakerWpf;
 
 public partial class App : Application {
 
+	public static readonly AppManager Manager = new();
+
 	private void ApplicationStartup(object sender, StartupEventArgs e) {
 
-		ApplicationManager.ApplicationStartup();
+		Manager.ApplicationStartup();
 
 	}
 

@@ -2,24 +2,26 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.Tabs;
 
 
 
-public partial class AutoTabView : UserControl, INotifyPropertyChanged {
+public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditor GameEditor => ApplicationManager.GameEditor;
+	private GameEditor GameEditor => App.Manager.GameEditor;
+
+	[Dependent(nameof(AppManager.GameEditor))]
 	public ReadOnlyObservableCollection<ButtonEditor> Buttons => GameEditor.AutoButtons;
 
 	private ButtonEditor? _SelectedButton;
@@ -39,8 +41,6 @@ public partial class AutoTabView : UserControl, INotifyPropertyChanged {
 	public AutoTabView() {
 
 		DataContext = this;
-
-		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
 
 		InitializeComponent();
 	}
@@ -85,14 +85,10 @@ public partial class AutoTabView : UserControl, INotifyPropertyChanged {
 	
 
 
-	public event PropertyChangedEventHandler? PropertyChanged;
+	public override event PropertyChangedEventHandler? PropertyChanged;
 
-	private void OnPropertyChanged(string? propertyName = null) {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
-
-	private void GameProjectChanged() {
-		PropertyChanged?.Invoke(this, new(""));
+	protected override void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
 	}
 
 }

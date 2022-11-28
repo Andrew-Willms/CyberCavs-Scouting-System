@@ -4,7 +4,7 @@ using System.Windows.Input;
 using UtilitiesLibrary;
 using UtilitiesLibrary.MiscExtensions;
 
-namespace GameMakerWpf.ApplicationManagement;
+namespace GameMakerWpf.AppManagement;
 
 
 

@@ -2,27 +2,29 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using CCSSDomain;
-using GameMakerWpf.ApplicationManagement;
+using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
+using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.DataTemplates.DataField;
 
 
 
-public partial class SelectionDataFieldView : UserControl, INotifyPropertyChanged {
+public partial class SelectionDataFieldView : AppManagerDependent, INotifyPropertyChanged {
 
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
 
 
-	private SelectionDataFieldEditor? Editor => ApplicationManager.SelectedDataField?.DataFieldTypeEditor as SelectionDataFieldEditor;
+	[Dependent(nameof(AppManager.SelectedDataField))]
+	private SelectionDataFieldEditor? Editor => App.Manager.SelectedDataField?.DataFieldTypeEditor as SelectionDataFieldEditor;
 	
+	[Dependent(nameof(AppManager.GameEditor))]
 	public ReadOnlyObservableCollection<SingleInput<string, string, ErrorSeverity>>? Options => Editor?.Options;
 
 	private SingleInput<string, string, ErrorSeverity>? _SelectedOption;
@@ -44,9 +46,6 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 		DataContext = this;
 
 		InitializeComponent();
-
-		ApplicationManager.RegisterGameProjectChangeAction(GameProjectChanged);
-		ApplicationManager.RegisterSelectedDataFieldChangeAction(EditorChanged);
 	}
 
 
@@ -96,18 +95,10 @@ public partial class SelectionDataFieldView : UserControl, INotifyPropertyChange
 
 
 
-	public event PropertyChangedEventHandler? PropertyChanged;
+	public override event PropertyChangedEventHandler? PropertyChanged;
 	
-	private void OnPropertyChanged(string? propertyName = null) {
+	protected override void OnPropertyChanged(string propertyName) {
 		PropertyChanged?.Invoke(this, new(propertyName));
-	}
-
-	private void EditorChanged() {
-		PropertyChanged?.Invoke(this, new(""));
-	}
-
-	private void GameProjectChanged() {
-		PropertyChanged?.Invoke(this, new(""));
 	}
 
 }
