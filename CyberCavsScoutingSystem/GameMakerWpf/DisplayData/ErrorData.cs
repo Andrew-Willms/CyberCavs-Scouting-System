@@ -80,4 +80,32 @@ public static class ErrorData {
 			"The Button you are trying to remove from the Tele Tab Buttons could not be found.";
 	}
 
+	public static class RemoveSetupInputError {
+		
+		public static string InputNotFoundCaption => "Setup Input Not Found";
+		public static string InputNotFoundMessage => 
+			"The Input you are trying to remove from the Setup Tab Inputs could not be found.";
+	}
+
+	public static class RemoveAutoInputError {
+		
+		public static string InputNotFoundCaption => "Auto Input Not Found";
+		public static string InputNotFoundMessage => 
+			"The Input you are trying to remove from the Auto Tab Inputs could not be found.";
+	}
+
+	public static class RemoveTeleInputError {
+		
+		public static string InputNotFoundCaption => "Tele Input Not Found";
+		public static string InputNotFoundMessage => 
+			"The Input you are trying to remove from the Tele Tab Inputs could not be found.";
+	}
+
+	public static class RemoveEndgameInputError {
+		
+		public static string InputNotFoundCaption => "Endgame Input Not Found";
+		public static string InputNotFoundMessage => 
+			"The Input you are trying to remove from the Endgame Tab Inputs could not be found.";
+	}
+
 }

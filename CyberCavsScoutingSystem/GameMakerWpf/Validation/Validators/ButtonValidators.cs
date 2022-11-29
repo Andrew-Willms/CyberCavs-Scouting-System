@@ -7,7 +7,6 @@ using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Validation;
-using UtilitiesLibrary.Validation.Inputs;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Conversion;
 using UtilitiesLibrary.Validation.Errors;
@@ -62,9 +61,9 @@ public static class ButtonValidators {
 	public static ReadOnlyList<Error> ButtonTextValidator_Length(string buttonText) {
 
 		return buttonText.Length switch {
-			>= ButtonValidationData.ButtonTextLength.UpperErrorThreshold => AllianceValidationData.Name.Length.TooLongError.ReadOnlyListify(),
-			>= ButtonValidationData.ButtonTextLength.UpperWarningThreshold => AllianceValidationData.Name.Length.TooLongWarning.ReadOnlyListify(),
-			>= ButtonValidationData.ButtonTextLength.UpperAdvisoryThreshold => AllianceValidationData.Name.Length.TooLongAdvisory.ReadOnlyListify(),
+			>= ButtonValidationData.ButtonTextLength.UpperErrorThreshold => ButtonValidationData.ButtonTextLength.TooLongError.ReadOnlyListify(),
+			>= ButtonValidationData.ButtonTextLength.UpperWarningThreshold => ButtonValidationData.ButtonTextLength.TooLongWarning.ReadOnlyListify(),
+			>= ButtonValidationData.ButtonTextLength.UpperAdvisoryThreshold => ButtonValidationData.ButtonTextLength.TooLongAdvisory.ReadOnlyListify(),
 			_ => ReadOnlyList.Empty
 		};
 	}

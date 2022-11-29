@@ -21,6 +21,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -109,22 +112,22 @@
                     Grid.Column="1">
 
             <Button Content="{Binding AddText, Source={StaticResource AutoTabData}}"
-                    Click="AddButton_Click"
+                    Click="AddButtonButton_Click"
                     Margin="5,5,5,5"
                     Padding="4,4,4,4"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"/>
 
             <Button Content="{Binding RemoveText, Source={StaticResource AutoTabData}}"
-                    Click="RemoveButton_Click"
-                    IsEnabled="{Binding Path=RemoveButtonIsEnabled}"
+                    Click="RemoveButtonButton_Click"
+                    IsEnabled="{Binding Path=RemoveButtonButtonIsEnabled}"
                     Margin="5,5,5,5"
                     Padding="4,4,4,4"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"/>
 
             <Button Content="{Binding MoveUpText, Source={StaticResource AutoTabData}}"
-                    Click="MoveUpButton_Click"
+                    Click="MoveButtonUpButton_Click"
                     Margin="5,5,5,5"
                     Padding="4,4,4,4"
                     HorizontalAlignment="Left"
@@ -133,7 +136,92 @@
                     Visibility="Hidden"/>
 
             <Button Content="{Binding MoveDownText, Source={StaticResource AutoTabData}}"
-                    Click="MoveDownButton_Click"
+                    Click="MoveButtonDownButton_Click"
+                    Margin="5,5,5,5"
+                    Padding="4,4,4,4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    IsEnabled="False"
+                    Visibility="Hidden"/>
+
+        </StackPanel>
+
+        <Grid
+            Margin="13,5,12,0"
+            Grid.Column="1"
+            Grid.Row="3">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label
+                Content="{Binding InputsDataFieldNameText, Source={StaticResource AutoTabData}}"
+                Margin="5,0,5,0"
+                Grid.Column="0"/>
+
+            <Label
+                Content="{Binding InputTextText, Source={StaticResource AutoTabData}}"
+                Margin="5,0,5,0"
+                Grid.Column="1"/>
+
+        </Grid>
+
+        <TextBlock Text="{Binding InputsText, Source={StaticResource AutoTabData}}"
+                   Margin="5,5,5,5"
+                   Width="auto"
+                   Grid.Row="4"
+                   Grid.Column="0"/>
+
+        <ListBox ItemsSource="{Binding Path=Inputs}"
+                 SelectedItem="{Binding Path=SelectedInput}"
+                 Margin="5,0,5,5"
+                 MinHeight="20"
+                 Grid.Row="4"
+                 Grid.Column="1"
+                 HorizontalContentAlignment="Stretch">
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <dataTemplates:InputView/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+        </ListBox>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="5"
+                    Grid.Column="1">
+
+            <Button Content="{Binding AddText, Source={StaticResource AutoTabData}}"
+                    Click="AddInputButton_Click"
+                    Margin="5,5,5,5"
+                    Padding="4,4,4,4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"/>
+
+            <Button Content="{Binding RemoveText, Source={StaticResource AutoTabData}}"
+                    Click="RemoveInputButton_Click"
+                    IsEnabled="{Binding Path=RemoveInputButtonIsEnabled}"
+                    Margin="5,5,5,5"
+                    Padding="4,4,4,4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"/>
+
+            <Button Content="{Binding MoveUpText, Source={StaticResource AutoTabData}}"
+                    Click="MoveInputUpButton_Click"
+                    Margin="5,5,5,5"
+                    Padding="4,4,4,4"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    IsEnabled="False"
+                    Visibility="Hidden"/>
+
+            <Button Content="{Binding MoveDownText, Source={StaticResource AutoTabData}}"
+                    Click="MoveInputDownButton_Click"
                     Margin="5,5,5,5"
                     Padding="4,4,4,4"
                     HorizontalAlignment="Left"

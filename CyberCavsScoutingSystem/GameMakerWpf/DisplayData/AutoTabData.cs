@@ -30,4 +30,10 @@ public class AutoTabData {
 
 	public static string MoveDownText => "MoveDown";
 
+	public static string InputsText => "Inputs";
+
+	public static string InputsDataFieldNameText => "Data Field";
+
+	public static string InputTextText => "Input Text";
+
 }

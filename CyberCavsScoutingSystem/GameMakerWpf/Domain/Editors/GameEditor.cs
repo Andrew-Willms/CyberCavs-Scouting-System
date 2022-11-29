@@ -204,6 +204,8 @@ public class GameEditor {
 		return new Success();
 	}
 
+
+
 	public void AddDataField(DataFieldEditingData dataFieldEditingData) {
 
 		DataFieldEditor dataFieldEditor = new(this, dataFieldEditingData);
@@ -231,10 +233,73 @@ public class GameEditor {
 		return new Success();
 	}
 
+
+
+	public void AddSetupTabInput(InputEditingData inputEditingData) {
+
+		InputEditor inputEditor = new(this, inputEditingData);
+		_SetupTabInputs.Add(inputEditor);
+	}
+
+	public Result<RemoveError> RemoveSetupInput(InputEditor inputEditor) {
+
+		if (!_SetupTabInputs.Remove(inputEditor)) {
+			return RemoveError.NotFound;
+		}
+
+		return new Success();
+	}
+
+	public void AddAutoTabInput(InputEditingData inputEditingData) {
+
+		InputEditor inputEditor = new(this, inputEditingData);
+		_AutoTabInputs.Add(inputEditor);
+	}
+
+	public Result<RemoveError> RemoveAutoInput(InputEditor inputEditor) {
+
+		if (!_AutoTabInputs.Remove(inputEditor)) {
+			return RemoveError.NotFound;
+		}
+
+		return new Success();
+	}
+
+	public void AddTeleTabInput(InputEditingData inputEditingData) {
+
+		InputEditor inputEditor = new(this, inputEditingData);
+		_TeleTabInputs.Add(inputEditor);
+	}
+
+	public Result<RemoveError> RemoveTeleInput(InputEditor inputEditor) {
+
+		if (!_TeleTabInputs.Remove(inputEditor)) {
+			return RemoveError.NotFound;
+		}
+
+		return new Success();
+	}
+
+	public void AddEndgameTabInput(InputEditingData inputEditingData) {
+
+		InputEditor inputEditor = new(this, inputEditingData);
+		_EndgameTabInputs.Add(inputEditor);
+	}
+
+	public Result<RemoveError> RemoveEndgameInput(InputEditor inputEditor) {
+
+		if (!_EndgameTabInputs.Remove(inputEditor)) {
+			return RemoveError.NotFound;
+		}
+
+		return new Success();
+	}
+
+
+
 	public void AddAutoButton(ButtonEditingData buttonEditingData) {
 
 		ButtonEditor buttonEditor = new(this, buttonEditingData);
-
 		_AutoButtons.Add(buttonEditor);
 	}
 

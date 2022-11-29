@@ -57,7 +57,12 @@ public static class DefaultEditingDataValues {
 		XPosition = "0.5",
 		YPosition = "0.5",
 		Height = "0.1",
-		Width = "0.1",
+		Width = "0.1"
+	};
+
+	public static readonly InputEditingData DefaultInputEditingData = new() {
+		DataFieldName = "",
+		InputText = ""
 	};
 
 

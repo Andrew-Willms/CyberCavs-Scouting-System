@@ -24,17 +24,32 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 	[Dependent(nameof(AppManager.GameEditor))]
 	public ReadOnlyObservableCollection<ButtonEditor> Buttons => GameEditor.AutoButtons;
 
+	[Dependent(nameof(AppManager.GameEditor))]
+	public ReadOnlyObservableCollection<InputEditor> Inputs => GameEditor.AutoTabInputs;
+
 	private ButtonEditor? _SelectedButton;
 	public ButtonEditor? SelectedButton {
 		get => _SelectedButton;
 		set {
 			_SelectedButton = value;
 			OnPropertyChanged(nameof(SelectedButton));
-			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
+			OnPropertyChanged(nameof(RemoveButtonButtonIsEnabled));
 		}
 	}
 
-	public bool RemoveButtonIsEnabled => _SelectedButton is not null;
+	public bool RemoveButtonButtonIsEnabled => SelectedButton is not null;
+
+	private InputEditor? _SelectedInput;
+	public InputEditor? SelectedInput {
+		get => _SelectedInput;
+		set {
+			_SelectedInput = value;
+			OnPropertyChanged(nameof(SelectedInput));
+			OnPropertyChanged(nameof(RemoveInputButtonIsEnabled));
+		}
+	}
+
+	public bool RemoveInputButtonIsEnabled => SelectedInput is not null;
 
 
 
@@ -47,12 +62,12 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 
 
 
-	private void AddButton_Click(object sender, RoutedEventArgs e) {
+	private void AddButtonButton_Click(object sender, RoutedEventArgs e) {
 		
 		GameEditor.AddAutoButton(DefaultEditingDataValues.DefaultButtonEditingData);
 	}
 
-	private void RemoveButton_Click(object sender, RoutedEventArgs e) {
+	private void RemoveButtonButton_Click(object sender, RoutedEventArgs e) {
 		
 		if (SelectedButton is null) {
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
@@ -75,14 +90,52 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 
 	}
 
-	private void MoveUpButton_Click(object sender, RoutedEventArgs e) {
+	private void MoveButtonUpButton_Click(object sender, RoutedEventArgs e) {
 		throw new NotImplementedException();
 	}
 
-	private void MoveDownButton_Click(object sender, RoutedEventArgs e) {
+	private void MoveButtonDownButton_Click(object sender, RoutedEventArgs e) {
 		throw new NotImplementedException();
 	}
 	
+
+
+	private void AddInputButton_Click(object sender, RoutedEventArgs e) {
+		
+		GameEditor.AddAutoTabInput(DefaultEditingDataValues.DefaultInputEditingData);
+	}
+
+	private void RemoveInputButton_Click(object sender, RoutedEventArgs e) {
+		
+		if (SelectedInput is null) {
+			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
+		}
+
+		Result<GameEditor.RemoveError> result = GameEditor.RemoveAutoInput(SelectedInput);
+
+		switch (result.Resolve()) {
+			
+			case Success:
+				return;
+
+			case GameEditor.RemoveError { ErrorType: GameEditor.RemoveError.Types.ItemNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveAutoInputError.InputNotFoundCaption, ErrorData.RemoveAutoInputError.InputNotFoundMessage);
+				return;
+
+			default:
+				throw new ShouldMatchOtherCaseException();
+		}
+
+	}
+
+	private void MoveInputUpButton_Click(object sender, RoutedEventArgs e) {
+		throw new NotImplementedException();
+	}
+
+	private void MoveInputDownButton_Click(object sender, RoutedEventArgs e) {
+		throw new NotImplementedException();
+	}
+
 
 
 	public override event PropertyChangedEventHandler? PropertyChanged;
