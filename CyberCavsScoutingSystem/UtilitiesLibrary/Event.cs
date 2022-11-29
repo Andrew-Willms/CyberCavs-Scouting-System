@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UtilitiesLibrary.Validation;
+namespace UtilitiesLibrary;
 
 
 
-public class ValidationEvent {
+public class Event {
 
 	private List<Action> Delegates { get; } = new();
 
@@ -17,12 +17,12 @@ public class ValidationEvent {
 		Delegates.Remove(action);
 	}
 
-	public void SubscribeTo(ValidationEvent validationEvent) {
-		validationEvent.Subscribe(Invoke);
+	public void SubscribeTo(Event @event) {
+		@event.Subscribe(Invoke);
 	}
 
-	public void UnsubscribeFrom(ValidationEvent validationEvent) {
-		validationEvent.UnSubscribe(Invoke);
+	public void UnsubscribeFrom(Event @event) {
+		@event.UnSubscribe(Invoke);
 	}
 
 	public void Invoke() {

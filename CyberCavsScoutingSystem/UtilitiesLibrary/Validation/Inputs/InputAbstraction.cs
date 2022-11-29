@@ -17,7 +17,7 @@ public interface IInput<TSeverity> : INotifyPropertyChanged
 
 	public TSeverity ErrorLevel { get; }
 
-	public ValidationEvent OutputObjectChanged { get; }
+	public Event OutputObjectChanged { get; }
 
 	public void Validate();
 }
@@ -49,7 +49,7 @@ public abstract class Input<TOutput, TSeverity> : IInput<TOutput, TSeverity>
 
 	public bool IsValid => ErrorLevel.IsFatal == false;
 
-	public ValidationEvent OutputObjectChanged { get; } = new();
+	public Event OutputObjectChanged { get; } = new();
 
 
 

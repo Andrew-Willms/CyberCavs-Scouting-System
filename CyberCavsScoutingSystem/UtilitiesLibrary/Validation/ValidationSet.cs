@@ -13,7 +13,7 @@ public interface IValidationSet<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
 	public IValidator<TSeverity> ToValidator(
-		Func<Optional<TOutput>> outputObjectGetter, ValidationEvent outputObjectChanged, 
+		Func<Optional<TOutput>> outputObjectGetter, Event outputObjectChanged, 
 		Action<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction);
 }
 
@@ -26,9 +26,9 @@ internal class ValidationSet<TOutput, TSeverity> : IValidationSet<TOutput, TSeve
 	private bool ValidateOnChange { get; }
 
 	private ValidationRule<TOutput, TSeverity> ValidationRule { get; }
-	private ValidationEvent[] ValidationEvents { get; }
+	private Event[] ValidationEvents { get; }
 
-	public ValidationSet(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange, params ValidationEvent[] validationEvents) {
+	public ValidationSet(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange, params Event[] validationEvents) {
 
 		ValidationRule = validationRule;
 		ValidateOnChange = validateOnChange;
@@ -36,10 +36,10 @@ internal class ValidationSet<TOutput, TSeverity> : IValidationSet<TOutput, TSeve
 	}
 
 	public IValidator<TSeverity> ToValidator(
-		Func<Optional<TOutput>> outputObjectGetter, ValidationEvent outputObjectChanged, 
+		Func<Optional<TOutput>> outputObjectGetter, Event outputObjectChanged, 
 		Action<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction) {
 
-		List<ValidationEvent> validationEvents = ValidationEvents.ToList();
+		List<Event> validationEvents = ValidationEvents.ToList();
 
 		if (ValidateOnChange) {
 			validationEvents.Add(outputObjectChanged);

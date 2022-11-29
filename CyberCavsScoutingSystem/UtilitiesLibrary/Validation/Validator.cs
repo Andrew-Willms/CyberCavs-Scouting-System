@@ -29,7 +29,7 @@ internal class Validator<TOutput, TSeverity> : IValidator<TSeverity>
 	public Validator(
 		ValidationRule<TOutput, TSeverity> validationRule,
 		Func<Optional<TOutput>> outputObjectGetter,
-		IEnumerable<ValidationEvent> validationEvents,
+		IEnumerable<Event> validationEvents,
 		Action<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction) {
 
 		ValidationRule = validationRule;

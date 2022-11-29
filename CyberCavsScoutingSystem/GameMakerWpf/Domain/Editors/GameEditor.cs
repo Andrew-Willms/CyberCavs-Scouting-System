@@ -6,7 +6,6 @@ using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 using Version = CCSSDomain.Models.Version;
 
@@ -29,11 +28,11 @@ public class GameEditor {
 	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance { get; }
 	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch { get; }
 
-	public ValidationEvent AnythingChanged { get; } = new();
-	public ValidationEvent AllianceNameChanged { get; } = new();
-	public ValidationEvent AllianceColorChanged { get; } = new();
-	public ValidationEvent DataFieldNameChanged { get; } = new();
-	public ValidationEvent DataFieldTypeChanged { get; } = new();
+	public Event AnythingChanged { get; } = new();
+	public Event AllianceNameChanged { get; } = new();
+	public Event AllianceColorChanged { get; } = new();
+	public Event DataFieldNameChanged { get; } = new();
+	public Event DataFieldTypeChanged { get; } = new();
 
 	private readonly ObservableCollection<AllianceEditor> _Alliances = new();
 	public ReadOnlyObservableCollection<AllianceEditor> Alliances => new(_Alliances);

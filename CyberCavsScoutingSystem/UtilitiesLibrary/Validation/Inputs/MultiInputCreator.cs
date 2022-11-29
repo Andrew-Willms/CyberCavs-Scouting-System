@@ -14,14 +14,14 @@ public abstract class MultiInputCreator<TOutput, TSeverity>
 	internal readonly List<ValidationSet<TOutput, TSeverity>> ValidationSets = new();
 
 	protected void AddValidationRule(
-		ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+		ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params Event[] validationEvents) {
 
 		ValidationSets.Add(new(validationRule, validateOnChange, validationEvents));
 	}
 
 	protected void AddValidationRule<TValidationParameter>(
 		ValidationRule<TOutput, TValidationParameter, TSeverity> validator, Func<TValidationParameter> validationParameterGetter, 
-		bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+		bool validateOnChange = true, params Event[] validationEvents) {
 
 		ReadOnlyList<ValidationError<TSeverity>> SimplifiedValidationRule(TOutput outputObject) {
 			return validator.Invoke(outputObject, validationParameterGetter.Invoke());
@@ -55,7 +55,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 	public new MultiInputCreator<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3>
-		AddValidationRule(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+		AddValidationRule(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params Event[] validationEvents) {
 
 		base.AddValidationRule(validationRule, validateOnChange, validationEvents);
 		return this;
@@ -64,7 +64,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 	public new MultiInputCreator<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3>
 		AddValidationRule<TValidationParameter>(ValidationRule<TOutput, TValidationParameter, TSeverity> validator,
-			Func<TValidationParameter> validationParameterGetter, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+			Func<TValidationParameter> validationParameterGetter, bool validateOnChange = true, params Event[] validationEvents) {
 
 		base.AddValidationRule(validator, validationParameterGetter, validateOnChange, validationEvents);
 		return this;
@@ -111,7 +111,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 	public new MultiInputCreator<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3, TInput4>
-		AddValidationRule(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+		AddValidationRule(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params Event[] validationEvents) {
 
 		base.AddValidationRule(validationRule, validateOnChange, validationEvents);
 		return this;
@@ -120,7 +120,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 	public new MultiInputCreator<TOutput, TSeverity, 
 			TInput1, TInput2, TInput3, TInput4>
 		AddValidationRule<TValidationParameter>(ValidationRule<TOutput, TValidationParameter, TSeverity> validator,
-			Func<TValidationParameter> validationParameterGetter, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+			Func<TValidationParameter> validationParameterGetter, bool validateOnChange = true, params Event[] validationEvents) {
 
 		base.AddValidationRule(validator, validationParameterGetter, validateOnChange, validationEvents);
 		return this;

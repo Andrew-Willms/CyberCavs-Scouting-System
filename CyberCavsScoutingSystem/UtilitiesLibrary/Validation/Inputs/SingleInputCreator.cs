@@ -23,7 +23,7 @@ public class SingleInputCreator<TOutput, TInput, TSeverity>
 
 
 	public SingleInputCreator<TOutput, TInput, TSeverity> AddValidationRule(
-		ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+		ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params Event[] validationEvents) {
 
 		ValidationSets.Add(new(validationRule, validateOnChange, validationEvents));
 		return this;
@@ -31,7 +31,7 @@ public class SingleInputCreator<TOutput, TInput, TSeverity>
 
 	public SingleInputCreator<TOutput, TInput, TSeverity> AddValidationRule<TValidationParameter>(
 		ValidationRule<TOutput, TValidationParameter, TSeverity> validator, Func<TValidationParameter> validationParameterGetter, 
-		bool validateOnChange = true, params ValidationEvent[] validationEvents) {
+		bool validateOnChange = true, params Event[] validationEvents) {
 
 		ReadOnlyList<ValidationError<TSeverity>> SimplifiedValidationRule(TOutput outputObject) {
 			return validator.Invoke(outputObject, validationParameterGetter.Invoke());

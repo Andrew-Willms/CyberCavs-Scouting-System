@@ -5,7 +5,6 @@ using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
@@ -17,7 +16,7 @@ public class SelectionDataFieldEditor : DataFieldTypeEditor {
 	private ObservableCollection<SingleInput<string, string, ErrorSeverity>> _Options { get; } = new();
 	public ReadOnlyObservableCollection<SingleInput<string, string, ErrorSeverity>> Options => new(_Options);
 
-	public ValidationEvent OptionNameChanged { get; } = new();
+	public Event OptionNameChanged { get; } = new();
 
 	public SelectionDataFieldEditor(SelectionDataFieldEditingData initialValues) {
 
