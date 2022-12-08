@@ -13,12 +13,16 @@ namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 public class SelectionDataFieldEditor : DataFieldTypeEditor {
 
+	private GameEditor GameEditor { get; }
+
 	private ObservableCollection<SingleInput<string, string, ErrorSeverity>> _Options { get; } = new();
 	public ReadOnlyObservableCollection<SingleInput<string, string, ErrorSeverity>> Options => new(_Options);
 
 	public Event OptionNameChanged { get; } = new();
 
-	public SelectionDataFieldEditor(SelectionDataFieldEditingData initialValues) {
+	public SelectionDataFieldEditor(GameEditor gameEditor, SelectionDataFieldEditingData initialValues) {
+
+		GameEditor = gameEditor;
 
 		initialValues.OptionNames.Foreach(AddOption);
 	}
@@ -26,18 +30,21 @@ public class SelectionDataFieldEditor : DataFieldTypeEditor {
 	public void AddOption(string optionName) {
 
 		SingleInput<string, string, ErrorSeverity> option = new SingleInputCreator<string, string, ErrorSeverity> {
-				Converter = SelectionDataFieldValidator.OptionNameConverter,
-				Inverter = SelectionDataFieldValidator.OptionNameInverter,
-				InitialInput = optionName
-			}.AddValidationRule(SelectionDataFieldValidator.OptionNameValidator_Length)
-			.AddValidationRule<IEnumerable<SingleInput<string, string, ErrorSeverity>>>(
-				SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, false, OptionNameChanged)
-			.CreateSingleInput();
+			Converter = SelectionDataFieldValidator.OptionNameConverter,
+			Inverter = SelectionDataFieldValidator.OptionNameInverter,
+			InitialInput = optionName
+		}.AddValidationRule(SelectionDataFieldValidator.OptionNameValidator_Length)
+		.AddValidationRule<IEnumerable<SingleInput<string, string, ErrorSeverity>>>(
+			SelectionDataFieldValidator.OptionNameValidator_Uniqueness, () => Options, false, OptionNameChanged)
+		.CreateSingleInput();
+
+		option.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 
 		_Options.Add(option);
 
 		OptionNameChanged.SubscribeTo(option.OutputObjectChanged);
 		OptionNameChanged.Invoke();
+		GameEditor.AnythingChanged.Invoke();
 	}
 
 	public Result<RemoveOptionError> RemoveOption(SingleInput<string, string, ErrorSeverity> option) {
@@ -48,6 +55,9 @@ public class SelectionDataFieldEditor : DataFieldTypeEditor {
 
 		OptionNameChanged.UnsubscribeFrom(option.OutputObjectChanged);
 		OptionNameChanged.Invoke();
+
+		option.OutputObjectChanged.UnSubscribe(GameEditor.AnythingChanged.Invoke);
+		GameEditor.AnythingChanged.Invoke();
 
 		return new Success();
 	}

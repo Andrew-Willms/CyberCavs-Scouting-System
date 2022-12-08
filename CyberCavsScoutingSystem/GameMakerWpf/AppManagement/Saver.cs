@@ -111,12 +111,12 @@ public class Saver : ISaver {
 		Formatting = Formatting.Indented
 	};
 
-	private static readonly OpenFileDialog OpenFileDialog = new() {
+	private static OpenFileDialog OpenFileDialog => new() {
 		Title = "Select a file to open.",
 		Filter = "CCSS Game Project (*.cgp)|*.cgp"
 	};
 
-	private static readonly SaveFileDialog SaveFileDialog = new() {
+	private static SaveFileDialog SaveFileDialog => new() {
 		Title = "Select a file name and location for the project to be saved.",
 		Filter = "CCSS Game Project (*.cgp)|*.cgp"
 	};

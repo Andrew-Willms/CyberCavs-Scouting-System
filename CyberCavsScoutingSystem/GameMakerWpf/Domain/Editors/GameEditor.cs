@@ -81,27 +81,39 @@ public class GameEditor {
 		};
 
 		SetupTabInputs = new() {
-			Adder = inputEditingData => new(this, inputEditingData)
+			Adder = inputEditingData => new(this, inputEditingData),
+			OnAdd = _ => AnythingChanged.Invoke(),
+			OnRemove = _ => AnythingChanged.Invoke()
 		};
 
 		AutoTabInputs = new() {
-			Adder = inputEditingData => new(this, inputEditingData)
+			Adder = inputEditingData => new(this, inputEditingData),
+			OnAdd = _ => AnythingChanged.Invoke(),
+			OnRemove = _ => AnythingChanged.Invoke()
 		};
 
 		TeleTabInputs = new() {
-			Adder = inputEditingData => new(this, inputEditingData)
+			Adder = inputEditingData => new(this, inputEditingData),
+			OnAdd = _ => AnythingChanged.Invoke(),
+			OnRemove = _ => AnythingChanged.Invoke()
 		};
 
 		EndgameTabInputs = new() {
-			Adder = inputEditingData => new(this, inputEditingData)
+			Adder = inputEditingData => new(this, inputEditingData),
+			OnAdd = _ => AnythingChanged.Invoke(),
+			OnRemove = _ => AnythingChanged.Invoke()
 		};
 
 		AutoButtons = new() {
-			Adder = buttonEditingData => new(this, buttonEditingData)
+			Adder = buttonEditingData => new(this, buttonEditingData),
+			OnAdd = _ => AnythingChanged.Invoke(),
+			OnRemove = _ => AnythingChanged.Invoke()
 		};
 
 		TeleButtons = new() {
-			Adder = buttonEditingData => new(this, buttonEditingData)
+			Adder = buttonEditingData => new(this, buttonEditingData),
+			OnAdd = _ => AnythingChanged.Invoke(),
+			OnRemove = _ => AnythingChanged.Invoke()
 		};
 
 		Year = new SingleInputCreator<int, string, ErrorSeverity> { 

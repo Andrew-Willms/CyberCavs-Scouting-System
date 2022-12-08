@@ -79,6 +79,14 @@ public class ButtonEditor {
 			InitialInput = initialValues.IncrementAmount
 		}.AddValidationRule(ButtonValidators.PositionValidator_BetweenZeroAndOne)
 		.CreateSingleInput();
+
+		DataFieldName.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		ButtonText.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		IncrementAmount.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		XPosition.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		YPosition.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		Width.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		Height.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
 
 	public ButtonEditingData ToEditingData() {

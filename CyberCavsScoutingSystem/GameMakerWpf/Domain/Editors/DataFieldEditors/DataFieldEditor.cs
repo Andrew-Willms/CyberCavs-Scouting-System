@@ -48,8 +48,8 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 		DataFieldTypeEditor = initialValues switch {
 			TextDataFieldEditingData => new TextDataFieldEditor(),
-			SelectionDataFieldEditingData selectionDataField => new SelectionDataFieldEditor(selectionDataField),
-			IntegerDataFieldEditingData integerDataField => new IntegerDataFieldEditor(integerDataField),
+			SelectionDataFieldEditingData selectionDataField => new SelectionDataFieldEditor(GameEditor, selectionDataField),
+			IntegerDataFieldEditingData integerDataField => new IntegerDataFieldEditor(GameEditor, integerDataField),
 			_ => throw new ShouldMatchOtherCaseException()
 		};
 
@@ -60,6 +60,8 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		}.AddValidationRule(DataFieldValidator.NameValidator_Length)
 		.AddValidationRule<IEnumerable<DataFieldEditor>>(DataFieldValidator.NameValidator_Uniqueness, () => GameEditor.DataFields, false, GameEditor.DataFieldNameChanged)
 		.CreateSingleInput();
+
+		Name.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
 
 	public DataFieldEditingData ToEditingData() {
@@ -93,12 +95,13 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 		DataFieldTypeEditor = dataFieldType switch {
 			DataFieldType.Text => new TextDataFieldEditor(),
-			DataFieldType.Selection => new SelectionDataFieldEditor(DefaultEditingDataValues.DefaultSelectionDataFieldEditingData),
-			DataFieldType.Integer => new IntegerDataFieldEditor(DefaultEditingDataValues.DefaultIntegerDataFieldEditingData),
+			DataFieldType.Selection => new SelectionDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultSelectionDataFieldEditingData),
+			DataFieldType.Integer => new IntegerDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultIntegerDataFieldEditingData),
 			_ => throw new ShouldMatchOtherCaseException()
 		};
 
 		GameEditor.DataFieldTypeChanged.Invoke();
+		GameEditor.AnythingChanged.Invoke();
 	}
 
 

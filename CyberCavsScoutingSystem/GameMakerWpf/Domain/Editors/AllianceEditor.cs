@@ -60,9 +60,15 @@ public class AllianceEditor {
 			InputComponent1 = RedColorValue,
 			InputComponent2 = GreenColorValue,
 			InputComponent3 = BlueColorValue
-		}.AddValidationRule<IEnumerable<AllianceEditor>>(AllianceValidator.ColorCovalidator_Uniqueness,
+		}.AddValidationRule(AllianceValidator.ColorCovalidator_Uniqueness,
 				() => GameEditor.Alliances.Where(x => x != this), false, GameEditor.AllianceColorChanged)
 		.CreateMultiInput();
+
+		Name.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		AllianceColor.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		RedColorValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		GreenColorValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		BlueColorValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
 
 	public AllianceEditingData ToEditingData() {

@@ -9,6 +9,8 @@ namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 public class IntegerDataFieldEditor : DataFieldTypeEditor {
 
+	private GameEditor GameEditor { get; }
+
 	public SingleInput<int, string, ErrorSeverity> InitialValue { get; }
 
 	public SingleInput<int, string, ErrorSeverity> MinValue { get; }
@@ -17,7 +19,9 @@ public class IntegerDataFieldEditor : DataFieldTypeEditor {
 
 
 
-	public IntegerDataFieldEditor(IntegerDataFieldEditingData initialValues) {
+	public IntegerDataFieldEditor(GameEditor gameEditor, IntegerDataFieldEditingData initialValues) {
+
+		GameEditor = gameEditor;
 
 		InitialValue = new SingleInputCreator<int, string, ErrorSeverity> {
 			Converter = IntegerDataFieldValidator.IntegerValueConverter,
@@ -36,6 +40,10 @@ public class IntegerDataFieldEditor : DataFieldTypeEditor {
 			Inverter = IntegerDataFieldValidator.IntegerValueInverter,
 			InitialInput = initialValues.MaxValue
 		}.CreateSingleInput();
+
+		InitialValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		MinValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		MaxValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
 
 }

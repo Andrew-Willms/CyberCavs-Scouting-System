@@ -23,7 +23,7 @@ public abstract class AppManagerDependent: DependentControl<AppManager> {
 
 public class AppManager : INotifyPropertyChanged {
 
-	private GameEditor _GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
+	private GameEditor _GameEditor = null!;
 	public GameEditor GameEditor {
 		get => _GameEditor;
 		private set {
@@ -44,18 +44,21 @@ public class AppManager : INotifyPropertyChanged {
 
 	private IGameMakerMainView MainView { get; set; } = null!;
 	private ISaver Saver { get; set; } = null!;
-	private ISavePrompter SavePrompter { get; set; } = null!;
+	private ISavePrompter SavePrompter => new SavePrompter();
 	private IErrorPresenter ErrorPresenter { get; set; } = null!;
 
 	private bool ProjectIsSaved { get; set; } = true;
 
 
+	public AppManager() {
+
+		GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
+	}
 
 	public void ApplicationStartup() {
 
 		MainView = new MainWindow();
 		Saver = new Saver();
-		SavePrompter = new SavePrompter();
 		ErrorPresenter = new ErrorPresenter();
 
 		MainView.Show();

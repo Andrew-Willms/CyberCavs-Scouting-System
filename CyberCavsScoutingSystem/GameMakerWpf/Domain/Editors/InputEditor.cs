@@ -35,6 +35,9 @@ public class InputEditor {
 			InitialInput = initialValues.InputText
 		}.AddValidationRule(InputValidators.InputTextValidator_Length)
 		.CreateSingleInput();
+
+		DataFieldName.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		InputText.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
 
 	public InputEditingData ToEditingData() {
