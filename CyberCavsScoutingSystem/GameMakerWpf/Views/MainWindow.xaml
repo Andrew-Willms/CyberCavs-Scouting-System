@@ -18,6 +18,9 @@
         <displayData:DataFieldTabData x:Key="DataFieldTabData"/>
         <displayData:SetupTabData x:Key="SetupTabData"/>
         <displayData:AutoTabData x:Key="AutoTabData"/>
+        <displayData:TeleTabData x:Key="TeleTabData"/>
+        <displayData:EndgameTabData x:Key="EndgameTabData"/>
+        <displayData:PublishTabData x:Key="PublishTabData"/>
     </Window.Resources>
     
     <Window.CommandBindings>
@@ -66,14 +69,20 @@
                     <tabs:AutoTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Teleop Tab">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="{Binding TabTitle, Source={StaticResource TeleTabData}}">
+                <Grid Background="#FFE5E5E5">
+                    <tabs:TeleTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
             </TabItem>
-            <TabItem Header="Endgame Tab">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="{Binding TabTitle, Source={StaticResource EndgameTabData}}">
+                <Grid Background="#FFE5E5E5">
+                    <tabs:EndgameTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
             </TabItem>
-            <TabItem Header="Publish">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="{Binding TabTitle, Source={StaticResource PublishTabData}}">
+                <Grid Background="#FFE5E5E5">
+                    <tabs:PublishTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

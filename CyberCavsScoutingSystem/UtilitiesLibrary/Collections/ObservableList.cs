@@ -64,6 +64,7 @@ public class ObservableList<TItem, TAdd> : INotifyCollectionChanged, IEnumerable
 
 
 
+// TODO: Move to it's own class
 public class ListRemoveError : Error<ListRemoveError.Types> {
 
 	// I think the only reasons List.Remove can fail is if the item is not found or the list is

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
+
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.WPF;
@@ -14,7 +16,7 @@ namespace GameMakerWpf.Views.Tabs;
 
 
 
-public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
+public partial class TeleTabView : AppManagerDependent, INotifyPropertyChanged {
 
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
@@ -22,10 +24,10 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 	private GameEditor GameEditor => App.Manager.GameEditor;
 
 	[DependsOn(nameof(AppManager.GameEditor))]
-	public ObservableList<ButtonEditor, ButtonEditingData> Buttons => GameEditor.AutoButtons;
+	public ObservableList<ButtonEditor, ButtonEditingData> Buttons => GameEditor.TeleButtons;
 
 	[DependsOn(nameof(AppManager.GameEditor))]
-	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.AutoTabInputs;
+	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.TeleTabInputs;
 
 	private ButtonEditor? _SelectedButton;
 	public ButtonEditor? SelectedButton {
@@ -53,7 +55,7 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 
 
 
-	public AutoTabView() {
+	public TeleTabView() {
 
 		DataContext = this;
 

@@ -2,9 +2,9 @@
 
 
 
-public class SetupTabData {
+public class EndgameTabData {
 	
-	public static string TabTitle => "Setup Tab";
+	public static string TabTitle => "Endgame Tab";
 
 	public static string InputsText => "Inputs";
 

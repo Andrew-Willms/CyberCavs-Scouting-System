@@ -14,7 +14,7 @@ namespace GameMakerWpf.Views.Tabs;
 
 
 
-public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged {
+public partial class EndgameTabView : AppManagerDependent, INotifyPropertyChanged  {
 
 	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
 
@@ -22,7 +22,7 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 	private GameEditor GameEditor => App.Manager.GameEditor;
 
 	[DependsOn(nameof(AppManager.GameEditor))]
-	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.SetupTabInputs;
+	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.EndgameTabInputs;
 
 	private InputEditor? _SelectedInput;
 	public InputEditor? SelectedInput {
@@ -38,7 +38,7 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 
 
 
-	public SetupTabView() {
+	public EndgameTabView() {
 
 		DataContext = this;
 
@@ -65,6 +65,7 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 			case Success:
 				return;
 
+			// TODO replace this with an appropriate error messages
 			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
 				ErrorPresenter.DisplayError(ErrorData.RemoveAutoInputError.InputNotFoundCaption, ErrorData.RemoveAutoInputError.InputNotFoundMessage);
 				return;
@@ -88,7 +89,7 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 	}
 
 
-	
+
 	public override event PropertyChangedEventHandler? PropertyChanged;
 
 	protected override void OnPropertyChanged(string propertyName) {
