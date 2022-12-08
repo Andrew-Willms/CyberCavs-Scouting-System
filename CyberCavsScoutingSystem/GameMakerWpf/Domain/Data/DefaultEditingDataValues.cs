@@ -88,15 +88,15 @@ public static class DefaultEditingDataValues {
 		TeleTabInputs = ReadOnlyList.Empty,
 		EndgameTabInputs = ReadOnlyList.Empty,
 
-		AutoButtonEditingData = ReadOnlyList.Empty,
-		TeleButtonEditingData = ReadOnlyList.Empty,
+		AutoButtons = ReadOnlyList.Empty,
+		TeleButtons = ReadOnlyList.Empty,
 	};
 
 
 
 	public static void AddUniqueAlliance(this GameEditor gameEditor) {
 
-		gameEditor.AddAlliance(AllianceGenerator.GenerateUniqueAlliance(gameEditor.Alliances.SelectIfHasValue(x => x.Name.OutputObject)));
+		gameEditor.Alliances.Add(AllianceGenerator.GenerateUniqueAlliance(gameEditor.Alliances.SelectIfHasValue(x => x.Name.OutputObject)));
 	}
 
 }

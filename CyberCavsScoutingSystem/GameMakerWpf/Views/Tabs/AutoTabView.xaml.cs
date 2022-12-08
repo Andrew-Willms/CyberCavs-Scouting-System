@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
+using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary;
-using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.Tabs;
@@ -21,11 +21,11 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;
 
-	[Dependent(nameof(AppManager.GameEditor))]
-	public ReadOnlyObservableCollection<ButtonEditor> Buttons => GameEditor.AutoButtons;
+	[DependsOn(nameof(AppManager.GameEditor))]
+	public ObservableList<ButtonEditor, ButtonEditingData> Buttons => GameEditor.AutoButtons;
 
-	[Dependent(nameof(AppManager.GameEditor))]
-	public ReadOnlyObservableCollection<InputEditor> Inputs => GameEditor.AutoTabInputs;
+	[DependsOn(nameof(AppManager.GameEditor))]
+	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.AutoTabInputs;
 
 	private ButtonEditor? _SelectedButton;
 	public ButtonEditor? SelectedButton {
@@ -64,7 +64,7 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 
 	private void AddButtonButton_Click(object sender, RoutedEventArgs e) {
 		
-		GameEditor.AddAutoButton(DefaultEditingDataValues.DefaultButtonEditingData);
+		Buttons.Add(DefaultEditingDataValues.DefaultButtonEditingData);
 	}
 
 	private void RemoveButtonButton_Click(object sender, RoutedEventArgs e) {
@@ -73,14 +73,19 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
 		}
 
-		Result<GameEditor.RemoveError> result = GameEditor.RemoveAutoButton(SelectedButton);
+		Result<ListRemoveError> result = Buttons.Remove(SelectedButton);
 
 		switch (result.Resolve()) {
 			
 			case Success:
 				return;
 
-			case GameEditor.RemoveError { ErrorType: GameEditor.RemoveError.Types.ItemNotFound }:
+			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveAutoButtonError.ButtonNotFoundCaption,ErrorData.RemoveAutoButtonError.ButtonNotFoundMessage);
+				return;
+
+			// TODO replace this with an appropriate error messages
+			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
 				ErrorPresenter.DisplayError(ErrorData.RemoveAutoButtonError.ButtonNotFoundCaption,ErrorData.RemoveAutoButtonError.ButtonNotFoundMessage);
 				return;
 
@@ -102,7 +107,7 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 
 	private void AddInputButton_Click(object sender, RoutedEventArgs e) {
 		
-		GameEditor.AddAutoTabInput(DefaultEditingDataValues.DefaultInputEditingData);
+		Inputs.Add(DefaultEditingDataValues.DefaultInputEditingData);
 	}
 
 	private void RemoveInputButton_Click(object sender, RoutedEventArgs e) {
@@ -111,14 +116,19 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
 		}
 
-		Result<GameEditor.RemoveError> result = GameEditor.RemoveAutoInput(SelectedInput);
+		Result<ListRemoveError> result = Inputs.Remove(SelectedInput);
 
 		switch (result.Resolve()) {
 			
 			case Success:
 				return;
 
-			case GameEditor.RemoveError { ErrorType: GameEditor.RemoveError.Types.ItemNotFound }:
+			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveAutoInputError.InputNotFoundCaption, ErrorData.RemoveAutoInputError.InputNotFoundMessage);
+				return;
+
+			// TODO replace this with an appropriate error messages
+			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
 				ErrorPresenter.DisplayError(ErrorData.RemoveAutoInputError.InputNotFoundCaption, ErrorData.RemoveAutoInputError.InputNotFoundMessage);
 				return;
 

@@ -15,28 +15,28 @@ public partial class MetaTabView : AppManagerDependent, INotifyPropertyChanged {
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<string, string, ErrorSeverity> GameName => GameEditor.Name;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<string, string, ErrorSeverity> Description => GameEditor.Description;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<int, string, ErrorSeverity> Year => GameEditor.Year;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public MultiInput<Version, ErrorSeverity, uint, uint, uint, string> Version => GameEditor.Version;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<uint, string, ErrorSeverity> VersionMajorNumber => GameEditor.VersionMajorNumber;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<uint, string, ErrorSeverity> VersionMinorNumber => GameEditor.VersionMinorNumber;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<uint, string, ErrorSeverity> VersionPatchNumber => GameEditor.VersionPatchNumber;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<string, string, ErrorSeverity> VersionDescription => GameEditor.VersionDescription;
 
 

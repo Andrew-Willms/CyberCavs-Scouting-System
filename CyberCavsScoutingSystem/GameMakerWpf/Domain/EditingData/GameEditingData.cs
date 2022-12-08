@@ -26,7 +26,7 @@ public class GameEditingData {
 	public required ReadOnlyList<InputEditingData> TeleTabInputs { get; init; }
 	public required ReadOnlyList<InputEditingData> EndgameTabInputs { get; init; }
 
-	public required ReadOnlyList<ButtonEditingData> AutoButtonEditingData { get; init; }
-	public required ReadOnlyList<ButtonEditingData> TeleButtonEditingData { get; init; }
+	public required ReadOnlyList<ButtonEditingData> AutoButtons { get; init; }
+	public required ReadOnlyList<ButtonEditingData> TeleButtons { get; init; }
 
 }

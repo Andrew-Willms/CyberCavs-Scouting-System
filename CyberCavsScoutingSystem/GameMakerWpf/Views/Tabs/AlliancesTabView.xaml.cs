@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CCSSDomain;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
+using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary;
-using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation.Inputs;
 using UtilitiesLibrary.WPF;
 
@@ -22,13 +22,13 @@ public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChan
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;
 
-	[Dependent(nameof(AppManager.GameEditor))]
-	public ReadOnlyObservableCollection<AllianceEditor> Alliances => GameEditor.Alliances;
+	[DependsOn(nameof(AppManager.GameEditor))]
+	public ObservableList<AllianceEditor, AllianceEditingData> Alliances => GameEditor.Alliances;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<uint, string, ErrorSeverity> RobotsPerAlliance => GameEditor.RobotsPerAlliance;
 
-	[Dependent(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<uint, string, ErrorSeverity> AlliancesPerMatch => GameEditor.AlliancesPerMatch;
 
 	private AllianceEditor? _SelectedAlliance;
@@ -64,14 +64,19 @@ public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChan
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
 		}
 
-		Result<GameEditor.RemoveError> result = GameEditor.RemoveAlliance(SelectedAlliance);
+		Result<ListRemoveError> result = Alliances.Remove(SelectedAlliance);
 
 		switch (result.Resolve()) {
 			
 			case Success:
 				return;
 
-			case GameEditor.RemoveError { ErrorType: GameEditor.RemoveError.Types.ItemNotFound }:
+			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveAllianceError.AllianceNotFoundCaption, ErrorData.RemoveAllianceError.AllianceNotFoundMessage);
+				return;
+
+			//TODO replace with appropriate error message
+			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
 				ErrorPresenter.DisplayError(ErrorData.RemoveAllianceError.AllianceNotFoundCaption, ErrorData.RemoveAllianceError.AllianceNotFoundMessage);
 				return;
 

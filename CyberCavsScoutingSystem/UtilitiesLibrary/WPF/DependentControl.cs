@@ -10,11 +10,11 @@ namespace UtilitiesLibrary.WPF;
 
 
 [AttributeUsage(AttributeTargets.Property)]
-public class DependentAttribute : Attribute {
+public class DependsOnAttribute : Attribute {
 
 	public string SingletonPropertyName { get; }
 
-	public DependentAttribute(string singletonPropertyName) {
+	public DependsOnAttribute(string singletonPropertyName) {
 
 		SingletonPropertyName = singletonPropertyName;
 	}
@@ -33,13 +33,13 @@ public abstract class DependentControl<TSingleton> : UserControl, INotifyPropert
 		IEnumerable<PropertyInfo> singletonProperties = typeof(TSingleton).GetProperties();
 
 		IEnumerable<PropertyInfo> dependentProperties = GetType().GetProperties()
-			.Where(x => x.GetCustomAttributes(typeof(DependentAttribute), true).Any());
+			.Where(x => x.GetCustomAttributes(typeof(DependsOnAttribute), true).Any());
 
 		foreach (PropertyInfo dependentProperty in dependentProperties) {
 
-			IEnumerable<DependentAttribute> dependentAttributes = dependentProperty.GetCustomAttributes<DependentAttribute>();
+			IEnumerable<DependsOnAttribute> dependentAttributes = dependentProperty.GetCustomAttributes<DependsOnAttribute>();
 
-			foreach (DependentAttribute dependentAttribute in dependentAttributes) {
+			foreach (DependsOnAttribute dependentAttribute in dependentAttributes) {
 
 				string singletonPropertyName = dependentAttribute.SingletonPropertyName;
 				PropertyInfo? singletonProperty = singletonProperties.FirstOrDefault(x => x.Name == singletonPropertyName);

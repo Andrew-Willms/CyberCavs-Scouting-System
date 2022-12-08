@@ -5,9 +5,11 @@ using System.Windows;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
+using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.WPF;
 
@@ -22,16 +24,16 @@ public partial class DataFieldTabView : AppManagerDependent, INotifyPropertyChan
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;
 
-	[Dependent(nameof(AppManager.GameEditor))]
-	public ReadOnlyObservableCollection<DataFieldEditor> DataFields => GameEditor.DataFields;
+	[DependsOn(nameof(AppManager.GameEditor))]
+	public ObservableList<DataFieldEditor, DataFieldEditingData> DataFields => GameEditor.DataFields;
 
-	[Dependent(nameof(AppManager.SelectedDataField))]
+	[DependsOn(nameof(AppManager.SelectedDataField))]
 	public DataFieldEditor? SelectedDataField {
 		get => App.Manager.SelectedDataField;
 		set => App.Manager.SelectedDataField = value;
 	}
 
-	[Dependent(nameof(AppManager.SelectedDataField))]
+	[DependsOn(nameof(AppManager.SelectedDataField))]
 	public bool RemoveButtonIsEnabled => SelectedDataField is not null;
 
 
@@ -47,7 +49,7 @@ public partial class DataFieldTabView : AppManagerDependent, INotifyPropertyChan
 
 	private void AddButton_Click(object sender, RoutedEventArgs e) {
 
-		GameEditor.AddDataField(DefaultEditingDataValues.DefaultDataFieldEditingData);
+		DataFields.Add(DefaultEditingDataValues.DefaultDataFieldEditingData);
 	}
 
 	private void RemoveButton_Click(object sender, RoutedEventArgs e) {
@@ -56,14 +58,19 @@ public partial class DataFieldTabView : AppManagerDependent, INotifyPropertyChan
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no DataField is selected.");
 		}
 
-		Result<GameEditor.RemoveError> result = GameEditor.RemoveDataField(SelectedDataField);
+		Result<ListRemoveError> result = DataFields.Remove(SelectedDataField);
 
 		switch (result.Resolve()) {
 			
 			case Success:
 				return;
 
-			case GameEditor.RemoveError { ErrorType: GameEditor.RemoveError.Types.ItemNotFound }:
+			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveDataFieldError.DataFieldNotFoundCaption, ErrorData.RemoveDataFieldError.DataFieldNotFoundMessage);
+				return;
+
+			//TODO replace with appropriate error message.
+			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
 				ErrorPresenter.DisplayError(ErrorData.RemoveDataFieldError.DataFieldNotFoundCaption, ErrorData.RemoveDataFieldError.DataFieldNotFoundMessage);
 				return;
 

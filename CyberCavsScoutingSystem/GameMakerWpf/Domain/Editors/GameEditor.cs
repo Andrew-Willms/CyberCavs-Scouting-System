@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
@@ -34,33 +33,76 @@ public class GameEditor {
 	public Event DataFieldNameChanged { get; } = new();
 	public Event DataFieldTypeChanged { get; } = new();
 
-	private readonly ObservableCollection<AllianceEditor> _Alliances = new();
-	public ReadOnlyObservableCollection<AllianceEditor> Alliances => new(_Alliances);
+	public ObservableList<AllianceEditor, AllianceEditingData> Alliances { get; }
+	public ObservableList<DataFieldEditor, DataFieldEditingData> DataFields { get; }
 
-	private readonly ObservableCollection<DataFieldEditor> _DataFields = new();
-	public ReadOnlyObservableCollection<DataFieldEditor> DataFields => new(_DataFields);
+	public ObservableList<InputEditor, InputEditingData> SetupTabInputs { get; }
+	public ObservableList<InputEditor, InputEditingData> AutoTabInputs { get; }
+	public ObservableList<InputEditor, InputEditingData> TeleTabInputs { get; }
+	public ObservableList<InputEditor, InputEditingData> EndgameTabInputs { get; }
 
-	private readonly ObservableCollection<InputEditor> _SetupTabInputs = new();
-	public ReadOnlyObservableCollection<InputEditor> SetupTabInputs => new(_SetupTabInputs);
-
-	private readonly ObservableCollection<InputEditor> _AutoTabInputs = new();
-	public ReadOnlyObservableCollection<InputEditor> AutoTabInputs => new(_AutoTabInputs);
-
-	private readonly ObservableCollection<InputEditor> _TeleTabInputs = new();
-	public ReadOnlyObservableCollection<InputEditor> TeleTabInputs => new(_TeleTabInputs);
-
-	private readonly ObservableCollection<InputEditor> _EndgameTabInputs = new();
-	public ReadOnlyObservableCollection<InputEditor> EndgameTabInputs => new(_EndgameTabInputs);
-
-	private readonly ObservableCollection<ButtonEditor> _AutoButtons = new();
-	public ReadOnlyObservableCollection<ButtonEditor> AutoButtons => new(_AutoButtons);
-
-	private readonly ObservableCollection<ButtonEditor> _TeleButtons = new();
-	public ReadOnlyObservableCollection<ButtonEditor> TeleButtons => new(_TeleButtons);
+	public ObservableList<ButtonEditor, ButtonEditingData> AutoButtons { get; }
+	public ObservableList<ButtonEditor, ButtonEditingData> TeleButtons { get; }
 
 
 
 	public GameEditor(GameEditingData initialValues) {
+
+		Alliances = new() {
+			Adder = allianceEditingData => new(this, allianceEditingData),
+			OnAdd = allianceEditor => {
+				AllianceNameChanged.SubscribeTo(allianceEditor.Name.OutputObjectChanged);
+				AllianceColorChanged.SubscribeTo(allianceEditor.AllianceColor.OutputObjectChanged);
+				AllianceNameChanged.Invoke();
+				AllianceColorChanged.Invoke();
+			},
+			OnRemove = allianceEditor => {
+				AllianceNameChanged.UnsubscribeFrom(allianceEditor.Name.OutputObjectChanged);
+				AllianceColorChanged.UnsubscribeFrom(allianceEditor.AllianceColor.OutputObjectChanged);
+				AllianceNameChanged.Invoke();
+				AllianceColorChanged.Invoke();
+			}
+		};
+
+		DataFields = new() {
+			Adder = dataFieldEditingData => new(this, dataFieldEditingData),
+			OnAdd = dataFieldEditor => {
+				DataFieldNameChanged.SubscribeTo(dataFieldEditor.Name.OutputObjectChanged);
+				DataFieldTypeChanged.SubscribeTo(dataFieldEditor.Name.OutputObjectChanged);
+				DataFieldNameChanged.Invoke();
+				DataFieldTypeChanged.Invoke();
+			},
+			OnRemove = dataFieldEditor => {
+				DataFieldNameChanged.UnsubscribeFrom(dataFieldEditor.Name.OutputObjectChanged);
+				DataFieldTypeChanged.UnsubscribeFrom(dataFieldEditor.Name.OutputObjectChanged);
+				DataFieldNameChanged.Invoke();
+				DataFieldTypeChanged.Invoke();
+			}
+		};
+
+		SetupTabInputs = new() {
+			Adder = inputEditingData => new(this, inputEditingData)
+		};
+
+		AutoTabInputs = new() {
+			Adder = inputEditingData => new(this, inputEditingData)
+		};
+
+		TeleTabInputs = new() {
+			Adder = inputEditingData => new(this, inputEditingData)
+		};
+
+		EndgameTabInputs = new() {
+			Adder = inputEditingData => new(this, inputEditingData)
+		};
+
+		AutoButtons = new() {
+			Adder = buttonEditingData => new(this, buttonEditingData)
+		};
+
+		TeleButtons = new() {
+			Adder = buttonEditingData => new(this, buttonEditingData)
+		};
 
 		Year = new SingleInputCreator<int, string, ErrorSeverity> { 
 			Converter = GameNumbersValidator.YearConverter,
@@ -129,8 +171,16 @@ public class GameEditor {
 			InitialInput = initialValues.AlliancesPerMatch
 		}.CreateSingleInput();
 
-		initialValues.Alliances.Foreach(AddAlliance);
-		initialValues.DataFields.Foreach(AddDataField);
+		initialValues.Alliances.Foreach(Alliances.Add);
+		initialValues.DataFields.Foreach(DataFields.Add);
+
+		initialValues.SetupTabInputs.Foreach(SetupTabInputs.Add);
+		initialValues.AutoTabInputs.Foreach(AutoTabInputs.Add);
+		initialValues.TeleTabInputs.Foreach(TeleTabInputs.Add);
+		initialValues.EndgameTabInputs.Foreach(EndgameTabInputs.Add);
+
+		initialValues.AutoButtons.Foreach(AutoButtons.Add);
+		initialValues.TeleButtons.Foreach(TeleButtons.Add);
 
 		AnythingChanged.SubscribeTo(Year.OutputObjectChanged);
 		AnythingChanged.SubscribeTo(Name.OutputObjectChanged);
@@ -168,174 +218,9 @@ public class GameEditor {
 			TeleTabInputs = TeleTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
 			EndgameTabInputs = EndgameTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
 
-			AutoButtonEditingData = AutoButtons.Select(x => x.ToEditingData()).ToReadOnly(),
-			TeleButtonEditingData = TeleButtons.Select(x => x.ToEditingData()).ToReadOnly(),
+			AutoButtons = AutoButtons.Select(x => x.ToEditingData()).ToReadOnly(),
+			TeleButtons = TeleButtons.Select(x => x.ToEditingData()).ToReadOnly(),
 		};
-
-	}
-
-
-
-	public void AddAlliance(AllianceEditingData allianceEditingData) {
-
-		AllianceEditor allianceEditor = new(this, allianceEditingData);
-
-		_Alliances.Add(allianceEditor);
-		AllianceNameChanged.SubscribeTo(allianceEditor.Name.OutputObjectChanged);
-		AllianceColorChanged.SubscribeTo(allianceEditor.AllianceColor.OutputObjectChanged);
-
-		AllianceNameChanged.Invoke();
-		AllianceColorChanged.Invoke();
-	}
-
-	public Result<RemoveError> RemoveAlliance(AllianceEditor allianceEditor) {
-
-		if (!_Alliances.Remove(allianceEditor)) {
-			return RemoveError.NotFound;
-		}
-
-		AllianceNameChanged.UnsubscribeFrom(allianceEditor.Name.OutputObjectChanged);
-		AllianceColorChanged.UnsubscribeFrom(allianceEditor.AllianceColor.OutputObjectChanged);
-
-		AllianceNameChanged.Invoke();
-		AllianceColorChanged.Invoke();
-
-		return new Success();
-	}
-
-
-
-	public void AddDataField(DataFieldEditingData dataFieldEditingData) {
-
-		DataFieldEditor dataFieldEditor = new(this, dataFieldEditingData);
-
-		_DataFields.Add(dataFieldEditor);
-		DataFieldNameChanged.SubscribeTo(dataFieldEditor.Name.OutputObjectChanged);
-		DataFieldTypeChanged.SubscribeTo(dataFieldEditor.Name.OutputObjectChanged);
-
-		DataFieldNameChanged.Invoke();
-		DataFieldTypeChanged.Invoke();
-	}
-
-	public Result<RemoveError> RemoveDataField(DataFieldEditor dataFieldEditor) {
-
-		if (!_DataFields.Remove(dataFieldEditor)) {
-			return RemoveError.NotFound;
-		}
-		
-		DataFieldNameChanged.UnsubscribeFrom(dataFieldEditor.Name.OutputObjectChanged);
-		DataFieldTypeChanged.UnsubscribeFrom(dataFieldEditor.Name.OutputObjectChanged);
-
-		DataFieldNameChanged.Invoke();
-		DataFieldTypeChanged.Invoke();
-
-		return new Success();
-	}
-
-
-
-	public void AddSetupTabInput(InputEditingData inputEditingData) {
-
-		InputEditor inputEditor = new(this, inputEditingData);
-		_SetupTabInputs.Add(inputEditor);
-	}
-
-	public Result<RemoveError> RemoveSetupInput(InputEditor inputEditor) {
-
-		if (!_SetupTabInputs.Remove(inputEditor)) {
-			return RemoveError.NotFound;
-		}
-
-		return new Success();
-	}
-
-	public void AddAutoTabInput(InputEditingData inputEditingData) {
-
-		InputEditor inputEditor = new(this, inputEditingData);
-		_AutoTabInputs.Add(inputEditor);
-	}
-
-	public Result<RemoveError> RemoveAutoInput(InputEditor inputEditor) {
-
-		if (!_AutoTabInputs.Remove(inputEditor)) {
-			return RemoveError.NotFound;
-		}
-
-		return new Success();
-	}
-
-	public void AddTeleTabInput(InputEditingData inputEditingData) {
-
-		InputEditor inputEditor = new(this, inputEditingData);
-		_TeleTabInputs.Add(inputEditor);
-	}
-
-	public Result<RemoveError> RemoveTeleInput(InputEditor inputEditor) {
-
-		if (!_TeleTabInputs.Remove(inputEditor)) {
-			return RemoveError.NotFound;
-		}
-
-		return new Success();
-	}
-
-	public void AddEndgameTabInput(InputEditingData inputEditingData) {
-
-		InputEditor inputEditor = new(this, inputEditingData);
-		_EndgameTabInputs.Add(inputEditor);
-	}
-
-	public Result<RemoveError> RemoveEndgameInput(InputEditor inputEditor) {
-
-		if (!_EndgameTabInputs.Remove(inputEditor)) {
-			return RemoveError.NotFound;
-		}
-
-		return new Success();
-	}
-
-
-
-	public void AddAutoButton(ButtonEditingData buttonEditingData) {
-
-		ButtonEditor buttonEditor = new(this, buttonEditingData);
-		_AutoButtons.Add(buttonEditor);
-	}
-
-	public Result<RemoveError> RemoveAutoButton(ButtonEditor buttonEditor) {
-
-		if (!_AutoButtons.Remove(buttonEditor)) {
-			return RemoveError.NotFound;
-		}
-
-		return new Success();
-	}
-
-	public void AddTeleButton(ButtonEditingData buttonEditingData) {
-
-		ButtonEditor buttonEditor = new(this, buttonEditingData);
-
-		_TeleButtons.Add(buttonEditor);
-	}
-
-	public Result<RemoveError> RemoveTeleButton(ButtonEditor buttonEditor) {
-
-		if (!_TeleButtons.Remove(buttonEditor)) {
-			return RemoveError.NotFound;
-		}
-
-		return new Success();
-	}
-
-
-
-	public class RemoveError : Error<RemoveError.Types> {
-
-		public enum Types {
-			ItemNotFound
-		}
-
-		public static RemoveError NotFound => new() { ErrorType = Types.ItemNotFound };
 
 	}
 

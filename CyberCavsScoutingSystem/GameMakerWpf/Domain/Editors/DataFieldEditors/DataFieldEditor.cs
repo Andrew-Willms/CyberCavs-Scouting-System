@@ -7,7 +7,6 @@ using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Validation.Inputs;
 using static CCSSDomain.Models.DataField;
 

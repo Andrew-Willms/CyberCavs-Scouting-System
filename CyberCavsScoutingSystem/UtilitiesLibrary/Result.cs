@@ -106,7 +106,7 @@ public class Success<T> : Result {
 
 public class Error : Result {
 
-	public string Message { get; init; } = "";
+	public string? Message { get; init; }
 
 	public Optional<Error> InnerError { get; init; } = Optional.NoValue;
 

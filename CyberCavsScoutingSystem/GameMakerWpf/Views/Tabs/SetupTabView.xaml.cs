@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using GameMakerWpf.AppManagement;
+using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.Tabs;
@@ -16,8 +17,8 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;
 
-	[Dependent(nameof(AppManager.GameEditor))]
-	public ReadOnlyObservableCollection<InputEditor> Inputs => GameEditor.SetupTabInputs;
+	[DependsOn(nameof(AppManager.GameEditor))]
+	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.SetupTabInputs;
 
 	private InputEditor? _SelectedInput;
 	public InputEditor? SelectedInput {

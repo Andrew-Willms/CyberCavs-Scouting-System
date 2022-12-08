@@ -6,7 +6,6 @@ using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Views;
 using UtilitiesLibrary;
-using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.WPF;
 using static GameMakerWpf.AppManagement.ISavePrompter;
 
