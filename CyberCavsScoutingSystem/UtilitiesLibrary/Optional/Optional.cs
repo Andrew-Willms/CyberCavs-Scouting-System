@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UtilitiesLibrary;
+namespace UtilitiesLibrary.Optional;
 
 
 
@@ -92,7 +92,7 @@ public class Optional<T> {
 
 	public static bool operator ==(T? left, Optional<T> right) {
 
-		return (right == left);
+		return right == left;
 	}
 
 	public static bool operator !=(T? left, Optional<T> right) {

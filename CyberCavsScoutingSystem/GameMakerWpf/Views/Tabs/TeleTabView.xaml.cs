@@ -10,6 +10,7 @@ using GameMakerWpf.Domain.Editors;
 
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Results;
 using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.Tabs;

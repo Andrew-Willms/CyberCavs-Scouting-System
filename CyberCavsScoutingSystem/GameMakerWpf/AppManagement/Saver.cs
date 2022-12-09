@@ -3,8 +3,8 @@ using System.IO;
 using GameMakerWpf.Domain.EditingData;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using UtilitiesLibrary;
-using UtilitiesLibrary.MiscExtensions;
+using UtilitiesLibrary.Optional;
+using UtilitiesLibrary.Results;
 
 namespace GameMakerWpf.AppManagement;
 

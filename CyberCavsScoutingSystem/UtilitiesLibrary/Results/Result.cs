@@ -1,8 +1,7 @@
 ﻿using System;
-using UtilitiesLibrary.MiscExtensions;
-using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Optional;
 
-namespace UtilitiesLibrary;
+namespace UtilitiesLibrary.Results;
 
 
 
@@ -26,11 +25,11 @@ public class Result<TError> where TError : Error {
 
 	private Result(Success success) {
 		Success = success.Optionalize();
-		Error = Optional.NoValue;
+		Error = Optional.Optional.NoValue;
 	}
 
 	private Result(Error error) {
-		Success = Optional.NoValue;
+		Success = Optional.Optional.NoValue;
 		Error = error.Optionalize();
 	}
 
@@ -66,11 +65,11 @@ public class Result<TValue, TError> where TError : Error {
 
 	private Result(Success<TValue> success) {
 		Success = success.Optionalize();
-		Error = Optional.NoValue;
+		Error = Optional.Optional.NoValue;
 	}
 
 	private Result(TError error) {
-		Success = Optional.NoValue;
+		Success = Optional.Optional.NoValue;
 		Error = error.Optionalize();
 	}
 
@@ -108,7 +107,7 @@ public class Error : Result {
 
 	public string? Message { get; init; }
 
-	public Optional<Error> InnerError { get; init; } = Optional.NoValue;
+	public Optional<Error> InnerError { get; init; } = Optional.Optional.NoValue;
 
 }
 

@@ -7,7 +7,7 @@ using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary;
-using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 using UtilitiesLibrary.WPF;
 

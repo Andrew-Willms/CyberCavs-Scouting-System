@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Validation.Errors;
 

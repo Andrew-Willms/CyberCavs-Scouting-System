@@ -1,4 +1,6 @@
-﻿namespace UtilitiesLibrary.Math.Numbers; 
+﻿using UtilitiesLibrary.Results;
+
+namespace UtilitiesLibrary.Math.Numbers;
 
 
 

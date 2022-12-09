@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using GameMakerWpf.AppManagement;
@@ -10,7 +9,7 @@ using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Validation;
+using UtilitiesLibrary.Results;
 using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.Tabs;

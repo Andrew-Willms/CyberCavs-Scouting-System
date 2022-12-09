@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
-using UtilitiesLibrary;
 using UtilitiesLibrary.Validation;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using GameMakerWpf.Domain.Editors;
+using UtilitiesLibrary.Optional;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace GameMakerWpf.Validation.Validators;

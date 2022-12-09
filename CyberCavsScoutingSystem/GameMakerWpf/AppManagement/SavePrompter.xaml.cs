@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
-using UtilitiesLibrary;
-using UtilitiesLibrary.MiscExtensions;
+using UtilitiesLibrary.Optional;
 
 namespace GameMakerWpf.AppManagement;
 

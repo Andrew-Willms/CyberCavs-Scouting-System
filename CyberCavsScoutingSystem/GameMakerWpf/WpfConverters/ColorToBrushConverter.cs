@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using UtilitiesLibrary;
+using UtilitiesLibrary.Optional;
 
-namespace GameMakerWpf.WpfConverters; 
+namespace GameMakerWpf.WpfConverters;
 
 
 

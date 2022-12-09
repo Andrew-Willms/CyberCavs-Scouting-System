@@ -9,6 +9,7 @@ namespace UtilitiesLibrary;
 
 
 
+//TODO replace with static list of colors desired to be possible alliance colors and move it to GameMaker.DisplayData
 public static class ColorsHelper {
 
 	private static ReadOnlyList<(string, Color)>? _DefaultColors;

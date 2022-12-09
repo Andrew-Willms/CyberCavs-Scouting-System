@@ -4,6 +4,7 @@ namespace UtilitiesLibrary;
 
 
 
+//TODO see if there are built in exceptions that fill these rolls, I think Nick Chapsas had a video on a relevant exception recently.
 public class ShouldNotReachException : Exception {
 
 	public ShouldNotReachException() { }

@@ -5,10 +5,10 @@ using System.Numerics;
 using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Math.Numbers;
-using UtilitiesLibrary.MiscExtensions;
-using UtilitiesLibrary.Validation;
-using ValidationError = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using UtilitiesLibrary.Optional;
+using UtilitiesLibrary.Results;
 using Number = UtilitiesLibrary.Math.Numbers.Number;
+using ValidationError = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
 namespace GameMakerWpf.Validation.Conversion;
 

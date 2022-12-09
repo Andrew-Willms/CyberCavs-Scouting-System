@@ -26,7 +26,6 @@ public class Event {
 	}
 
 	public void Invoke() {
-
 		Delegates.ForEach(x => x.Invoke());
 	}
 

@@ -5,6 +5,7 @@ using System.Linq;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 
 namespace UtilitiesLibrary.Validation.Inputs;
 
@@ -70,12 +71,12 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 
 
 
-public class MultiInput<TOutput, TSeverity,
+public class MultiInput<TOutput, TSeverity, 
 		TInput1, TInput2, TInput3>
 	: MultiInput<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
-	private Optional<TOutput> _OutputObject = Optional.NoValue;
+	private Optional<TOutput> _OutputObject = Optional.Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -114,7 +115,7 @@ public class MultiInput<TOutput, TSeverity,
 					InputComponent3.OutputObject.Value));
 			}
 
-			return (Optional.NoValue, ReadOnlyList.Empty);
+			return (Optional.Optional.NoValue, ReadOnlyList.Empty);
 
 		}
 	}
@@ -176,7 +177,7 @@ public class MultiInput<TOutput, TSeverity,
 	: MultiInput<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
-	private Optional<TOutput> _OutputObject = Optional.NoValue;
+	private Optional<TOutput> _OutputObject = Optional.Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field
@@ -217,7 +218,7 @@ public class MultiInput<TOutput, TSeverity,
 					InputComponent4.OutputObject.Value));
 			}
 
-			return (Optional.NoValue, ReadOnlyList.Empty);
+			return (Optional.Optional.NoValue, ReadOnlyList.Empty);
 
 		}
 	}

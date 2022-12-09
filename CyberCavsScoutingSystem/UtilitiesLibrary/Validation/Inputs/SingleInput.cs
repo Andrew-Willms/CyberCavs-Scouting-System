@@ -4,6 +4,7 @@ using System.ComponentModel;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 
 namespace UtilitiesLibrary.Validation.Inputs;
 
@@ -29,7 +30,7 @@ public class SingleInput<TOutput, TInput, TSeverity> : Input<TOutput, TSeverity>
 	where TOutput : IEquatable<TOutput>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
-	private Optional<TOutput> _OutputObject = Optional.NoValue;
+	private Optional<TOutput> _OutputObject = Optional.Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
 
 		// TODO: .Net 7.0 remove backing field

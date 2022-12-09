@@ -1,5 +1,5 @@
 ﻿using GameMakerWpf.Domain.EditingData;
-using UtilitiesLibrary;
+using UtilitiesLibrary.Results;
 
 namespace GameMakerWpf.AppManagement;
 

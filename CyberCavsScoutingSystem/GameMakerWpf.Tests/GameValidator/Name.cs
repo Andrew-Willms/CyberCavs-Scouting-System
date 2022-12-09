@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using GameMakerWpf.Validation.Data;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Validation;
 using Xunit;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Media;
 using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
