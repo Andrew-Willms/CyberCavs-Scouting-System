@@ -3,8 +3,8 @@ using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.SimpleEvent;
 using UtilitiesLibrary.Validation.Inputs;
 using Version = CCSSDomain.Models.Version;
 

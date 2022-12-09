@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
+using UtilitiesLibrary.SimpleEvent;
 
 namespace UtilitiesLibrary.Validation.Inputs;
 

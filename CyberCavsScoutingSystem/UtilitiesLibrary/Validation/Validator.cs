@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
+using UtilitiesLibrary.SimpleEvent;
 using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Validation.Errors;
 

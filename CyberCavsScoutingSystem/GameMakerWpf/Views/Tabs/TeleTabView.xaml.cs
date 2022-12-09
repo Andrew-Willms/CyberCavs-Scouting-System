@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 
 using GameMakerWpf.AppManagement;
@@ -93,7 +94,7 @@ public partial class TeleTabView : AppManagerDependent, INotifyPropertyChanged {
 				return;
 
 			default:
-				throw new ShouldMatchOtherCaseException();
+				throw new UnreachableException();
 		}
 
 	}
@@ -136,7 +137,7 @@ public partial class TeleTabView : AppManagerDependent, INotifyPropertyChanged {
 				return;
 
 			default:
-				throw new ShouldMatchOtherCaseException();
+				throw new UnreachableException();
 		}
 	}
 

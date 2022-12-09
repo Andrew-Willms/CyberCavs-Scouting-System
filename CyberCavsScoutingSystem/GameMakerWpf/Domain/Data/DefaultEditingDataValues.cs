@@ -96,7 +96,7 @@ public static class DefaultEditingDataValues {
 
 	public static void AddUniqueAlliance(this GameEditor gameEditor) {
 
-		gameEditor.Alliances.Add(AllianceGenerator.GenerateUniqueAlliance(gameEditor.Alliances.SelectIfHasValue(x => x.Name.OutputObject)));
+		gameEditor.Alliances.Add(AllianceGenerator.GenerateUniqueAlliance(gameEditor.Alliances.SelectIfHasValue(x => x.AllianceColor.OutputObject)));
 	}
 
 }

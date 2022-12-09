@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
@@ -124,7 +125,7 @@ public class AppManager : INotifyPropertyChanged {
 				return;
 
 			default:
-				throw new ShouldMatchOtherCaseException();
+				throw new UnreachableException();
 		}
 	}
 
@@ -145,7 +146,7 @@ public class AppManager : INotifyPropertyChanged {
 				return;
 
 			default:
-				throw new ShouldMatchOtherCaseException();
+				throw new UnreachableException();
 		}
 
 		SaveGameProject();
@@ -178,7 +179,7 @@ public class AppManager : INotifyPropertyChanged {
 				return;
 
 			default:
-				throw new ShouldMatchOtherCaseException();
+				throw new UnreachableException();
 		}
 	}
 

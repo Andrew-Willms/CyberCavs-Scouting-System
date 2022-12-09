@@ -3,6 +3,7 @@ using System;
 using UtilitiesLibrary.Validation.Delegates;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.SimpleEvent;
 
 namespace UtilitiesLibrary.Validation.Inputs;
 

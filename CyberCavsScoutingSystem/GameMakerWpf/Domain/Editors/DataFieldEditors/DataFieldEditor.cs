@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using CCSSDomain;
 using GameMakerWpf.Domain.Data;
@@ -50,7 +51,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 			TextDataFieldEditingData => new TextDataFieldEditor(),
 			SelectionDataFieldEditingData selectionDataField => new SelectionDataFieldEditor(GameEditor, selectionDataField),
 			IntegerDataFieldEditingData integerDataField => new IntegerDataFieldEditor(GameEditor, integerDataField),
-			_ => throw new ShouldMatchOtherCaseException()
+			_ => throw new UnreachableException()
 		};
 
 		Name = new SingleInputCreator<string, string, ErrorSeverity> {
@@ -87,7 +88,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 				MaxValue = integerDataFieldEditor.MaxValue.InputObject
 			},
 
-			_ => throw new ShouldMatchOtherCaseException()
+			_ => throw new UnreachableException()
 		};
 	}
 
@@ -97,7 +98,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 			DataFieldType.Text => new TextDataFieldEditor(),
 			DataFieldType.Selection => new SelectionDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultSelectionDataFieldEditingData),
 			DataFieldType.Integer => new IntegerDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultIntegerDataFieldEditingData),
-			_ => throw new ShouldMatchOtherCaseException()
+			_ => throw new UnreachableException()
 		};
 
 		GameEditor.DataFieldTypeChanged.Invoke();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using UtilitiesLibrary;
@@ -225,7 +226,7 @@ public static class StringConversion {
 
 			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
-			_ => throw new ShouldMatchOtherCaseException()
+			_ => throw new UnreachableException()
 		};
 	} 
 
@@ -251,7 +252,7 @@ public static class StringConversion {
 
 			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
-			_ => throw new ShouldMatchOtherCaseException()
+			_ => throw new UnreachableException()
 		};
 	}
 
@@ -277,7 +278,7 @@ public static class StringConversion {
 
 			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
-			_ => throw new ShouldMatchOtherCaseException()
+			_ => throw new UnreachableException()
 		};
 	}
 

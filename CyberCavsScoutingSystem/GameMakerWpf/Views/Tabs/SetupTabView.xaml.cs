@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
@@ -76,7 +77,7 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 				return;
 
 			default:
-				throw new ShouldMatchOtherCaseException();
+				throw new UnreachableException();
 		}
 	}
 

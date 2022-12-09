@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
+using UtilitiesLibrary.SimpleEvent;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors.DataFieldEditors;

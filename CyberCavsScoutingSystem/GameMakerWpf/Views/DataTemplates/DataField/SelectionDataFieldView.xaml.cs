@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using CCSSDomain;
 using GameMakerWpf.AppManagement;
@@ -81,7 +82,7 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 				return;
 
 			default:
-				throw new ShouldMatchOtherCaseException();
+				throw new UnreachableException();
 		}
 	}
 

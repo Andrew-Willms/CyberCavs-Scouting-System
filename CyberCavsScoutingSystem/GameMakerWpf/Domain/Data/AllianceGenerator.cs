@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using GameMakerWpf.Domain.EditingData;
-using UtilitiesLibrary;
 
 namespace GameMakerWpf.Domain.Data;
 
@@ -10,43 +10,226 @@ namespace GameMakerWpf.Domain.Data;
 
 public static class AllianceGenerator {
 
-	private const int NamesTriedUntilDuplicateAllianceNameAccepted = 10;
+	private static readonly Random Random = new();
 
-	private static int RandomizedColorsUsed;
+	private static readonly (string name, Color color)[] PossibleAllianceColors =  {
+		("Almond", Colors.BlanchedAlmond),
+		("Aqua", Colors.Aqua),
+		("Aquamarine", Colors.Aquamarine),
+		("Azure", Colors.Azure),
+		("Beige", Colors.Beige),
+		("Bisque", Colors.Bisque),
+		("Black", Colors.Black),
+		("Blue", Colors.Blue),
+		("Brown", Colors.SaddleBrown),
+		("Chartreuse", Colors.Chartreuse),
+		("Chocolate", Colors.Chocolate),
+		("Coral", Colors.Coral),
+		("Cornflower", Colors.CornflowerBlue),
+		("Crimson", Colors.Crimson),
+		("Cyan", Colors.Cyan),
+		("Dodger", Colors.DodgerBlue),
+		("Firebrick", Colors.Firebrick),
+		("Floral", Colors.FloralWhite),
+		("Forest", Colors.ForestGreen),
+		("Fuchsia", Colors.Fuchsia),
+		("Ghost", Colors.GhostWhite),
+		("Gold", Colors.Gold),
+		("Goldenrod", Colors.Goldenrod),
+		("Gray", Colors.Gray),
+		("Green", Colors.Green),
+		("Honeydew", Colors.Honeydew),
+		("Indigo", Colors.Indigo),
+		("Ivory", Colors.Ivory),
+		("Khaki", Colors.Khaki),
+		("Lace", Colors.OldLace),
+		("Lavender", Colors.Lavender),
+		("Lawn", Colors.LawnGreen),
+		("Lemon", Colors.LemonChiffon),
+		("Lime", Colors.Lime),
+		("Magenta", Colors.Magenta),
+		("Maroon", Colors.Maroon),
+		("Midnight", Colors.MidnightBlue),
+		("Navy", Colors.Navy),
+		("Olive", Colors.Olive),
+		("Orange", Colors.Orange),
+		("Orchid", Colors.Orchid),
+		("Papaya", Colors.PapayaWhip),
+		("Peach", Colors.PeachPuff),
+		("Pink", Colors.HotPink),
+		("Plum", Colors.Plum),
+		("Purple", Colors.Purple),
+		("Red", Colors.Red),
+		("Rose", Colors.MistyRose),
+		("Royal", Colors.RoyalBlue),
+		("Salmon", Colors.Salmon),
+		("Sand", Colors.SandyBrown),
+		("Seashell", Colors.SeaShell),
+		("Sienna", Colors.Sienna),
+		("Silver", Colors.Silver),
+		("Sky", Colors.SkyBlue),
+		("Slate", Colors.SlateGray),
+		("Smoke", Colors.WhiteSmoke),
+		("Spring", Colors.SpringGreen),
+		("Steel", Colors.SteelBlue),
+		("Tan", Colors.Tan),
+		("Teal", Colors.Teal),
+		("Thistle", Colors.Thistle),
+		("Tomato", Colors.Tomato),
+		("Turquoise", Colors.Turquoise),
+		("Violet", Colors.Violet),
+		("Wheat", Colors.Wheat),
+		("White", Colors.White),
+		("Wood", Colors.BurlyWood),
+		("Yellow", Colors.Yellow)
+	};
 
-	private static readonly List<(string, Color)> RandomizedColors = ColorsHelper.DefaultColorsRandomized();
+	public static AllianceEditingData GenerateUniqueAlliance(IEnumerable<Color> allianceColors) {
 
-	public static AllianceEditingData GenerateUniqueAlliance(IEnumerable<string> allianceNames) {
+		(string name, Color color)[] unusedColors = PossibleAllianceColors.ExceptBy(allianceColors, tuple => tuple.color).ToArray();
 
-		HashSet<string> allianceNamesHashed = allianceNames.ToHashSet();
-
-		int namesTried = 0;
-		(string colorName, Color color) colorNamePair;
-
-		do {
-
-			colorNamePair = RandomizedColors[RandomizedColorsUsed];
-			RandomizedColorsUsed++;
-			namesTried++;
-
-			if (namesTried == NamesTriedUntilDuplicateAllianceNameAccepted) {
-				break;
-			}
-
-			if (RandomizedColorsUsed == RandomizedColors.Count) {
-				RandomizedColorsUsed = 0;
-			}
-
-		} while (allianceNamesHashed.Contains($"Alliance {colorNamePair.colorName}"));
-
+		(string name, Color color) colorNamePair = unusedColors[Random.Next(unusedColors.Length)];
 
 		return new() {
-			Name = $"{colorNamePair.colorName} Alliance",
+			Name = $"{colorNamePair.name} Alliance",
 			RedColorValue = colorNamePair.color.R.ToString(),
 			GreenColorValue = colorNamePair.color.G.ToString(),
 			BlueColorValue = colorNamePair.color.B.ToString(),
-
 		};
 	}
+
+	//public static Color[] AllColors = {
+	//	Colors.Orchid,
+	//	Colors.Orange,
+	//	Colors.Olive,
+	//	Colors.OldLace,
+	//	Colors.Navy,
+	//	Colors.NavajoWhite,
+	//	Colors.Moccasin,
+	//	Colors.MistyRose,
+	//	Colors.MidnightBlue,
+	//	Colors.MediumVioletRed,
+	//	Colors.MediumTurquoise,
+	//	Colors.MediumSpringGreen,
+	//	Colors.MediumSlateBlue,
+	//	Colors.LightSkyBlue,
+	//	Colors.LightSlateGray,
+	//	Colors.LightSteelBlue,
+	//	Colors.LightYellow,
+	//	Colors.Lime,
+	//	Colors.Maroon,
+	//	Colors.MediumAquamarine,
+	//	Colors.MediumBlue,
+	//	Colors.MediumOrchid,
+	//	Colors.MediumPurple,
+	//	Colors.MediumSeaGreen,
+	//	Colors.Magenta,
+	//	Colors.PaleTurquoise,
+	//	Colors.PaleVioletRed,
+	//	Colors.PapayaWhip,
+	//	Colors.SlateGray,
+	//	Colors.SpringGreen,
+	//	Colors.SteelBlue,
+	//	Colors.Tan,
+	//	Colors.Teal,
+	//	Colors.SlateBlue,
+	//	Colors.Thistle,
+	//	Colors.Turquoise,
+	//	Colors.Violet,
+	//	Colors.Wheat,
+	//	Colors.White,
+	//	Colors.WhiteSmoke,
+	//	Colors.Tomato,
+	//	Colors.LightSeaGreen,
+	//	Colors.SkyBlue,
+	//	Colors.Sienna,
+	//	Colors.PeachPuff,
+	//	Colors.Peru,
+	//	Colors.Pink,
+	//	Colors.Plum,
+	//	Colors.PowderBlue,
+	//	Colors.Purple,
+	//	Colors.Silver,
+	//	Colors.Red,
+	//	Colors.RoyalBlue,
+	//	Colors.SaddleBrown,
+	//	Colors.Salmon,
+	//	Colors.SandyBrown,
+	//	Colors.SeaGreen,
+	//	Colors.SeaShell,
+	//	Colors.RosyBrown,
+	//	Colors.Yellow,
+	//	Colors.LightSalmon,
+	//	Colors.LightGreen,
+	//	Colors.DarkRed,
+	//	Colors.DarkOrchid,
+	//	Colors.DarkOrange,
+	//	Colors.DarkOliveGreen,
+	//	Colors.DarkMagenta,
+	//	Colors.DarkKhaki,
+	//	Colors.DarkGreen,
+	//	Colors.DarkGray,
+	//	Colors.DarkGoldenrod,
+	//	Colors.DarkCyan,
+	//	Colors.DarkBlue,
+	//	Colors.Cyan,
+	//	Colors.Crimson,
+	//	Colors.Cornsilk,
+	//	Colors.CornflowerBlue,
+	//	Colors.Coral,
+	//	Colors.Chocolate,
+	//	Colors.AntiqueWhite,
+	//	Colors.Aqua,
+	//	Colors.Aquamarine,
+	//	Colors.Azure,
+	//	Colors.Beige,
+	//	Colors.Bisque,
+	//	Colors.DarkSalmon,
+	//	Colors.Black,
+	//	Colors.Blue,
+	//	Colors.BlueViolet,
+	//	Colors.Brown,
+	//	Colors.BurlyWood,
+	//	Colors.CadetBlue,
+	//	Colors.Chartreuse,
+	//	Colors.BlanchedAlmond,
+	//	Colors.DarkSeaGreen,
+	//	Colors.DarkSlateBlue,
+	//	Colors.DarkSlateGray,
+	//	Colors.HotPink,
+	//	Colors.IndianRed,
+	//	Colors.Indigo,
+	//	Colors.Ivory,
+	//	Colors.Khaki,
+	//	Colors.Lavender,
+	//	Colors.Honeydew,
+	//	Colors.LavenderBlush,
+	//	Colors.LemonChiffon,
+	//	Colors.LightBlue,
+	//	Colors.LightCoral,
+	//	Colors.LightCyan,
+	//	Colors.LightGoldenrodYellow,
+	//	Colors.LightGray,
+	//	Colors.LawnGreen,
+	//	Colors.LightPink,
+	//	Colors.GreenYellow,
+	//	Colors.Gray,
+	//	Colors.DarkTurquoise,
+	//	Colors.DarkViolet,
+	//	Colors.DeepPink,
+	//	Colors.DeepSkyBlue,
+	//	Colors.DimGray,
+	//	Colors.DodgerBlue,
+	//	Colors.Green,
+	//	Colors.Firebrick,
+	//	Colors.ForestGreen,
+	//	Colors.Fuchsia,
+	//	Colors.Gainsboro,
+	//	Colors.GhostWhite,
+	//	Colors.Gold,
+	//	Colors.Goldenrod,
+	//	Colors.FloralWhite,
+	//	Colors.YellowGreen,
+	//};
 
 }

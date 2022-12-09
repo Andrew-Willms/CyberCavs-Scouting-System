@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using UtilitiesLibrary.Collections;
@@ -215,7 +216,7 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 			}
 		}
 
-		throw new ShouldNotReachException(
+		throw new UnreachableException(
 			"Since Equality is short-circuit it should not be possible that the two values are the same and execution should not reach this point.");
 	}
 

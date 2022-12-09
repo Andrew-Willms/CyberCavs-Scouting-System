@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using UtilitiesLibrary.Optional;
 
 namespace UtilitiesLibrary.Results;
@@ -20,7 +21,7 @@ public class Result<TError> where TError : Error {
 			return Error.Value;
 		}
 
-		throw new ShouldNotReachException();
+		throw new UnreachableException();
 	}
 
 	private Result(Success success) {
@@ -60,7 +61,7 @@ public class Result<TValue, TError> where TError : Error {
 			return Error.Value;
 		}
 
-		throw new ShouldNotReachException();
+		throw new UnreachableException();
 	}
 
 	private Result(Success<TValue> success) {
