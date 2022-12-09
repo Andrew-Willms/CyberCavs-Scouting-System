@@ -97,7 +97,7 @@ public static class AllianceValidationData {
 		private const int SimilarityWarningThreshold = 10;
 		private const int SimilarityAdvisoryThreshold = 20;
 
-		public static Optional<Error> GetColorSimilarityError(int colorDifference, string otherAllianceName) {
+		public static Optional<Error> GetColorSimilarityError(double colorDifference, string otherAllianceName) {
 
 			return colorDifference switch {
 				<= SimilarityErrorThreshold => new Error("Identical Color", ErrorSeverity.Error,

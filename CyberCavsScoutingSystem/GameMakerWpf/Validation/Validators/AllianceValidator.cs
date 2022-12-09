@@ -99,7 +99,7 @@ public static class AllianceValidator {
 				continue;
 			}
 
-			int colorDifference = color.Difference(allianceColorOption.Value);
+			double colorDifference = color.Difference(allianceColorOption.Value);
 
 			Optional<Error> validationError = AllianceValidationData.Color.GetColorSimilarityError(colorDifference, otherAlliance.Name.InputObject);
 
