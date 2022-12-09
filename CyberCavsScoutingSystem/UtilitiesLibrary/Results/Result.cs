@@ -9,7 +9,7 @@ namespace UtilitiesLibrary.Results;
 public class Result<TError> where TError : Error {
 
 	private Optional<Success> Success { get; }
-	private Optional<Error> Error { get; }
+	private Optional<TError> Error { get; }
 
 	public Result Resolve() {
 
@@ -29,7 +29,7 @@ public class Result<TError> where TError : Error {
 		Error = Optional.Optional.NoValue;
 	}
 
-	private Result(Error error) {
+	private Result(TError error) {
 		Success = Optional.Optional.NoValue;
 		Error = error.Optionalize();
 	}
