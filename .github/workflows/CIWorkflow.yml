@@ -37,3 +37,5 @@ jobs:
       run: dotnet build CyberCavsScoutingSystem.sln --no-restore
     - name: Test GameMakerWpf
       run: dotnet test GameMakerWpf.Tests/GameMakerWpf.Tests.csproj --no-build --verbosity normal
+    - name: Test UtilitiesLibrary
+      run: dotnet test UtilitiesLibrary.Tests/UtilitiesLibrary.Tests.csproj --no-build --verbosity normal
