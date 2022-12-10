@@ -1,14 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-
 using CCSSDomain;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
-using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
@@ -70,7 +68,7 @@ public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChan
 		Result<ListRemoveError> result = Alliances.Remove(SelectedAlliance);
 
 		switch (result.Resolve()) {
-			
+
 			case Success:
 				return;
 

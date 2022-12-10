@@ -32,7 +32,6 @@ public class Name {
 			Assert.Empty(errors);
 			Assert.Equal(optional.Value, validName);
 		}
-
 	}
 
 	public class Inverter {

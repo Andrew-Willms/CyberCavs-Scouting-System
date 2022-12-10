@@ -6,7 +6,6 @@ using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Views;
-using UtilitiesLibrary;
 using UtilitiesLibrary.Results;
 using UtilitiesLibrary.WPF;
 using static GameMakerWpf.AppManagement.ISavePrompter;
@@ -15,7 +14,7 @@ namespace GameMakerWpf.AppManagement;
 
 
 
-public abstract class AppManagerDependent: DependentControl<AppManager> {
+public abstract class AppManagerDependent : DependentControl<AppManager> {
 
 	protected override AppManager SingletonGetter => App.Manager;
 
@@ -134,7 +133,7 @@ public class AppManager : INotifyPropertyChanged {
 		Result<ISaver.SetSaveLocationError> result = Saver.SetSaveLocation();
 
 		switch (result.Resolve()) {
-			
+
 			case Success:
 				break;
 
@@ -169,7 +168,7 @@ public class AppManager : INotifyPropertyChanged {
 
 			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.Aborted }:
 				return;
-				
+
 			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.SaveLocationInaccessible }:
 				ErrorPresenter.DisplayError(ErrorData.OpenError.SaveLocationInaccessibleCaption, ErrorData.OpenError.SaveLocationInaccessibleMessage);
 				return;
