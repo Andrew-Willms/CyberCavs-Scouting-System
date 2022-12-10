@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -7,7 +6,7 @@ using CCSSDomain;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
-using UtilitiesLibrary;
+using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 using UtilitiesLibrary.WPF;
@@ -26,7 +25,7 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 	private SelectionDataFieldEditor? Editor => App.Manager.SelectedDataField?.DataFieldTypeEditor as SelectionDataFieldEditor;
 	
 	[DependsOn(nameof(AppManager.GameEditor))]
-	public ReadOnlyObservableCollection<SingleInput<string, string, ErrorSeverity>>? Options => Editor?.Options;
+	public ObservableList<SingleInput<string, string, ErrorSeverity>, string>? Options => Editor?.Options;
 
 	private SingleInput<string, string, ErrorSeverity>? _SelectedOption;
 	public SingleInput<string, string, ErrorSeverity>? SelectedOption {
@@ -53,11 +52,11 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 
 	private void AddButton_Click(object sender, RoutedEventArgs e) {
 
-		if (Editor is null) {
+		if (Options is null) {
 			throw new InvalidOperationException($"You should not be able to remove an option when the {nameof(Editor)} is null.");
 		}
 
-		Editor.AddOption("Test");
+		Options.Add("Test");
 	}
 
 	private void RemoveButton_Click(object sender, RoutedEventArgs e) {
@@ -66,18 +65,23 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 			throw new InvalidOperationException("You should not be able to press the remove button while there is no Option selected.");
 		}
 
-		if (Editor is null) {
+		if (Options is null) {
 			throw new InvalidOperationException($"You should not be able to remove an option when the {nameof(Editor)} is null.");
 		}
 
-		Result<SelectionDataFieldEditor.RemoveOptionError> result = Editor.RemoveOption(SelectedOption);
+		Result<ListRemoveError> result = Options.Remove(SelectedOption);
 
 		switch (result.Resolve()) {
 			
 			case Success:
 				return;
 
-			case SelectionDataFieldEditor.RemoveOptionError { ErrorType: SelectionDataFieldEditor.RemoveOptionError.Types.OptionNotFound }:
+			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
+				ErrorPresenter.DisplayError(ErrorData.RemoveOptionError.OptionNotFoundCaption, ErrorData.RemoveOptionError.OptionNotFoundMessage);
+				return;
+
+			// TODO: make new error message for this case
+			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
 				ErrorPresenter.DisplayError(ErrorData.RemoveOptionError.OptionNotFoundCaption, ErrorData.RemoveOptionError.OptionNotFoundMessage);
 				return;
 
