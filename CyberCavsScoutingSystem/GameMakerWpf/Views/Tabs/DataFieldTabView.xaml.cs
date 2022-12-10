@@ -8,7 +8,6 @@ using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
-using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 using UtilitiesLibrary.WPF;

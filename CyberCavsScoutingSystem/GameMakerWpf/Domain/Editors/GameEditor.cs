@@ -1,12 +1,15 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using CCSSDomain;
+using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Results;
 using UtilitiesLibrary.SimpleEvent;
 using UtilitiesLibrary.Validation.Inputs;
-using Version = CCSSDomain.Models.Version;
+using Version = CCSSDomain.GameSpecification.Version;
 
 namespace GameMakerWpf.Domain.Editors;
 
@@ -52,13 +55,13 @@ public class GameEditor {
 			Adder = allianceEditingData => new(this, allianceEditingData),
 			OnAdd = allianceEditor => {
 				AllianceNameChanged.SubscribeTo(allianceEditor.Name.OutputObjectChanged);
-				AllianceColorChanged.SubscribeTo(allianceEditor.AllianceColor.OutputObjectChanged);
+				AllianceColorChanged.SubscribeTo(allianceEditor.Color.OutputObjectChanged);
 				AllianceNameChanged.Invoke();
 				AllianceColorChanged.Invoke();
 			},
 			OnRemove = allianceEditor => {
 				AllianceNameChanged.UnsubscribeFrom(allianceEditor.Name.OutputObjectChanged);
-				AllianceColorChanged.UnsubscribeFrom(allianceEditor.AllianceColor.OutputObjectChanged);
+				AllianceColorChanged.UnsubscribeFrom(allianceEditor.Color.OutputObjectChanged);
 				AllianceNameChanged.Invoke();
 				AllianceColorChanged.Invoke();
 			}
@@ -207,6 +210,8 @@ public class GameEditor {
 		AnythingChanged.SubscribeTo(DataFieldTypeChanged);
 	}
 
+
+
 	public GameEditingData ToEditingData() {
 
 		return new() {
@@ -234,6 +239,49 @@ public class GameEditor {
 			TeleButtons = TeleButtons.Select(x => x.ToEditingData()).ToReadOnly(),
 		};
 
+	}
+
+	public bool IsValid => Name.IsValid && 
+	                       Year.IsValid && 
+	                       Description.IsValid &&
+	                       Version.IsValid &&
+	                       RobotsPerAlliance.IsValid &&
+	                       AlliancesPerMatch.IsValid &&
+	                       Alliances.All(x => x.IsValid) &&
+	                       DataFields.All(x => x.IsValid) &&
+	                       SetupTabInputs.All(x => x.IsValid) &&
+	                       AutoTabInputs.All(x => x.IsValid) &&
+	                       TeleTabInputs.All(x => x.IsValid) &&
+	                       EndgameTabInputs.All(x => x.IsValid) &&
+	                       AutoButtons.All(x => x.IsValid) &&
+	                       TeleButtons.All(x => x.IsValid);
+
+	public Result<Game, Error> ToGameSpecification() {
+
+		if (!IsValid) {
+			return new Error();
+		}
+
+		return new Game {
+
+			Name = Name.OutputObject.Value,
+			Year = Year.OutputObject.Value,
+			Description = Description.OutputObject.Value,
+			Version = Version.OutputObject.Value,
+			RobotsPerAlliance = RobotsPerAlliance.OutputObject.Value,
+			AlliancesPerMatch = AlliancesPerMatch.OutputObject.Value,
+
+			Alliances = Alliances.Select(x => (x.ToGameSpecification().Resolve() as Success<Alliance>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+			DataFields = DataFields.Select(x => (x.ToGameSpecification().Resolve() as Success<DataField>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+
+			SetupTabInputs = SetupTabInputs.Select(x => (x.ToGameSpecification().Resolve() as Success<Input>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+			AutoTabInputs = AutoTabInputs.Select(x => (x.ToGameSpecification().Resolve() as Success<Input>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+			TeleTabInputs = TeleTabInputs.Select(x => (x.ToGameSpecification().Resolve() as Success<Input>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+			EndgameTabInputs = EndgameTabInputs.Select(x => (x.ToGameSpecification().Resolve() as Success<Input>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+
+			AutoButtons = AutoButtons.Select(x => (x.ToGameSpecification().Resolve() as Success<Button>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+			TeleButtons = TeleButtons.Select(x => (x.ToGameSpecification().Resolve() as Success<Button>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+		};
 	}
 
 }

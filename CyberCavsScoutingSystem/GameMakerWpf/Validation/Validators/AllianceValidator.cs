@@ -93,7 +93,7 @@ public static class AllianceValidator {
 
 		foreach (AllianceEditor otherAlliance in otherAlliances) {
 
-			Optional<Color> allianceColorOption = otherAlliance.AllianceColor.OutputObject;
+			Optional<Color> allianceColorOption = otherAlliance.Color.OutputObject;
 
 			if (allianceColorOption.HasValue == false) {
 				continue;

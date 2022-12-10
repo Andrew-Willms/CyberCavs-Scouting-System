@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using CCSSDomain;
-using CCSSDomain.Models;
+using CCSSDomain.GameSpecification;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary.Validation.Inputs;

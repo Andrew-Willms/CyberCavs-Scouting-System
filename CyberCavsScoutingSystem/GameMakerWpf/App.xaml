@@ -7,7 +7,7 @@
              xmlns:wpf="clr-namespace:UtilitiesLibrary.WPF;assembly=UtilitiesLibrary"
              xmlns:wpfConverters="clr-namespace:GameMakerWpf.WpfConverters"
              xmlns:ccssDomain="clr-namespace:CCSSDomain"
-             xmlns:models="clr-namespace:CCSSDomain.Models;assembly=CCSSDomain"
+             xmlns:gameSpecification="clr-namespace:CCSSDomain.GameSpecification;assembly=CCSSDomain"
              Startup="ApplicationStartup">
 	<Application.Resources>
 
@@ -92,7 +92,7 @@
 
 		<Style x:Key="MultiStringInputBorderStyle" TargetType="Border">
 			<d:Style.DataContext>
-                <d:DesignInstance Type="{wpf:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T1=models:Version, T2=ccssDomain:ErrorSeverity}"/>
+                <d:DesignInstance Type="{wpf:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T1=gameSpecification:Version, T2=ccssDomain:ErrorSeverity}"/>
                 <!--<d:DesignInstance Type="wpfUtilities:MultiStringInput, IsDesignTimeCreatable=True"/>-->
 			</d:Style.DataContext>
 

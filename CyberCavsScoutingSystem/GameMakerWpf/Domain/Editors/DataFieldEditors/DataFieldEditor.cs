@@ -3,13 +3,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using CCSSDomain;
+using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
-using static CCSSDomain.Models.DataField;
+using static CCSSDomain.GameSpecification.DataField;
 
 namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
@@ -65,33 +66,6 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		Name.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
 
-	public DataFieldEditingData ToEditingData() {
-
-		return DataFieldTypeEditor switch {
-
-			TextDataFieldEditor => new TextDataFieldEditingData() {
-				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Text
-			},
-
-			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldEditingData() {
-				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Selection,
-				OptionNames = selectionDataFieldEditor.Options.Select(x => x.InputObject).ToReadOnly()
-			},
-
-			IntegerDataFieldEditor integerDataFieldEditor => new IntegerDataFieldEditingData() {
-				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Integer,
-				InitialValue = integerDataFieldEditor.InitialValue.InputObject,
-				MinValue = integerDataFieldEditor.MinValue.InputObject,
-				MaxValue = integerDataFieldEditor.MaxValue.InputObject
-			},
-
-			_ => throw new UnreachableException()
-		};
-	}
-
 	private void ChangeDataFieldType(DataFieldType dataFieldType) {
 
 		DataFieldTypeEditor = dataFieldType switch {
@@ -110,7 +84,82 @@ public class DataFieldEditor : INotifyPropertyChanged {
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	private void OnPropertyChanged(string propertyName) {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		PropertyChanged?.Invoke(this, new(propertyName));
+	}
+
+
+
+	public DataFieldEditingData ToEditingData() {
+
+		return DataFieldTypeEditor switch {
+
+			TextDataFieldEditor => new TextDataFieldEditingData {
+				Name = Name.InputObject,
+				DataFieldType = DataFieldType.Text
+			},
+
+			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldEditingData {
+				Name = Name.InputObject,
+				DataFieldType = DataFieldType.Selection,
+				OptionNames = selectionDataFieldEditor.Options.Select(x => x.InputObject).ToReadOnly()
+			},
+
+			IntegerDataFieldEditor integerDataFieldEditor => new IntegerDataFieldEditingData {
+				Name = Name.InputObject,
+				DataFieldType = DataFieldType.Integer,
+				InitialValue = integerDataFieldEditor.InitialValue.InputObject,
+				MinValue = integerDataFieldEditor.MinValue.InputObject,
+				MaxValue = integerDataFieldEditor.MaxValue.InputObject
+			},
+
+			_ => throw new UnreachableException()
+		};
+	}
+
+	public bool IsValid {
+		get {
+			return Name.IsValid && DataFieldTypeEditor switch {
+
+				TextDataFieldEditor => true,
+
+				SelectionDataFieldEditor selectionDataFieldEditor => selectionDataFieldEditor.Options.All(x => x.IsValid),
+
+				IntegerDataFieldEditor integerDataFieldEditor => integerDataFieldEditor.InitialValue.IsValid &&
+				                                                 integerDataFieldEditor.MinValue.IsValid &&
+				                                                 integerDataFieldEditor.MaxValue.IsValid,
+
+				_ => throw new UnreachableException()
+			};
+
+		}
+	}
+
+	public Result<DataField, Error> ToGameSpecification() {
+
+		if (!IsValid) {
+			return new Error();
+		}
+
+		return DataFieldTypeEditor switch {
+
+			TextDataFieldEditor => new TextDataField {
+				Name = Name.InputObject,
+			},
+
+			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataField {
+				Name = Name.InputObject,
+				OptionNames = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
+			},
+
+			IntegerDataFieldEditor integerDataFieldEditor => new IntegerDataField {
+				Name = Name.InputObject,
+				InitialValue = integerDataFieldEditor.InitialValue.OutputObject.Value,
+				MinValue = integerDataFieldEditor.MinValue.OutputObject.Value,
+				MaxValue = integerDataFieldEditor.MaxValue.OutputObject.Value
+			},
+
+			_ => throw new UnreachableException()
+		};
 	}
 
 }

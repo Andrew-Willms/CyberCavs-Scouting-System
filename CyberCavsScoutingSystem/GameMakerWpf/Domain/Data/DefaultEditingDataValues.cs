@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CCSSDomain.Models;
+using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary.Collections;
@@ -62,7 +62,7 @@ public static class DefaultEditingDataValues {
 
 	public static readonly InputEditingData DefaultInputEditingData = new() {
 		DataFieldName = "",
-		InputText = ""
+		Label = ""
 	};
 
 
@@ -96,7 +96,7 @@ public static class DefaultEditingDataValues {
 
 	public static void AddUniqueAlliance(this GameEditor gameEditor) {
 
-		gameEditor.Alliances.Add(AllianceGenerator.GenerateUniqueAlliance(gameEditor.Alliances.SelectIfHasValue(x => x.AllianceColor.OutputObject)));
+		gameEditor.Alliances.Add(AllianceGenerator.GenerateUniqueAlliance(gameEditor.Alliances.SelectIfHasValue(x => x.Color.OutputObject)));
 	}
 
 }

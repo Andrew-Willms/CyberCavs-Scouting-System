@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Windows.Media;
 using CCSSDomain;
+using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
+using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors;
@@ -15,7 +17,7 @@ public class AllianceEditor {
 
 	public SingleInput<string, string, ErrorSeverity> Name { get; }
 
-	public MultiInput<Color, ErrorSeverity, byte, byte, byte> AllianceColor { get; }
+	public MultiInput<Color, ErrorSeverity, byte, byte, byte> Color { get; }
 	public SingleInput<byte, string, ErrorSeverity> RedColorValue { get; }
 	public SingleInput<byte, string, ErrorSeverity> GreenColorValue { get; }
 	public SingleInput<byte, string, ErrorSeverity> BlueColorValue { get; }
@@ -53,7 +55,7 @@ public class AllianceEditor {
 			InitialInput = initialValues.BlueColorValue
 		}.CreateSingleInput();
 
-		AllianceColor = new MultiInputCreator<Color, ErrorSeverity, byte, byte, byte> { 
+		Color = new MultiInputCreator<Color, ErrorSeverity, byte, byte, byte> { 
 			Converter = AllianceValidator.ColorConverter, 
 			Inverter = AllianceValidator.ColorInverter,
 			InputComponent1 = RedColorValue,
@@ -64,11 +66,13 @@ public class AllianceEditor {
 		.CreateMultiInput();
 
 		Name.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
-		AllianceColor.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		Color.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 		RedColorValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 		GreenColorValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 		BlueColorValue.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
+
+
 
 	public AllianceEditingData ToEditingData() {
 
@@ -77,6 +81,20 @@ public class AllianceEditor {
 			RedColorValue = RedColorValue.InputObject,
 			GreenColorValue = GreenColorValue.InputObject,
 			BlueColorValue = BlueColorValue.InputObject
+		};
+	}
+
+	public bool IsValid => Name.IsValid && Color.IsValid;
+
+	public Result<Alliance, Error> ToGameSpecification() {
+
+		if (!IsValid) {
+			return new Error();
+		}
+
+		return new Alliance {
+			Name = Name.OutputObject.Value,
+			Color = Color.OutputObject.Value
 		};
 	}
 

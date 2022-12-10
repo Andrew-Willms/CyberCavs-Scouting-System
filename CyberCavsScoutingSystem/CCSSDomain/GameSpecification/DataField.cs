@@ -1,6 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using UtilitiesLibrary.Collections;
 
-namespace CCSSDomain.Models;
+namespace CCSSDomain.GameSpecification;
 
 
 
@@ -20,7 +20,7 @@ public class TextDataField : DataField { }
 
 public class SelectionDataField : DataField {
 
-	public required ReadOnlyCollection<string> OptionNames { get; init; }
+	public required ReadOnlyList<string> OptionNames { get; init; }
 
 }
 

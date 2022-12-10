@@ -27,7 +27,7 @@
                  Width="Auto"
                  Grid.Column="0"/>
 
-        <Border DataContext="{Binding Path=AllianceColor}"
+        <Border DataContext="{Binding Path=Color}"
                 Style="{StaticResource MultiStringInputBorderStyle}"
                 BorderThickness="1,1,1,1"
                 Grid.Column="1">

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using CCSSDomain;
+using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
+using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors; 
@@ -15,7 +17,7 @@ public class InputEditor {
 
 	public SingleInput<string, string, ErrorSeverity> DataFieldName { get; }
 
-	public SingleInput<string, string, ErrorSeverity> InputText { get; }
+	public SingleInput<string, string, ErrorSeverity> Label { get; }
 
 	public InputEditor(GameEditor gameEditor, InputEditingData initialValues) {
 
@@ -29,22 +31,40 @@ public class InputEditor {
 			true, GameEditor.DataFieldNameChanged, GameEditor.DataFieldTypeChanged)
 		.CreateSingleInput();
 
-		InputText = new SingleInputCreator<string, string, ErrorSeverity> { 
+		Label = new SingleInputCreator<string, string, ErrorSeverity> { 
 			Converter = InputValidators.InputTextConverter,
 			Inverter = InputValidators.InputTextInverter,
-			InitialInput = initialValues.InputText
+			InitialInput = initialValues.Label
 		}.AddValidationRule(InputValidators.InputTextValidator_Length)
 		.CreateSingleInput();
 
 		DataFieldName.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
-		InputText.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
+		Label.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
+
+
 
 	public InputEditingData ToEditingData() {
 
 		return new() {
 			DataFieldName = DataFieldName.InputObject,
-			InputText = InputText.InputObject
+			Label = Label.InputObject
+		};
+	}
+
+
+
+	public bool IsValid => DataFieldName.IsValid && Label.IsValid;
+
+	public Result<Input, Error> ToGameSpecification() {
+
+		if (!IsValid) {
+			return new Error();
+		}
+
+		return new Input() {
+			DataFieldName = DataFieldName.OutputObject.Value,
+			Label = Label.OutputObject.Value
 		};
 	}
 

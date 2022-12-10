@@ -24,7 +24,7 @@
                  Width="Auto"
                  Grid.Column="0"/>
 
-        <TextBox DataContext="{Binding InputText}"
+        <TextBox DataContext="{Binding Label}"
                  Style="{StaticResource StringInputStyle}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"

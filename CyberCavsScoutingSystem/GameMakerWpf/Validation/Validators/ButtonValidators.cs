@@ -1,7 +1,7 @@
 ﻿using CCSSDomain;
 using System.Collections.Generic;
 using System.Globalization;
-using CCSSDomain.Models;
+using CCSSDomain.GameSpecification;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation;

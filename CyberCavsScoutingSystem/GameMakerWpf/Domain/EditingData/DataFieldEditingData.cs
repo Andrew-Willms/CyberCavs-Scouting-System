@@ -1,5 +1,5 @@
 ﻿using UtilitiesLibrary.Collections;
-using static CCSSDomain.Models.DataField;
+using static CCSSDomain.GameSpecification.DataField;
 
 namespace GameMakerWpf.Domain.EditingData;
 
