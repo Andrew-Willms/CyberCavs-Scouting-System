@@ -9,7 +9,7 @@ namespace UtilitiesLibrary.WPF;
 
 
 
-[AttributeUsage(AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
 public class DependsOnAttribute : Attribute {
 
 	public string IndependentPropertyName { get; }
@@ -30,7 +30,7 @@ public abstract class DependentControl<TSingleton> : UserControl, INotifyPropert
 
 	protected DependentControl() {
 
-		IEnumerable<PropertyInfo> singletonProperties = typeof(TSingleton).GetProperties();
+		IEnumerable<PropertyInfo> propertiesOfSingleton = typeof(TSingleton).GetProperties();
 
 		IEnumerable<PropertyInfo> dependentProperties = GetType().GetProperties()
 			.Where(x => x.GetCustomAttributes(typeof(DependsOnAttribute), true).Any());
@@ -42,7 +42,7 @@ public abstract class DependentControl<TSingleton> : UserControl, INotifyPropert
 			foreach (DependsOnAttribute dependentAttribute in dependentAttributes) {
 
 				string independentPropertyName = dependentAttribute.IndependentPropertyName;
-				PropertyInfo? singletonProperty = singletonProperties.FirstOrDefault(x => x.Name == independentPropertyName);
+				PropertyInfo? singletonProperty = propertiesOfSingleton.FirstOrDefault(x => x.Name == independentPropertyName);
 
 				if (singletonProperty is null) {
 					throw new InvalidOperationException($"The type {typeof(TSingleton)} does not have a property named {independentPropertyName}.");

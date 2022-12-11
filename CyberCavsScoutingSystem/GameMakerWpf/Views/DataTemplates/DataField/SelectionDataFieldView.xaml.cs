@@ -21,10 +21,10 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 
 
 
-	[DependsOn(nameof(AppManager.SelectedDataField))]
 	private SelectionDataFieldEditor? Editor => App.Manager.SelectedDataField?.DataFieldTypeEditor as SelectionDataFieldEditor;
 	
 	[DependsOn(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.SelectedDataField))]
 	public ObservableList<SingleInput<string, string, ErrorSeverity>, string>? Options => Editor?.Options;
 
 	private SingleInput<string, string, ErrorSeverity>? _SelectedOption;
