@@ -256,10 +256,10 @@ public class GameEditor {
 	                       AutoButtons.All(x => x.IsValid) &&
 	                       TeleButtons.All(x => x.IsValid);
 
-	public Result<Game, Error> ToGameSpecification() {
+	public Result<Game, EditorToGameSpecificationError> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new Error();
+			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
 		}
 
 		return new Game {
@@ -282,6 +282,16 @@ public class GameEditor {
 			AutoButtons = AutoButtons.Select(x => (x.ToGameSpecification().Resolve() as Success<Button>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
 			TeleButtons = TeleButtons.Select(x => (x.ToGameSpecification().Resolve() as Success<Button>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
 		};
+	}
+
+}
+
+
+
+public class EditorToGameSpecificationError : Error<EditorToGameSpecificationError.Types> {
+
+	public enum Types {
+		EditorIsInvalid
 	}
 
 }

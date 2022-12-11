@@ -10,6 +10,51 @@ namespace GameMakerWpf.AppManagement;
 
 
 
+public interface ISaver {
+
+	public class SaveError : Error<SaveError.Types> {
+
+		public enum Types {
+			NoSaveLocationSpecified,
+			GameEditingDataCouldNotBeConvertedToSaveData,
+			SaveLocationInaccessible
+		}
+
+	}
+
+	public class SetSaveLocationError : Error<SetSaveLocationError.Types> {
+
+		public enum Types {
+			Aborted,
+			SaveLocationIsInvalid
+		}
+
+	}
+
+	public class OpenError : Error<OpenError.Types> {
+
+		public enum Types {
+			Aborted,
+			SaveLocationInaccessible,
+			SavedDataCouldNotBeConvertedToGameEditingData
+		}
+
+	}
+
+
+
+	public bool ProjectHasSaveLocation { get; }
+
+	public Result<SaveError> Save(GameEditingData gameEditingData);
+
+	public Result<SetSaveLocationError> SetSaveLocation();
+
+	public Result<GameEditingData, OpenError> Open();
+
+}
+
+
+
 public class Saver : ISaver {
 
 	public bool ProjectHasSaveLocation => FilePath.HasValue;
@@ -32,7 +77,7 @@ public class Saver : ISaver {
 		} catch {
 
 			return new ISaver.SaveError {
-				ErrorType = ISaver.SaveError.Types.SerializationFailed
+				ErrorType = ISaver.SaveError.Types.GameEditingDataCouldNotBeConvertedToSaveData
 			};
 		}
 
@@ -101,9 +146,10 @@ public class Saver : ISaver {
 			return newGameEditingData;
 
 		} catch {
-			return new ISaver.OpenError { ErrorType = ISaver.OpenError.Types.SavedDataCouldNotBeConverted };
+			return new ISaver.OpenError { ErrorType = ISaver.OpenError.Types.SavedDataCouldNotBeConvertedToGameEditingData };
 		}
 	}
+
 
 
 	private static readonly JsonSerializerSettings JsonSerializerSettings = new() {

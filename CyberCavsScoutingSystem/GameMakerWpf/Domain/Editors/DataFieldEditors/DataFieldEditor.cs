@@ -134,10 +134,10 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		}
 	}
 
-	public Result<DataField, Error> ToGameSpecification() {
+	public Result<DataField, EditorToGameSpecificationError> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new Error();
+			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
 		}
 
 		return DataFieldTypeEditor switch {

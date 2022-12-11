@@ -7,6 +7,20 @@ namespace GameMakerWpf.AppManagement;
 
 
 
+public interface ISavePrompter {
+
+	public enum SavePromptResult {
+		SaveAndContinue,
+		ContinueWithoutSaving,
+		Cancel
+	}
+
+	public SavePromptResult PromptSave();
+
+}
+
+
+
 public partial class SavePrompter : Window, ISavePrompter {
 
 	private Optional<ISavePrompter.SavePromptResult> SelectedOption { get; set; } = Optional.NoValue;

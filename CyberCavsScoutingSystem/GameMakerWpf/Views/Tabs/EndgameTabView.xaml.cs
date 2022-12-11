@@ -68,12 +68,12 @@ public partial class EndgameTabView : AppManagerDependent, INotifyPropertyChange
 
 			// TODO replace this with an appropriate error messages
 			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveAutoInputError.InputNotFoundCaption, ErrorData.RemoveAutoInputError.InputNotFoundMessage);
+				ErrorPresenter.DisplayError("todo", "todo");
 				return;
 
 			// TODO replace this with an appropriate error messages
 			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveAutoInputError.InputNotFoundCaption, ErrorData.RemoveAutoInputError.InputNotFoundMessage);
+				ErrorPresenter.DisplayError("todo", "todo");
 				return;
 
 			default:

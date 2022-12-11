@@ -56,10 +56,10 @@ public class InputEditor {
 
 	public bool IsValid => DataFieldName.IsValid && Label.IsValid;
 
-	public Result<Input, Error> ToGameSpecification() {
+	public Result<Input, EditorToGameSpecificationError> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new Error();
+			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
 		}
 
 		return new Input() {

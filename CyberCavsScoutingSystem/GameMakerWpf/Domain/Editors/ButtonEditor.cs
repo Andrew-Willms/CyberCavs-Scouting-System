@@ -114,10 +114,10 @@ public class ButtonEditor {
 	                       Width.IsValid &&
 	                       Height.IsValid;
 
-	public Result<Button, Error> ToGameSpecification() {
+	public Result<Button, EditorToGameSpecificationError> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new Error();
+			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
 		}
 
 		return new Button {

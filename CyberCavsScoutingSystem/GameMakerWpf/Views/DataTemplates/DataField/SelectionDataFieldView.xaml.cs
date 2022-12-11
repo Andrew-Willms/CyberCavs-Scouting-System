@@ -82,7 +82,7 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 
 			// TODO: make new error message for this case
 			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveOptionError.OptionNotFoundCaption, ErrorData.RemoveOptionError.OptionNotFoundMessage);
+				ErrorPresenter.DisplayError("todo", "todo");
 				return;
 
 			default:

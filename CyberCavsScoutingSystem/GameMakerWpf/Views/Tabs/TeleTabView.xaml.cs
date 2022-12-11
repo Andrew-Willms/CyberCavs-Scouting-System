@@ -88,7 +88,7 @@ public partial class TeleTabView : AppManagerDependent, INotifyPropertyChanged {
 
 			// TODO replace this with an appropriate error messages
 			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveAutoButtonError.ButtonNotFoundCaption,ErrorData.RemoveAutoButtonError.ButtonNotFoundMessage);
+				ErrorPresenter.DisplayError("todo", "todo");
 				return;
 
 			default:
@@ -131,7 +131,7 @@ public partial class TeleTabView : AppManagerDependent, INotifyPropertyChanged {
 
 			// TODO replace this with an appropriate error messages
 			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveAutoInputError.InputNotFoundCaption, ErrorData.RemoveAutoInputError.InputNotFoundMessage);
+				ErrorPresenter.DisplayError("todo", "todo");
 				return;
 
 			default:

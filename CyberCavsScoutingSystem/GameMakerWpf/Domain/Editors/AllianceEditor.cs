@@ -86,10 +86,10 @@ public class AllianceEditor {
 
 	public bool IsValid => Name.IsValid && Color.IsValid;
 
-	public Result<Alliance, Error> ToGameSpecification() {
+	public Result<Alliance, EditorToGameSpecificationError> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new Error();
+			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
 		}
 
 		return new Alliance {

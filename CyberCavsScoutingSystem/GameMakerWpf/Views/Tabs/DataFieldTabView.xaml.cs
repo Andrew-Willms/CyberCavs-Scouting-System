@@ -70,7 +70,7 @@ public partial class DataFieldTabView : AppManagerDependent, INotifyPropertyChan
 
 			//TODO replace with appropriate error message.
 			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveDataFieldError.DataFieldNotFoundCaption, ErrorData.RemoveDataFieldError.DataFieldNotFoundMessage);
+				ErrorPresenter.DisplayError("todo", "todo");
 				return;
 
 			default:

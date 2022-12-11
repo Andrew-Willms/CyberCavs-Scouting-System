@@ -12,11 +12,11 @@ namespace UtilitiesLibrary.WPF;
 [AttributeUsage(AttributeTargets.Property)]
 public class DependsOnAttribute : Attribute {
 
-	public string SingletonPropertyName { get; }
+	public string IndependentPropertyName { get; }
 
-	public DependsOnAttribute(string singletonPropertyName) {
+	public DependsOnAttribute(string independentPropertyName) {
 
-		SingletonPropertyName = singletonPropertyName;
+		IndependentPropertyName = independentPropertyName;
 	}
 
 }
@@ -41,23 +41,23 @@ public abstract class DependentControl<TSingleton> : UserControl, INotifyPropert
 
 			foreach (DependsOnAttribute dependentAttribute in dependentAttributes) {
 
-				string singletonPropertyName = dependentAttribute.SingletonPropertyName;
-				PropertyInfo? singletonProperty = singletonProperties.FirstOrDefault(x => x.Name == singletonPropertyName);
+				string independentPropertyName = dependentAttribute.IndependentPropertyName;
+				PropertyInfo? singletonProperty = singletonProperties.FirstOrDefault(x => x.Name == independentPropertyName);
 
 				if (singletonProperty is null) {
-					throw new InvalidOperationException($"The type {typeof(TSingleton)} does not have a property named {singletonPropertyName}.");
+					throw new InvalidOperationException($"The type {typeof(TSingleton)} does not have a property named {independentPropertyName}.");
 				}
 
 				// This call to a abstract member is fine since the member is auto initialized (before constructor).
 				// ReSharper disable once VirtualMemberCallInConstructor 
-				SingletonGetter.PropertyChanged += (_, args) => PropertyChangedEventHandler(args, singletonPropertyName, dependentProperty.Name);
+				SingletonGetter.PropertyChanged += (_, args) => PropertyChangedEventHandler(args, independentPropertyName, dependentProperty.Name);
 			}
 		}
 	}
 
-	private void PropertyChangedEventHandler(PropertyChangedEventArgs args, string singletonProperty, string dependentPropertyName) {
+	private void PropertyChangedEventHandler(PropertyChangedEventArgs args, string independentPropertyName, string dependentPropertyName) {
 
-		if (args.PropertyName == singletonProperty) {
+		if (args.PropertyName == independentPropertyName) {
 			OnPropertyChanged(dependentPropertyName);
 		}
 	}

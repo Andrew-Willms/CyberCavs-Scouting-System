@@ -20,7 +20,9 @@
 			Content="{Binding PublishButtonText, Source={StaticResource PublishTabData}}"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-			Padding="5,3,5,3"/>
+			Padding="5,3,5,3"
+			IsEnabled="{Binding GameIsValid}"
+			Click="PublishButton_OnClick"/>
 
     </Grid>
 

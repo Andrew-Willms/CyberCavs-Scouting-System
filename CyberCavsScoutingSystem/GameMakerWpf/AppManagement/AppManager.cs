@@ -43,10 +43,11 @@ public class AppManager : INotifyPropertyChanged {
 		}
 	}
 
-	private IGameMakerMainView MainView { get; set; } = null!;
-	private ISaver Saver { get; set; } = null!;
-	private ISavePrompter SavePrompter => new SavePrompter();
-	private IErrorPresenter ErrorPresenter { get; set; } = null!;
+	private IGameMakerMainView MainView { get; set; } = null!; // must be initialized after the AppManager is finished construction
+	private readonly IErrorPresenter ErrorPresenter = new ErrorPresenter(); // stateless
+	private readonly ISaver Saver = new Saver(); // stateful
+	private static ISavePrompter SavePrompter => new SavePrompter(); // single use
+	private readonly IPublisher Publisher = new Publisher(); // stateless
 
 	private bool ProjectIsSaved { get; set; } = true;
 
@@ -59,8 +60,6 @@ public class AppManager : INotifyPropertyChanged {
 	public void ApplicationStartup() {
 
 		MainView = new MainWindow();
-		Saver = new Saver();
-		ErrorPresenter = new ErrorPresenter();
 
 		MainView.Show();
 	}
@@ -115,7 +114,7 @@ public class AppManager : INotifyPropertyChanged {
 				ErrorPresenter.DisplayError(ErrorData.SaveError.NoSaveLocationSpecifiedCaption, ErrorData.SaveError.NoSaveLocationSpecifiedMessage);
 				return;
 
-			case ISaver.SaveError { ErrorType: ISaver.SaveError.Types.SerializationFailed }:
+			case ISaver.SaveError { ErrorType: ISaver.SaveError.Types.GameEditingDataCouldNotBeConvertedToSaveData }:
 				ErrorPresenter.DisplayError(ErrorData.SaveError.SerializationFailedCaption, ErrorData.SaveError.SerializationFailedMessage);
 				return;
 
@@ -173,7 +172,7 @@ public class AppManager : INotifyPropertyChanged {
 				ErrorPresenter.DisplayError(ErrorData.OpenError.SaveLocationInaccessibleCaption, ErrorData.OpenError.SaveLocationInaccessibleMessage);
 				return;
 
-			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.SavedDataCouldNotBeConverted }:
+			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.SavedDataCouldNotBeConvertedToGameEditingData }:
 				ErrorPresenter.DisplayError(ErrorData.OpenError.SavedDataCouldNotBeConvertedCaption, ErrorData.OpenError.SavedDataCouldNotBeConvertedMessage);
 				return;
 
@@ -191,6 +190,44 @@ public class AppManager : INotifyPropertyChanged {
 
 		GameEditor = new(DefaultEditingDataValues.DefaultGameEditingData);
 		ProjectIsSaved = true;
+	}
+
+	public void Publish() {
+
+		Result<IPublisher.PublishingError> result = Publisher.Publish(GameEditor);
+
+		switch (result.Resolve()) {
+
+			case Success:
+				break;
+
+			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.Aborted }:
+				return;
+
+			//TODO: Error messages
+			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.GameEditorCouldNotBeConvertedToGameSpecification }:
+				ErrorPresenter.DisplayError("todo", "todo");
+				return;
+
+			//TODO: Error messages
+			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.GameSpecificationCouldNotBeConvertedToSaveData }:
+				ErrorPresenter.DisplayError("todo", "todo");
+				return;
+
+			//TODO: Error messages
+			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.SaveLocationDoesNotExist }:
+				ErrorPresenter.DisplayError("todo", "todo");
+				return;
+
+			//TODO: Error messages
+			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.SaveLocationCouldNotBeWrittenTo }:
+				ErrorPresenter.DisplayError("todo", "todo");
+				return;
+
+			default:
+				throw new UnreachableException();
+		}
+
 	}
 
 

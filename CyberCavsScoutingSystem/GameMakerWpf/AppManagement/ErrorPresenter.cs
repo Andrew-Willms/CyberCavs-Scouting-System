@@ -1,6 +1,14 @@
 ﻿using System.Windows;
 
-namespace GameMakerWpf.AppManagement; 
+namespace GameMakerWpf.AppManagement;
+
+
+
+public interface IErrorPresenter {
+
+	public void DisplayError(string caption, string message);
+
+}
 
 
 
