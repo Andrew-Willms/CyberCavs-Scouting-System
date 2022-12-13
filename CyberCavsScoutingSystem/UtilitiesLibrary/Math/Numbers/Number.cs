@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Results;
 
 namespace UtilitiesLibrary.Math.Numbers;
 
@@ -89,15 +88,15 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 
 
 
-	private Result<T, NumberToPrimitiveError> ToNumberPrimitive<T>(
+	private INumberToPrimitiveResult<T> ToNumberPrimitive<T>(
 		Number typeMinValue, Number typeMaxValue, Func<Digit, T> digitToT, Func<int, T> tenToThe) where T : INumber<T> {
 
 		if (this < typeMinValue) {
-			return new NumberToPrimitiveError { ErrorType = NumberToPrimitiveError.Types.ValueBelowMin };
+			return new INumberToPrimitiveResult<T>.ValueBelowMin();
 		}
 
 		if (this > typeMaxValue) {
-			return new NumberToPrimitiveError { ErrorType = NumberToPrimitiveError.Types.ValueAboveMax };
+			return new INumberToPrimitiveResult<T>.ValueAboveMax();
 		}
 
 		T value = T.Zero;
@@ -109,50 +108,50 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 			value *= Numbers<T>.MinusOne;
 		}
 
-		return value;
+		return new INumberToPrimitiveResult<T>.Success { Value = value };
 	}
 
-	public static Result<byte, NumberToPrimitiveError> ToByte(Number number) {
+	public static INumberToPrimitiveResult<byte> ToByte(Number number) {
 
 		return number.ToNumberPrimitive(byte.MinValue, byte.MaxValue, Digit.ToINumber<byte>, i => (byte)System.Math.Pow(10, i));
 	}
 
-	public static Result<ushort, NumberToPrimitiveError> ToUshort(Number number) {
+	public static INumberToPrimitiveResult<ushort> ToUshort(Number number) {
 
 		return number.ToNumberPrimitive(ushort.MinValue, ushort.MaxValue, Digit.ToINumber<ushort>, i => (ushort)System.Math.Pow(10, i));
 	}
 
-	public static Result<uint, NumberToPrimitiveError> ToUint(Number number) {
+	public static INumberToPrimitiveResult<uint> ToUint(Number number) {
 
 		return number.ToNumberPrimitive(uint.MinValue, uint.MaxValue, Digit.ToINumber<uint>, i => (uint)System.Math.Pow(10, i));
 	}
 
-	public static Result<ulong, NumberToPrimitiveError> ToUlong(Number number) {
+	public static INumberToPrimitiveResult<ulong> ToUlong(Number number) {
 
 		return number.ToNumberPrimitive(ulong.MinValue, ulong.MaxValue, Digit.ToINumber<ulong>, i => (ulong)System.Math.Pow(10, i));
 	}
 
-	public static Result<short, NumberToPrimitiveError> ToShort(Number number) {
+	public static INumberToPrimitiveResult<short> ToShort(Number number) {
 
 		return number.ToNumberPrimitive(short.MinValue, short.MaxValue, Digit.ToINumber<short>, i => (short)System.Math.Pow(10, i));
 	}
 
-	public static Result<int, NumberToPrimitiveError> ToInt(Number number) {
+	public static INumberToPrimitiveResult<int> ToInt(Number number) {
 
 		return number.ToNumberPrimitive(int.MinValue, int.MaxValue, Digit.ToINumber<int>, i => (int)System.Math.Pow(10, i));
 	}
 
-	public static Result<long, NumberToPrimitiveError> ToLong(Number number) {
+	public static INumberToPrimitiveResult<long> ToLong(Number number) {
 
 		return number.ToNumberPrimitive(long.MinValue, long.MaxValue, Digit.ToINumber<long>, i => (long)System.Math.Pow(10, i));
 	}
 
-	public static Result<float, NumberToPrimitiveError> ToFloat(Number number) {
+	public static INumberToPrimitiveResult<float> ToFloat(Number number) {
 
 		return number.ToNumberPrimitive(float.MinValue, float.MaxValue, Digit.ToINumber<float>, i => (float)System.Math.Pow(10, i));
 	}
 
-	public static Result<double, NumberToPrimitiveError> ToDouble(Number number) {
+	public static INumberToPrimitiveResult<double> ToDouble(Number number) {
 
 		return number.ToNumberPrimitive(double.MinValue, double.MaxValue, Digit.ToINumber<double>, i => System.Math.Pow(10, i));
 	}

@@ -4,7 +4,6 @@ using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors; 
@@ -114,19 +113,19 @@ public class ButtonEditor {
 	                       Width.IsValid &&
 	                       Height.IsValid;
 
-	public Result<Button, EditorToGameSpecificationError> ToGameSpecification() {
+	public IEditorToGameSpecificationResult<Button> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
+			return new IEditorToGameSpecificationResult<Button>.EditorIsInvalid();
 		}
 
-		return new Button {
+		return new IEditorToGameSpecificationResult<Button>.Success { Value = new() {
 			DataFieldName = DataFieldName.OutputObject.Value,
 			ButtonText = ButtonText.OutputObject.Value,
 			IncrementAmount = IncrementAmount.OutputObject.Value,
 			Location = (XPosition.OutputObject.Value, YPosition.OutputObject.Value),
 			Size = (Width.OutputObject.Value, Height.OutputObject.Value)
-		};
+		}};
 	}
 
 }

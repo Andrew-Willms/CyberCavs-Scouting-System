@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
+        xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData.TabViews"
         xmlns:editors="clr-namespace:GameMakerWpf.Domain.Editors"
         xmlns:commands="clr-namespace:GameMakerWpf.Views.Commands"
         xmlns:tabs="clr-namespace:GameMakerWpf.Views.Tabs"
@@ -20,7 +20,6 @@
         <displayData:AutoTabData x:Key="AutoTabData"/>
         <displayData:TeleTabData x:Key="TeleTabData"/>
         <displayData:EndgameTabData x:Key="EndgameTabData"/>
-        <displayData:PublishTabData x:Key="PublishTabData"/>
     </Window.Resources>
     
     <Window.CommandBindings>
@@ -28,21 +27,26 @@
         <CommandBinding Command="commands:Commands.SaveAs" Executed="SaveAs_Execute"/>
         <CommandBinding Command="Open" Executed="Open_Execute"/>
         <CommandBinding Command="New" Executed="New_Execute"/>
-    </Window.CommandBindings>
+        <CommandBinding Command="commands:Commands.Publish" Executed="Publish_Execute"/>
+	</Window.CommandBindings>
 
     <Grid>
-        <Grid.RowDefinitions>
+
+	    <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Command="Save"/>
                 <MenuItem Command="commands:Commands.SaveAs"/>
                 <MenuItem Command="Open"/>
                 <MenuItem Command="New"/>
+				<MenuItem Command="commands:Commands.Publish"/>
             </MenuItem>
         </Menu>
+
         <TabControl Grid.Row="1">
             <TabItem Header="{Binding TabTitle, Source={StaticResource MetaTabData}}">
                 <Grid Background="#FFE5E5E5">
@@ -79,11 +83,8 @@
                     <tabs:EndgameTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding TabTitle, Source={StaticResource PublishTabData}}">
-                <Grid Background="#FFE5E5E5">
-                    <tabs:PublishTabView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                </Grid>
-            </TabItem>
         </TabControl>
+
     </Grid>
+
 </Window>

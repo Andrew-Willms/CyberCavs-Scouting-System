@@ -1,9 +1,9 @@
-﻿namespace GameMakerWpf.DisplayData; 
+﻿namespace GameMakerWpf.DisplayData.TabViews;
 
 
 
 public class AutoTabData {
-	
+
 	public static string TabTitle => "Auto Tab";
 
 	public static string ButtonsText => "Buttons";

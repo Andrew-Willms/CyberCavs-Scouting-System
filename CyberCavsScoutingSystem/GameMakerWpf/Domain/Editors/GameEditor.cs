@@ -256,13 +256,13 @@ public class GameEditor {
 	                       AutoButtons.All(x => x.IsValid) &&
 	                       TeleButtons.All(x => x.IsValid);
 
-	public Result<Game, EditorToGameSpecificationError> ToGameSpecification() {
+	public IEditorToGameSpecificationResult<Game> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
+			return new IEditorToGameSpecificationResult<Game>.EditorIsInvalid();
 		}
 
-		return new Game {
+		return new IEditorToGameSpecificationResult<Game>.Success { Value = new() {
 
 			Name = Name.OutputObject.Value,
 			Year = Year.OutputObject.Value,
@@ -271,27 +271,48 @@ public class GameEditor {
 			RobotsPerAlliance = RobotsPerAlliance.OutputObject.Value,
 			AlliancesPerMatch = AlliancesPerMatch.OutputObject.Value,
 
-			Alliances = Alliances.Select(x => (x.ToGameSpecification().Resolve() as Success<Alliance>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
-			DataFields = DataFields.Select(x => (x.ToGameSpecification().Resolve() as Success<DataField>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+			Alliances = Alliances.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Alliance>.Success)?.Value??
+				throw new UnreachableException()).ToReadOnly(),
 
-			SetupTabInputs = SetupTabInputs.Select(x => (x.ToGameSpecification().Resolve() as Success<Input>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
-			AutoTabInputs = AutoTabInputs.Select(x => (x.ToGameSpecification().Resolve() as Success<Input>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
-			TeleTabInputs = TeleTabInputs.Select(x => (x.ToGameSpecification().Resolve() as Success<Input>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
-			EndgameTabInputs = EndgameTabInputs.Select(x => (x.ToGameSpecification().Resolve() as Success<Input>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
+			DataFields = DataFields.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<DataField>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
 
-			AutoButtons = AutoButtons.Select(x => (x.ToGameSpecification().Resolve() as Success<Button>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
-			TeleButtons = TeleButtons.Select(x => (x.ToGameSpecification().Resolve() as Success<Button>)?.Value ?? throw new UnreachableException()).ToReadOnly(),
-		};
+			SetupTabInputs = SetupTabInputs.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Input>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
+
+			AutoTabInputs = AutoTabInputs.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Input>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
+
+			TeleTabInputs = TeleTabInputs.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Input>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
+
+			EndgameTabInputs = EndgameTabInputs.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Input>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
+
+			AutoButtons = AutoButtons.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Button>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
+
+			TeleButtons = TeleButtons.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Button>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
+		}};
 	}
 
 }
 
 
 
-public class EditorToGameSpecificationError : Error<EditorToGameSpecificationError.Types> {
+public interface IEditorToGameSpecificationResult<TGameSpecification> : IResult<TGameSpecification> {
 
-	public enum Types {
-		EditorIsInvalid
-	}
+	public class Success : IResult<TGameSpecification>.Success, IEditorToGameSpecificationResult<TGameSpecification> { }
+
+	public class EditorIsInvalid : Error, IEditorToGameSpecificationResult<TGameSpecification> { }
 
 }

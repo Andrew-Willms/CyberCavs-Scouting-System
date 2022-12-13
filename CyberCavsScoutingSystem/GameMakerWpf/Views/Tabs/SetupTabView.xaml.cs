@@ -3,12 +3,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using GameMakerWpf.AppManagement;
-using GameMakerWpf.DisplayData;
+using GameMakerWpf.DisplayData.Errors.ErrorData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Results;
 using UtilitiesLibrary.WPF;
 
 namespace GameMakerWpf.Views.Tabs;
@@ -17,7 +16,7 @@ namespace GameMakerWpf.Views.Tabs;
 
 public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged {
 
-	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
+	private static IErrorPresenter ErrorPresenter => new ErrorPresenter();
 
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;
@@ -59,20 +58,15 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
 		}
 
-		Result<ListRemoveError> result = Inputs.Remove(SelectedInput);
+		IListRemoveResult<InputEditor> result = Inputs.Remove(SelectedInput);
 
-		switch (result.Resolve()) {
-			
-			case Success:
+		switch (result) {
+
+			case IListRemoveResult<InputEditor>.Success:
 				return;
 
-			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveAutoInputError.InputNotFoundCaption, ErrorData.RemoveAutoInputError.InputNotFoundMessage);
-				return;
-
-			// TODO replace this with an appropriate error messages
-			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
-				ErrorPresenter.DisplayError("todo", "todo");
+			case IListRemoveResult<InputEditor>.ItemNotFound error:
+				ErrorPresenter.DisplayError(error, RemoveFromListErrors.RemoveSetupInputError);
 				return;
 
 			default:

@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Results;
+using static GameMakerWpf.AppManagement.ISaver;
 
 namespace GameMakerWpf.AppManagement;
 
@@ -12,32 +13,37 @@ namespace GameMakerWpf.AppManagement;
 
 public interface ISaver {
 
-	public class SaveError : Error<SaveError.Types> {
+	public interface ISaveResult : IResult {
 
-		public enum Types {
-			NoSaveLocationSpecified,
-			GameEditingDataCouldNotBeConvertedToSaveData,
-			SaveLocationInaccessible
-		}
+		public class Success : IResult.Success, ISaveResult { }
 
-	}
+		public class NoSaveLocationSpecified : Error, ISaveResult { }
 
-	public class SetSaveLocationError : Error<SetSaveLocationError.Types> {
+		public class GameEditingDataCouldNotBeConvertedToSaveData : Error, ISaveResult { }
 
-		public enum Types {
-			Aborted,
-			SaveLocationIsInvalid
-		}
+		public class SaveLocationInaccessible : Error, ISaveResult { }
 
 	}
 
-	public class OpenError : Error<OpenError.Types> {
+	public interface ISaveAsResult : IResult {
 
-		public enum Types {
-			Aborted,
-			SaveLocationInaccessible,
-			SavedDataCouldNotBeConvertedToGameEditingData
-		}
+		public class Success : IResult.Success, ISaveAsResult { }
+
+		public class Aborted : Error, ISaveAsResult { }
+
+		public class SaveLocationIsInvalid : Error, ISaveAsResult { }
+
+	}
+
+	public interface IOpenResult : IResult<GameEditingData> {
+
+		public class Success : IResult<GameEditingData>.Success, IOpenResult { }
+
+		public class Aborted : Error, IOpenResult { }
+
+		public class SaveLocationInaccessible : Error, IOpenResult { }
+		
+		public class SavedDataCouldNotBeConvertedToGameEditingData : Error, IOpenResult { }
 
 	}
 
@@ -45,11 +51,11 @@ public interface ISaver {
 
 	public bool ProjectHasSaveLocation { get; }
 
-	public Result<SaveError> Save(GameEditingData gameEditingData);
+	public ISaveResult Save(GameEditingData gameEditingData);
 
-	public Result<SetSaveLocationError> SetSaveLocation();
+	public ISaveAsResult SetSaveLocation();
 
-	public Result<GameEditingData, OpenError> Open();
+	public IOpenResult Open();
 
 }
 
@@ -61,13 +67,10 @@ public class Saver : ISaver {
 
 	private Optional<string> FilePath = Optional.NoValue;
 
-	public Result<ISaver.SaveError> Save(GameEditingData gameEditingData) {
+	public ISaveResult Save(GameEditingData gameEditingData) {
 
 		if (!FilePath.HasValue) {
-
-			return new ISaver.SaveError {
-				ErrorType = ISaver.SaveError.Types.NoSaveLocationSpecified
-			};
+			return new ISaveResult.NoSaveLocationSpecified();
 		}
 
 		string serializedProject;
@@ -75,33 +78,27 @@ public class Saver : ISaver {
 			serializedProject = JsonConvert.SerializeObject(gameEditingData, JsonSerializerSettings);
 
 		} catch {
-
-			return new ISaver.SaveError {
-				ErrorType = ISaver.SaveError.Types.GameEditingDataCouldNotBeConvertedToSaveData
-			};
+			return new ISaveResult.GameEditingDataCouldNotBeConvertedToSaveData();
 		}
 
 		try {
 			File.WriteAllText(FilePath.Value, serializedProject);
 
 		} catch {
-
-			return new ISaver.SaveError {
-				ErrorType = ISaver.SaveError.Types.SaveLocationInaccessible
-			};
+			return new ISaveResult.SaveLocationInaccessible();
 		}
 
-		return new Success();
+		return new ISaveResult.Success();
 	}
 
-	public Result<ISaver.SetSaveLocationError> SetSaveLocation() {
+	public ISaveAsResult SetSaveLocation() {
 
 		SaveFileDialog saveFileDialog = SaveFileDialog;
 
 		bool? proceed = saveFileDialog.ShowDialog();
 
 		if (proceed is null or false) {
-			return new ISaver.SetSaveLocationError { ErrorType = ISaver.SetSaveLocationError.Types.Aborted };
+			return new ISaveAsResult.Aborted();
 		}
 
 		string filePath = saveFileDialog.FileName;
@@ -109,22 +106,22 @@ public class Saver : ISaver {
 		string folderPath = string.Join("\\", filePathPieces[..^1]);
 
 		if (!Directory.Exists(folderPath)) {
-			return new ISaver.SetSaveLocationError { ErrorType = ISaver.SetSaveLocationError.Types.SaveLocationIsInvalid };
+			return new ISaveAsResult.SaveLocationIsInvalid();
 		}
 
 		FilePath = filePath.Optionalize();
 
-		return new Success();
+		return new ISaveAsResult.Success();
 	}
 
-	public Result<GameEditingData, ISaver.OpenError> Open() {
+	public IOpenResult Open() {
 
 		OpenFileDialog openFileDialog = OpenFileDialog;
 
 		bool? proceed = openFileDialog.ShowDialog();
 
 		if (proceed is null or false) {
-			return new ISaver.OpenError { ErrorType = ISaver.OpenError.Types.Aborted };
+			return new IOpenResult.Aborted();
 		}
 
 		string filePath = openFileDialog.FileName;
@@ -134,7 +131,7 @@ public class Saver : ISaver {
 			serializedGameEditingData = File.ReadAllText(filePath);
 
 		} catch {
-			return new ISaver.OpenError { ErrorType = ISaver.OpenError.Types.SaveLocationInaccessible };
+			return new IOpenResult.SaveLocationInaccessible();
 		}
 
 		try {
@@ -143,10 +140,10 @@ public class Saver : ISaver {
 				?? throw new NoNullAllowedException();
 
 			FilePath = filePath.Optionalize();
-			return newGameEditingData;
+			return new IOpenResult.Success { Value = newGameEditingData};
 
 		} catch {
-			return new ISaver.OpenError { ErrorType = ISaver.OpenError.Types.SavedDataCouldNotBeConvertedToGameEditingData };
+			return new IOpenResult.SavedDataCouldNotBeConvertedToGameEditingData();
 		}
 	}
 

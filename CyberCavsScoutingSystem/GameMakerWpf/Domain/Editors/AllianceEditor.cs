@@ -4,7 +4,6 @@ using CCSSDomain;
 using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors;
@@ -86,16 +85,16 @@ public class AllianceEditor {
 
 	public bool IsValid => Name.IsValid && Color.IsValid;
 
-	public Result<Alliance, EditorToGameSpecificationError> ToGameSpecification() {
+	public IEditorToGameSpecificationResult<Alliance> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
+			return new IEditorToGameSpecificationResult<Alliance>.EditorIsInvalid();
 		}
 
-		return new Alliance {
+		return new IEditorToGameSpecificationResult<Alliance>.Success { Value = new() {
 			Name = Name.OutputObject.Value,
 			Color = Color.OutputObject.Value
-		};
+		}};
 	}
 
 }

@@ -1,9 +1,9 @@
-﻿namespace GameMakerWpf.DisplayData; 
+﻿namespace GameMakerWpf.DisplayData.TabViews;
 
 
 
 public class SetupTabData {
-	
+
 	public static string TabTitle => "Setup Tab";
 
 	public static string InputsText => "Inputs";

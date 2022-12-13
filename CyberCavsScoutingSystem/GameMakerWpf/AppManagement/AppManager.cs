@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using GameMakerWpf.DisplayData;
+using GameMakerWpf.DisplayData.Errors.ErrorData.AppManagerErrors;
 using GameMakerWpf.Domain.Data;
-using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Views;
-using UtilitiesLibrary.Results;
 using UtilitiesLibrary.WPF;
 using static GameMakerWpf.AppManagement.ISavePrompter;
+using static GameMakerWpf.AppManagement.ISaver.ISaveAsResult;
+using static GameMakerWpf.AppManagement.ISaver.ISaveResult;
 
 namespace GameMakerWpf.AppManagement;
 
@@ -44,7 +44,7 @@ public class AppManager : INotifyPropertyChanged {
 	}
 
 	private IGameMakerMainView MainView { get; set; } = null!; // must be initialized after the AppManager is finished construction
-	private readonly IErrorPresenter ErrorPresenter = new ErrorPresenter(); // stateless
+	private static IErrorPresenter ErrorPresenter => new ErrorPresenter(); // stateless
 	private readonly ISaver Saver = new Saver(); // stateful
 	private static ISavePrompter SavePrompter => new SavePrompter(); // single use
 	private readonly IPublisher Publisher = new Publisher(); // stateless
@@ -102,25 +102,25 @@ public class AppManager : INotifyPropertyChanged {
 			return;
 		}
 
-		Result<ISaver.SaveError> result = Saver.Save(GameEditor.ToEditingData());
+		ISaver.ISaveResult result = Saver.Save(GameEditor.ToEditingData());
 
-		switch (result.Resolve()) {
+		switch (result) {
 
-			case Success:
+			case ISaver.ISaveResult.Success:
 				ProjectIsSaved = true;
 				return;
 
-			case ISaver.SaveError { ErrorType: ISaver.SaveError.Types.NoSaveLocationSpecified }:
-				ErrorPresenter.DisplayError(ErrorData.SaveError.NoSaveLocationSpecifiedCaption, ErrorData.SaveError.NoSaveLocationSpecifiedMessage);
-				return;
+			case NoSaveLocationSpecified error:
+				ErrorPresenter.DisplayError(error, SaveErrors.NoSaveLocationSpecified);
+				break;
 
-			case ISaver.SaveError { ErrorType: ISaver.SaveError.Types.GameEditingDataCouldNotBeConvertedToSaveData }:
-				ErrorPresenter.DisplayError(ErrorData.SaveError.SerializationFailedCaption, ErrorData.SaveError.SerializationFailedMessage);
-				return;
+			case SaveLocationInaccessible error:
+				ErrorPresenter.DisplayError(error, SaveErrors.SaveLocationInaccessible);
+				break;
 
-			case ISaver.SaveError { ErrorType: ISaver.SaveError.Types.SaveLocationInaccessible }:
-				ErrorPresenter.DisplayError(ErrorData.SaveError.SaveLocationInaccessibleCaption, ErrorData.SaveError.SaveLocationInaccessibleMessage);
-				return;
+			case GameEditingDataCouldNotBeConvertedToSaveData error:
+				ErrorPresenter.DisplayError(error, SaveErrors.GameEditingDataCouldNotBeConvertedToSaveData);
+				break;
 
 			default:
 				throw new UnreachableException();
@@ -129,18 +129,18 @@ public class AppManager : INotifyPropertyChanged {
 
 	public void SaveGameProjectAs() {
 
-		Result<ISaver.SetSaveLocationError> result = Saver.SetSaveLocation();
+		ISaver.ISaveAsResult result = Saver.SetSaveLocation();
 
-		switch (result.Resolve()) {
+		switch (result) {
 
-			case Success:
+			case UtilitiesLibrary.Results.Success:
 				break;
 
-			case ISaver.SetSaveLocationError { ErrorType: ISaver.SetSaveLocationError.Types.Aborted }:
+			case Aborted:
 				return;
 
-			case ISaver.SetSaveLocationError { ErrorType: ISaver.SetSaveLocationError.Types.SaveLocationIsInvalid }:
-				ErrorPresenter.DisplayError(ErrorData.SaveAsError.SaveLocationIsInvalidCaption, ErrorData.SaveAsError.SaveLocationIsInvalidMessage);
+			case SaveLocationIsInvalid error:
+				ErrorPresenter.DisplayError(error, SaveAsErrors.SaveLocationIsInvalid);
 				return;
 
 			default:
@@ -157,23 +157,23 @@ public class AppManager : INotifyPropertyChanged {
 			return;
 		}
 
-		Result<GameEditingData, ISaver.OpenError> openResult = Saver.Open();
+		ISaver.IOpenResult openResult = Saver.Open();
 
-		switch (openResult.Resolve()) {
+		switch (openResult) {
 
-			case Success<GameEditingData> newGameEditingData:
+			case ISaver.IOpenResult.Success newGameEditingData:
 				GameEditor = new(newGameEditingData.Value);
 				return;
 
-			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.Aborted }:
+			case ISaver.IOpenResult.Aborted:
 				return;
 
-			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.SaveLocationInaccessible }:
-				ErrorPresenter.DisplayError(ErrorData.OpenError.SaveLocationInaccessibleCaption, ErrorData.OpenError.SaveLocationInaccessibleMessage);
+			case ISaver.IOpenResult.SaveLocationInaccessible error:
+				ErrorPresenter.DisplayError(error, OpenError.SaveLocationInaccessible);
 				return;
 
-			case ISaver.OpenError { ErrorType: ISaver.OpenError.Types.SavedDataCouldNotBeConvertedToGameEditingData }:
-				ErrorPresenter.DisplayError(ErrorData.OpenError.SavedDataCouldNotBeConvertedCaption, ErrorData.OpenError.SavedDataCouldNotBeConvertedMessage);
+			case ISaver.IOpenResult.SavedDataCouldNotBeConvertedToGameEditingData error:
+				ErrorPresenter.DisplayError(error, OpenError.SavedDataCouldNotBeConvertedToGameEditingData);
 				return;
 
 			default:
@@ -194,34 +194,30 @@ public class AppManager : INotifyPropertyChanged {
 
 	public void Publish() {
 
-		Result<IPublisher.PublishingError> result = Publisher.Publish(GameEditor);
+		IPublisher.IPublishResult result = Publisher.Publish(GameEditor);
 
-		switch (result.Resolve()) {
+		switch (result) {
 
-			case Success:
+			case UtilitiesLibrary.Results.Success:
 				break;
 
-			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.Aborted }:
+			case IPublisher.IPublishResult.Aborted:
 				return;
 
-			//TODO: Error messages
-			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.GameEditorCouldNotBeConvertedToGameSpecification }:
-				ErrorPresenter.DisplayError("todo", "todo");
+			case IPublisher.IPublishResult.GameEditorCouldNotBeConvertedToGameSpecification error:
+				ErrorPresenter.DisplayError(error, PublishErrors.GameEditorCouldNotBeConvertedToGameSpecification);
 				return;
 
-			//TODO: Error messages
-			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.GameSpecificationCouldNotBeConvertedToSaveData }:
-				ErrorPresenter.DisplayError("todo", "todo");
+			case IPublisher.IPublishResult.GameSpecificationCouldNotBeConvertedToSaveData error:
+				ErrorPresenter.DisplayError(error, PublishErrors.GameSpecificationCouldNotBeConvertedToSaveData);
 				return;
 
-			//TODO: Error messages
-			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.SaveLocationDoesNotExist }:
-				ErrorPresenter.DisplayError("todo", "todo");
+			case IPublisher.IPublishResult.SaveLocationDoesNotExist error:
+				ErrorPresenter.DisplayError(error, PublishErrors.SaveLocationDoesNotExist);
 				return;
 
-			//TODO: Error messages
-			case IPublisher.PublishingError { ErrorType: IPublisher.PublishingError.Types.SaveLocationCouldNotBeWrittenTo }:
-				ErrorPresenter.DisplayError("todo", "todo");
+			case IPublisher.IPublishResult.SaveLocationCouldNotBeWrittenTo error:
+				ErrorPresenter.DisplayError(error, PublishErrors.SaveLocationCouldNotBeWrittenTo);
 				return;
 
 			default:

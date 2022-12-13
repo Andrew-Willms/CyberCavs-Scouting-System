@@ -15,4 +15,13 @@ public static class Commands {
 		}
 	);
 
+	public static readonly RoutedUICommand Publish = new(
+		text: nameof(Publish),
+		name: nameof(Publish),
+		ownerType: typeof(Commands),
+		inputGestures: new() {
+			new KeyGesture(Key.P, ModifierKeys.Control)
+		}
+	);
+
 }

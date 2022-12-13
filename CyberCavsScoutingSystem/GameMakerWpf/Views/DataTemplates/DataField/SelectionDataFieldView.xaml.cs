@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Windows;
 using CCSSDomain;
 using GameMakerWpf.AppManagement;
-using GameMakerWpf.DisplayData;
+using GameMakerWpf.DisplayData.Errors.ErrorData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
@@ -17,7 +17,7 @@ namespace GameMakerWpf.Views.DataTemplates.DataField;
 
 public partial class SelectionDataFieldView : AppManagerDependent, INotifyPropertyChanged {
 
-	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
+	private static IErrorPresenter ErrorPresenter => new ErrorPresenter();
 
 
 
@@ -69,20 +69,15 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 			throw new InvalidOperationException($"You should not be able to remove an option when the {nameof(Editor)} is null.");
 		}
 
-		Result<ListRemoveError> result = Options.Remove(SelectedOption);
+		IListRemoveResult<SingleInput<string, string, ErrorSeverity>> result = Options.Remove(SelectedOption);
 
-		switch (result.Resolve()) {
+		switch (result) {
 			
 			case Success:
 				return;
 
-			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveOptionError.OptionNotFoundCaption, ErrorData.RemoveOptionError.OptionNotFoundMessage);
-				return;
-
-			// TODO: make new error message for this case
-			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
-				ErrorPresenter.DisplayError("todo", "todo");
+			case IListRemoveResult<SingleInput<string, string, ErrorSeverity>>.ItemNotFound error:
+				ErrorPresenter.DisplayError(error, RemoveFromListErrors.RemoveOptionError);
 				return;
 
 			default:

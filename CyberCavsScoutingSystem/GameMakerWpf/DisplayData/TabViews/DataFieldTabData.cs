@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace GameMakerWpf.DisplayData; 
+namespace GameMakerWpf.DisplayData.TabViews;
 
 
 
@@ -29,7 +29,7 @@ public class IntegerDataFieldData {
 	public static string InitialValueText => "Initial Value";
 
 	public static string MinValueText => "Min Value";
-		
+
 	public static string MaxValueText => "Max Value";
 
 	public static string MinValueButtonText => "Min";

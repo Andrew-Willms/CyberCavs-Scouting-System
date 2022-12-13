@@ -1,0 +1,52 @@
+﻿<Window x:Class="GameMakerWpf.AppManagement.ErrorPresenter"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:errors="clr-namespace:GameMakerWpf.DisplayData.Errors"
+        xmlns:appManagement="clr-namespace:GameMakerWpf.AppManagement"
+        mc:Ignorable="d"
+        Title="ErrorPresenter"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown"
+        SizeToContent="Height"
+        Width="400"
+        d:DataContext="{d:DesignInstance Type=appManagement:ErrorPresenter, IsDesignTimeCreatable=True}">
+
+	<Window.Resources>
+		<errors:ErrorPresenterData x:Key="ErrorPresenterData"/>
+	</Window.Resources>
+
+	<Grid>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<TextBlock
+			Text="{Binding Caption}"
+			Margin="10"
+			TextWrapping="Wrap"
+			Grid.Row="0"/>
+
+		<TextBlock
+			Text="{Binding Message}"
+			Margin="10"
+			TextWrapping="Wrap"
+			Grid.Row="1"/>
+
+		<Button
+			Content="{Binding OkayButtonText, Source={StaticResource ErrorPresenterData}}"
+			Click="OkayButton_Clicked"
+			HorizontalAlignment="Center"
+			Padding="5,3,5,3"
+			Margin="10"
+			Grid.Row="2"/>
+
+	</Grid>
+
+</Window>

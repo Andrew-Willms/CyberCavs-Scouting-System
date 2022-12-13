@@ -1,4 +1,4 @@
-﻿namespace GameMakerWpf.DisplayData; 
+﻿namespace GameMakerWpf.DisplayData.TabViews;
 
 
 
@@ -10,7 +10,7 @@ public class SavePromptData {
 	public static string SaveAndContinueButtonText => "Save and Continue";
 
 	public static string ContinueWithoutSavingButtonText => "Continue without Saving";
-	
+
 	public static string CancelButtonText => "Cancel";
 
 }

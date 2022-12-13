@@ -36,4 +36,9 @@ public partial class MainWindow : Window, IGameMakerMainView {
 		App.Manager.NewGameProject();
 	}
 
+	private void Publish_Execute(object sender, RoutedEventArgs e) {
+
+		App.Manager.Publish();
+	}
+
 }

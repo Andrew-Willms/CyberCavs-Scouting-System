@@ -3,7 +3,6 @@ using System.Linq;
 using System.Numerics;
 using System.Collections.Generic;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Results;
 
 namespace UtilitiesLibrary.Math.Numbers;
 
@@ -53,15 +52,15 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 
 
 
-	private Result<T, IntegerToPrimitiveError> ToNumberPrimitive<T>(
+	private IIntegerToPrimitiveResult<T> ToNumberPrimitive<T>(
 		Whole typeMinValue, Whole typeMaxValue, Func<Digit, T> digitToT, Func<int, T> tenToThe) where T : INumber<T> {
 
 		if (this < typeMinValue) {
-			return new IntegerToPrimitiveError { ErrorType = IntegerToPrimitiveError.Types.ValueBelowMin };
+			return new IIntegerToPrimitiveResult<T>.ValueBelowMin();
 		}
 
 		if (this > typeMaxValue) {
-			return new IntegerToPrimitiveError { ErrorType = IntegerToPrimitiveError.Types.ValueAboveMax };
+			return new IIntegerToPrimitiveResult<T>.ValueAboveMax();
 		}
 
 		T value = T.Zero;
@@ -69,40 +68,40 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 			value += digitToT(Digits[position]) * tenToThe(position);
 		}
 
-		return value;
+		return new IIntegerToPrimitiveResult<T>.Success { Value = value };
 	}
 
-	public static Result<byte, IntegerToPrimitiveError> ToByte(Whole whole) {
+	public static IIntegerToPrimitiveResult<byte> ToByte(Whole whole) {
 
 		return whole.ToNumberPrimitive(byte.MinValue, byte.MaxValue, Digit.ToINumber<byte>, i => (byte)System.Math.Pow(10, i));
 	}
 
-	public static Result<ushort, IntegerToPrimitiveError> ToUshort(Whole whole) {
+	public static IIntegerToPrimitiveResult<ushort> ToUshort(Whole whole) {
 
 		return whole.ToNumberPrimitive(ushort.MinValue, ushort.MaxValue, Digit.ToINumber<ushort>, i => (ushort)System.Math.Pow(10, i));
 	}
 
-	public static Result<uint, IntegerToPrimitiveError> ToUint(Whole whole) {
+	public static IIntegerToPrimitiveResult<uint> ToUint(Whole whole) {
 
 		return whole.ToNumberPrimitive(uint.MinValue, uint.MaxValue, Digit.ToINumber<uint>, i => (uint)System.Math.Pow(10, i));
 	}
 
-	public static Result<ulong, IntegerToPrimitiveError> ToUlong(Whole whole) {
+	public static IIntegerToPrimitiveResult<ulong> ToUlong(Whole whole) {
 
 		return whole.ToNumberPrimitive(ulong.MinValue, ulong.MaxValue, Digit.ToINumber<ulong>, i => (ulong)System.Math.Pow(10, i));
 	}
 
-	public static Result<short, IntegerToPrimitiveError> ToShort(Whole whole) {
+	public static IIntegerToPrimitiveResult<short> ToShort(Whole whole) {
 
 		return whole.ToNumberPrimitive(0, (Whole)short.MaxValue, Digit.ToINumber<short>, i => (short)System.Math.Pow(10, i));
 	}
 
-	public static Result<int, IntegerToPrimitiveError> ToInt(Whole whole) {
+	public static IIntegerToPrimitiveResult<int> ToInt(Whole whole) {
 
 		return whole.ToNumberPrimitive(0, int.MaxValue, Digit.ToINumber<int>, i => (int)System.Math.Pow(10, i));
 	}
 
-	public static Result<long, IntegerToPrimitiveError> ToLong(Whole whole) {
+	public static IIntegerToPrimitiveResult<long> ToLong(Whole whole) {
 		
 		return whole.ToNumberPrimitive(0, long.MaxValue, Digit.ToINumber<long>, i => (long)System.Math.Pow(10, i));
 	}

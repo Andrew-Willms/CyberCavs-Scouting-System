@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
+        xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData.TabViews"
         mc:Ignorable="d"
         WindowStyle="None"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown"
         SizeToContent="Height"
@@ -35,7 +36,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+				<ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel

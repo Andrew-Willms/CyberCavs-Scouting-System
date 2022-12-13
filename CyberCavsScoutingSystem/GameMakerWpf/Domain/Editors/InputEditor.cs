@@ -4,7 +4,6 @@ using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
-using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 
 namespace GameMakerWpf.Domain.Editors; 
@@ -56,16 +55,16 @@ public class InputEditor {
 
 	public bool IsValid => DataFieldName.IsValid && Label.IsValid;
 
-	public Result<Input, EditorToGameSpecificationError> ToGameSpecification() {
+	public IEditorToGameSpecificationResult<Input> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
+			return new IEditorToGameSpecificationResult<Input>.EditorIsInvalid();
 		}
 
-		return new Input() {
+		return new IEditorToGameSpecificationResult<Input>.Success { Value = new() {
 			DataFieldName = DataFieldName.OutputObject.Value,
 			Label = Label.OutputObject.Value
-		};
+		}};
 	}
 
 }

@@ -8,7 +8,6 @@ using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 using static CCSSDomain.GameSpecification.DataField;
 
@@ -134,29 +133,29 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		}
 	}
 
-	public Result<DataField, EditorToGameSpecificationError> ToGameSpecification() {
+	public IEditorToGameSpecificationResult<DataField> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new EditorToGameSpecificationError { ErrorType = EditorToGameSpecificationError.Types.EditorIsInvalid };
+			return new IEditorToGameSpecificationResult<DataField>.EditorIsInvalid();
 		}
 
 		return DataFieldTypeEditor switch {
 
-			TextDataFieldEditor => new TextDataField {
-				Name = Name.InputObject,
-			},
+			TextDataFieldEditor => new() { Value = new TextDataField {
+				Name = Name.InputObject
+			}},
 
-			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataField {
+			SelectionDataFieldEditor selectionDataFieldEditor => new() { Value = new SelectionDataField {
 				Name = Name.InputObject,
 				OptionNames = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
-			},
+			}},
 
-			IntegerDataFieldEditor integerDataFieldEditor => new IntegerDataField {
+			IntegerDataFieldEditor integerDataFieldEditor => new IEditorToGameSpecificationResult<DataField>.Success { Value = new IntegerDataField {
 				Name = Name.InputObject,
 				InitialValue = integerDataFieldEditor.InitialValue.OutputObject.Value,
 				MinValue = integerDataFieldEditor.MinValue.OutputObject.Value,
 				MaxValue = integerDataFieldEditor.MaxValue.OutputObject.Value
-			},
+			}},
 
 			_ => throw new UnreachableException()
 		};

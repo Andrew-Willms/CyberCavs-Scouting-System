@@ -31,20 +31,20 @@ public class ObservableList<TItem, TAdd> : INotifyCollectionChanged, IEnumerable
 		OnAdd?.Invoke(newItem);
 	}
 
-	public Result<ListRemoveError> Remove(TItem toRemove) {
+	public IListRemoveResult<TItem> Remove(TItem toRemove) {
 
 		if (!Collection.Contains(toRemove)) {
-			return ListRemoveError.NotFound;
+			return new IListRemoveResult<TItem>.ItemNotFound();
 		}
 
 		int index = Collection.IndexOf(toRemove);
 		if (!Collection.Remove(toRemove)) {
-			return ListRemoveError.OtherFailure;
+			return new IListRemoveResult<TItem>.OtherFailure();
 		}
 
 		OnRemove?.Invoke(toRemove);
 		CollectionChanged?.Invoke(this, new(NotifyCollectionChangedAction.Remove, toRemove, index));
-		return new Success();
+		return new IListRemoveResult<TItem>.Success();
 	}
 
 
@@ -65,18 +65,15 @@ public class ObservableList<TItem, TAdd> : INotifyCollectionChanged, IEnumerable
 
 
 
-// TODO: Move to it's own class
-public class ListRemoveError : Error<ListRemoveError.Types> {
+public interface IListRemoveResult : IResult { }
 
-	// I think the only reasons List.Remove can fail is if the item is not found or the list is
-	// being enumerated in a foreach loop but I don't want to assume that.
-	public enum Types {
-		ItemNotFound,
-		OtherFailure
-	}
+// TODO: Move to it's own file
+public interface IListRemoveResult<T> : IListRemoveResult {
 
-	public static ListRemoveError NotFound => new() { ErrorType = Types.ItemNotFound };
+	public class Success : IResult.Success, IListRemoveResult<T> { }
 
-	public static ListRemoveError OtherFailure => new() { ErrorType = Types.OtherFailure };
+	public class ItemNotFound : Error, IListRemoveResult<T> { }
+
+	public class OtherFailure : Error, IListRemoveResult<T> { }
 
 }

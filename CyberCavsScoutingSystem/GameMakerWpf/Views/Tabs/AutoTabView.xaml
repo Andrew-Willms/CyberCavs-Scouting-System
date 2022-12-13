@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData"
+             xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData.TabViews"
              xmlns:local="clr-namespace:GameMakerWpf.Views.Tabs"
              xmlns:dataTemplates="clr-namespace:GameMakerWpf.Views.DataTemplates"
              xmlns:appManagement="clr-namespace:GameMakerWpf.AppManagement"

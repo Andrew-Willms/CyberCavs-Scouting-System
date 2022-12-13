@@ -1,0 +1,78 @@
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Input;
+using GameMakerWpf.DisplayData.Errors;
+using UtilitiesLibrary.Results;
+
+namespace GameMakerWpf.AppManagement;
+
+
+
+public interface IErrorPresenter {
+
+	public void DisplayError<TError>(TError error, Func<TError, ErrorDisplayData> errorDisplayDataGetter) where TError : Error;
+
+}
+
+
+
+public partial class ErrorPresenter : Window, IErrorPresenter, INotifyPropertyChanged {
+
+	private string _Caption = "";
+	public string Caption {
+		get => _Caption;
+		set {
+			_Caption = value;
+			OnPropertyChanged(nameof(Caption));
+		}
+	}
+
+	private string _Message = "";
+	public string Message {
+		get => _Message;
+		set {
+			_Message = value;
+			OnPropertyChanged(nameof(Message));
+		}
+	}
+
+
+
+	public ErrorPresenter() {
+
+		DataContext = this;
+
+		InitializeComponent();
+	}
+
+	public void DisplayError<TError>(TError error, Func<TError, ErrorDisplayData> errorDisplayDataGetter) where TError : Error {
+
+		ErrorDisplayData errorDisplayData = errorDisplayDataGetter.Invoke(error);
+
+		Caption = errorDisplayData.Caption;
+		Message = errorDisplayData.Message;
+
+		ShowDialog();
+	}
+
+	private void Window_MouseDown(object sender, MouseButtonEventArgs e) {
+
+		if (e.ChangedButton == MouseButton.Left) {
+			DragMove();
+		}
+	}
+
+	private void OkayButton_Clicked(object sender, RoutedEventArgs e) {
+		Close();
+	}
+
+
+
+	public event PropertyChangedEventHandler? PropertyChanged;
+
+	private void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
+	}
+
+}

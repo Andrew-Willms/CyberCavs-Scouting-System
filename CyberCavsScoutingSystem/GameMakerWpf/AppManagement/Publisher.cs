@@ -4,7 +4,9 @@ using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.Editors;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Results;
+using static GameMakerWpf.AppManagement.IPublisher;
 
 namespace GameMakerWpf.AppManagement;
 
@@ -12,17 +14,21 @@ namespace GameMakerWpf.AppManagement;
 
 public interface IPublisher {
 
-	public Result<PublishingError> Publish(GameEditor gameEditor);
+	public IPublishResult Publish(GameEditor gameEditor);
 
-	public class PublishingError : Error<PublishingError.Types> {
+	public interface IPublishResult : IResult {
 
-		public enum Types {
-			Aborted,
-			GameEditorCouldNotBeConvertedToGameSpecification,
-			GameSpecificationCouldNotBeConvertedToSaveData,
-			SaveLocationDoesNotExist,
-			SaveLocationCouldNotBeWrittenTo
-		}
+		public class Success : IResult.Success, IPublishResult { }
+
+		public class Aborted : Error, IPublishResult { }
+
+		public class GameEditorCouldNotBeConvertedToGameSpecification : Error, IPublishResult { }
+
+		public class GameSpecificationCouldNotBeConvertedToSaveData : Error, IPublishResult { }
+
+		public class SaveLocationDoesNotExist : Error, IPublishResult { }
+
+		public class SaveLocationCouldNotBeWrittenTo : Error, IPublishResult { }
 
 	}
 
@@ -42,22 +48,20 @@ public class Publisher : IPublisher {
 		Filter = "CCSS Game Specification (*.cgs)|*.cgs"
 	};
 
+	public IPublishResult Publish(GameEditor gameEditor) {
 
-
-	public Result<IPublisher.PublishingError> Publish(GameEditor gameEditor) {
-
-		Result<Game, EditorToGameSpecificationError> result = gameEditor.ToGameSpecification();
+		IEditorToGameSpecificationResult<Game> result = gameEditor.ToGameSpecification();
 		Game gameSpecification;
 
-		switch (result.Resolve()) {
+		switch (result) {
 
-			case Success<Game> success:
+			case IEditorToGameSpecificationResult<Game>.Success success:
 				gameSpecification = success.Value;
 				break;
 
-			case EditorToGameSpecificationError { ErrorType: EditorToGameSpecificationError.Types.EditorIsInvalid }:
-				return new IPublisher.PublishingError {
-					ErrorType = IPublisher.PublishingError.Types.GameEditorCouldNotBeConvertedToGameSpecification
+			case IEditorToGameSpecificationResult<Game>.Error error:
+				return new IPublishResult.GameEditorCouldNotBeConvertedToGameSpecification {
+					InnerError = ((Error)error).Optionalize()
 				};
 
 			default:
@@ -69,7 +73,7 @@ public class Publisher : IPublisher {
 		bool? proceed = saveFileDialog.ShowDialog();
 
 		if (proceed is null or false) {
-			return new IPublisher.PublishingError { ErrorType = IPublisher.PublishingError.Types.Aborted };
+			return new IPublishResult.Aborted();
 		}
 
 		string filePath = saveFileDialog.FileName;
@@ -77,7 +81,7 @@ public class Publisher : IPublisher {
 		string folderPath = string.Join("\\", filePathPieces[..^1]);
 
 		if (!Directory.Exists(folderPath)) {
-			return new IPublisher.PublishingError { ErrorType = IPublisher.PublishingError.Types.SaveLocationDoesNotExist };
+			return new IPublishResult.SaveLocationDoesNotExist();
 		}
 
 		string serializedGameSpecification;
@@ -85,10 +89,7 @@ public class Publisher : IPublisher {
 			serializedGameSpecification = JsonConvert.SerializeObject(gameSpecification, JsonSerializerSettings);
 
 		} catch {
-
-			return new IPublisher.PublishingError {
-				ErrorType = IPublisher.PublishingError.Types.GameSpecificationCouldNotBeConvertedToSaveData
-			};
+			return new IPublishResult.GameSpecificationCouldNotBeConvertedToSaveData();
 		}
 
 		try {
@@ -96,14 +97,10 @@ public class Publisher : IPublisher {
 
 		} catch {
 
-			return new IPublisher.PublishingError {
-				ErrorType = IPublisher.PublishingError.Types.SaveLocationCouldNotBeWrittenTo
-			};
+			return new IPublishResult.SaveLocationCouldNotBeWrittenTo();
 		}
 
-		return new Success();
+		return new IPublishResult.Success();
 	}
-
-
 
 }

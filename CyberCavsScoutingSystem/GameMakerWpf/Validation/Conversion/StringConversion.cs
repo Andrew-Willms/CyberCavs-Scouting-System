@@ -6,7 +6,6 @@ using System.Numerics;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Math.Numbers;
 using UtilitiesLibrary.Optional;
-using UtilitiesLibrary.Results;
 using Number = UtilitiesLibrary.Math.Numbers.Number;
 using ValidationError = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
 
@@ -204,7 +203,7 @@ public static class StringConversion {
 
 
 	private static (Optional<T>, ReadOnlyList<ValidationError>) ToFloatPrimitive<T>(
-		string inputString, Func<Number, Result<T, NumberToPrimitiveError>> parser, FloatConversionErrorSet errorSet) where T : INumber<T> {
+		string inputString, Func<Number, INumberToPrimitiveResult<T>> parser, FloatConversionErrorSet errorSet) where T : INumber<T> {
 
 		(Optional<Number> option, ReadOnlyList<ValidationError> numberConversionErrors) = ToFloat(inputString, errorSet);
 
@@ -213,24 +212,22 @@ public static class StringConversion {
 		}
 
 		Number number = option.Value;
-		Result<T, NumberToPrimitiveError> result = parser.Invoke(number);
+		INumberToPrimitiveResult<T> result = parser.Invoke(number);
 
-		return result.Resolve() switch {
+		return result switch {
 
-			NumberToPrimitiveError { ErrorType: NumberToPrimitiveError.Types.ValueBelowMin}
-				=> (Optional.NoValue, errorSet.ValueTooNegativeErrorGetter(inputString).ReadOnlyListify()),
+			INumberToPrimitiveResult<T>.ValueBelowMin => (Optional.NoValue, errorSet.ValueTooNegativeErrorGetter(inputString).ReadOnlyListify()),
 
-			NumberToPrimitiveError { ErrorType: NumberToPrimitiveError.Types.ValueAboveMax}
-				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
+			INumberToPrimitiveResult<T>.ValueAboveMax => (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
+			INumberToPrimitiveResult<T>.Success success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new UnreachableException()
 		};
 	} 
 
 	private static (Optional<T>, ReadOnlyList<ValidationError>) ToIntegerPrimitive<T>(
-		string inputString, Func<Integer, Result<T, IntegerToPrimitiveError>> parser, IntegerConversionErrorSet errorSet) where T : INumber<T> {
+		string inputString, Func<Integer, IIntegerToPrimitiveResult<T>> parser, IntegerConversionErrorSet errorSet) where T : INumber<T> {
 
 		(Optional<Integer> option, ReadOnlyList<ValidationError> numberConversionErrors) = ToInteger(inputString, errorSet);
 
@@ -239,24 +236,22 @@ public static class StringConversion {
 		}
 
 		Integer integer = option.Value;
-		Result<T, IntegerToPrimitiveError> result = parser.Invoke(integer);
+		IIntegerToPrimitiveResult<T> result = parser.Invoke(integer);
 
-		return result.Resolve() switch {
+		return result switch {
 
-			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueBelowMin}
-				=> (Optional.NoValue, errorSet.ValueTooNegativeErrorGetter(inputString).ReadOnlyListify()),
+			IIntegerToPrimitiveResult<T>.ValueBelowMin => (Optional.NoValue, errorSet.ValueTooNegativeErrorGetter(inputString).ReadOnlyListify()),
 
-			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueAboveMax}
-				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
+			IIntegerToPrimitiveResult<T>.ValueAboveMax => (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
+			IIntegerToPrimitiveResult<T>.Success success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new UnreachableException()
 		};
 	}
 
 	private static (Optional<T>, ReadOnlyList<ValidationError>) ToWholePrimitive<T>(
-		string inputString, Func<Whole, Result<T, IntegerToPrimitiveError>> parser, WholeConversionErrorSet errorSet) where T : INumber<T> {
+		string inputString, Func<Whole, IIntegerToPrimitiveResult<T>> parser, WholeConversionErrorSet errorSet) where T : INumber<T> {
 
 		(Optional<Whole> option, ReadOnlyList<ValidationError> numberConversionErrors) = ToWhole(inputString, errorSet);
 
@@ -265,17 +260,15 @@ public static class StringConversion {
 		}
 		
 		Whole whole = option.Value;
-		Result<T, IntegerToPrimitiveError> result = parser.Invoke(whole);
+		IIntegerToPrimitiveResult<T> result = parser.Invoke(whole);
 
-		return result.Resolve() switch {
+		return result switch {
 
-			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueBelowMin}
-				=> (Optional.NoValue, errorSet.CannotBeNegativeError.ReadOnlyListify()),
+			IIntegerToPrimitiveResult<T>.ValueBelowMin => (Optional.NoValue, errorSet.CannotBeNegativeError.ReadOnlyListify()),
 
-			IntegerToPrimitiveError { ErrorType: IntegerToPrimitiveError.Types.ValueAboveMax}
-				=> (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
+			IIntegerToPrimitiveResult<T>.ValueAboveMax => (Optional.NoValue, errorSet.ValueTooLargeErrorGetter(inputString).ReadOnlyListify()),
 
-			Success<T> success => (success.Value.Optionalize(), ReadOnlyList.Empty),
+			IIntegerToPrimitiveResult<T>.Success success => (success.Value.Optionalize(), ReadOnlyList.Empty),
 
 			_ => throw new UnreachableException()
 		};

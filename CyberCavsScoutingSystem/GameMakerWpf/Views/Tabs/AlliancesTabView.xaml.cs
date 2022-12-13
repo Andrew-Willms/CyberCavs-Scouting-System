@@ -3,12 +3,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using CCSSDomain;
 using GameMakerWpf.AppManagement;
-using GameMakerWpf.DisplayData;
+using GameMakerWpf.DisplayData.Errors.ErrorData;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 using UtilitiesLibrary.WPF;
 
@@ -18,7 +17,7 @@ namespace GameMakerWpf.Views.Tabs;
 
 public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChanged {
 
-	private static IErrorPresenter ErrorPresenter { get; } = new ErrorPresenter();
+	private static IErrorPresenter ErrorPresenter => new ErrorPresenter();
 
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;
@@ -65,20 +64,15 @@ public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChan
 			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
 		}
 
-		Result<ListRemoveError> result = Alliances.Remove(SelectedAlliance);
+		IListRemoveResult result = Alliances.Remove(SelectedAlliance);
 
-		switch (result.Resolve()) {
+		switch (result) {
 
-			case Success:
+			case IListRemoveResult<AllianceEditor>.Success:
 				return;
 
-			case ListRemoveError { ErrorType: ListRemoveError.Types.ItemNotFound }:
-				ErrorPresenter.DisplayError(ErrorData.RemoveAllianceError.AllianceNotFoundCaption, ErrorData.RemoveAllianceError.AllianceNotFoundMessage);
-				return;
-
-			//TODO replace with appropriate error message
-			case ListRemoveError { ErrorType: ListRemoveError.Types.OtherFailure }:
-				ErrorPresenter.DisplayError("todo", "todo");
+			case IListRemoveResult<AllianceEditor>.ItemNotFound error:
+				ErrorPresenter.DisplayError(error, RemoveFromListErrors.RemoveAllianceError);
 				return;
 
 			default:

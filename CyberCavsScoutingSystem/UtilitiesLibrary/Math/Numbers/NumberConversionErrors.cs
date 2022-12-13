@@ -1,4 +1,5 @@
-﻿using UtilitiesLibrary.Results;
+﻿using System.Numerics;
+using UtilitiesLibrary.Results;
 
 namespace UtilitiesLibrary.Math.Numbers;
 
@@ -18,21 +19,24 @@ public class ValueIsNotPositiveError : Error { }
 
 
 
-public class IntegerToPrimitiveError : Error<IntegerToPrimitiveError.Types> {
+public interface IIntegerToPrimitiveResult<T> : IResult<T> where T : INumber<T> {
 
-	public enum Types {
-		ValueBelowMin,
-		ValueAboveMax
-	}
+	public class Success : IResult<T>.Success, IIntegerToPrimitiveResult<T> { }
+
+	public class ValueBelowMin : IResult<T>.Error, IIntegerToPrimitiveResult<T> { }
+
+	public class ValueAboveMax : IResult<T>.Error, IIntegerToPrimitiveResult<T> { }
 
 }
 
-public class NumberToPrimitiveError : Error<NumberToPrimitiveError.Types> {
+public interface INumberToPrimitiveResult<T> : IResult<T> where T : INumber<T> {
 
-	public enum Types {
-		ValueBelowMin,
-		ValueAboveMax,
-		//DecimalsCannotBeRepresented
-	}
+	public class Success : IResult<T>.Success, INumberToPrimitiveResult<T> { }
+
+	public class ValueBelowMin : IResult<T>.Error, INumberToPrimitiveResult<T> { }
+
+	public class ValueAboveMax : IResult<T>.Error, INumberToPrimitiveResult<T> { }
+
+	//public class DecimalsCannotBeRepresented : IResult<T>.Error, IIntegerToPrimitiveResult<T> { }
 
 }
