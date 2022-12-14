@@ -24,28 +24,6 @@ public abstract class SmartEnum<T> : IEquatable<SmartEnum<T>> where T : SmartEnu
 		Value = value;
 	}
 
-	public static IEnumerable<T> GetOptions() {
-
-		return typeof(T).Assembly.GetTypes()
-			.Where(x => typeof(T).IsAssignableFrom(x))
-			.SelectMany(x => x.GetFields())
-			.Where(x => x.FieldType == typeof(T))
-			.Select(x => (SmartEnum<T>)x.GetValue(null)!)
-			.OrderBy(x => x.Name)
-			.Select(x => (T)x);
-
-		// Verbose version
-		//Type baseType = typeof(T);
-		//Assembly assembly = baseType.Assembly;
-		//Type[] assemblyTypes = assembly.GetTypes();
-		//IEnumerable<Type> relevantTypes = assemblyTypes.Where(x => baseType.IsAssignableFrom(x));
-		//IEnumerable<FieldInfo> fieldInfos = relevantTypes.SelectMany(x => x.GetFields());
-		//IEnumerable<FieldInfo> relevantFields = fieldInfos.Where(x => x.FieldType == typeof(T));
-		//IEnumerable<T> smartEnums = relevantFields.Select(x => (T)x.GetValue(null)!);
-		//IEnumerable<T> alphabeticalSmartEnums = smartEnums.OrderBy(x => x.Name);
-		//return alphabeticalSmartEnums;
-	}
-
 	public override string ToString() {
 		return $"{nameof(SmartEnum<T>)}.{Name}";
 	}
