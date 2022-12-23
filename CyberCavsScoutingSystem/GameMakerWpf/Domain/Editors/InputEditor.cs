@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CCSSDomain;
 using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;

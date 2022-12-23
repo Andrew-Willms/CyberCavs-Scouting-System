@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CCSSDomain;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Collections;

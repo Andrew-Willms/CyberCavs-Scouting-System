@@ -52,7 +52,7 @@ public class Results {
 
 		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success));
 		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).GetGenericTypeDefinition());
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).GetGenericTypeDefinition().GetGenericTypeDefinition);
+		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).GetGenericTypeDefinition().GetGenericTypeDefinition());
 
 		foreach (Type type in gameMakerAssembly
 			         .GetTypes()

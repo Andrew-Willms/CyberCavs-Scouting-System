@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Linq;
-using CCSSDomain;
 using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;

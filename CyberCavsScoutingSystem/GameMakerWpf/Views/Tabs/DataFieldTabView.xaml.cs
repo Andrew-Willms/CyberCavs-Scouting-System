@@ -8,6 +8,7 @@ using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
+using Microsoft.Extensions.DependencyInjection;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 using UtilitiesLibrary.WPF;
@@ -18,7 +19,7 @@ namespace GameMakerWpf.Views.Tabs;
 
 public partial class DataFieldTabView : AppManagerDependent, INotifyPropertyChanged {
 
-	private static IErrorPresenter ErrorPresenter => new ErrorPresenter();
+	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;

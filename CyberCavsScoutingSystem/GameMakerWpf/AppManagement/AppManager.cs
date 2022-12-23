@@ -4,7 +4,7 @@ using GameMakerWpf.DisplayData.Errors.ErrorData.AppManagerErrors;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
-using GameMakerWpf.Views;
+using Microsoft.Extensions.DependencyInjection;
 using UtilitiesLibrary.WPF;
 using static GameMakerWpf.AppManagement.ISavePrompter;
 using static GameMakerWpf.AppManagement.ISaver.ISaveAsResult;
@@ -43,13 +43,14 @@ public class AppManager : INotifyPropertyChanged {
 		}
 	}
 
-	private IGameMakerMainView MainView { get; set; } = null!; // must be initialized after the AppManager is finished construction
-	private static IErrorPresenter ErrorPresenter => new ErrorPresenter(); // stateless
-	private readonly ISaver Saver = new Saver(); // stateful
-	private static ISavePrompter SavePrompter => new SavePrompter(); // single use
-	private readonly IPublisher Publisher = new Publisher(); // stateless
+	private IGameMakerMainView MainView => App.ServiceProvider.GetRequiredService<IGameMakerMainView>();
+	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
+	private readonly ISaver Saver = App.ServiceProvider.GetRequiredService<ISaver>();
+	private static ISavePrompter SavePrompter => App.ServiceProvider.GetRequiredService<ISavePrompter>();
+	private readonly IPublisher Publisher = App.ServiceProvider.GetRequiredService<IPublisher>();
 
 	private bool ProjectIsSaved { get; set; } = true;
+
 
 
 	public AppManager() {
@@ -58,9 +59,6 @@ public class AppManager : INotifyPropertyChanged {
 	}
 
 	public void ApplicationStartup() {
-
-		MainView = new MainWindow();
-
 		MainView.Show();
 	}
 

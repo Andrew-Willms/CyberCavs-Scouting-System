@@ -1,5 +1,4 @@
-﻿using CCSSDomain;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain;

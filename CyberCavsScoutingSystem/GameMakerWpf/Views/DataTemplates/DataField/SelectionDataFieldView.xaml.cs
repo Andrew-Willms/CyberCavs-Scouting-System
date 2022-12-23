@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
-using CCSSDomain;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData.Errors.ErrorData;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
+using Microsoft.Extensions.DependencyInjection;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
@@ -18,7 +18,7 @@ namespace GameMakerWpf.Views.DataTemplates.DataField;
 
 public partial class SelectionDataFieldView : AppManagerDependent, INotifyPropertyChanged {
 
-	private static IErrorPresenter ErrorPresenter => new ErrorPresenter();
+	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 
 
 

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
-using CCSSDomain;
 using GameMakerWpf.Domain;
 using UtilitiesLibrary.WPF;
 

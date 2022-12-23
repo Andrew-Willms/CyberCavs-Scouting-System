@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CCSSDomain;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;

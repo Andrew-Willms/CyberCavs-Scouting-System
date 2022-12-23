@@ -1,5 +1,4 @@
-﻿using CCSSDomain;
-using GameMakerWpf.Domain;
+﻿using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<GameMakerWpf.Domain.ErrorSeverity>;
 

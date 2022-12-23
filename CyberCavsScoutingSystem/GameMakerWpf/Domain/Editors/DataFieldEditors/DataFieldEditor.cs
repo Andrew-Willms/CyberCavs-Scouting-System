@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using CCSSDomain;
 using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;

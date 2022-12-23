@@ -1,5 +1,4 @@
-﻿using CCSSDomain;
-using GameMakerWpf.Domain.EditingData;
+﻿using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation.Inputs;
 

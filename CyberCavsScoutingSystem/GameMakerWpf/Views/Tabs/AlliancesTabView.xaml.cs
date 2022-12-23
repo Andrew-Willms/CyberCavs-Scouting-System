@@ -1,13 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using CCSSDomain;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData.Errors.ErrorData;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
+using Microsoft.Extensions.DependencyInjection;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation.Inputs;
 using UtilitiesLibrary.WPF;
@@ -18,7 +18,7 @@ namespace GameMakerWpf.Views.Tabs;
 
 public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChanged {
 
-	private static IErrorPresenter ErrorPresenter => new ErrorPresenter();
+	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 
 	// These can't be static or PropertyChanged events on them won't work.
 	private GameEditor GameEditor => App.Manager.GameEditor;
