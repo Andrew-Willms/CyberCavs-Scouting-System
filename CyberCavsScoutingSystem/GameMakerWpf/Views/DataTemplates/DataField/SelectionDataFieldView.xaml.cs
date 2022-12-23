@@ -5,6 +5,7 @@ using System.Windows;
 using CCSSDomain;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData.Errors.ErrorData;
+using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;

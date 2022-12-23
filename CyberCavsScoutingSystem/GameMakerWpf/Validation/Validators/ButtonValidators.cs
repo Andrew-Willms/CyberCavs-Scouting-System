@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using CCSSDomain.GameSpecification;
+using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation;
@@ -9,7 +10,7 @@ using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Conversion;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Optional;
-using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using Error = UtilitiesLibrary.Validation.Errors.ValidationError<GameMakerWpf.Domain.ErrorSeverity>;
 
 namespace GameMakerWpf.Validation.Validators;
 

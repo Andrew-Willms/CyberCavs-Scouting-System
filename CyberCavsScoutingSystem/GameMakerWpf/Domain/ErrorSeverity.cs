@@ -1,6 +1,6 @@
 ﻿using UtilitiesLibrary.Validation.Errors;
 
-namespace CCSSDomain;
+namespace GameMakerWpf.Domain;
 
 
 

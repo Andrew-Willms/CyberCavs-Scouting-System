@@ -18,4 +18,5 @@ public abstract class ValidationErrorSeverityEnum<T> : OrderedSmartEnum<T> where
 public interface IValidationErrorSeverityEnum<out T> where T : ValidationErrorSeverityEnum<T> {
 
 	public static abstract T NoError { get; }
+
 }

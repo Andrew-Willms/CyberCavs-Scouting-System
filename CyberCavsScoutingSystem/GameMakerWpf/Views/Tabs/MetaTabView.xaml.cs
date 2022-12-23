@@ -2,6 +2,7 @@
 using CCSSDomain;
 using CCSSDomain.GameSpecification;
 using GameMakerWpf.AppManagement;
+using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary.Validation.Inputs;
 using UtilitiesLibrary.WPF;

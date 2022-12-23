@@ -42,7 +42,7 @@ public abstract class Input<TOutput, TSeverity> : IInput<TOutput, TSeverity>
 	private ReadOnlyKeysDictionary<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> Validators { get; }
 
 	protected ReadOnlyList<ValidationError<TSeverity>> ConversionErrors { get; set; } = ReadOnlyList.Empty;
-	protected ReadOnlyList<ValidationError<TSeverity>> ValidationErrors => Validators.Values.Flatten().ToReadOnly();
+	public ReadOnlyList<ValidationError<TSeverity>> ValidationErrors => Validators.Values.Flatten().ToReadOnly();
 	public abstract ReadOnlyList<ValidationError<TSeverity>> Errors { get; }
 
 	public TSeverity ConversionErrorLevel => ConversionErrors.Select(x => x.Severity).Max() ?? TSeverity.NoError;

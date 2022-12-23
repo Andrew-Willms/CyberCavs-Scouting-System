@@ -7,7 +7,7 @@ using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Math.Numbers;
 using UtilitiesLibrary.Optional;
 using Number = UtilitiesLibrary.Math.Numbers.Number;
-using ValidationError = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using ValidationError = UtilitiesLibrary.Validation.Errors.ValidationError<GameMakerWpf.Domain.ErrorSeverity>;
 
 namespace GameMakerWpf.Validation.Conversion;
 

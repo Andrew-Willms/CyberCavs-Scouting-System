@@ -11,9 +11,9 @@ public class Program {
 		//Console.WriteLine("Test");
 		//Trace.WriteLine("Test");
 
-		Child test = new Child();
+		//Child test = new Child();
 
-		//TestGenericTypeMatching();
+		TestGenericTypeMatching();
 	}
 
 
@@ -30,7 +30,10 @@ public class Program {
 		Console.WriteLine(test.GetType().GetGenericArguments());
 		Console.WriteLine(test.GetType().GetGenericTypeDefinition());
 
+		Console.WriteLine(test.GetType() == typeof(TestClass1<,>));
+		Console.WriteLine(test.GetType() == typeof(TestClass1<int, int>));
 		Console.WriteLine(test.GetType().GetGenericTypeDefinition() == typeof(TestClass1<,>));
+		Console.WriteLine(test.GetType() == typeof(TestClass1<,,>));
 		Console.WriteLine(test.GetType().GetGenericTypeDefinition() == typeof(TestClass1<,,>));
 	}
 

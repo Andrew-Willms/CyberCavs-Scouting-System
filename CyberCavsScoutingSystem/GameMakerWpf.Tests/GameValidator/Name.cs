@@ -5,7 +5,7 @@ using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Validation;
 using Xunit;
-using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using Error = UtilitiesLibrary.Validation.Errors.ValidationError<GameMakerWpf.Domain.ErrorSeverity>;
 
 namespace GameMakerWpf.Tests.GameValidator;
 

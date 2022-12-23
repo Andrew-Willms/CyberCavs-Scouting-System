@@ -4,7 +4,7 @@ using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Validation;
-using Error = UtilitiesLibrary.Validation.Errors.ValidationError<CCSSDomain.ErrorSeverity>;
+using Error = UtilitiesLibrary.Validation.Errors.ValidationError<GameMakerWpf.Domain.ErrorSeverity>;
 using Version = CCSSDomain.GameSpecification.Version;
 
 namespace GameMakerWpf.Validation.Validators;

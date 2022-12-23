@@ -4,6 +4,7 @@ using System.Diagnostics;
 using CCSSDomain;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.DisplayData.Errors.ErrorData;
+using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;

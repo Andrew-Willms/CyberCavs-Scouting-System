@@ -3,12 +3,12 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:wpfUtilities="clr-namespace:UtilitiesLibrary;assembly=UtilitiesLibrary"
+             xmlns:utilitiesLibrary="clr-namespace:UtilitiesLibrary;assembly=UtilitiesLibrary"
              xmlns:wpf="clr-namespace:UtilitiesLibrary.WPF;assembly=UtilitiesLibrary"
              xmlns:wpfConverters="clr-namespace:GameMakerWpf.WpfConverters"
-             xmlns:ccssDomain="clr-namespace:CCSSDomain"
-             xmlns:gameSpecification="clr-namespace:CCSSDomain.GameSpecification;assembly=CCSSDomain"
-             Startup="ApplicationStartup">
+			 xmlns:domain="clr-namespace:GameMakerWpf.Domain"
+			 xmlns:gameSpecification="clr-namespace:CCSSDomain.GameSpecification;assembly=CCSSDomain"
+			 Startup="ApplicationStartup">
 	<Application.Resources>
 
         <wpfConverters:ErrorToNormalBrushConverter x:Key="ErrorToNormalBrushConverter"/>
@@ -17,12 +17,15 @@
 		<wpfConverters:ErrorToToolTipTextBrushConverter x:Key="ErrorToToolTipTextBrushConverter"/>
         <wpfConverters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
 
+
+
         <Style x:Key="StringInputStyle" TargetType="{x:Type TypeName=TextBox}">
-            <d:Style.DataContext>
+
+	        <d:Style.DataContext>
                 <d:DesignInstance Type="wpfUtilities:ISingleInput, IsDesignTimeCreatable=True"/>
             </d:Style.DataContext>
 
-            <!--I have to override the template in order to change the border color when focused or hovered over-->
+	        <!--I have to override the template in order to change the border color when focused or hovered over-->
 			<Setter Property="Template">
 				<Setter.Value>
 					<ControlTemplate TargetType="{x:Type TextBox}">
@@ -65,34 +68,41 @@
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
             <Setter Property="Text" Value="{Binding Path=InputObject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-			<Setter Property="ToolTip">
-				<Setter.Value>
-					<StackPanel>
-						<TextBlock Text="Description stuff here."/>
-						<ItemsControl ItemsSource="{Binding Errors}">
-							<ItemsControl.ItemTemplate>
-								<DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=ccssDomain:ErrorSeverity}">
-                                    <!--<DataTemplate.DataType>d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}"</DataTemplate.DataType>-->
-                                    <DataTemplate.Resources>
-										<Style TargetType="TextBlock">
-											<Setter Property="Foreground"
-													Value="{Binding Path=Severity,
+
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Path=Errors.IsEmpty}" Value="False">
+
+					<Setter Property="ToolTip">
+						<Setter.Value>
+							<StackPanel>
+								<ItemsControl ItemsSource="{Binding Errors}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type utilitiesLibrary:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
+											<!--<DataTemplate.DataType>d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}"</DataTemplate.DataType>-->
+											<DataTemplate.Resources>
+												<Style TargetType="TextBlock">
+													<Setter Property="Foreground"
+													        Value="{Binding Path=Severity,
 															Converter={StaticResource ErrorToToolTipTextBrushConverter},
 															Mode=OneTime}"/>
-										</Style>
-									</DataTemplate.Resources>
-									<TextBlock Text="{Binding Description}"/>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</StackPanel>
-				</Setter.Value>
-			</Setter>
+												</Style>
+											</DataTemplate.Resources>
+											<TextBlock Text="{Binding Description}"/>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</StackPanel>
+						</Setter.Value>
+					</Setter>
+
+				</DataTrigger>
+			</Style.Triggers>
+
 		</Style>
 
 		<Style x:Key="MultiStringInputBorderStyle" TargetType="Border">
 			<d:Style.DataContext>
-                <d:DesignInstance Type="{wpf:GenericObjectFactoryExtension2 Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T1=gameSpecification:Version, T2=ccssDomain:ErrorSeverity}"/>
+                <d:DesignInstance Type="{wpf:GenericObjectFactoryExtension2 Type={x:Type utilitiesLibrary:Validation.Errors.ValidationError`1}, T1=gameSpecification:Version, T2=domain:ErrorSeverity}"/>
                 <!--<d:DesignInstance Type="wpfUtilities:MultiStringInput, IsDesignTimeCreatable=True"/>-->
 			</d:Style.DataContext>
 
@@ -100,28 +110,34 @@
 
             <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
 			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
-			<Setter Property="ToolTip">
-				<Setter.Value>
-					<StackPanel>
-						<TextBlock Text="Description stuff here."/>
-                        <ItemsControl ItemsSource="{Binding ValidationErrors}">
-							<ItemsControl.ItemTemplate>
-                                <DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=ccssDomain:ErrorSeverity}">
-                                    <DataTemplate.Resources>
-										<Style TargetType="TextBlock">
-											<Setter Property="Foreground"
-													Value="{Binding Path=Severity,
+
+            <Style.Triggers>
+				<DataTrigger Binding="{Binding Path=ValidationErrors.IsEmpty}" Value="False">
+
+					<Setter Property="ToolTip">
+			            <Setter.Value>
+				            <StackPanel>
+					            <ItemsControl ItemsSource="{Binding ValidationErrors}">
+						            <ItemsControl.ItemTemplate>
+							            <DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type utilitiesLibrary:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
+								            <DataTemplate.Resources>
+									            <Style TargetType="TextBlock">
+										            <Setter Property="Foreground"
+										                    Value="{Binding Path=Severity,
 															Converter={StaticResource ErrorToToolTipTextBrushConverter},
 															Mode=OneTime}"/>
-										</Style>
-									</DataTemplate.Resources>
-									<TextBlock Text="{Binding Description}"/>
-								</DataTemplate>
-							</ItemsControl.ItemTemplate>
-						</ItemsControl>
-					</StackPanel>
-				</Setter.Value>
-			</Setter>
+									            </Style>
+								            </DataTemplate.Resources>
+								            <TextBlock Text="{Binding Description}"/>
+							            </DataTemplate>
+						            </ItemsControl.ItemTemplate>
+					            </ItemsControl>
+				            </StackPanel>
+			            </Setter.Value>
+		            </Setter>
+
+				</DataTrigger>
+            </Style.Triggers>
 
 		</Style>
 

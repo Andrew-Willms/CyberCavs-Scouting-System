@@ -19,4 +19,8 @@
       <ProjectReference Include="..\GameMakerWpf\GameMakerWpf.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Result\" />
+    </ItemGroup>
+
 </Project>

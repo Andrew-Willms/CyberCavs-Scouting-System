@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace UtilitiesLibrary.MiscExtensions; 
 
@@ -28,6 +29,22 @@ public static class TypeExtensions {
 		}
 
 		return false;
+	}
+
+	public static bool Inherits(this Type toCheck, Type potentialParent) {
+
+		//Trace.WriteLine(toCheck);
+		//Trace.WriteLine(toCheck.GetGenericTypeDefinition());
+		//Trace.WriteLine(potentialParent);
+		//Trace.WriteLine(potentialParent.GetGenericTypeDefinition());
+
+		if (potentialParent.IsGenericType) {
+			potentialParent = potentialParent.GetGenericTypeDefinition();
+		}
+
+		return toCheck.IsGenericType
+			? toCheck.GetGenericTypeDefinition().IsAssignableTo(potentialParent)
+			: toCheck.IsAssignableTo(potentialParent);
 	}
 
 }
