@@ -25,7 +25,7 @@ public partial class App : Application {
 		}
 	}
 
-	public static readonly AppManager Manager = new(ServiceProvider.GetRequiredService<IGameMakerMainView>());
+	public static readonly AppManager Manager = new();
 
 
 
