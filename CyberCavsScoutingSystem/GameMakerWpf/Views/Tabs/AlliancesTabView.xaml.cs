@@ -21,7 +21,7 @@ public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChan
 	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditor GameEditor => App.Manager.GameEditor;
+	private GameEditor GameEditor => App.ServiceProvider.GetRequiredService<IAppManager>().GameEditor;
 
 	[DependsOn(nameof(AppManager.GameEditor))]
 	public ObservableList<AllianceEditor, AllianceEditingData> Alliances => GameEditor.Alliances;

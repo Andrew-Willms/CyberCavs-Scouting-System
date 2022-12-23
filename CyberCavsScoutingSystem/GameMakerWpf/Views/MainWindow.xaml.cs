@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using GameMakerWpf.AppManagement;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GameMakerWpf.Views;
 
@@ -9,7 +10,7 @@ public partial class MainWindow : Window, IGameMakerMainView {
 
 	public MainWindow() {
 
-		DataContext = App.Manager.GameEditor;
+		DataContext = App.ServiceProvider.GetRequiredService<IAppManager>().GameEditor;
 
 		InitializeComponent();
 	}
@@ -18,27 +19,27 @@ public partial class MainWindow : Window, IGameMakerMainView {
 
 	private void Save_Execute(object sender, RoutedEventArgs e) {
 
-		App.Manager.SaveGameProject();
+		App.ServiceProvider.GetRequiredService<IAppManager>().SaveGameProject();
 	}
 
 	private void SaveAs_Execute(object sender, RoutedEventArgs e) {
 
-		App.Manager.SaveGameProjectAs();
+		App.ServiceProvider.GetRequiredService<IAppManager>().SaveGameProjectAs();
 	}
 
 	private void Open_Execute(object sender, RoutedEventArgs e) {
 
-		App.Manager.OpenGameProject();
+		App.ServiceProvider.GetRequiredService<IAppManager>().OpenGameProject();
 	}
 
 	private void New_Execute(object sender, RoutedEventArgs e) {
 
-		App.Manager.NewGameProject();
+		App.ServiceProvider.GetRequiredService<IAppManager>().NewGameProject();
 	}
 
 	private void Publish_Execute(object sender, RoutedEventArgs e) {
 
-		App.Manager.Publish();
+		App.ServiceProvider.GetRequiredService<IAppManager>().Publish();
 	}
 
 }

@@ -3,6 +3,7 @@ using CCSSDomain.GameSpecification;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Editors;
+using Microsoft.Extensions.DependencyInjection;
 using UtilitiesLibrary.Validation.Inputs;
 using UtilitiesLibrary.WPF;
 
@@ -13,7 +14,7 @@ namespace GameMakerWpf.Views.Tabs;
 public partial class MetaTabView : AppManagerDependent, INotifyPropertyChanged {
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditor GameEditor => App.Manager.GameEditor;
+	private GameEditor GameEditor => App.ServiceProvider.GetRequiredService<IAppManager>().GameEditor;
 
 	[DependsOn(nameof(AppManager.GameEditor))]
 	public SingleInput<string, string, ErrorSeverity> GameName => GameEditor.Name;

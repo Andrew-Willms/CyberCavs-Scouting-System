@@ -21,7 +21,7 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditor GameEditor => App.Manager.GameEditor;
+	private GameEditor GameEditor => App.ServiceProvider.GetRequiredService<IAppManager>().GameEditor;
 
 	[DependsOn(nameof(AppManager.GameEditor))]
 	public ObservableList<ButtonEditor, ButtonEditingData> Buttons => GameEditor.AutoButtons;

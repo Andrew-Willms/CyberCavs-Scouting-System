@@ -25,13 +25,11 @@ public partial class App : Application {
 		}
 	}
 
-	public static readonly AppManager Manager = new();
-
 
 
 	private void ApplicationStartup(object sender, StartupEventArgs e) {
 
-		Manager.ApplicationStartup();
+		ServiceProvider.GetRequiredService<IAppManager>().ApplicationStartup();
 	}
 
 	private static void ConfigureServices(in IServiceCollection services) {
@@ -39,8 +37,10 @@ public partial class App : Application {
 		services.AddTransient<IErrorPresenter, ErrorPresenter>();
 		services.AddTransient<ISavePrompter, SavePrompter>();
 		services.AddTransient<IPublisher, Publisher>();
+
 		services.AddSingleton<ISaver, Saver>();
 		services.AddSingleton<IGameMakerMainView, MainWindow>();
+		services.AddSingleton<IAppManager, AppManager>();
 	}
 
 }

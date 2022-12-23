@@ -20,7 +20,7 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 
 	// These can't be static or PropertyChanged events on them won't work.
-	private GameEditor GameEditor => App.Manager.GameEditor;
+	private GameEditor GameEditor => App.ServiceProvider.GetRequiredService<IAppManager>().GameEditor;
 
 	[DependsOn(nameof(AppManager.GameEditor))]
 	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.SetupTabInputs;
@@ -35,7 +35,7 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 		}
 	}
 
-	public bool RemoveButtonIsEnabled => App.Manager.SelectedDataField is not null;
+	public bool RemoveButtonIsEnabled => App.ServiceProvider.GetRequiredService<IAppManager>().SelectedDataField is not null;
 
 
 

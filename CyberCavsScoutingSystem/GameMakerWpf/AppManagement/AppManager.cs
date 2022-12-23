@@ -14,15 +14,37 @@ namespace GameMakerWpf.AppManagement;
 
 
 
-public abstract class AppManagerDependent : DependentControl<AppManager> {
+public abstract class AppManagerDependent : DependentControl<IAppManager> {
 
-	protected override AppManager SingletonGetter => App.Manager;
+	protected override IAppManager SingletonGetter => App.ServiceProvider.GetRequiredService<IAppManager>();
 
 }
 
 
 
-public class AppManager : INotifyPropertyChanged {
+public interface IAppManager : INotifyPropertyChanged {
+
+	public DataFieldEditor? SelectedDataField { get; set; }
+
+	public GameEditor GameEditor { get; }
+
+	public void ApplicationStartup();
+
+	public void SaveGameProject();
+
+	public void SaveGameProjectAs();
+
+	public void OpenGameProject();
+
+	public void NewGameProject();
+
+	public void Publish();
+
+}
+
+
+
+public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	private GameEditor _GameEditor = null!;
 	public GameEditor GameEditor {
