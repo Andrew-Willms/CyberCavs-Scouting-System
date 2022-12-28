@@ -1,10 +1,7 @@
 ﻿using GameMakerWpf.AppManagement;
-using GameMakerWpf.Domain.Editors;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Results;
 using Xunit;
@@ -15,62 +12,69 @@ namespace GameMakerWpf.Tests.Result;
 
 public class Results {
 
+	private static Assembly GameMakerAssembly { get; } = 
+		Assembly.GetAssembly(typeof(AppManager)) ?? throw new("GameMaker assembly not found.");
+
+	[Fact]
+	public void AllNestedClassesInResultInterfacesInheritTheContainingResultInterface() {
+
+		foreach (Type containingResultInterface in GameMakerAssembly.GetInterfaces().Where(x => x.Implements(typeof(IResult)))) {
+
+			foreach (Type resultOption in containingResultInterface.GetNestedClasses()) {
+
+				Assert.True(resultOption.IsAssignableTo(containingResultInterface),
+					$"The type '{resultOption}' is nested within a result interface but does not implement that result interface.");
+			}
+		}
+	}
+
+	[Fact]
+	public void AllNestedClassesInValueResultInterfacesInheritTheContainingResultInterface() {
+
+		foreach (Type containingResultInterface in GameMakerAssembly.GetInterfaces().Where(x => x.Implements(typeof(IResult<>)))) {
+
+			foreach (Type resultOption in containingResultInterface.GetNestedClasses()) {
+
+				Assert.True(resultOption.Implements(containingResultInterface),
+					$"The type '{resultOption}' is nested within a result interface but does not implement that result interface.");
+			}
+		}
+	}
+
+
+
 	[Fact]
 	public void AllResultNestedClassesImplementErrorOrSuccess() {
 
-		Assembly? gameMakerAssembly = Assembly.GetAssembly(typeof(AppManager));
+		foreach (Type containingResultInterface in GameMakerAssembly.GetInterfaces().Where(x => x.Implements(typeof(IResult)))) {
 
-		Assert.NotNull(gameMakerAssembly);
-		gameMakerAssembly = gameMakerAssembly ?? throw new UnreachableException();
+			foreach (Type resultOption in containingResultInterface.GetNestedClasses()) {
 
-		foreach (Type type in gameMakerAssembly
-			         .GetTypes()
-			         .Where(x => x.IsInterface)
-			         .Where(x => x.IsAssignableTo(typeof(IResult)))
-			         .SelectMany(x => x.GetNestedTypes()).Where(x => x.IsClass)) {
-
-			if (!type.IsAssignableTo(typeof(IResult))) {
-
-				Assert.True(false, $"The type '{type}' is nested within an interface that implements '{typeof(IResult)}' " +
-				                   $"but does not itself implement '{typeof(IResult)}'.");
-			}
-
-			if (!type.IsAssignableTo(typeof(IResult.Error)) && !type.IsAssignableTo(typeof(IResult.Success))) {
-
-				Assert.True(false, $"The type '{type}' implements '{typeof(IResult)}' but does not inherit from " +
-				                   $"'{typeof(IResult.Error)}' or '{typeof(IResult.Success)}'.");
+				Assert.True(resultOption.IsAssignableTo(typeof(IResult.Success)) || resultOption.IsAssignableTo(typeof(IResult.Error)),
+					$"The type '{resultOption}' is nested within a result interface but does not inherit from " +
+					$"'{typeof(IResult.Error)}' or '{typeof(IResult.Success)}'.");
 			}
 		}
+	}
 
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).IsAssignableTo(typeof(IEditorToGameSpecificationResult<Game>))); // true
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).IsAssignableTo(typeof(IResult<Game>))); // true
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).IsAssignableTo(typeof(IResult<>))); // false
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).GetGenericTypeDefinition().IsAssignableTo(typeof(IResult<>))); // false
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).IsAssignableTo(typeof(IResult<Game>.Success))); // true
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).IsAssignableTo(typeof(IResult<>.Success))); // false
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).GetGenericTypeDefinition().IsAssignableTo(typeof(IResult<>.Success))); // false
 
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success));
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).GetGenericTypeDefinition());
-		Trace.WriteLine(typeof(IEditorToGameSpecificationResult<Game>.Success).GetGenericTypeDefinition().GetGenericTypeDefinition());
+	[Fact]
+	public void AllValueResultNestedClassesImplementErrorOrSuccess() {
 
-		foreach (Type type in gameMakerAssembly
-			         .GetTypes()
-			         .Where(x => x.IsInterface)
-			         .Where(x => !x.IsAssignableTo(typeof(IResult)))
-			         .Where(x => x.GetInterfaces().Select(y => y.IsGenericType && y.GetGenericTypeDefinition() == typeof(IResult<>)).Any())
-			         .SelectMany(x => x.GetNestedTypes()).Where(x => x.IsClass)) {
+		foreach (Type containingResultInterface in GameMakerAssembly.GetInterfaces().Where(x => x.Implements(typeof(IResult<>)))) {
 
-			if (!type.Inherits(typeof(IResult<>))) {
+			foreach (Type resultOption in containingResultInterface.GetNestedClasses()) {
 
-				Assert.True(false, $"The type '{type}' is nested within an interface that implements '{typeof(IResult<>)}' " +
-				                   $"but does not itself implement '{typeof(IResult<>)}'.");
-			}
+				Type resultInterface =
+					resultOption.GetInterfaces().FirstOrDefault(x => x.IsDirectlyAssignableTo(typeof(IResult<>)))
+					?? throw new($"The type '{resultOption}' is nested within a result interface but does not implement that result interface.");
 
-			if (!type.IsAssignableTo(typeof(IResult<>.Error)) && !type.IsAssignableTo(typeof(IResult<>.Success))) {
+				Type successType = resultInterface.GetNestedClasses().First(x => x.IsDirectlyAssignableTo(typeof(IResult<>.Success)));
+				Type errorType = resultInterface.GetNestedClasses().First(x => x.IsDirectlyAssignableTo(typeof(IResult<>.Error)));
 
-				Assert.True(false, $"The type '{type}' implements '{typeof(IResult<>)}' but does not inherit from " +
-				                   $"'{typeof(IResult<>.Error)}' or '{typeof(IResult<>.Success)}'.");
+				Assert.True(resultOption.Inherits(successType) || resultOption.Inherits(errorType),
+					$"The type '{resultOption}' is nested within a result interface but does not inherit from " +
+					$"'{errorType}' or '{successType}'.");
 			}
 		}
 	}

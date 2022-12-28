@@ -28,7 +28,7 @@ public class DependsOnAttributeUsage {
 					continue;
 				}
 
-				bool isAssignableToDependentControl = type.IsSubclassOfGeneric(typeof(DependentControl<>));
+				bool isAssignableToDependentControl = type.Inherits(typeof(DependentControl<>));
 
 				Assert.True(isAssignableToDependentControl,
 					$"The type \"{type}\" has a the property \"{propertyInfo.Name}\" which is decorated with an attribute of type \"{typeof(DependsOnAttribute)}\" " +
