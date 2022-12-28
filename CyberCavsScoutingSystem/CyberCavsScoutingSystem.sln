@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilitiesLibrary", "Utiliti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMakerWpf.Tests", "GameMakerWpf.Tests\GameMakerWpf.Tests.csproj", "{10EB0ADA-4DDD-44E3-A97A-D1C6E242D3DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilitiesLibrary.Tests", "UtilitiesLibrary.Tests\UtilitiesLibrary.Tests.csproj", "{E3ED097D-307E-4BDA-B81C-78B086F75EA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilitiesLibrary.Tests", "UtilitiesLibrary.Tests\UtilitiesLibrary.Tests.csproj", "{E3ED097D-307E-4BDA-B81C-78B086F75EA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoutingApp", "ScoutingApp\ScoutingApp.csproj", "{9302F231-1AF9-4D8A-B80B-DBC149BE05FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,12 @@ Global
 		{E3ED097D-307E-4BDA-B81C-78B086F75EA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3ED097D-307E-4BDA-B81C-78B086F75EA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3ED097D-307E-4BDA-B81C-78B086F75EA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9302F231-1AF9-4D8A-B80B-DBC149BE05FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9302F231-1AF9-4D8A-B80B-DBC149BE05FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9302F231-1AF9-4D8A-B80B-DBC149BE05FC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9302F231-1AF9-4D8A-B80B-DBC149BE05FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9302F231-1AF9-4D8A-B80B-DBC149BE05FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9302F231-1AF9-4D8A-B80B-DBC149BE05FC}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
