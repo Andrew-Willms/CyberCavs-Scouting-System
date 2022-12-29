@@ -58,4 +58,34 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Views\AutoTab.xaml.cs">
+	    <DependentUpon>AutoTab.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\ConfirmTab.xaml.cs">
+	    <DependentUpon>ConfirmTab.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\EndgameTab.xaml.cs">
+	    <DependentUpon>EndgameTab.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\SetupTab.xaml.cs">
+	    <DependentUpon>SetupTab.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\TelePage.xaml.cs">
+	    <DependentUpon>TelePage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\AutoTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EndgameTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SetupTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

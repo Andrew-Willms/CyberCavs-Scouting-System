@@ -2,7 +2,7 @@
 using Microsoft.Maui.Accessibility;
 using Microsoft.Maui.Controls;
 
-namespace ScoutingApp;
+namespace ScoutingApp.Views;
 
 
 
