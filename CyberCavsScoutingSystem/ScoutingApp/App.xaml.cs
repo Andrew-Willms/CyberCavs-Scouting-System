@@ -1,9 +1,15 @@
-﻿namespace ScoutingApp;
+﻿using Microsoft.Maui.Controls;
+
+namespace ScoutingApp;
+
+
 
 public partial class App : Application {
-	public App() {
-		InitializeComponent();
 
+	public App() {
+
+		InitializeComponent();
 		MainPage = new AppShell();
 	}
+
 }
