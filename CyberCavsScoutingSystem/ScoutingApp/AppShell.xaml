@@ -4,35 +4,34 @@
     x:Class="ScoutingApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:ScoutingApp"
-    xmlns:views="clr-namespace:ScoutingApp.Views"
+    xmlns:tabs="clr-namespace:ScoutingApp.Views.Tabs"
     Shell.FlyoutBehavior="Disabled">
 
 	<TabBar>
 
 		<ShellContent
 			Title="Setup"
-			ContentTemplate="{DataTemplate views:SetupTab}"
+			ContentTemplate="{DataTemplate tabs:SetupTab}"
 			Route="MainPage"/>
 
 		<ShellContent
 			Title="Auto"
-			ContentTemplate="{DataTemplate views:AutoTab}"
+			ContentTemplate="{DataTemplate tabs:AutoTab}"
 			Route="MainPage2"/>
 
 		<ShellContent
 			Title="Tele"
-			ContentTemplate="{DataTemplate views:TelePage}"
+			ContentTemplate="{DataTemplate tabs:TelePage}"
 			Route="MainPage3"/>
 
 		<ShellContent
 			Title="Endgame"
-			ContentTemplate="{DataTemplate views:EndgameTab}"
+			ContentTemplate="{DataTemplate tabs:EndgameTab}"
 			Route="MainPage3"/>
 
 		<ShellContent
 			Title="Confirm"
-			ContentTemplate="{DataTemplate views:ConfirmTab}"
+			ContentTemplate="{DataTemplate tabs:ConfirmTab}"
 			Route="MainPage3"/>
 
 	</TabBar>

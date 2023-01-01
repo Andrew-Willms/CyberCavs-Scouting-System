@@ -1,6 +1,6 @@
 ﻿using Microsoft.Maui.Controls;
 
-namespace ScoutingApp.Views; 
+namespace ScoutingApp.Views.Tabs; 
 
 
 

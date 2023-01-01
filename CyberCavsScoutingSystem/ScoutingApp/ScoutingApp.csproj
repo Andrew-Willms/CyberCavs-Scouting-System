@@ -59,33 +59,58 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\AutoTab.xaml.cs">
+	  <Compile Update="Views\DataTemplates\CounterView.xaml.cs">
+	    <DependentUpon>CounterView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DataTemplates\IntegerDataFieldInputView.xaml.cs">
+	    <DependentUpon>IntegerDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DataTemplates\SelectionDataFieldInputView.xaml.cs">
+	    <DependentUpon>SelectionDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DataTemplates\TextDataFieldInputView.xaml.cs">
+	    <DependentUpon>TextDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Tabs\AutoTab.xaml.cs">
 	    <DependentUpon>AutoTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\ConfirmTab.xaml.cs">
+	  <Compile Update="Views\Tabs\ConfirmTab.xaml.cs">
 	    <DependentUpon>ConfirmTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\EndgameTab.xaml.cs">
+	  <Compile Update="Views\Tabs\EndgameTab.xaml.cs">
 	    <DependentUpon>EndgameTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\SetupTab.xaml.cs">
+	  <Compile Update="Views\Tabs\SetupTab.xaml.cs">
 	    <DependentUpon>SetupTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\TelePage.xaml.cs">
+	  <Compile Update="Views\Tabs\TelePage.xaml.cs">
 	    <DependentUpon>TelePage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\AutoTab.xaml">
+	  <MauiXaml Update="Views\DataTemplates\CounterView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\EndgameTab.xaml">
+	  <MauiXaml Update="Views\DataTemplates\IntegerDataFieldInputView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\SetupTab.xaml">
+	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Tabs\AutoTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Tabs\EndgameTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Tabs\SetupTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Domain\" />
 	</ItemGroup>
 
 </Project>
