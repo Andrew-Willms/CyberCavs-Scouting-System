@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using GameMakerWpf.AppManagement;
 using UtilitiesLibrary.MiscExtensions;
-using UtilitiesLibrary.WPF;
+using WPFUtilities;
 using Xunit;
 
 namespace GameMakerWpf.Tests.AttributeUsage; 
