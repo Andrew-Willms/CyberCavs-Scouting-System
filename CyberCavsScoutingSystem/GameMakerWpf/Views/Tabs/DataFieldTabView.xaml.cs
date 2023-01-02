@@ -11,7 +11,7 @@ using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using Microsoft.Extensions.DependencyInjection;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
-using UtilitiesLibrary.WPF;
+using WPFUtilities;
 
 namespace GameMakerWpf.Views.Tabs;
 

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace UtilitiesLibrary.MiscExtensions; 
+namespace UtilitiesLibrary.MiscExtensions;
 
 
 

@@ -4,7 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:utilitiesLibrary="clr-namespace:UtilitiesLibrary;assembly=UtilitiesLibrary"
-             xmlns:wpf="clr-namespace:UtilitiesLibrary.WPF;assembly=UtilitiesLibrary"
+             xmlns:wpf="clr-namespace:WPFUtilities;assembly=WPFUtilities"
              xmlns:wpfConverters="clr-namespace:GameMakerWpf.WpfConverters"
 			 xmlns:domain="clr-namespace:GameMakerWpf.Domain"
 			 xmlns:gameSpecification="clr-namespace:CCSSDomain.GameSpecification;assembly=CCSSDomain"

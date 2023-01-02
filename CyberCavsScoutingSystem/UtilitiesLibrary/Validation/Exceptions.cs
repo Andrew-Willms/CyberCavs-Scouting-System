@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UtilitiesLibrary.Validation; 
+namespace UtilitiesLibrary.Validation;
 
 
 

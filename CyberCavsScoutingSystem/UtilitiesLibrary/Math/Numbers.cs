@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace UtilitiesLibrary.Math; 
+namespace UtilitiesLibrary.Math;
 
 
 
@@ -21,7 +21,7 @@ public static class Numbers<T> where T : INumber<T> {
 
 		T value = T.One;
 
-		Func<T, T> operation = exponent > 0 
+		Func<T, T> operation = exponent > 0
 			? x => x * Ten
 			: x => x / Ten;
 

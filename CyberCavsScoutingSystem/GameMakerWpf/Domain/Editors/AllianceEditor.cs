@@ -4,6 +4,7 @@ using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation.Inputs;
+using WPFUtilities;
 
 namespace GameMakerWpf.Domain.Editors;
 
@@ -92,7 +93,7 @@ public class AllianceEditor {
 
 		return new IEditorToGameSpecificationResult<Alliance>.Success { Value = new() {
 			Name = Name.OutputObject.Value,
-			Color = Color.OutputObject.Value
+			Color = Color.OutputObject.Value.ToDrawingColor()
 		}};
 	}
 

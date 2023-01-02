@@ -35,7 +35,7 @@ public static class ButtonValidators {
 
 		return dataFields.None(x => x.Name.OutputObject.HasValue &&
 		                           x.Name.OutputObject.Value == name &&
-		                           x.DataFieldType == DataField.DataFieldType.Integer)
+		                           x.DataFieldType == DataFieldSpec.DataFieldType.Integer)
 
 			? ButtonValidationData.DataField.DataFieldDoesNotExistError.ReadOnlyListify()
 			: ReadOnlyList.Empty;

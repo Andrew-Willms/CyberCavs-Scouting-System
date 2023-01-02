@@ -10,7 +10,7 @@ namespace UtilitiesLibrary.Collections;
 
 public class ReadOnlyList {
 
-	public static readonly ReadOnlyList Empty = new();
+    public static readonly ReadOnlyList Empty = new();
 
     private ReadOnlyList() { }
 
@@ -21,36 +21,36 @@ public class ReadOnlyList {
 [JsonObject]
 public class ReadOnlyList<T> : IEnumerable<T> {
 
-	[JsonProperty]
-	private readonly T[] Collection;
+    [JsonProperty]
+    private readonly T[] Collection;
 
     [JsonIgnore]
-	public int Count => Collection.Length;
+    public int Count => Collection.Length;
 
     [JsonIgnore]
-	public T this[int index] => Collection[index];
+    public T this[int index] => Collection[index];
 
 
 
-	public static readonly ReadOnlyList<T> Empty = new();
-	public static implicit operator ReadOnlyList<T>(ReadOnlyList empty) {
+    public static readonly ReadOnlyList<T> Empty = new();
+    public static implicit operator ReadOnlyList<T>(ReadOnlyList empty) {
 
-		if (empty != ReadOnlyList.Empty) {
-			throw new ArgumentException($"This casting operator should only be used with {nameof(ReadOnlyList.Empty)}", nameof(empty));
-		}
+        if (empty != ReadOnlyList.Empty) {
+            throw new ArgumentException($"This casting operator should only be used with {nameof(ReadOnlyList.Empty)}", nameof(empty));
+        }
 
-		return Empty;
-	}
+        return Empty;
+    }
 
 
 
-	private ReadOnlyList() {
-		Collection = Array.Empty<T>();
-	}
+    private ReadOnlyList() {
+        Collection = Array.Empty<T>();
+    }
 
-	public ReadOnlyList(IEnumerable<T> collection) {
-		Collection = collection.ToArray();
-	}
+    public ReadOnlyList(IEnumerable<T> collection) {
+        Collection = collection.ToArray();
+    }
 
 
 
@@ -85,15 +85,15 @@ public class ReadOnlyList<T> : IEnumerable<T> {
 
 
     public IEnumerator<T> GetEnumerator() {
-	    return ((IEnumerable<T>)Collection).GetEnumerator();
+        return ((IEnumerable<T>)Collection).GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator() {
-	    return GetEnumerator();
+        return GetEnumerator();
     }
 
     public void CopyTo(T[] array, int arrayIndex) {
-	    Collection.CopyTo(array, arrayIndex);
+        Collection.CopyTo(array, arrayIndex);
     }
 
 }

@@ -5,7 +5,7 @@ using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.Editors;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using Microsoft.Extensions.DependencyInjection;
-using UtilitiesLibrary.WPF;
+using WPFUtilities;
 using static GameMakerWpf.AppManagement.ISavePrompter;
 using static GameMakerWpf.AppManagement.ISaver.ISaveAsResult;
 using static GameMakerWpf.AppManagement.ISaver.ISaveResult;

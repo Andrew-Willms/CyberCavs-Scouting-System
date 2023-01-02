@@ -11,11 +11,11 @@ namespace UtilitiesLibrary.Validation;
 
 
 
-public interface IValidationSet<TOutput, TSeverity> 
+public interface IValidationSet<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
 	public IValidator<TSeverity> ToValidator(
-		Func<Optional<TOutput>> outputObjectGetter, Event outputObjectChanged, 
+		Func<Optional<TOutput>> outputObjectGetter, Event outputObjectChanged,
 		Action<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction);
 }
 
@@ -38,7 +38,7 @@ internal class ValidationSet<TOutput, TSeverity> : IValidationSet<TOutput, TSeve
 	}
 
 	public IValidator<TSeverity> ToValidator(
-		Func<Optional<TOutput>> outputObjectGetter, Event outputObjectChanged, 
+		Func<Optional<TOutput>> outputObjectGetter, Event outputObjectChanged,
 		Action<IValidator<TSeverity>, ReadOnlyList<ValidationError<TSeverity>>> postValidationAction) {
 
 		List<Event> validationEvents = ValidationEvents.ToList();

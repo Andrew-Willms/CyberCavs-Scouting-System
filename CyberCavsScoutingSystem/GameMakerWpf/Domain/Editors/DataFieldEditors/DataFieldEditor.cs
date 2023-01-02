@@ -8,7 +8,7 @@ using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation.Inputs;
-using static CCSSDomain.GameSpecification.DataField;
+using static CCSSDomain.GameSpecification.DataFieldSpec;
 
 namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
@@ -132,24 +132,24 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		}
 	}
 
-	public IEditorToGameSpecificationResult<DataField> ToGameSpecification() {
+	public IEditorToGameSpecificationResult<DataFieldSpec> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new IEditorToGameSpecificationResult<DataField>.EditorIsInvalid();
+			return new IEditorToGameSpecificationResult<DataFieldSpec>.EditorIsInvalid();
 		}
 
 		return DataFieldTypeEditor switch {
 
-			TextDataFieldEditor => new() { Value = new TextDataField {
+			TextDataFieldEditor => new() { Value = new TextDataFieldSpec {
 				Name = Name.InputObject
 			}},
 
-			SelectionDataFieldEditor selectionDataFieldEditor => new() { Value = new SelectionDataField {
+			SelectionDataFieldEditor selectionDataFieldEditor => new() { Value = new SelectionDataFieldSpec {
 				Name = Name.InputObject,
 				OptionNames = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
 			}},
 
-			IntegerDataFieldEditor integerDataFieldEditor => new IEditorToGameSpecificationResult<DataField>.Success { Value = new IntegerDataField {
+			IntegerDataFieldEditor integerDataFieldEditor => new IEditorToGameSpecificationResult<DataFieldSpec>.Success { Value = new IntegerDataFieldSpec {
 				Name = Name.InputObject,
 				InitialValue = integerDataFieldEditor.InitialValue.OutputObject.Value,
 				MinValue = integerDataFieldEditor.MinValue.OutputObject.Value,

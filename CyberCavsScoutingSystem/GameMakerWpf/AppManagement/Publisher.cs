@@ -50,16 +50,16 @@ public class Publisher : IPublisher {
 
 	public IPublishResult Publish(GameEditor gameEditor) {
 
-		IEditorToGameSpecificationResult<Game> result = gameEditor.ToGameSpecification();
-		Game gameSpecification;
+		IEditorToGameSpecificationResult<GameSpec> result = gameEditor.ToGameSpecification();
+		GameSpec gameSpecSpecification;
 
 		switch (result) {
 
-			case IEditorToGameSpecificationResult<Game>.Success success:
-				gameSpecification = success.Value;
+			case IEditorToGameSpecificationResult<GameSpec>.Success success:
+				gameSpecSpecification = success.Value;
 				break;
 
-			case IEditorToGameSpecificationResult<Game>.Error error:
+			case IEditorToGameSpecificationResult<GameSpec>.Error error:
 				return new IPublishResult.GameEditorCouldNotBeConvertedToGameSpecification {
 					InnerError = ((Error)error).Optionalize()
 				};
@@ -86,7 +86,7 @@ public class Publisher : IPublisher {
 
 		string serializedGameSpecification;
 		try {
-			serializedGameSpecification = JsonConvert.SerializeObject(gameSpecification, JsonSerializerSettings);
+			serializedGameSpecification = JsonConvert.SerializeObject(gameSpecSpecification, JsonSerializerSettings);
 
 		} catch {
 			return new IPublishResult.GameSpecificationCouldNotBeConvertedToSaveData();

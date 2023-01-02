@@ -21,7 +21,7 @@ public abstract class MultiInputCreator<TOutput, TSeverity>
 	}
 
 	protected void AddValidationRule<TValidationParameter>(
-		ValidationRule<TOutput, TValidationParameter, TSeverity> validator, Func<TValidationParameter> validationParameterGetter, 
+		ValidationRule<TOutput, TValidationParameter, TSeverity> validator, Func<TValidationParameter> validationParameterGetter,
 		bool validateOnChange = true, params Event[] validationEvents) {
 
 		ReadOnlyList<ValidationError<TSeverity>> SimplifiedValidationRule(TOutput outputObject) {
@@ -35,8 +35,8 @@ public abstract class MultiInputCreator<TOutput, TSeverity>
 
 
 
-public class MultiInputCreator<TOutput, TSeverity, 
-	TInput1, TInput2, TInput3> : 
+public class MultiInputCreator<TOutput, TSeverity,
+	TInput1, TInput2, TInput3> :
 	MultiInputCreator<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
@@ -44,7 +44,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 	public required IInput<TInput2, TSeverity> InputComponent2 { get; init; }
 	public required IInput<TInput3, TSeverity> InputComponent3 { get; init; }
 
-	public required InputConverter<TOutput, 
+	public required InputConverter<TOutput,
 		(TInput1, TInput2, TInput3),
 		TSeverity> Converter { get; init; }
 
@@ -54,7 +54,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 
 
-	public new MultiInputCreator<TOutput, TSeverity, 
+	public new MultiInputCreator<TOutput, TSeverity,
 			TInput1, TInput2, TInput3>
 		AddValidationRule(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params Event[] validationEvents) {
 
@@ -62,7 +62,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 		return this;
 	}
 
-	public new MultiInputCreator<TOutput, TSeverity, 
+	public new MultiInputCreator<TOutput, TSeverity,
 			TInput1, TInput2, TInput3>
 		AddValidationRule<TValidationParameter>(ValidationRule<TOutput, TValidationParameter, TSeverity> validator,
 			Func<TValidationParameter> validationParameterGetter, bool validateOnChange = true, params Event[] validationEvents) {
@@ -73,7 +73,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 
 
-	public MultiInput<TOutput, TSeverity, 
+	public MultiInput<TOutput, TSeverity,
 			TInput1, TInput2, TInput3>
 		CreateMultiInput() {
 
@@ -90,8 +90,8 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 
 
-public class MultiInputCreator<TOutput, TSeverity, 
-	TInput1, TInput2, TInput3, TInput4> : 
+public class MultiInputCreator<TOutput, TSeverity,
+	TInput1, TInput2, TInput3, TInput4> :
 	MultiInputCreator<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
@@ -100,7 +100,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 	public required IInput<TInput3, TSeverity> InputComponent3 { get; init; }
 	public required IInput<TInput4, TSeverity> InputComponent4 { get; init; }
 
-	public required InputConverter<TOutput, 
+	public required InputConverter<TOutput,
 		(TInput1, TInput2, TInput3, TInput4),
 		TSeverity> Converter { get; init; }
 
@@ -110,7 +110,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 
 
-	public new MultiInputCreator<TOutput, TSeverity, 
+	public new MultiInputCreator<TOutput, TSeverity,
 			TInput1, TInput2, TInput3, TInput4>
 		AddValidationRule(ValidationRule<TOutput, TSeverity> validationRule, bool validateOnChange = true, params Event[] validationEvents) {
 
@@ -118,7 +118,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 		return this;
 	}
 
-	public new MultiInputCreator<TOutput, TSeverity, 
+	public new MultiInputCreator<TOutput, TSeverity,
 			TInput1, TInput2, TInput3, TInput4>
 		AddValidationRule<TValidationParameter>(ValidationRule<TOutput, TValidationParameter, TSeverity> validator,
 			Func<TValidationParameter> validationParameterGetter, bool validateOnChange = true, params Event[] validationEvents) {
@@ -129,7 +129,7 @@ public class MultiInputCreator<TOutput, TSeverity,
 
 
 
-	public MultiInput<TOutput, TSeverity, 
+	public MultiInput<TOutput, TSeverity,
 			TInput1, TInput2, TInput3, TInput4>
 		CreateMultiInput() {
 

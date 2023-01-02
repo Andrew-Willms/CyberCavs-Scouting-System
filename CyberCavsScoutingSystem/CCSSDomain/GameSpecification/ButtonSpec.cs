@@ -2,7 +2,7 @@
 
 
 
-public class Button {
+public class ButtonSpec {
 
 	public required string DataFieldName { get; init; }
 

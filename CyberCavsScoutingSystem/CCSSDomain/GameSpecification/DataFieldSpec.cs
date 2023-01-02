@@ -4,7 +4,7 @@ namespace CCSSDomain.GameSpecification;
 
 
 
-public abstract class DataField {
+public abstract class DataFieldSpec {
 
 	public required string Name { get; init; }
 
@@ -16,15 +16,15 @@ public abstract class DataField {
 
 }
 
-public class TextDataField : DataField { }
+public class TextDataFieldSpec : DataFieldSpec { }
 
-public class SelectionDataField : DataField {
+public class SelectionDataFieldSpec : DataFieldSpec {
 
 	public required ReadOnlyList<string> OptionNames { get; init; }
 
 }
 
-public class IntegerDataField : DataField {
+public class IntegerDataFieldSpec : DataFieldSpec {
 
 	public int InitialValue { get; init; } = 0;
 

@@ -31,7 +31,7 @@ public class SingleInputCreator<TOutput, TInput, TSeverity>
 	}
 
 	public SingleInputCreator<TOutput, TInput, TSeverity> AddValidationRule<TValidationParameter>(
-		ValidationRule<TOutput, TValidationParameter, TSeverity> validator, Func<TValidationParameter> validationParameterGetter, 
+		ValidationRule<TOutput, TValidationParameter, TSeverity> validator, Func<TValidationParameter> validationParameterGetter,
 		bool validateOnChange = true, params Event[] validationEvents) {
 
 		ReadOnlyList<ValidationError<TSeverity>> SimplifiedValidationRule(TOutput outputObject) {

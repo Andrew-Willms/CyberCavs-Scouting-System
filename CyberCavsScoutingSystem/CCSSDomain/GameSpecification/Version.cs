@@ -1,4 +1,6 @@
-﻿namespace CCSSDomain.GameSpecification;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace CCSSDomain.GameSpecification;
 
 
 
@@ -7,18 +9,20 @@ public class Version {
 
 	public Version() { }
 
-	public Version(uint major, uint minor, uint patch, string description = "") {
+	[SetsRequiredMembers]
+	public Version(uint major, uint minor, uint patch, string name = "", string description = "") {
 		MajorNumber = major;
 		MinorNumber = minor;
 		PatchNumber = patch;
+		Name = name;
 		Description = description;
 	}
 
-	public uint MajorNumber { get; init; }
+	public required uint MajorNumber { get; init; }
 
-	public uint MinorNumber { get; init; }
+	public required uint MinorNumber { get; init; }
 
-	public uint PatchNumber { get; init; }
+	public required uint PatchNumber { get; init; }
 
 	public string Name { get; init; } = "";
 

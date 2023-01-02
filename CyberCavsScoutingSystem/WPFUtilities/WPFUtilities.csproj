@@ -1,14 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
-		<TargetFrameworks>net7.0</TargetFrameworks>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
 		<Nullable>enable</Nullable>
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 		<LangVersion>preview</LangVersion>
 	</PropertyGroup>
 	
 	<ItemGroup>
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
-
+	
 </Project>

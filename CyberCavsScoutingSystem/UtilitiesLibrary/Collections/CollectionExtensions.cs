@@ -18,7 +18,7 @@ public static class CollectionExtensions {
 
 		return new(enumerable);
 	}
-
+	
 	public static void AddIfNotNull<T>(this List<T> enumerable, T? newValue) {
 
 		if (newValue is null) {

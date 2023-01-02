@@ -59,6 +59,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Views\DataTemplates\CounterView.xaml.cs">
 	    <DependentUpon>CounterView.xaml</DependentUpon>
 	  </Compile>
@@ -107,10 +111,6 @@
 	  <MauiXaml Update="Views\Tabs\SetupTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Domain\" />
 	</ItemGroup>
 
 </Project>

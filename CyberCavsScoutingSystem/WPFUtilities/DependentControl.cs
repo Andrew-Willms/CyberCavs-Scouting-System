@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Controls;
 
-namespace UtilitiesLibrary.WPF;
+namespace WPFUtilities;
 
 
 

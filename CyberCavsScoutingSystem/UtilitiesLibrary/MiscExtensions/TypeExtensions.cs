@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace UtilitiesLibrary.MiscExtensions; 
+namespace UtilitiesLibrary.MiscExtensions;
 
 
 
@@ -30,8 +30,8 @@ public static class TypeExtensions {
 			throw new InvalidOperationException();
 		}
 
-		return type.IsDirectlyAssignableTo(@interface) || 
-		       type.GetInterfaces().Any(interfaceType => interfaceType.IsDirectlyAssignableTo(@interface));
+		return type.IsDirectlyAssignableTo(@interface) ||
+			   type.GetInterfaces().Any(interfaceType => interfaceType.IsDirectlyAssignableTo(@interface));
 	}
 
 

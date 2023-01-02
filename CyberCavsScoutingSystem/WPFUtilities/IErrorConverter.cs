@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Data;
 using UtilitiesLibrary.Validation.Errors;
 
-namespace UtilitiesLibrary.WPF;
+namespace WPFUtilities;
 
 
 

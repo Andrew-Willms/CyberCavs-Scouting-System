@@ -112,13 +112,13 @@ public class ButtonEditor {
 	                       Width.IsValid &&
 	                       Height.IsValid;
 
-	public IEditorToGameSpecificationResult<Button> ToGameSpecification() {
+	public IEditorToGameSpecificationResult<ButtonSpec> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new IEditorToGameSpecificationResult<Button>.EditorIsInvalid();
+			return new IEditorToGameSpecificationResult<ButtonSpec>.EditorIsInvalid();
 		}
 
-		return new IEditorToGameSpecificationResult<Button>.Success { Value = new() {
+		return new IEditorToGameSpecificationResult<ButtonSpec>.Success { Value = new() {
 			DataFieldName = DataFieldName.OutputObject.Value,
 			ButtonText = ButtonText.OutputObject.Value,
 			IncrementAmount = IncrementAmount.OutputObject.Value,

@@ -167,8 +167,8 @@ public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 		}
 
 		return other is not null &&
-		       IsNegative == other.IsNegative &&
-		       Digits.SequenceEqual(other.Digits);
+			   IsNegative == other.IsNegative &&
+			   Digits.SequenceEqual(other.Digits);
 	}
 
 	public int CompareTo(Integer? other) {
@@ -208,7 +208,7 @@ public class Integer : Whole, IEquatable<Integer>, IComparable<Integer> {
 		}
 
 		throw new("Since Equality is short-circuit it should not be possible that the two values are the same and" +
-		          " execution should not reach this point.");
+				  " execution should not reach this point.");
 	}
 
 

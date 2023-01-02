@@ -15,7 +15,7 @@
     <UserControl.Resources>
         <ObjectDataProvider x:Key="DataFieldTypes" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="models:DataField+DataFieldType"/>
+                <x:Type TypeName="models:DataFieldSpec+DataFieldType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>

@@ -76,10 +76,10 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 	}
 
 	public static implicit operator Number(byte value) => FromINumber(value);
-	public static implicit operator Number(ushort value)  => FromINumber(value);
+	public static implicit operator Number(ushort value) => FromINumber(value);
 	public static implicit operator Number(uint value) => FromINumber(value);
 	public static implicit operator Number(ulong value) => FromINumber(value);
-	public static implicit operator Number(short value)  => FromINumber(value);
+	public static implicit operator Number(short value) => FromINumber(value);
 	public static implicit operator Number(int value) => FromINumber(value);
 	public static implicit operator Number(long value) => FromINumber(value);
 	public static implicit operator Number(float value) => FromINumber(value);
@@ -173,9 +173,9 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 		}
 
 		return other is not null &&
-		       IsNegative == other.IsNegative &&
-		       DecimalPosition == other.DecimalPosition &&
-		       Digits.SequenceEqual(other.Digits);
+			   IsNegative == other.IsNegative &&
+			   DecimalPosition == other.DecimalPosition &&
+			   Digits.SequenceEqual(other.Digits);
 	}
 
 	public int CompareTo(Number? other) {
@@ -199,7 +199,7 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 		if (LargestDecimalPosition > other.LargestDecimalPosition) {
 			return IsNegative ? -1 : 1;
 		}
-		
+
 		if (LargestDecimalPosition < other.LargestDecimalPosition) {
 			return IsNegative ? 1 : -1;
 		}
@@ -274,7 +274,7 @@ public class Number : IEquatable<Number>, IComparable<Number> {
 		bool isNegative = text.First() is '-';
 		int decimalPosition = 0;
 		List<Digit> digits = new();
-		
+
 		for (int i = text.Length - 1; i >= 0; i--) {
 
 			if (text[i] is '.') {

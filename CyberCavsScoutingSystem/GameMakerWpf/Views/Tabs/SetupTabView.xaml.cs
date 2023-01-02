@@ -9,7 +9,7 @@ using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using Microsoft.Extensions.DependencyInjection;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.WPF;
+using WPFUtilities;
 
 namespace GameMakerWpf.Views.Tabs;
 

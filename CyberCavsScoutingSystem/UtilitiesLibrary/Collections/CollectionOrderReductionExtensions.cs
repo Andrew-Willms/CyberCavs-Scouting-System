@@ -6,7 +6,7 @@ namespace UtilitiesLibrary.Collections;
 
 
 public static class CollectionOrderReductionExtensions {
-	
+
 	public static IEnumerable<T> Flatten<T>(this IEnumerable<IEnumerable<T>> twoDimensionalEnumerable) {
 
 		List<T> flattenedList = new();

@@ -29,13 +29,13 @@ public static class DefaultEditingDataValues {
 
 	public static readonly TextDataFieldEditingData DefaultTextDataFieldEditingData = new() {
 		Name = "New Data Field",
-		DataFieldType = DataField.DataFieldType.Text
+		DataFieldType = DataFieldSpec.DataFieldType.Text
 	};
 
 	public static readonly SelectionDataFieldEditingData DefaultSelectionDataFieldEditingData = new() {
 		Name = "New Data Field",
 		OptionNames = ReadOnlyList.Empty,
-		DataFieldType = DataField.DataFieldType.Selection
+		DataFieldType = DataFieldSpec.DataFieldType.Selection
 	};
 
 	public static readonly IntegerDataFieldEditingData DefaultIntegerDataFieldEditingData = new() {
@@ -43,7 +43,7 @@ public static class DefaultEditingDataValues {
 		InitialValue = $"{0}",
 		MinValue = $"{int.MinValue}",
 		MaxValue = $"{int.MaxValue}",
-		DataFieldType = DataField.DataFieldType.Integer
+		DataFieldType = DataFieldSpec.DataFieldType.Integer
 	};
 
 	public static readonly DataFieldEditingData DefaultDataFieldEditingData = DefaultTextDataFieldEditingData;

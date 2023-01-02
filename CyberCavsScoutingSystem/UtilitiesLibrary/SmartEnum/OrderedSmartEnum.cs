@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UtilitiesLibrary.SmartEnum; 
+namespace UtilitiesLibrary.SmartEnum;
 
 
 

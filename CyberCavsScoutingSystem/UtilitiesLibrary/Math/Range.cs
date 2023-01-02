@@ -79,5 +79,5 @@ public class Range<T> where T : IComparable {
 	public static bool operator !=(Range<T>? left, Range<T>? right) {
 		return !(left == right);
 	}
-	
+
 }

@@ -1,4 +1,4 @@
-﻿namespace UtilitiesLibrary.Serialization; 
+﻿namespace UtilitiesLibrary.Serialization;
 
 
 

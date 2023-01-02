@@ -102,7 +102,7 @@ public class Whole : IEquatable<Whole>, IComparable<Whole> {
 	}
 
 	public static IIntegerToPrimitiveResult<long> ToLong(Whole whole) {
-		
+
 		return whole.ToNumberPrimitive(0, long.MaxValue, Digit.ToINumber<long>, i => (long)System.Math.Pow(10, i));
 	}
 

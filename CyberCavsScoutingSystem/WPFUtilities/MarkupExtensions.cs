@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Markup;
 
-namespace UtilitiesLibrary.WPF;
+namespace WPFUtilities;
 
 
 

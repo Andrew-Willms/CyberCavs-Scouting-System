@@ -255,13 +255,13 @@ public class GameEditor {
 	                       AutoButtons.All(x => x.IsValid) &&
 	                       TeleButtons.All(x => x.IsValid);
 
-	public IEditorToGameSpecificationResult<Game> ToGameSpecification() {
+	public IEditorToGameSpecificationResult<GameSpec> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new IEditorToGameSpecificationResult<Game>.EditorIsInvalid();
+			return new IEditorToGameSpecificationResult<GameSpec>.EditorIsInvalid();
 		}
 
-		return new IEditorToGameSpecificationResult<Game>.Success { Value = new() {
+		return new IEditorToGameSpecificationResult<GameSpec>.Success { Value = new() {
 
 			Name = Name.OutputObject.Value,
 			Year = Year.OutputObject.Value,
@@ -275,7 +275,7 @@ public class GameEditor {
 				throw new UnreachableException()).ToReadOnly(),
 
 			DataFields = DataFields.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<DataField>.Success)?.Value ??
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<DataFieldSpec>.Success)?.Value ??
 				throw new UnreachableException()).ToReadOnly(),
 
 			SetupTabInputs = SetupTabInputs.Select(x =>
@@ -295,11 +295,11 @@ public class GameEditor {
 				throw new UnreachableException()).ToReadOnly(),
 
 			AutoButtons = AutoButtons.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Button>.Success)?.Value ??
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<ButtonSpec>.Success)?.Value ??
 				throw new UnreachableException()).ToReadOnly(),
 
 			TeleButtons = TeleButtons.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Button>.Success)?.Value ??
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<ButtonSpec>.Success)?.Value ??
 				throw new UnreachableException()).ToReadOnly(),
 		}};
 	}

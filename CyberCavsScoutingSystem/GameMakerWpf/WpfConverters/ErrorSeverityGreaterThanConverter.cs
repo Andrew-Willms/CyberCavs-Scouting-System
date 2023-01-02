@@ -1,5 +1,5 @@
 ﻿using GameMakerWpf.Domain;
-using UtilitiesLibrary.WPF;
+using WPFUtilities;
 
 namespace GameMakerWpf.WpfConverters;
 

@@ -32,7 +32,7 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 
 
 	protected MultiInput(ReadOnlyList<IInput<TSeverity>> inputComponents,
-		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets) 
+		IEnumerable<IValidationSet<TOutput, TSeverity>> validationSets)
 		: base(validationSets) {
 
 		InputComponents = inputComponents;
@@ -71,7 +71,7 @@ public abstract class MultiInput<TOutput, TSeverity> : Input<TOutput, TSeverity>
 
 
 
-public class MultiInput<TOutput, TSeverity, 
+public class MultiInput<TOutput, TSeverity,
 		TInput1, TInput2, TInput3>
 	: MultiInput<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
@@ -97,7 +97,7 @@ public class MultiInput<TOutput, TSeverity,
 		}
 	}
 
-	private InputConverter<TOutput, 
+	private InputConverter<TOutput,
 		(TInput1, TInput2, TInput3),
 		TSeverity> Converter { get; }
 
@@ -106,8 +106,8 @@ public class MultiInput<TOutput, TSeverity,
 		get {
 
 			if (InputComponent1.OutputObject.HasValue &&
-			    InputComponent2.OutputObject.HasValue &&
-			    InputComponent3.OutputObject.HasValue) {
+				InputComponent2.OutputObject.HasValue &&
+				InputComponent3.OutputObject.HasValue) {
 
 				return Converter((
 					InputComponent1.OutputObject.Value,
@@ -162,7 +162,7 @@ public class MultiInput<TOutput, TSeverity,
 			return false;
 		}
 
-		(Optional<(TInput1, TInput2, TInput3)> inversionResult, 
+		(Optional<(TInput1, TInput2, TInput3)> inversionResult,
 			ReadOnlyList<ValidationError<TSeverity>> errors) = Inverter(testValue.Value);
 
 		return errors.AreFatal() || !inversionResult.HasValue;
@@ -198,7 +198,7 @@ public class MultiInput<TOutput, TSeverity,
 		}
 	}
 
-	private InputConverter<TOutput, 
+	private InputConverter<TOutput,
 		(TInput1, TInput2, TInput3, TInput4),
 		TSeverity> Converter { get; }
 
@@ -207,9 +207,9 @@ public class MultiInput<TOutput, TSeverity,
 		get {
 
 			if (InputComponent1.OutputObject.HasValue &&
-			    InputComponent2.OutputObject.HasValue &&
-			    InputComponent3.OutputObject.HasValue &&
-			    InputComponent4.OutputObject.HasValue) {
+				InputComponent2.OutputObject.HasValue &&
+				InputComponent3.OutputObject.HasValue &&
+				InputComponent4.OutputObject.HasValue) {
 
 				return Converter((
 					InputComponent1.OutputObject.Value,
@@ -269,7 +269,7 @@ public class MultiInput<TOutput, TSeverity,
 			return false;
 		}
 
-		(Optional<(TInput1, TInput2, TInput3, TInput4)> inversionResult, 
+		(Optional<(TInput1, TInput2, TInput3, TInput4)> inversionResult,
 			ReadOnlyList<ValidationError<TSeverity>> errors) = Inverter(testValue.Value);
 
 		return errors.AreFatal() || !inversionResult.HasValue;

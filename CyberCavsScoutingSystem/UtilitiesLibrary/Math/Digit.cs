@@ -3,27 +3,27 @@ using System.ComponentModel;
 using System.Numerics;
 using UtilitiesLibrary.SmartEnum;
 
-namespace UtilitiesLibrary.Math; 
+namespace UtilitiesLibrary.Math;
 
 
 
 public class Digit : OrderedSmartEnum<Digit> {
 
-	public static readonly Digit Zero = new (nameof(Zero), 0);
-	public static readonly Digit One = new (nameof(One), 1);
-	public static readonly Digit Two = new (nameof(Two), 2);
-	public static readonly Digit Three = new (nameof(Three), 3);
-	public static readonly Digit Four = new (nameof(Four), 4);
-	public static readonly Digit Five = new (nameof(Five), 5);
-	public static readonly Digit Six = new (nameof(Six), 6);
-	public static readonly Digit Seven = new (nameof(Seven), 7);
-	public static readonly Digit Eight = new (nameof(Eight), 8);
-	public static readonly Digit Nine = new (nameof(Nine), 9);
+	public static readonly Digit Zero = new(nameof(Zero), 0);
+	public static readonly Digit One = new(nameof(One), 1);
+	public static readonly Digit Two = new(nameof(Two), 2);
+	public static readonly Digit Three = new(nameof(Three), 3);
+	public static readonly Digit Four = new(nameof(Four), 4);
+	public static readonly Digit Five = new(nameof(Five), 5);
+	public static readonly Digit Six = new(nameof(Six), 6);
+	public static readonly Digit Seven = new(nameof(Seven), 7);
+	public static readonly Digit Eight = new(nameof(Eight), 8);
+	public static readonly Digit Nine = new(nameof(Nine), 9);
 
 	private Digit(string name, int value) : base(name, value) { }
 
 
-	
+
 	public static T ToINumber<T>(Digit digit) where T : INumber<T> {
 
 		return digit.Value switch {
