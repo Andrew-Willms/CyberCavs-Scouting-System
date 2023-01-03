@@ -17,24 +17,13 @@ public interface IErrorConverter<TSeverityEnum, TConversionType> : IValueConvert
 
 	object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 
-		TSeverityEnum severity;
+		TSeverityEnum severity = value as TSeverityEnum ?? throw new ArgumentException($"The object to be converted is not a {typeof(TSeverityEnum)}");
 
-		if (value is TSeverityEnum valueAsSeverity) {
-			severity = valueAsSeverity;
-		} else {
-			throw new ArgumentException($"The object to be converted is not a {typeof(TSeverityEnum)}");
-		}
-
-		TConversionType conversionResult = ConversionDictionary[severity];
-
-		if (conversionResult is null) {
-			throw new NullReferenceException();
-		}
-
-		return conversionResult;
+		return ConversionDictionary[severity] ?? throw new NullReferenceException();
 	}
 
 	object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
 		throw new NotImplementedException($"IErrorConverter cannot be used to convert from another object back to an {typeof(TSeverityEnum)}");
 	}
+
 }

@@ -14,6 +14,7 @@ public class GenericObjectFactoryExtension : MarkupExtension {
 		Type genericType = Type.MakeGenericType(T);
 		return Activator.CreateInstance(genericType);
 	}
+
 }
 
 public class GenericObjectFactoryExtension2 : MarkupExtension {
@@ -26,4 +27,5 @@ public class GenericObjectFactoryExtension2 : MarkupExtension {
 		Type genericType = Type.MakeGenericType(T1, T2);
 		return Activator.CreateInstance(genericType);
 	}
+
 }
