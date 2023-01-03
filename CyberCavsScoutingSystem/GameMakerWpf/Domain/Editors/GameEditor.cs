@@ -271,7 +271,7 @@ public class GameEditor {
 			AlliancesPerMatch = AlliancesPerMatch.OutputObject.Value,
 
 			Alliances = Alliances.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Alliance>.Success)?.Value??
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<AllianceSpec>.Success)?.Value??
 				throw new UnreachableException()).ToReadOnly(),
 
 			DataFields = DataFields.Select(x =>

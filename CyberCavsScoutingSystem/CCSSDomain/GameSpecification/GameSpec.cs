@@ -18,7 +18,7 @@ public class GameSpec {
 	public required uint RobotsPerAlliance { get; init; }
 	public required uint AlliancesPerMatch { get; init; }
 
-	public required ReadOnlyList<Alliance> Alliances { get; init; }
+	public required ReadOnlyList<AllianceSpec> Alliances { get; init; }
 
 	public required ReadOnlyList<DataFieldSpec> DataFields { get; init; }
 

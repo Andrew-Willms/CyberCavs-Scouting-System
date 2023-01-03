@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using CCSSDomain.GameSpecification;
-using UtilitiesLibrary.Optional;
-using UtilitiesLibrary.SimpleEvent;
+﻿using CCSSDomain.GameSpecification;
 
 namespace CCSSDomain.MatchData; 
 
@@ -9,20 +6,13 @@ namespace CCSSDomain.MatchData;
 
 public class MatchData {
 	
-	public required Alliance Alliance { get; init; }
+	public required AllianceSpec Alliance { get; init; }
 
-	public uint ReplayNumber { get; init; }
+	public uint ReplayNumber { get; init; } = 0;
 	public bool IsReplay => ReplayNumber > 0;
 
-	public required string Comments { get; set; }
-
-
-
-
-	public MatchData(GameSpecification.GameSpec gameSpecSpecification) {
+	public MatchData(GameSpec gameSpec) {
 
 	}
-
-
 
 }

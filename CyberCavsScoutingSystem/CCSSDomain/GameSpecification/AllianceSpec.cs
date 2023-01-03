@@ -4,7 +4,7 @@ namespace CCSSDomain.GameSpecification;
 
 
 
-public class Alliance {
+public class AllianceSpec {
 
 	public required string Name { get; init; }
 
