@@ -2,7 +2,7 @@
 
 
 
-public interface IGameMakerMainView {
+public interface IMainView {
 
 	public void Show();
 

@@ -39,7 +39,7 @@ public partial class App : Application {
 		services.AddTransient<IPublisher, Publisher>();
 
 		services.AddSingleton<ISaver, Saver>();
-		services.AddSingleton<IGameMakerMainView, MainWindow>();
+		services.AddSingleton<IMainView, MainWindow>();
 		services.AddSingleton<IAppManager, AppManager>();
 	}
 

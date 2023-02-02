@@ -6,8 +6,8 @@ using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
-using UtilitiesLibrary.SimpleEvent;
 using UtilitiesLibrary.Validation.Inputs;
+using Event = UtilitiesLibrary.SimpleEvent.Event;
 using Version = CCSSDomain.GameSpecification.Version;
 
 namespace GameMakerWpf.Domain.Editors;
@@ -261,48 +261,53 @@ public class GameEditor {
 			return new IEditorToGameSpecificationResult<GameSpec>.EditorIsInvalid();
 		}
 
-		return new IEditorToGameSpecificationResult<GameSpec>.Success { Value = new() {
+        IResult<GameSpec> creationResult = GameSpec.Create(
+            name: Name.OutputObject.Value,
+            year: Year.OutputObject.Value,
+            description: Description.OutputObject.Value,
+            version: Version.OutputObject.Value,
+            robotsPerAlliance: RobotsPerAlliance.OutputObject.Value,
+            alliancesPerMatch: AlliancesPerMatch.OutputObject.Value,
 
-			Name = Name.OutputObject.Value,
-			Year = Year.OutputObject.Value,
-			Description = Description.OutputObject.Value,
-			Version = Version.OutputObject.Value,
-			RobotsPerAlliance = RobotsPerAlliance.OutputObject.Value,
-			AlliancesPerMatch = AlliancesPerMatch.OutputObject.Value,
+            alliances: Alliances.Select(x =>
+                (x.ToGameSpecification() as IEditorToGameSpecificationResult<Alliance>.Success)?.Value ??
+                throw new UnreachableException()).ToReadOnly(),
 
-			Alliances = Alliances.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<AllianceSpec>.Success)?.Value??
-				throw new UnreachableException()).ToReadOnly(),
+            dataFields: DataFields.Select(x =>
+                (x.ToGameSpecification() as IEditorToGameSpecificationResult<DataFieldSpec>.Success)?.Value ??
+                throw new UnreachableException()).ToReadOnly(),
 
-			DataFields = DataFields.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<DataFieldSpec>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+            setupTabInputs: SetupTabInputs.Select(x =>
+                (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
+                throw new UnreachableException()).ToReadOnly(),
 
-			SetupTabInputs = SetupTabInputs.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Input>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+            autoTabInputs: AutoTabInputs.Select(x =>
+                (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
+                throw new UnreachableException()).ToReadOnly(),
 
-			AutoTabInputs = AutoTabInputs.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Input>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+            teleTabInputs: TeleTabInputs.Select(x =>
+                (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
+                throw new UnreachableException()).ToReadOnly(),
 
-			TeleTabInputs = TeleTabInputs.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Input>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+            endgameTabInputs: EndgameTabInputs.Select(x =>
+                (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
+                throw new UnreachableException()).ToReadOnly(),
 
-			EndgameTabInputs = EndgameTabInputs.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Input>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+            autoButtons: AutoButtons.Select(x =>
+                (x.ToGameSpecification() as IEditorToGameSpecificationResult<ButtonSpec>.Success)?.Value ??
+                throw new UnreachableException()).ToReadOnly(),
 
-			AutoButtons = AutoButtons.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<ButtonSpec>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+            teleButtons: TeleButtons.Select(x =>
+                (x.ToGameSpecification() as IEditorToGameSpecificationResult<ButtonSpec>.Success)?.Value ??
+                throw new UnreachableException()).ToReadOnly()
+        );
 
-			TeleButtons = TeleButtons.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<ButtonSpec>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
-		}};
-	}
+        return creationResult switch {
+			IResult<GameSpec>.Success success => new IEditorToGameSpecificationResult<GameSpec>.Success { Value = success.Value },
+			IResult<GameSpec>.Error => new IEditorToGameSpecificationResult<GameSpec>.EditorIsInvalid(),
+            _ => throw new UnreachableException()
+        };
+    }
 
 }
 

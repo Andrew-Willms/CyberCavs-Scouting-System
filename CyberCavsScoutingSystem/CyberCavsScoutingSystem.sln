@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFUtilities", "WPFUtilitie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilitiesLibrary", "UtilitiesLibrary\UtilitiesLibrary.csproj", "{4C18CB38-6F78-41F5-B957-A7BDE6A83A6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiUtilities", "MauiUtilities\MauiUtilities.csproj", "{F168D618-43B0-4BB0-B0EA-6BB666CE22D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiUtilities", "MauiUtilities\MauiUtilities.csproj", "{F168D618-43B0-4BB0-B0EA-6BB666CE22D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

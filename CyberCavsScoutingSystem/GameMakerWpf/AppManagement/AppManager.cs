@@ -65,7 +65,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		}
 	}
 
-	private IGameMakerMainView MainView => App.ServiceProvider.GetRequiredService<IGameMakerMainView>();
+	private IMainView MainView => App.ServiceProvider.GetRequiredService<IMainView>();
 	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 	private readonly ISaver Saver = App.ServiceProvider.GetRequiredService<ISaver>();
 	private static ISavePrompter SavePrompter => App.ServiceProvider.GetRequiredService<ISavePrompter>();

@@ -33,7 +33,6 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 
-
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -56,10 +55,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="QRCoder" Version="1.4.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
+		<ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
+		<ProjectReference Include="..\MauiUtilities\MauiUtilities.csproj" />
+		<ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -74,6 +76,9 @@
 	  </Compile>
 	  <Compile Update="Views\DataTemplates\TextDataFieldInputView.xaml.cs">
 	    <DependentUpon>TextDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\QrCodeDisplay.xaml.cs">
+	    <DependentUpon>QrCodeDisplay.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Tabs\AutoTab.xaml.cs">
 	    <DependentUpon>AutoTab.xaml</DependentUpon>
@@ -102,6 +107,9 @@
 	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\QrCodeDisplay.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Tabs\AutoTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -111,6 +119,10 @@
 	  <MauiXaml Update="Views\Tabs\SetupTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="AppManagement\" />
 	</ItemGroup>
 
 </Project>

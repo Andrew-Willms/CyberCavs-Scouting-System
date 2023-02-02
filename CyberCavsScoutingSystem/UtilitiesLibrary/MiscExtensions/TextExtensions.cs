@@ -46,4 +46,10 @@ public static class TextExtensions {
 		return spacedText.ToString();
 	}
 
+    public static string ToCsvFriendly(this string text) {
+
+        text = text.Replace("\"", "\"\"");
+        text = "\"" + text + "\"";
+        return text;
+    }
 }

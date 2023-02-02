@@ -6,7 +6,7 @@ namespace GameMakerWpf.Views;
 
 
 
-public partial class MainWindow : Window, IGameMakerMainView {
+public partial class MainWindow : Window, IMainView {
 
 	public MainWindow() {
 
