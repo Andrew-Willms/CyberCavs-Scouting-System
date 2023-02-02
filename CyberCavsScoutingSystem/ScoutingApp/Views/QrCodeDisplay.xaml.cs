@@ -80,11 +80,11 @@ public partial class QrCodeDisplay : ContentPage {
 
 		QRCodeData? qrCodeData = generator.CreateQrCode(theDataToEncode, QRCodeGenerator.ECCLevel.L);
 
-		QRCode qrCode = new(qrCodeData);
-
-		Bitmap? graphic = qrCode.GetGraphic(20, Color.Black, Color.Aqua, null);
-
-		graphic.Save(@"c:\Users\Andrew\Downloads\button.png", ImageFormat.Png);
+		//QRCode qrCode = new(qrCodeData);
+		//
+		//Bitmap? graphic = qrCode.GetGraphic(20, Color.Black, Color.Aqua, null);
+		//
+		//graphic.Save(@"c:\Users\Andrew\Downloads\button.png", ImageFormat.Png);
 	}
 
 }
