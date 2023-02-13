@@ -119,6 +119,21 @@ public static class CollectionExtensions {
 
 
 
+	public static IEnumerable<(T first, T second)> Pair<T>(this IEnumerable<T> enumerable1, IEnumerable<T> enumerable2) {
+
+		T[] array1 = enumerable1 as T[] ?? enumerable1.ToArray();
+		T[] array2 = enumerable2 as T[] ?? enumerable2.ToArray();
+
+		if (array1.Length != array2.Length) {
+			throw new InvalidOperationException();
+		}
+
+		return array1.Zip(array2);
+	}
+
+
+
+
 	public static string CharArrayToString(this IEnumerable<char> enumerable) {
 
 		return enumerable.Aggregate("", (current, character) => current + character);
