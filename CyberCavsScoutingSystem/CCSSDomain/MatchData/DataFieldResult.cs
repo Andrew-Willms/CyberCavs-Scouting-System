@@ -58,10 +58,10 @@
 
 //public class SelectionDataFieldResult : DataFieldResult {
 
-//	public string Selection { get; }
+//	public string SelectedOption { get; }
 
-//	private SelectionDataFieldResult(SelectionDataFieldSpec dataFieldSpec, string selection) : base(dataFieldSpec) {
-//		Selection = selection;
+//	private SelectionDataFieldResult(SelectionDataFieldSpec dataFieldSpec, string selectedOption) : base(dataFieldSpec) {
+//		SelectedOption = selectedOption;
 //	}
 
 //	public static IResult<SelectionDataFieldResult> Create(SelectionDataFieldSpec dataFieldSpec, string selection) {

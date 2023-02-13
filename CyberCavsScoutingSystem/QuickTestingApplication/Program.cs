@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 
@@ -13,17 +14,18 @@ public class Program {
 
 		//TestGenericTypeMatching();
 
+		Console.WriteLine(DateTime.Now.ToString(CultureInfo.InvariantCulture));
 
-		Console.WriteLine(typeof(int?));
-		Console.WriteLine(typeof(int?).Name);
-		Console.WriteLine(typeof(Nullable<>));
-		Console.WriteLine(typeof(Nullable<>).Name);
+		//Console.WriteLine(typeof(int?));
+		//Console.WriteLine(typeof(int?).Name);
+		//Console.WriteLine(typeof(Nullable<>));
+		//Console.WriteLine(typeof(Nullable<>).Name);
 
-		Type test1 = typeof(B<>).BaseType.GetGenericArguments()[0];
-		Type test2 = typeof(B<int>).BaseType.GetGenericArguments()[0];
+		//Type test1 = typeof(B<>).BaseType.GetGenericArguments()[0];
+		//Type test2 = typeof(B<int>).BaseType.GetGenericArguments()[0];
 
-		Console.WriteLine(test1);
-		Console.WriteLine(test2);
+		//Console.WriteLine(test1);
+		//Console.WriteLine(test2);
 	}
 
 

@@ -14,7 +14,7 @@ namespace CCSSDomain.DataCollectors;
 
 public class MatchDataCollector {
 
-	private GameSpec GameSpec { get; }
+	private GameSpec GameSpecification { get; }
 
 	public Optional<Event> Event { get; set; } = Optional.NoValue;
 
@@ -37,68 +37,68 @@ public class MatchDataCollector {
 
 
 
-	public MatchDataCollector(GameSpec gameSpec) {
+	public MatchDataCollector(GameSpec gameSpecification) {
 
-		GameSpec = gameSpec;
+		GameSpecification = gameSpecification;
 
-		DataFields = GameSpec.DataFields.Select(DataField.FromSpec).ToReadOnly();
+		DataFields = GameSpecification.DataFields.Select(DataField.FromSpec).ToReadOnly();
 
-        SetupTabInputs = GameSpec.SetupTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        AutoTabInputs = GameSpec.AutoTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        TeleTabInputs = GameSpec.TeleTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        EndgameTabInputs = GameSpec.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+        SetupTabInputs = GameSpecification.SetupTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+        AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+        TeleTabInputs = GameSpecification.TeleTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+        EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
     }
 
     public string GetCsvHeaders() {
 
-		StringBuilder columnHeaders = new(
-			$"{nameof(Event).ToCsvFriendly()}," +
-			$"{nameof(MatchNumber).ToCsvFriendly()}," +
-			$"{nameof(ReplayNumber).ToCsvFriendly()}," +
-			$"{nameof(IsPlayoff).ToCsvFriendly()}," +
-			$"{nameof(TeamNumber).ToCsvFriendly()}," +
-			$"{nameof(Alliance).ToCsvFriendly()}," +
-			$"{nameof(Time).ToCsvFriendly()},"
-		);
+        StringBuilder columnHeaders = new(
+            $"{nameof(Event).ToCsvFriendly()}," +
+            $"{nameof(MatchNumber).ToCsvFriendly()}," +
+            $"{nameof(ReplayNumber).ToCsvFriendly()}," +
+            $"{nameof(IsPlayoff).ToCsvFriendly()}," +
+            $"{nameof(TeamNumber).ToCsvFriendly()}," +
+            $"{nameof(Alliance).ToCsvFriendly()}," +
+            $"{nameof(Time).ToCsvFriendly()},"
+        );
 
-		GameSpec.DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));
+        GameSpecification.DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));
 
-		return columnHeaders.ToString();
-	}
+        return columnHeaders.ToString();
+    }
 
-	public string ConvertDataToCsv() {
+    public string ConvertDataToCsv() {
 
-		StringBuilder matchData = new(
-			$"{Event.Value.Name.ToCsvFriendly()}," +
-			$"{MatchNumber.Value.ToString().ToCsvFriendly()}," +
-			$"{ReplayNumber.Value.ToString().ToCsvFriendly()}," +
-			$"{IsPlayoff.Value.ToString().ToCsvFriendly()}," +
-			$"{TeamNumber.Value.ToString().ToCsvFriendly()}," +
-			$"{Alliance.Value.Name.ToCsvFriendly()}," +
-			$"{Time.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
+        StringBuilder matchData = new(
+            $"{Event.Value.Name.ToCsvFriendly()}," +
+            $"{MatchNumber.Value.ToString().ToCsvFriendly()}," +
+            $"{ReplayNumber.Value.ToString().ToCsvFriendly()}," +
+            $"{IsPlayoff.Value.ToString().ToCsvFriendly()}," +
+            $"{TeamNumber.Value.ToString().ToCsvFriendly()}," +
+            $"{Alliance.Value.Name.ToCsvFriendly()}," +
+            $"{Time.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
 
-		foreach (DataField dataField in DataFields) {
+        foreach (DataField dataField in DataFields) {
 
-			switch (dataField) {
+            switch (dataField) {
 
-				case TextDataField textDataField:
-					matchData.Append($"{textDataField.Text.ToCsvFriendly()},");
-					break;
+                case TextDataField textDataField:
+                    matchData.Append($"{textDataField.Text.ToCsvFriendly()},");
+                    break;
 
-				case IntegerDataField integerDataField:
-					matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},");
-					break;
+                case IntegerDataField integerDataField:
+                    matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},");
+                    break;
 
-				case SelectionDataField selectionDataField:
-					matchData.Append($"{selectionDataField.SelectedOption.ToCsvFriendly()},");
-					break;
+                case SelectionDataField selectionDataField:
+                    matchData.Append($"{selectionDataField.SelectedOption.ToCsvFriendly()},");
+                    break;
 
-				default:
-					throw new UnreachableException();
-			}
-		}
+                default:
+                    throw new UnreachableException();
+            }
+        }
 
-		return matchData.ToString();
-	}
+        return matchData.ToString();
+    }
 
 }

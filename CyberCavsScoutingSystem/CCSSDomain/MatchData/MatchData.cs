@@ -1,9 +1,5 @@
 ﻿//using System;
-//using System.Collections.Generic;
-//using System.Diagnostics;
-//using System.Globalization;
-//using System.Linq;
-//using System.Text;
+//using CCSSDomain.DataCollectors;
 //using CCSSDomain.GameSpecification;
 //using UtilitiesLibrary.Collections;
 //using UtilitiesLibrary.Results;
@@ -18,11 +14,11 @@
 
 //	public required Event Event { get; init; }
 
-//	public required Match Match { get; init; }
+//	public required uint MatchNumber { get; init; }
+//	public required uint ReplayNumber { get; init; }
+//	public required bool IsPlayoff { get; init; }
 
-//	public uint ReplayNumber { get; init; } = 0;
-
-//	public required uint TeamNumber { get; init; }
+//    public required uint TeamNumber { get; init; }
 
 //	public required Alliance Alliance { get; init; }
 
@@ -60,101 +56,18 @@
 //				return new IResult<MatchData>.Error();
 //			}
 
-//			if (gameSpecification.DataFields[i].GetType() != dataFieldResults[i].GetType()) {
+//			if (gameSpecification.DataFields[i].GetType() != dataFieldResults[i].GetType() ||
+//                gameSpecification.DataFields[i].Name != dataFieldResults[i].Name) {
+
 //				return new IResult<MatchData>.Error("The DataFields do not match.");
 //			}
 
-//			if (gameSpecification.DataFields[i].Name != dataFieldResults[i].Name) {
-//				return new IResult<MatchData>.Error("The DataFields do not match.");
-//			}
-//		}
+//            if (gameSpecification.DataFields[i] is SelectionDataField selectionDataField) {
+
+//            }
+//        }
 
 
-//	}
-
-
-
-//	public string GetCsvHeaders() {
-
-//		StringBuilder columnHeaders = new(
-//			$"{nameof(Event).ToCsvFriendly()}," +
-//			$"{nameof(Match).ToCsvFriendly()}," +
-//			$"{nameof(ReplayNumber).ToCsvFriendly()}," +
-//			$"{nameof(TeamNumber).ToCsvFriendly()}," +
-//			$"{nameof(Alliance).ToCsvFriendly()}," +
-//			$"{nameof(Time).ToCsvFriendly()},"
-//		);
-
-//		GameSpecification.DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));
-
-//		return columnHeaders.ToString();
-//	}
-
-//	public string ConvertDataToCsv() {
-
-//		StringBuilder matchData = new(
-//			$"{Event.Name.ToCsvFriendly()}," +
-//			$"{Match.ToString().ToCsvFriendly()}," +
-//			$"{ReplayNumber.ToString().ToCsvFriendly()}," +
-//			$"{TeamNumber.ToString().ToCsvFriendly()}," +
-//			$"{Alliance.Name.ToCsvFriendly()}," +
-//			$"{Time.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
-
-//		foreach (DataFieldSpec dataField in GameSpecification.DataFields) {
-
-//			switch (dataField) {
-
-//				case TextDataFieldSpec textDataField:
-
-//					IEnumerable<TextDataFieldResult> textDataFieldEnumerable = DataFields
-//						.Where(x => x is TextDataFieldResult && x.Name == textDataField.Name)
-//						.Select(x => x as TextDataFieldResult ?? throw new UnreachableException())
-//						.ToArray();
-
-//					if (textDataFieldEnumerable.OnlyOne()) {
-
-//						TextDataFieldResult textResult = textDataFieldEnumerable.First();
-//						matchData.Append($"{textResult.Text.ToCsvFriendly()},");
-//					}
-
-//					break;
-
-//				case IntegerDataFieldSpec integerDataField:
-
-//					IEnumerable<IntegerDataFieldResult> integerDataFieldEnumerable =
-//						DataFields.Where(x => x is IntegerDataFieldResult && x.Name == integerDataField.Name)
-//						.Select(x => x as IntegerDataFieldResult ?? throw new UnreachableException())
-//						.ToArray();
-
-//					if (integerDataFieldEnumerable.OnlyOne()) {
-
-//						IntegerDataFieldResult integerResult = integerDataFieldEnumerable.First();
-//						matchData.Append($"{integerResult.Value.ToString().ToCsvFriendly()},");
-//					}
-
-//					break;
-
-//				case SelectionDataFieldSpec selectionDataField:
-
-//					IEnumerable<SelectionDataFieldResult> selectionDataFieldEnumerable =
-//						DataFields.Where(x => x is SelectionDataFieldResult && x.Name == selectionDataField.Name)
-//							.Select(x => x as SelectionDataFieldResult ?? throw new UnreachableException())
-//							.ToArray();
-
-//					if (selectionDataFieldEnumerable.OnlyOne()) {
-
-//						SelectionDataFieldResult selectionResult = selectionDataFieldEnumerable.First();
-//						matchData.Append($"{selectionResult.Selection.ToCsvFriendly()},");
-//					}
-
-//					break;
-
-//				default:
-//					throw new UnreachableException();
-//			}
-//		}
-
-//		return matchData.ToString();
 //	}
 
 //}
