@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+			 xmlns:views="clr-namespace:QrCodeScanner.Views"
+			 x:Class="QrCodeScanner.Views.MatchScannerPage"
+			 x:DataType="views:MatchScannerPage">
+
+	<Grid Margin="5">
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="60"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<Label
+			Text="{Binding Path=QrCodeData}"
+			FontSize="12"
+			Margin="5"
+			Grid.Row="0"/>
+
+		<controls:CameraBarcodeReaderView
+			x:Name="QrCodeReader"
+			IsDetecting="true"
+			BarcodesDetected="CameraBarcodeReaderView_OnBarcodesDetected"
+			Margin="5, 50"
+			Grid.Row="1"/>
+
+		<Button
+			Text="Save"
+			IsEnabled="{Binding Path=CanSave}"
+			Clicked="Button_OnClicked"
+			Margin="5"
+			Grid.Row="2"/>
+
+	</Grid>
+
+</ContentPage>
