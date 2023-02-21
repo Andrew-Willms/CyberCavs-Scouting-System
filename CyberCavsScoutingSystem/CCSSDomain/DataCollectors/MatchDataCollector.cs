@@ -49,24 +49,7 @@ public class MatchDataCollector {
         EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
     }
 
-    public string GetCsvHeaders() {
-
-        StringBuilder columnHeaders = new(
-            $"{nameof(Event).ToCsvFriendly()}," +
-            $"{nameof(MatchNumber).ToCsvFriendly()}," +
-            $"{nameof(ReplayNumber).ToCsvFriendly()}," +
-            $"{nameof(IsPlayoff).ToCsvFriendly()}," +
-            $"{nameof(TeamNumber).ToCsvFriendly()}," +
-            $"{nameof(Alliance).ToCsvFriendly()}," +
-            $"{nameof(Time).ToCsvFriendly()},"
-        );
-
-        GameSpecification.DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));
-
-        return columnHeaders.ToString();
-    }
-
-    public string ConvertDataToCsv() {
+	public string ConvertDataToCsv() {
 
         StringBuilder matchData = new(
             $"{Event.Value.Name.ToCsvFriendly()}," +
