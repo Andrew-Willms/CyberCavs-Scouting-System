@@ -27,8 +27,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	private volatile bool IsActuallyRefreshing;
-	private volatile bool _IsRefreshing;
+	private bool IsActuallyRefreshing;
+	private bool _IsRefreshing;
 	public bool IsRefreshing {
 		get => _IsRefreshing;
 		set {
