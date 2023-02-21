@@ -5,8 +5,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Dispatching;
 using UtilitiesLibrary.Collections;
 
 namespace QrCodeScanner.Views;
@@ -25,8 +27,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	private bool IsActuallyRefreshing;
-	private bool _IsRefreshing;
+	private volatile bool IsActuallyRefreshing;
+	private volatile bool _IsRefreshing;
 	public bool IsRefreshing {
 		get => _IsRefreshing;
 		set {
@@ -36,7 +38,6 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	}
 
 	public ObservableCollection<ScannedMatch> ScannedMatches { get; } = new();
-
 
 
 
@@ -80,22 +81,25 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	private async Task Refresh() {
+	private async Task Refresh([CallerMemberName] string callerName = null!) {
 
-		if (IsActuallyRefreshing) {
-			return;
-		}
+		await Dispatcher.DispatchAsync(async () => {
 
-		IsRefreshing = true;
-		IsActuallyRefreshing = true;
+			if (IsActuallyRefreshing) {
+				return;
+			}
 
-		ScannedMatches.Clear();
-		foreach (ScannedMatch match in await GetScannedMatchesFromFiles()) {
-			ScannedMatches.Add(match);
-		}
+			IsRefreshing = true;
+			IsActuallyRefreshing = true;
 
-		IsActuallyRefreshing = false;
-		IsRefreshing = false;
+			ScannedMatches.Clear();
+			foreach (ScannedMatch match in await GetScannedMatchesFromFiles()) {
+				ScannedMatches.Add(match);
+			}
+
+			IsActuallyRefreshing = false;
+			IsRefreshing = false;
+		});
 	}
 
 	private async Task AddMatch(ScannedMatch match) {
