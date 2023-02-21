@@ -1,4 +1,5 @@
-﻿using UtilitiesLibrary.Optional;
+﻿using System.Diagnostics.CodeAnalysis;
+using UtilitiesLibrary.Optional;
 
 namespace UtilitiesLibrary.Results;
 
@@ -47,6 +48,13 @@ public interface IResult<T> {
 
 		public static implicit operator Success(T value) {
 			return new() { Value = value };
+		}
+
+		public Success() { }
+
+		[SetsRequiredMembers]
+		public Success(T value) {
+			Value = value;
 		}
 
 	}
