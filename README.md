@@ -21,7 +21,7 @@ All while
 
 &nbsp;
 
-The primary components are listed below:
+The components of the CCSS are listed below:
 
 - GameMaker: A cross-platform desktop app enabling the specification of custom data collection interfaces and schemas.
 
