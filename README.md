@@ -15,9 +15,9 @@ The goal of the CCSS is to
 
 All while
 - not requiring users to have technical skills such as coding knowledge,
-- not requiring users to have internet connection or cell service,
-- not requiring teams to poses dedicated scouting equipment such as tablets, and
-- generally being of no cost to the teams using it.
+- not requiring scouts to have internet connection or cell service at competitions,
+- not requiring teams to possess dedicated scouting equipment such as tablets, and
+- being of no cost to the teams using it.
 
 &nbsp;
 
@@ -25,10 +25,18 @@ The primary components are listed below:
 
 - GameMaker: A cross-platform desktop app enabling the specification of custom data collection interfaces and schemas.
 
-- DataHost (working title): A web server for hosting and distributing these specifications.
+- EventMaker: A cross-platform app enabling the specification of Event rosters and match schedules.
 
-- ScoutingApp: A cross-platform mobile app that generates scouting interfaces based on the specifications.
+- SpecHost: A web server to simplify the distributing of Game and Event specifications when network connectivity is available.
 
-- DataIngester (working title): A tool for transfering data from scouting devices to a central database.
+- ScoutingApp: A cross-platform app that displays the scouting interface based on the game specifications and generates QR codes containing the scouted data.
 
-- DataViewer (working title): A cross-platform app for querying, displaying, and comparing the collected data.
+- DataScanner: A cross-platform mobile app that scans the QR codes in order to centralize the scouting data on a single device.
+
+- DataIngester: A tool for transfering data from scouting devices to a central database.
+
+- DataViewer: A cross-platform app for querying, displaying, and comparing the collected data.
+
+&nbsp;
+
+The CCSS was first conceptualized in late 2019 with the intention of using it in the 2020 FRC season. Due to the COVID-19 pandemic development of the CCSS was abandoned in early 2020. Development restarted in fall 2022 and the CyberCavs intend to use a beta version of the CCSS in the 2023 FRC season. The CyberCavs intend on releasing the CCSS to the public in 2024.
