@@ -55,19 +55,30 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+		<PackageReference Include="MediaDevices" Version="1.10.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\FileView.xaml.cs">
-	    <DependentUpon>FileView.xaml</DependentUpon>
+	  <ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
+	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\FileSystemItemView.xaml.cs">
+	    <DependentUpon>FileSystemItemView.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\FileView.xaml">
+	  <MauiXaml Update="Views\FileSystemItemView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Converters\" />
+	  <Folder Include="Services\" />
 	</ItemGroup>
 
 </Project>

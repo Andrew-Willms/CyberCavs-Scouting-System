@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:DataIngester.Views"
+             xmlns:converters="clr-namespace:DataIngester.Converters"
+             x:Class="DataIngester.Views.FileSystemItemView"
+             x:DataType="views:FileSystemItem">
+	
+	<ContentView.Resources>
+		<converters:BoolToAccessibilityIndicatorColorConverter x:Key="IntToColor"/>
+	</ContentView.Resources>
+
+	<Grid ColumnSpacing="10">
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="1*"/>
+		</Grid.ColumnDefinitions>
+
+		<BoxView
+			WidthRequest="{Binding Source={RelativeSource Self}, Path=Height}"
+			Color="{Binding Path=IsAccessible, Converter={StaticResource IntToColor}}"
+			CornerRadius="5"
+			Grid.Column="0"/>
+
+		<Entry
+			Text="{Binding Path=Path}"
+			Grid.Column="1"
+			Margin="0,0,5,0"/>
+
+	</Grid>
+
+</ContentView>
