@@ -35,7 +35,7 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 		}
 	}
 
-	public bool RemoveButtonIsEnabled => App.ServiceProvider.GetRequiredService<IAppManager>().SelectedDataField is not null;
+	public bool RemoveButtonIsEnabled => SelectedInput is not null;
 
 
 
