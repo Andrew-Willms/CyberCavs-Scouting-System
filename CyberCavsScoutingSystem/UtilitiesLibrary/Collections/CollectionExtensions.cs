@@ -171,18 +171,36 @@ public static class CollectionExtensions {
 
 	public static void PruneToUnion<T>(this List<T> list, IEnumerable<T> other) {
 
-		T[] array = other as T[] ?? other.ToArray();
+		T[] uniqueValuesInList = list.Where(item => !other.Contains(item)).ToArray();
 
-		foreach (T item in list.Where(item => !array.Contains(item))) {
+		foreach (T item in uniqueValuesInList) {
+			list.Remove(item);
+		}
+	}
+
+	public static void PruneEntriesFrom<T>(this List<T> list, IEnumerable<T> other) {
+
+		T[] duplicates = list.Where(other.Contains).ToArray();
+
+		foreach (T duplicate in duplicates) {
+			list.Remove(duplicate);
+		}
+	}
+
+	public static void PruneEntriesFrom<T1, T2>(this List<T1> list, IEnumerable<T2> other, Func<T1, T2, bool> predicate) {
+
+		T1[] duplicates = list.Where(item => other.Any(x => predicate(item, x))).ToArray();
+
+		foreach (T1 item in duplicates) {
 			list.Remove(item);
 		}
 	}
 
 	public static void PruneToUnionAndDispose<T>(this List<T> list, IEnumerable<T> other) where T : IDisposable {
 
-		T[] array = other as T[] ?? other.ToArray();
+		T[] uniqueValuesInList = list.Where(item => !other.Contains(item)).ToArray();
 
-		foreach (T item in list.Where(item => !array.Contains(item))) {
+		foreach (T item in uniqueValuesInList) {
 			list.RemoveAndDispose(item);
 		}
 	}
