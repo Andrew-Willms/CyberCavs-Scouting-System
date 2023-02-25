@@ -88,6 +88,7 @@
 
 						</Grid>
 					</DataTemplate>
+
 				</CollectionView.ItemTemplate>
 
 			</CollectionView>

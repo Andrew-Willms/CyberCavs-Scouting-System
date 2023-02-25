@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
@@ -8,7 +9,7 @@ namespace CCSSDomain.DataCollectors;
 
 
 
-public abstract class DataField {
+public abstract class DataField : INotifyPropertyChanged {
 
     public DataFieldSpec DataFieldSpec { get; }
 
@@ -28,6 +29,12 @@ public abstract class DataField {
             SelectionDataFieldSpec selectionDataFieldSpec => new SelectionDataField(selectionDataFieldSpec),
             _ => throw new UnreachableException()
         };
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected void OnPropertyChanged(string propertyName) {
+	    PropertyChanged?.Invoke(this, new(propertyName));
     }
 
 }
@@ -67,12 +74,15 @@ public class IntegerDataField : DataField {
             if (value > MaxValue) {
                 _Value = MaxValue;
 
-            } else if (value < MaxValue) {
-                _Value = MaxValue;
-            }
+            } else if (value < MinValue) {
+                _Value = MinValue;
 
-            _Value = value;
-            OnValueChange.Invoke();
+            } else {
+	            _Value = value;
+			}
+
+			OnValueChange.Invoke();
+            OnPropertyChanged(nameof(Value));
         }
     }
 
