@@ -10,6 +10,7 @@ using DataIngester.Services;
 using MediaDevices;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
+using Microsoft.Maui.Graphics;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 
@@ -70,25 +71,18 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private static async Task RunBackgroundTask(ReadOnlyList<Directory> sourceDirectories, string targetFilePath, Action<string> log) {
 
-		try{
+		UpdateSourceDirectoryAccessibilities(sourceDirectories);
 
-			UpdateSourceDirectoryAccessibilities(sourceDirectories);
-
-			List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile(targetFilePath, log);
-			if (targetFileContents is null) {
-				return;
-			}
-
-			List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories(sourceDirectories, log);
-
-			matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
-
-			await WriteMatchDataToTargetFile(targetFilePath, matchDataFromDevices.ToReadOnly(), log);
-
-		} catch (Exception exception) {
-			string test = "";
+		List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile(targetFilePath, log);
+		if (targetFileContents is null) {
+			return;
 		}
 
+		List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories(sourceDirectories, log);
+
+		matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
+
+		await WriteMatchDataToTargetFile(targetFilePath, matchDataFromDevices.ToReadOnly(), log);
 	}
 
 	private static void UpdateSourceDirectoryAccessibilities(IEnumerable<Directory> sourceDirectories) {

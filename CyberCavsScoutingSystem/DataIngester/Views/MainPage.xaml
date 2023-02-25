@@ -8,13 +8,20 @@
 
 	<ScrollView>
 
-		<VerticalStackLayout
+		<Grid
 			Margin="10"
-			Spacing="50">
+			RowSpacing="50">
 	
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+
 			<VerticalStackLayout
 				Margin="10"
-				Spacing="5">
+				Spacing="5"
+				Grid.Row="0">
 	
 				<Label Text="Target File"/>
 
@@ -26,7 +33,8 @@
 	
 			<VerticalStackLayout
 				Margin="10"
-				Spacing="5">
+				Spacing="5"
+				Grid.Row="1">
 	
 				<Label Text="Source Directories"/>
 	
@@ -64,30 +72,39 @@
 
 			</VerticalStackLayout>
 
-			<VerticalStackLayout
+			<Grid
 				Margin="10"
-				Spacing="5">
+				RowSpacing="5"
+				Grid.Row="2">
 
-				<Label Text="Log"/>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="1*"/>
+				</Grid.RowDefinitions>
 
-				<Border Stroke="white">
-					<CollectionView
-						ItemsSource="{Binding Path=LogMessages}"
-						HeightRequest="300"
-						Margin="10,0">
+				<Label
+					Text="Log"
+					Grid.Row="0"/>
 
-						<CollectionView.ItemTemplate>
-							<DataTemplate x:DataType="system:String">
-								<Label Text="{Binding Source={RelativeSource Self}, Path=BindingContext}"/>
-							</DataTemplate>
-						</CollectionView.ItemTemplate>
+				<CollectionView
+					ItemsSource="{Binding Path=LogMessages}"
+					MinimumHeightRequest="20"
+					VerticalOptions="Fill"
+					BackgroundColor="#202020"
+					Margin="0"
+					Grid.Row="1">
 
-					</CollectionView>
-				</Border>
+					<CollectionView.ItemTemplate>
+						<DataTemplate x:DataType="system:String">
+							<Label Text="{Binding Source={RelativeSource Self}, Path=BindingContext}"/>
+						</DataTemplate>
+					</CollectionView.ItemTemplate>
 
-			</VerticalStackLayout>
+				</CollectionView>
 
-		</VerticalStackLayout>
+			</Grid>
+
+		</Grid>
 	</ScrollView>
 
 </ContentPage>
