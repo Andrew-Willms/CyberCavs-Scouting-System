@@ -28,7 +28,7 @@ public partial class App : Application {
 
 		InitializeComponent();
 
-		ServiceProvider.GetRequiredService<IAppManager>().ApplicationStartup();
+		//ServiceProvider.GetRequiredService<IAppManager>().ApplicationStartup();
 
 		MainPage = ServiceProvider.GetRequiredService<IMainView>().AsPage();
 	}
