@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UtilitiesLibrary.Optional;
+using UtilitiesLibrary.Results;
 
 namespace UtilitiesLibrary.Collections;
 
@@ -19,19 +20,26 @@ public static class CollectionExtensions {
 		return new(enumerable);
 	}
 	
-	public static void AddIfNotNull<T>(this List<T> enumerable, T? newValue) {
+	public static void AddIfNotNull<T>(this List<T> list, T? newValue) {
 
 		if (newValue is null) {
 			return;
 		}
 
-		enumerable.Add(newValue);
+		list.Add(newValue);
 	}
 
-	public static void AddIfHasValue<T>(this List<T> enumerable, Optional<T> newValue) {
+	public static void AddIfHasValue<T>(this List<T> list, Optional<T> newValue) {
 
 		if (newValue.HasValue) {
-			enumerable.Add(newValue.Value);
+			list.Add(newValue.Value);
+		}
+	}
+
+	public static void AddValueIfIsSuccess<T>(this List<T> list, IResult<T> result) {
+
+		if (result is IResult<T>.Success success) {
+			list.Add(success.Value);
 		}
 	}
 
@@ -52,6 +60,19 @@ public static class CollectionExtensions {
 		return enumerable.Where(x => selector(x).HasValue).Select(x => selector(x).Value);
 
 		//return enumerable.Select(selector).Where(x => x.HasValue).Select(x => x.Value);
+	}
+
+	public static void AddIfUnique<T>(this List<T> list, T item) {
+		if (!list.Contains(item)) {
+			list.Add(item);
+		}
+	}
+
+	public static void AddUniqueItems<T>(this List<T> list, IEnumerable<T> newItems) {
+
+		foreach (T item in newItems) {
+			list.AddIfUnique(item);
+		}
 	}
 
 
@@ -133,7 +154,6 @@ public static class CollectionExtensions {
 
 
 
-
 	public static string CharArrayToString(this IEnumerable<char> enumerable) {
 
 		return enumerable.Aggregate("", (current, character) => current + character);
@@ -145,6 +165,37 @@ public static class CollectionExtensions {
 		this IEnumerable<TKey> keys, TValue defaultValue) where TKey : notnull {
 
 		return new ReadOnlyKeysDictionary<TKey, TValue>(keys, defaultValue);
+	}
+
+
+
+	public static void PruneToUnion<T>(this List<T> list, IEnumerable<T> other) {
+
+		T[] array = other as T[] ?? other.ToArray();
+
+		foreach (T item in list.Where(item => !array.Contains(item))) {
+			list.Remove(item);
+		}
+	}
+
+	public static void PruneToUnionAndDispose<T>(this List<T> list, IEnumerable<T> other) where T : IDisposable {
+
+		T[] array = other as T[] ?? other.ToArray();
+
+		foreach (T item in list.Where(item => !array.Contains(item))) {
+			list.RemoveAndDispose(item);
+		}
+	}
+
+	public static bool RemoveAndDispose<T>(this List<T> list, T item) where T : IDisposable {
+
+		bool result = list.Remove(item);
+
+		if (result) {
+			item.Dispose();
+		}
+
+		return result;
 	}
 
 }
