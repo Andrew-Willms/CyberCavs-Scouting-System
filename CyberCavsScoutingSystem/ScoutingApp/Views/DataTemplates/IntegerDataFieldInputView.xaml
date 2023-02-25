@@ -2,6 +2,47 @@
 
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ScoutingApp.Views.DataTemplates.IntegerDataFieldInputView">
-	
+             xmlns:dataCollectors="clr-namespace:CCSSDomain.DataCollectors;assembly=CCSSDomain"
+             x:Class="ScoutingApp.Views.DataTemplates.IntegerDataFieldInputView"
+             x:DataType="dataCollectors:IntegerDataField">
+
+	<VerticalStackLayout>
+
+		<Label
+			Text="{Binding Path=Name}"
+			HorizontalTextAlignment="Center"
+			VerticalTextAlignment="Center"/>
+
+		<Grid>
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<Button
+				Text="-"
+				Grid.Column="0"
+				Clicked="DecrementButton_OnClicked"/>
+
+			<Label
+				Text="{Binding Path=Value}"
+				HorizontalTextAlignment="Center"
+				VerticalTextAlignment="Center"
+				Grid.Column="1"/>
+
+			<Button
+				Text="+"
+				Grid.Column="2"
+				Clicked="IncrementButton_OnClick"/>
+
+		</Grid>
+
+	</VerticalStackLayout>
+
 </ContentView>
