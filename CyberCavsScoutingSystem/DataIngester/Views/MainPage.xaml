@@ -66,6 +66,7 @@
 					<Button
 						Text="Delete Source Directory"
 						Clicked="DeleteSourceFile_OnClick"
+						IsEnabled="{Binding Path=RemoveButtonEnabled}"
 						HorizontalOptions="Start"/>
 
 				</HorizontalStackLayout>
@@ -88,8 +89,7 @@
 
 				<CollectionView
 					ItemsSource="{Binding Path=LogMessages}"
-					MinimumHeightRequest="20"
-					VerticalOptions="Fill"
+					MinimumHeightRequest="100"
 					BackgroundColor="#202020"
 					Margin="0"
 					Grid.Row="1">

@@ -10,7 +10,6 @@ using DataIngester.Services;
 using MediaDevices;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
-using Microsoft.Maui.Graphics;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 
@@ -35,8 +34,11 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		set {
 			_SelectedDirectory = value;
 			OnPropertyChanged(nameof(SelectedDirectory));
+			OnPropertyChanged(nameof(RemoveButtonEnabled));
 		}
 	}
+
+	public bool RemoveButtonEnabled => SelectedDirectory is not null;
 
 	public ObservableCollection<Directory> SourceDirectories { get; } = new();
 
@@ -212,7 +214,7 @@ public static class MtpDeviceExtensions {
 
 		try {
 			device.DownloadFile(filePath, memoryStream);
-		} catch (Exception exception) {
+		} catch {
 			return new IResult<string>.Error("The specified file could not be downloaded from the device.");
 		}
 
