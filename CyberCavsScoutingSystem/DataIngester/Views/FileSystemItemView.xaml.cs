@@ -17,7 +17,7 @@ public partial class FileSystemItemView : ContentView {
 
 
 [INotifyPropertyChanged]
-public partial class FileSystemItem {
+public partial class Directory {
 
 	[ObservableProperty]
 	private string _Path = "";

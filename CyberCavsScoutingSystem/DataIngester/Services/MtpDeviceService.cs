@@ -30,11 +30,10 @@ public class MtpDeviceService : IMtpDeviceService {
 
 		Timer timer = new(DevicePollingFrequency);
 		timer.Elapsed += TimerElapsedHandler;
+		timer.Start();
 	}
 
 	private void TimerElapsedHandler(object? sender, ElapsedEventArgs e) {
-
-		Debug.WriteLine(sender?.GetType());
 
 		IEnumerable<MediaDevice> devices = MediaDevice.GetDevices().ToArray();
 
@@ -48,9 +47,8 @@ public class MtpDeviceService : IMtpDeviceService {
 
 			try {
 				device.Connect();
-			} catch {
-				// ignored
-			}
+
+			} catch { /**/ }
 
 			ConnectedDevices.Add(device);
 		}

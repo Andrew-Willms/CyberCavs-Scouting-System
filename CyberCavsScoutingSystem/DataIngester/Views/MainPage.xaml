@@ -17,8 +17,10 @@
 				Spacing="5">
 	
 				<Label Text="Target File"/>
-	
-				<views:FileSystemItemView BindingContext="{Binding Path=TargetFile}"/>
+
+				<Entry
+					Text="{Binding Path=TargetFile}"
+					Margin="0,0,5,0"/>
 	
 			</VerticalStackLayout>
 	
@@ -38,7 +40,7 @@
 					</CollectionView.ItemsLayout>
 	
 					<CollectionView.ItemTemplate>
-						<DataTemplate x:DataType="views:FileSystemItem">
+						<DataTemplate x:DataType="views:Directory">
 							<views:FileSystemItemView
 								HorizontalOptions="Fill"
 								Focused="SourceFileCollectionViewItem_OnFocus"/>
