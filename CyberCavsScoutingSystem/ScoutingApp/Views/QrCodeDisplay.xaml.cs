@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;

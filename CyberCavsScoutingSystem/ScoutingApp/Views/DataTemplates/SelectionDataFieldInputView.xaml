@@ -1,7 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ScoutingApp.Views.DataTemplates.SelectionDataFieldInputView">
-	
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:dataCollectors="clr-namespace:CCSSDomain.DataCollectors;assembly=CCSSDomain"
+			 x:Class="ScoutingApp.Views.DataTemplates.SelectionDataFieldInputView"
+			 x:DataType="dataCollectors:SelectionDataField">
+
+	<VerticalStackLayout>
+
+		<Label
+			Text="{Binding Path=Name}"
+			HorizontalTextAlignment="Center"
+			VerticalTextAlignment="Center"/>
+
+		<Picker
+			ItemsSource="{Binding Path=Options, Converter={StaticResource ReadOnlyListOfStringsToIListConverter}}"
+			SelectedItem="{Binding Path=SelectedOption}"/>
+
+	</VerticalStackLayout>
+
 </ContentView>

@@ -1,11 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ScoutingApp.Views.Tabs.EndgameTab">
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:tabs="clr-namespace:ScoutingApp.Views.Tabs"
+			 x:Class="ScoutingApp.Views.Tabs.EndgameTab"
+			 x:DataType="tabs:EndgameTab">
 
-	<ContentPage.Content>
-		
-	</ContentPage.Content>
+	<Grid Margin="10">
+
+		<CollectionView
+			ItemsSource="{Binding Path=Inputs}"
+			ItemTemplate="{StaticResource InputDataTemplateSelector}">
+
+			<CollectionView.ItemsLayout>
+
+				<GridItemsLayout
+					Orientation="Vertical"
+					Span="2"
+					VerticalItemSpacing="10"
+					HorizontalItemSpacing="10"/>
+
+			</CollectionView.ItemsLayout>
+
+		</CollectionView>
+
+	</Grid>
 
 </ContentPage>

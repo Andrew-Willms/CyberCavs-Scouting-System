@@ -8,7 +8,7 @@ namespace ScoutingApp.Views.Tabs;
 
 
 
-public partial class EndgameTab : ContentPage {
+public partial class TeleTab : ContentPage {
 
 	public ObservableCollection<DataField> Inputs { get; } = new(new() {
 
@@ -30,7 +30,7 @@ public partial class EndgameTab : ContentPage {
 
 	});
 
-	public EndgameTab() {
+	public TeleTab() {
 
 		BindingContext = this;
 		InitializeComponent();

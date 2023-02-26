@@ -21,7 +21,7 @@
 
 		<ShellContent
 			Title="Tele"
-			ContentTemplate="{DataTemplate tabs:TelePage}"
+			ContentTemplate="{DataTemplate tabs:TeleTab}"
 			Route="MainPage3"/>
 
 		<ShellContent

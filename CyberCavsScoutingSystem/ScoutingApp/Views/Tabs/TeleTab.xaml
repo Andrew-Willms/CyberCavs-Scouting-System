@@ -3,8 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:tabs="clr-namespace:ScoutingApp.Views.Tabs"
-			 x:Class="ScoutingApp.Views.Tabs.SetupTab"
-			 x:DataType="tabs:SetupTab">
+			 x:Class="ScoutingApp.Views.Tabs.TeleTab"
+			 x:DataType="tabs:TeleTab">
 
 	<Grid Margin="10">
 
