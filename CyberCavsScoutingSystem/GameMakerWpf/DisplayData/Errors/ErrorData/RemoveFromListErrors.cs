@@ -25,16 +25,6 @@ public static class RemoveFromListErrors {
 		Message = "The Option you are trying to remove from the Selection Data Field could not be found."
 	};
 
-	public static ErrorDisplayData RemoveAutoButtonError(IListRemoveResult<ButtonEditor>.ItemNotFound error) => new() {
-		Caption = "Auto Button Not Found",
-		Message = "The Button you are trying to remove from the Auto Tab Buttons could not be found."
-	};
-
-	public static ErrorDisplayData RemoveTeleButtonError(IListRemoveResult<ButtonEditor>.ItemNotFound error) => new() {
-		Caption = "Tele Button Not Found",
-		Message = "The Button you are trying to remove from the Tele Tab Buttons could not be found."
-	};
-
 	public static ErrorDisplayData RemoveSetupInputError(IListRemoveResult<InputEditor>.ItemNotFound error) => new() {
 		Caption = "Setup Input Not Found",
 		Message = "The Input you are trying to remove from the Setup Tab Inputs could not be found."

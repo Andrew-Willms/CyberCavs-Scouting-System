@@ -43,9 +43,6 @@ public class GameEditor {
 	public ObservableList<InputEditor, InputEditingData> TeleTabInputs { get; }
 	public ObservableList<InputEditor, InputEditingData> EndgameTabInputs { get; }
 
-	public ObservableList<ButtonEditor, ButtonEditingData> AutoButtons { get; }
-	public ObservableList<ButtonEditor, ButtonEditingData> TeleButtons { get; }
-
 
 
 	public GameEditor(GameEditingData initialValues) {
@@ -102,18 +99,6 @@ public class GameEditor {
 
 		EndgameTabInputs = new() {
 			Adder = inputEditingData => new(this, inputEditingData),
-			OnAdd = _ => AnythingChanged.Invoke(),
-			OnRemove = _ => AnythingChanged.Invoke()
-		};
-
-		AutoButtons = new() {
-			Adder = buttonEditingData => new(this, buttonEditingData),
-			OnAdd = _ => AnythingChanged.Invoke(),
-			OnRemove = _ => AnythingChanged.Invoke()
-		};
-
-		TeleButtons = new() {
-			Adder = buttonEditingData => new(this, buttonEditingData),
 			OnAdd = _ => AnythingChanged.Invoke(),
 			OnRemove = _ => AnythingChanged.Invoke()
 		};
@@ -193,9 +178,6 @@ public class GameEditor {
 		initialValues.TeleTabInputs.Foreach(TeleTabInputs.Add);
 		initialValues.EndgameTabInputs.Foreach(EndgameTabInputs.Add);
 
-		initialValues.AutoButtons.Foreach(AutoButtons.Add);
-		initialValues.TeleButtons.Foreach(TeleButtons.Add);
-
 		AnythingChanged.SubscribeTo(Year.OutputObjectChanged);
 		AnythingChanged.SubscribeTo(Name.OutputObjectChanged);
 		AnythingChanged.SubscribeTo(Description.OutputObjectChanged);
@@ -232,10 +214,7 @@ public class GameEditor {
 			SetupTabInputs = SetupTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
 			AutoTabInputs = AutoTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
 			TeleTabInputs = TeleTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
-			EndgameTabInputs = EndgameTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
-
-			AutoButtons = AutoButtons.Select(x => x.ToEditingData()).ToReadOnly(),
-			TeleButtons = TeleButtons.Select(x => x.ToEditingData()).ToReadOnly(),
+			EndgameTabInputs = EndgameTabInputs.Select(x => x.ToEditingData()).ToReadOnly()
 		};
 
 	}
@@ -251,9 +230,7 @@ public class GameEditor {
 	                       SetupTabInputs.All(x => x.IsValid) &&
 	                       AutoTabInputs.All(x => x.IsValid) &&
 	                       TeleTabInputs.All(x => x.IsValid) &&
-	                       EndgameTabInputs.All(x => x.IsValid) &&
-	                       AutoButtons.All(x => x.IsValid) &&
-	                       TeleButtons.All(x => x.IsValid);
+	                       EndgameTabInputs.All(x => x.IsValid);
 
 	public IEditorToGameSpecificationResult<GameSpec> ToGameSpecification() {
 
@@ -291,14 +268,6 @@ public class GameEditor {
 
             endgameTabInputs: EndgameTabInputs.Select(x =>
                 (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-                throw new UnreachableException()).ToReadOnly(),
-
-            autoButtons: AutoButtons.Select(x =>
-                (x.ToGameSpecification() as IEditorToGameSpecificationResult<ButtonSpec>.Success)?.Value ??
-                throw new UnreachableException()).ToReadOnly(),
-
-            teleButtons: TeleButtons.Select(x =>
-                (x.ToGameSpecification() as IEditorToGameSpecificationResult<ButtonSpec>.Success)?.Value ??
                 throw new UnreachableException()).ToReadOnly()
         );
 

@@ -18,10 +18,7 @@
     <Grid Margin="5,5,5,5">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+	        <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -31,125 +28,10 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid
+	    <Grid
             Margin="13,5,12,0"
             Grid.Column="1"
             Grid.Row="0">
-            
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
-
-            <Label
-                Content="{Binding ButtonDataFieldNameText, Source={StaticResource AutoTabData}}"
-                Margin="5,0,5,0"
-                Grid.Column="0"/>
-
-            <Label
-                Content="{Binding ButtonTextText, Source={StaticResource AutoTabData}}"
-                Margin="5,0,5,0"
-                Grid.Column="1"/>
-
-            <Label
-                Content="{Binding ButtonIncrementAmountText, Source={StaticResource AutoTabData}}"
-                Margin="5,0,5,0"
-                Grid.Column="2"/>
-
-            <Label
-                Content="{Binding ButtonXPositionText, Source={StaticResource AutoTabData}}"
-                Margin="5,0,5,0"
-                Grid.Column="3"/>
-
-            <Label
-                Content="{Binding ButtonYPositionText, Source={StaticResource AutoTabData}}"
-                Margin="5,0,5,0"
-                Grid.Column="4"/>
-
-            <Label
-                Content="{Binding ButtonWidthText, Source={StaticResource AutoTabData}}"
-                Margin="5,0,5,0"
-                Grid.Column="5"/>
-
-            <Label
-                Content="{Binding ButtonHeightText, Source={StaticResource AutoTabData}}"
-                Margin="5,0,5,0"
-                Grid.Column="6"/>
-
-        </Grid>
-
-        <TextBlock Text="{Binding ButtonsText, Source={StaticResource AutoTabData}}"
-                   Margin="5,5,5,5"
-                   Width="auto"
-                   Grid.Row="1"
-                   Grid.Column="0"/>
-
-        <ListBox ItemsSource="{Binding Path=Buttons}"
-                 SelectedItem="{Binding Path=SelectedButton}"
-                 Margin="5,0,5,5"
-                 MinHeight="20"
-                 Grid.Row="1"
-                 Grid.Column="1"
-                 HorizontalContentAlignment="Stretch">
-
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <dataTemplates:ButtonView/>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-
-        </ListBox>
-
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="2"
-                    Grid.Column="1">
-
-            <Button Content="{Binding AddText, Source={StaticResource AutoTabData}}"
-                    Click="AddButtonButton_Click"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"/>
-
-            <Button Content="{Binding RemoveText, Source={StaticResource AutoTabData}}"
-                    Click="RemoveButtonButton_Click"
-                    IsEnabled="{Binding Path=RemoveButtonButtonIsEnabled}"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"/>
-
-            <Button Content="{Binding MoveUpText, Source={StaticResource AutoTabData}}"
-                    Click="MoveButtonUpButton_Click"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    IsEnabled="False"
-                    Visibility="Hidden"/>
-
-            <Button Content="{Binding MoveDownText, Source={StaticResource AutoTabData}}"
-                    Click="MoveButtonDownButton_Click"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    IsEnabled="False"
-                    Visibility="Hidden"/>
-
-        </StackPanel>
-
-        <Grid
-            Margin="13,5,12,0"
-            Grid.Column="1"
-            Grid.Row="3">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -171,14 +53,14 @@
         <TextBlock Text="{Binding InputsText, Source={StaticResource AutoTabData}}"
                    Margin="5,5,5,5"
                    Width="auto"
-                   Grid.Row="4"
+                   Grid.Row="1"
                    Grid.Column="0"/>
 
         <ListBox ItemsSource="{Binding Path=Inputs}"
                  SelectedItem="{Binding Path=SelectedInput}"
                  Margin="5,0,5,5"
                  MinHeight="20"
-                 Grid.Row="4"
+                 Grid.Row="1"
                  Grid.Column="1"
                  HorizontalContentAlignment="Stretch">
 
@@ -193,7 +75,7 @@
         </ListBox>
 
         <StackPanel Orientation="Horizontal"
-                    Grid.Row="5"
+                    Grid.Row="2"
                     Grid.Column="1">
 
             <Button Content="{Binding AddText, Source={StaticResource AutoTabData}}"
@@ -205,7 +87,7 @@
 
             <Button Content="{Binding RemoveText, Source={StaticResource AutoTabData}}"
                     Click="RemoveInputButton_Click"
-                    IsEnabled="{Binding Path=RemoveInputButtonIsEnabled}"
+                    IsEnabled="{Binding Path=RemoveButtonIsEnabled}"
                     Margin="5,5,5,5"
                     Padding="4,4,4,4"
                     HorizontalAlignment="Left"

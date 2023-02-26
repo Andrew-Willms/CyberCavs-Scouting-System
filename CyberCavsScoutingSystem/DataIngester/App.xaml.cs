@@ -22,8 +22,6 @@ public partial class App : Application {
 		ReadOnlyList.Empty,
 		ReadOnlyList.Empty,
 		ReadOnlyList.Empty,
-		ReadOnlyList.Empty,
-		ReadOnlyList.Empty,
 		ReadOnlyList.Empty) as IResult<GameSpec>.Success)?.Value ?? throw new InvalidOperationException();
 
 	public App() {

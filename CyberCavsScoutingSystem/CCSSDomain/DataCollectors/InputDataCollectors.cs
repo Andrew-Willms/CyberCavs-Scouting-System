@@ -27,6 +27,8 @@ public abstract class InputDataCollector : INotifyPropertyChanged {
 
 }
 
+
+
 public class TextInputDataCollector : InputDataCollector, INotifyPropertyChanged {
 
 	private readonly TextDataField DataField;
@@ -44,6 +46,8 @@ public class TextInputDataCollector : InputDataCollector, INotifyPropertyChanged
 
 }
 
+
+
 public class IntegerInputDataCollector : InputDataCollector, INotifyPropertyChanged {
 
 	private readonly IntegerDataField DataField;
@@ -60,6 +64,8 @@ public class IntegerInputDataCollector : InputDataCollector, INotifyPropertyChan
 	}
 
 }
+
+
 
 public class SelectionInputDataCollector : InputDataCollector, INotifyPropertyChanged {
 

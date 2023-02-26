@@ -44,11 +44,8 @@ public partial class QrCodeDisplay : ContentPage {
 		ReadOnlyList<InputSpec> teleTabInputs = ReadOnlyList<InputSpec>.Empty;
 		ReadOnlyList<InputSpec> endgameTabInputs = ReadOnlyList<InputSpec>.Empty;
 
-		ReadOnlyList<ButtonSpec> autoButtons = ReadOnlyList<ButtonSpec>.Empty;
-		ReadOnlyList<ButtonSpec> teleButtons = ReadOnlyList<ButtonSpec>.Empty;
-
 		IResult<GameSpec> gameSpecResult = GameSpec.Create("Game Name", 2023, "Description", version, 3, 2,
-			alliances, dataFieldSpecs, setupTabInputs, autoTabInputs, teleTabInputs, endgameTabInputs, autoButtons, teleButtons);
+			alliances, dataFieldSpecs, setupTabInputs, autoTabInputs, teleTabInputs, endgameTabInputs);
 
 		GameSpec gameSpec = ((gameSpecResult as IResult<GameSpec>.Success)!).Value;
 

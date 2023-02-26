@@ -31,8 +31,7 @@ public class GameSpec {
 	public required ReadOnlyList<InputSpec> TeleTabInputs { get; init; }
 	public required ReadOnlyList<InputSpec> EndgameTabInputs { get; init; }
 
-	public required ReadOnlyList<ButtonSpec> AutoButtons { get; init; }
-	public required ReadOnlyList<ButtonSpec> TeleButtons { get; init; }
+
 
 	private GameSpec() { }
 
@@ -48,9 +47,7 @@ public class GameSpec {
 		ReadOnlyList<InputSpec> setupTabInputs,
 		ReadOnlyList<InputSpec> autoTabInputs,
 		ReadOnlyList<InputSpec> teleTabInputs,
-		ReadOnlyList<InputSpec> endgameTabInputs,
-		ReadOnlyList<ButtonSpec> autoButtons,
-		ReadOnlyList<ButtonSpec> teleButtons) {
+		ReadOnlyList<InputSpec> endgameTabInputs) {
 
 		foreach (Alliance alliance in alliances) {
 
@@ -108,9 +105,7 @@ public class GameSpec {
 				SetupTabInputs = setupTabInputs,
 				AutoTabInputs = autoTabInputs,
 				TeleTabInputs = teleTabInputs,
-				EndgameTabInputs = endgameTabInputs,
-				AutoButtons = autoButtons,
-				TeleButtons = teleButtons,
+				EndgameTabInputs = endgameTabInputs
 			}
 		};
 	}

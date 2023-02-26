@@ -24,22 +24,7 @@ public partial class TeleTabView : AppManagerDependent, INotifyPropertyChanged {
 	private GameEditor GameEditor => App.ServiceProvider.GetRequiredService<IAppManager>().GameEditor;
 
 	[DependsOn(nameof(AppManager.GameEditor))]
-	public ObservableList<ButtonEditor, ButtonEditingData> Buttons => GameEditor.TeleButtons;
-
-	[DependsOn(nameof(AppManager.GameEditor))]
 	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.TeleTabInputs;
-
-	private ButtonEditor? _SelectedButton;
-	public ButtonEditor? SelectedButton {
-		get => _SelectedButton;
-		set {
-			_SelectedButton = value;
-			OnPropertyChanged(nameof(SelectedButton));
-			OnPropertyChanged(nameof(RemoveButtonButtonIsEnabled));
-		}
-	}
-
-	public bool RemoveButtonButtonIsEnabled => SelectedButton is not null;
 
 	private InputEditor? _SelectedInput;
 	public InputEditor? SelectedInput {
@@ -47,11 +32,11 @@ public partial class TeleTabView : AppManagerDependent, INotifyPropertyChanged {
 		set {
 			_SelectedInput = value;
 			OnPropertyChanged(nameof(SelectedInput));
-			OnPropertyChanged(nameof(RemoveInputButtonIsEnabled));
+			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}
 	}
 
-	public bool RemoveInputButtonIsEnabled => SelectedInput is not null;
+	public bool RemoveButtonIsEnabled => SelectedInput is not null;
 
 
 
@@ -62,44 +47,6 @@ public partial class TeleTabView : AppManagerDependent, INotifyPropertyChanged {
 		InitializeComponent();
 	}
 
-
-
-	private void AddButtonButton_Click(object sender, RoutedEventArgs e) {
-		
-		Buttons.Add(DefaultEditingDataValues.DefaultButtonEditingData);
-	}
-
-	private void RemoveButtonButton_Click(object sender, RoutedEventArgs e) {
-		
-		if (SelectedButton is null) {
-			throw new InvalidOperationException("The RemoveButton should not be enabled if no Alliance is selected.");
-		}
-
-		IListRemoveResult<ButtonEditor> result = Buttons.Remove(SelectedButton);
-
-		switch (result) {
-
-			case Success:
-				return;
-
-			case IListRemoveResult<ButtonEditor>.ItemNotFound error:
-				ErrorPresenter.DisplayError(error, RemoveFromListErrors.RemoveTeleButtonError);
-				return;
-
-			default:
-				throw new UnreachableException();
-		}
-
-	}
-
-	private void MoveButtonUpButton_Click(object sender, RoutedEventArgs e) {
-		throw new NotImplementedException();
-	}
-
-	private void MoveButtonDownButton_Click(object sender, RoutedEventArgs e) {
-		throw new NotImplementedException();
-	}
-	
 
 
 	private void AddInputButton_Click(object sender, RoutedEventArgs e) {

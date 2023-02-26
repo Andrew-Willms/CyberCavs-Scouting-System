@@ -50,16 +50,6 @@ public static class DefaultEditingDataValues {
 
 
 
-	public static readonly ButtonEditingData DefaultButtonEditingData = new() {
-		DataFieldName = "",
-		IncrementAmount = "1",
-		ButtonText = "Button Text",
-		XPosition = "0.5",
-		YPosition = "0.5",
-		Height = "0.1",
-		Width = "0.1"
-	};
-
 	public static readonly InputEditingData DefaultInputEditingData = new() {
 		DataFieldName = "",
 		Label = ""
@@ -86,10 +76,7 @@ public static class DefaultEditingDataValues {
 		SetupTabInputs = ReadOnlyList.Empty,
 		AutoTabInputs = ReadOnlyList.Empty,
 		TeleTabInputs = ReadOnlyList.Empty,
-		EndgameTabInputs = ReadOnlyList.Empty,
-
-		AutoButtons = ReadOnlyList.Empty,
-		TeleButtons = ReadOnlyList.Empty,
+		EndgameTabInputs = ReadOnlyList.Empty
 	};
 
 
