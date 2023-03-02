@@ -26,8 +26,6 @@ public interface IAppManager : INotifyPropertyChanged {
 
 	public void StoreMatchData();
 
-	public void DisplayQrCode();
-
 }
 
 
@@ -69,13 +67,9 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		throw new System.NotImplementedException();
 	}
 
-	public void DisplayQrCode() {
-		throw new System.NotImplementedException();
-	}
 
 
-
-    public event PropertyChangedEventHandler? PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged(string propertyName) {
         PropertyChanged?.Invoke(this, new(propertyName));

@@ -19,13 +19,16 @@ public partial class AutoTab : ContentPage {
 		new IntegerDataField(new() { Name = "Low Cones", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
 		new IntegerDataField(new() { Name = "Low Cubes", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
 
-		new TextDataField(new() { Name = "Comments"}),
-
-		new SelectionDataField(new() { Name = "Climb Level", OptionNames = new List<string> {
+		new SelectionDataField(new() { Name = "Charge Station", OptionNames = new List<string> {
 			"None",
 			"Attempted",
 			"Docked",
 			"Engaged"
+		}.ToReadOnly()}),
+
+		new SelectionDataField(new() { Name = "Mobility", OptionNames = new List<string> {
+			"Yes",
+			"No",
 		}.ToReadOnly()})
 
 	});

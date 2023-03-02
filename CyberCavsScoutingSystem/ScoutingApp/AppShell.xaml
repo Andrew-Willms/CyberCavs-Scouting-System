@@ -5,35 +5,72 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:tabs="clr-namespace:ScoutingApp.Views.Tabs"
-    FlyoutBehavior="Disabled">
+    FlyoutBehavior="Flyout">
 
-	<TabBar>
+	<FlyoutItem Title="Match">
+
+		<Tab Title="Setup">
+			<ShellContent
+				Title="Setup"
+				ContentTemplate="{DataTemplate tabs:SetupTab}"
+				Route="Setup"/>
+		</Tab>
+
+		<Tab Title="Auto">
+			<ShellContent
+				Title="Auto"
+				ContentTemplate="{DataTemplate tabs:AutoTab}"
+				Route="Auto"/>
+		</Tab>
+
+		<Tab Title="Tele">
+			<ShellContent
+				Title="Tele"
+				ContentTemplate="{DataTemplate tabs:TeleTab}"
+				Route="Tele"/>
+		</Tab>
+
+		<Tab Title="Endgame">
+			<ShellContent
+				Title="Endgame"
+				ContentTemplate="{DataTemplate tabs:EndgameTab}"
+				Route="Endgame"/>
+		</Tab>
+
+		<Tab Title="Confirm">
+			<ShellContent
+				Title="Confirm"
+				ContentTemplate="{DataTemplate tabs:ConfirmTab}"
+				Route="Confirm"/>
+		</Tab>
+
+	</FlyoutItem>
+
+	<FlyoutItem Title="Event">
 
 		<ShellContent
-			Title="Setup"
+			Title="Event"
+			ContentTemplate="{DataTemplate tabs:EventPage}"
+			Route="Setup"/>
+
+	</FlyoutItem>
+
+	<FlyoutItem Title="Scout">
+
+		<ShellContent
+			Title ="Scout Name"
+			ContentTemplate="{DataTemplate tabs:ScoutPage}"
+			Route="Setup"/>
+
+	</FlyoutItem>
+
+	<FlyoutItem Title="Qr Codes">
+
+		<ShellContent
+			Title="QR codes" 
 			ContentTemplate="{DataTemplate tabs:SetupTab}"
-			Route="MainPage"/>
+			Route="Setup"/>
 
-		<ShellContent
-			Title="Auto"
-			ContentTemplate="{DataTemplate tabs:AutoTab}"
-			Route="MainPage2"/>
-
-		<ShellContent
-			Title="Tele"
-			ContentTemplate="{DataTemplate tabs:TeleTab}"
-			Route="MainPage3"/>
-
-		<ShellContent
-			Title="Endgame"
-			ContentTemplate="{DataTemplate tabs:EndgameTab}"
-			Route="MainPage3"/>
-
-		<ShellContent
-			Title="Confirm"
-			ContentTemplate="{DataTemplate tabs:ConfirmTab}"
-			Route="MainPage3"/>
-
-	</TabBar>
+	</FlyoutItem>
 
 </Shell>

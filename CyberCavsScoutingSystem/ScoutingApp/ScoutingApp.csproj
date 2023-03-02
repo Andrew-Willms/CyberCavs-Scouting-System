@@ -81,6 +81,12 @@
 	  <Compile Update="Views\Tabs\EndgameTab.xaml.cs">
 	    <DependentUpon>EndgameTab.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Tabs\EventPage.xaml.cs">
+	    <DependentUpon>EventPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Tabs\ScoutPage.xaml.cs">
+	    <DependentUpon>ScoutPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Tabs\SetupTab.xaml.cs">
 	    <DependentUpon>SetupTab.xaml</DependentUpon>
 	  </Compile>
@@ -103,6 +109,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Tabs\EndgameTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Tabs\EventPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Tabs\ScoutPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Tabs\SetupTab.xaml">

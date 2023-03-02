@@ -12,21 +12,16 @@ public partial class SetupTab : ContentPage {
 
 	public ObservableCollection<DataField> Inputs { get; } = new(new() {
 
-		new IntegerDataField(new() { Name = "High Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),
-		new IntegerDataField(new() { Name = "High Cubes", InitialValue = 0, MinValue = 0, MaxValue = 3 }),
-		new IntegerDataField(new() { Name = "Mid Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),
-		new IntegerDataField(new() { Name = "Mid Cubes", InitialValue = 0, MinValue = 0, MaxValue = 3 }),
-		new IntegerDataField(new() { Name = "Low Cones", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
-		new IntegerDataField(new() { Name = "Low Cubes", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
+		new TextDataField(new() { Name = "Scout Name"}),
 
-		new TextDataField(new() { Name = "Comments"}),
+		new IntegerDataField(new() { Name = "Match Number", InitialValue = 0, MinValue = 0, MaxValue = 100 }),
 
-		new SelectionDataField(new() { Name = "Climb Level", OptionNames = new List<string> {
-			"None",
-			"Attempted",
-			"Docked",
-			"Engaged"
-		}.ToReadOnly()})
+		new IntegerDataField(new() { Name = "Team Number", InitialValue = 0, MinValue = 0, MaxValue = 10000 }),
+
+		new SelectionDataField(new() { Name = "Alliance", OptionNames = new List<string> {
+			"Red",
+			"Blue"
+		}.ToReadOnly()}),
 
 	});
 

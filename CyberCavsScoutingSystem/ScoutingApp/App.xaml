@@ -4,7 +4,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:dataTemplates="clr-namespace:ScoutingApp.Views.DataTemplates"
 			 xmlns:dataTemplateSelectors="clr-namespace:ScoutingApp.Views.DataTemplateSelectors"
-			 xmlns:converters1="clr-namespace:ScoutingApp.Views.Converters"
+			 xmlns:converters="clr-namespace:ScoutingApp.Views.Converters"
 			 x:Class="ScoutingApp.App">
 
 	<Application.Resources>
@@ -38,7 +38,7 @@
 
 
 
-			<converters1:ReadOnlyListOfStringsToIListConverter x:Key="ReadOnlyListOfStringsToIListConverter"/>
+			<converters:ReadOnlyListOfStringsToIListConverter x:Key="ReadOnlyListOfStringsToIListConverter"/>
 
 		</ResourceDictionary>
 

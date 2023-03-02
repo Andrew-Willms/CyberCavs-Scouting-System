@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tabs="clr-namespace:ScoutingApp.Views.Tabs"
+             x:Class="ScoutingApp.Views.Tabs.ScoutPage"
+             x:DataType="tabs:ScoutPage">
+
+	<VerticalStackLayout
+		Margin="10"
+		Spacing="0">
+		
+		<Label 
+			Text="Scout Name"
+			HorizontalTextAlignment="Start"/>
+
+		<Entry Text="{Binding Path=ScoutName}"/>
+
+	</VerticalStackLayout>
+
+</ContentPage>

@@ -12,21 +12,49 @@ public partial class EndgameTab : ContentPage {
 
 	public ObservableCollection<DataField> Inputs { get; } = new(new() {
 
-		new IntegerDataField(new() { Name = "High Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),
-		new IntegerDataField(new() { Name = "High Cubes", InitialValue = 0, MinValue = 0, MaxValue = 3 }),
-		new IntegerDataField(new() { Name = "Mid Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),
-		new IntegerDataField(new() { Name = "Mid Cubes", InitialValue = 0, MinValue = 0, MaxValue = 3 }),
-		new IntegerDataField(new() { Name = "Low Cones", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
-		new IntegerDataField(new() { Name = "Low Cubes", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
-
-		new TextDataField(new() { Name = "Comments"}),
-
-		new SelectionDataField(new() { Name = "Climb Level", OptionNames = new List<string> {
+		new SelectionDataField(new() { Name = "Charge Station", OptionNames = new List<string> {
 			"None",
 			"Attempted",
 			"Docked",
 			"Engaged"
-		}.ToReadOnly()})
+		}.ToReadOnly()}),
+
+		new SelectionDataField(new() { Name = "Shelf Cones", OptionNames = new List<string> {
+			"Yes",
+			"No",
+		}.ToReadOnly()}),
+
+		new SelectionDataField(new() { Name = "Chute Cones", OptionNames = new List<string> {
+			"Yes",
+			"No",
+		}.ToReadOnly()}),
+
+		new SelectionDataField(new() { Name = "Upright Cones", OptionNames = new List<string> {
+			"Yes",
+			"No",
+		}.ToReadOnly()}),
+
+		new SelectionDataField(new() { Name = "Tipped Cones", OptionNames = new List<string> {
+			"Yes",
+			"No",
+		}.ToReadOnly()}),
+
+		new SelectionDataField(new() { Name = "Shelf Cubes", OptionNames = new List<string> {
+			"Yes",
+			"No",
+		}.ToReadOnly()}),
+
+		new SelectionDataField(new() { Name = "Chute Cubes", OptionNames = new List<string> {
+			"Yes",
+			"No",
+		}.ToReadOnly()}),
+
+		new SelectionDataField(new() { Name = "Ground Cubes", OptionNames = new List<string> {
+			"Yes",
+			"No",
+		}.ToReadOnly()}),
+
+		new TextDataField(new() { Name = "Comments"}),
 
 	});
 
