@@ -18,7 +18,7 @@ public abstract class AppManagerDependent : DependentView<IAppManager> {
 
 public interface IAppManager : INotifyPropertyChanged {
 
-    public Optional<MatchDataCollector> ActiveMatchData { get; }
+	public Optional<MatchDataCollector> ActiveMatchData { get; }
 
 	public void ApplicationStartup();
 
@@ -32,22 +32,22 @@ public interface IAppManager : INotifyPropertyChanged {
 
 public class AppManager : IAppManager, INotifyPropertyChanged {
 
-    private Optional<MatchDataCollector> _ActiveMatchData = Optional.NoValue;
-    public Optional<MatchDataCollector> ActiveMatchData {
-        get => _ActiveMatchData;
-        private set {
-            _ActiveMatchData = value;
-            OnPropertyChanged(nameof(ActiveMatchData));
-        }
-    }
+	private Optional<MatchDataCollector> _ActiveMatchData = Optional.NoValue;
+	public Optional<MatchDataCollector> ActiveMatchData {
+		get => _ActiveMatchData;
+		private set {
+			_ActiveMatchData = value;
+			OnPropertyChanged(nameof(ActiveMatchData));
+		}
+	}
 
 
 
-    private IMainView MainView => App.ServiceProvider.GetRequiredService<IMainView>();
-    private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
+	private IMainView MainView => App.ServiceProvider.GetRequiredService<IMainView>();
+	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 
 
-    public AppManager() {
+	public AppManager() {
 
 	}
 
@@ -71,8 +71,8 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void OnPropertyChanged(string propertyName) {
-        PropertyChanged?.Invoke(this, new(propertyName));
-    }
+	private void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
+	}
 
 }

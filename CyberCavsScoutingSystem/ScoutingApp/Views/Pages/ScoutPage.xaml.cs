@@ -1,14 +1,15 @@
 ﻿using System.ComponentModel;
 using Microsoft.Maui.Controls;
 
-namespace ScoutingApp.Views.Tabs; 
+namespace ScoutingApp.Views.Pages; 
 
 
 
 public partial class ScoutPage : ContentPage, INotifyPropertyChanged {
 
-	private string _ScoutName = "";
+	public static string Route => "Scout";
 
+	private string _ScoutName = "";
 	public string ScoutName {
 		get => _ScoutName;
 		set {

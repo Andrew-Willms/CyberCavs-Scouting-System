@@ -2,11 +2,13 @@
 using Microsoft.Maui.Controls;
 using UtilitiesLibrary.Collections;
 
-namespace ScoutingApp.Views.Tabs; 
+namespace ScoutingApp.Views.Pages; 
 
 
 
 public partial class EventPage : ContentPage {
+
+	public static string Route => "Event";
 
 	public ReadOnlyList<string> Events { get; set; } = new List<string> {
 		"Waterloo",

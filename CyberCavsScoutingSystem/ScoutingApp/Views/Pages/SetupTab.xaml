@@ -2,9 +2,9 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:tabs="clr-namespace:ScoutingApp.Views.Tabs"
-			 x:Class="ScoutingApp.Views.Tabs.AutoTab"
-			 x:DataType="tabs:AutoTab">
+			 xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
+			 x:Class="ScoutingApp.Views.Pages.SetupTab"
+			 x:DataType="pages:SetupTab">
 
 	<Grid Margin="10">
 
@@ -16,7 +16,7 @@
 
 				<GridItemsLayout
 					Orientation="Vertical"
-					Span="2"
+					Span="1"
 					VerticalItemSpacing="10"
 					HorizontalItemSpacing="10"/>
 

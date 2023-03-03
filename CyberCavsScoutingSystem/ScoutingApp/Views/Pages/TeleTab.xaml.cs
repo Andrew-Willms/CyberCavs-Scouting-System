@@ -2,11 +2,13 @@
 using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
 
-namespace ScoutingApp.Views.Tabs; 
+namespace ScoutingApp.Views.Pages; 
 
 
 
 public partial class TeleTab : ContentPage {
+
+	public static string Route => "Tele";
 
 	public ObservableCollection<DataField> Inputs { get; } = new(new() {
 		new IntegerDataField(new() { Name = "High Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),

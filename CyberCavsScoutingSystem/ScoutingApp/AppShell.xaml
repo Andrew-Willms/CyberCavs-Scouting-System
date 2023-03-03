@@ -1,75 +1,93 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Shell
-    x:Class="ScoutingApp.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:tabs="clr-namespace:ScoutingApp.Views.Tabs"
-    FlyoutBehavior="Flyout">
+	x:Class="ScoutingApp.AppShell"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
+	FlyoutBehavior="Flyout">
 
 	<FlyoutItem Title="Match">
 
-		<Tab Title="Setup">
+		<Tab
+			Title="Setup"
+			Route="{x:Static pages:SetupTab.Route}">
+
 			<ShellContent
 				Title="Setup"
-				ContentTemplate="{DataTemplate tabs:SetupTab}"
-				Route="Setup"/>
+				ContentTemplate="{DataTemplate pages:SetupTab}"/>
+
 		</Tab>
 
-		<Tab Title="Auto">
+		<Tab
+			Title="Auto"
+			Route="{x:Static pages:AutoTab.Route}">
+
 			<ShellContent
 				Title="Auto"
-				ContentTemplate="{DataTemplate tabs:AutoTab}"
-				Route="Auto"/>
+				ContentTemplate="{DataTemplate pages:AutoTab}"/>
+
 		</Tab>
 
-		<Tab Title="Tele">
+		<Tab 
+			Title="Tele"
+			Route="{x:Static pages:TeleTab.Route}">
+
 			<ShellContent
 				Title="Tele"
-				ContentTemplate="{DataTemplate tabs:TeleTab}"
-				Route="Tele"/>
+				ContentTemplate="{DataTemplate pages:TeleTab}"/>
+
 		</Tab>
 
-		<Tab Title="Endgame">
+		<Tab
+			Title="Endgame"
+			Route="{x:Static pages:EndgameTab.Route}">
+
 			<ShellContent
 				Title="Endgame"
-				ContentTemplate="{DataTemplate tabs:EndgameTab}"
-				Route="Endgame"/>
+				ContentTemplate="{DataTemplate pages:EndgameTab}"/>
+
 		</Tab>
 
-		<Tab Title="Confirm">
+		<Tab
+			Title="Confirm"
+			Route="{x:Static pages:ConfirmTab.Route}">
+
 			<ShellContent
 				Title="Confirm"
-				ContentTemplate="{DataTemplate tabs:ConfirmTab}"
-				Route="Confirm"/>
+				ContentTemplate="{DataTemplate pages:ConfirmTab}"/>
+
 		</Tab>
 
 	</FlyoutItem>
 
-	<FlyoutItem Title="Event">
+	<FlyoutItem
+		Title="Event"
+		Route="{x:Static pages:EventPage.Route}">
 
 		<ShellContent
 			Title="Event"
-			ContentTemplate="{DataTemplate tabs:EventPage}"
-			Route="Setup"/>
+			ContentTemplate="{DataTemplate pages:EventPage}"/>
 
 	</FlyoutItem>
 
-	<FlyoutItem Title="Scout">
+	<FlyoutItem
+		Title="Scout"
+		Route="{x:Static pages:ScoutPage.Route}">
 
 		<ShellContent
 			Title ="Scout Name"
-			ContentTemplate="{DataTemplate tabs:ScoutPage}"
-			Route="Setup"/>
+			ContentTemplate="{DataTemplate pages:ScoutPage}"/>
 
 	</FlyoutItem>
 
-	<FlyoutItem Title="Qr Codes">
+	<FlyoutItem
+		Title="Qr Codes"
+		Route="{x:Static pages:QrCodePage.Route}">
 
 		<ShellContent
-			Title="QR codes" 
-			ContentTemplate="{DataTemplate tabs:SetupTab}"
-			Route="Setup"/>
+			Title="QR Codes" 
+			ContentTemplate="{DataTemplate pages:QrCodePage}"/>
 
 	</FlyoutItem>
 

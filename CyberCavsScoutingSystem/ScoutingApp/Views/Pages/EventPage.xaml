@@ -2,9 +2,9 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:tabs="clr-namespace:ScoutingApp.Views.Tabs"
-             x:Class="ScoutingApp.Views.Tabs.EventPage"
-             x:DataType="tabs:EventPage">
+             xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
+             x:Class="ScoutingApp.Views.Pages.EventPage"
+             x:DataType="pages:EventPage">
 
 	<VerticalStackLayout
 		Margin="10"

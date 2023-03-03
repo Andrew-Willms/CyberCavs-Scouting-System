@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
@@ -49,7 +48,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	private async void MainPage_OnBindingContextChanged(object? sender, EventArgs e) {
+	private async void MainPage_OnLoaded(object? sender, EventArgs e) {
 		await Refresh();
 	}
 
@@ -81,7 +80,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	private async Task Refresh([CallerMemberName] string callerName = null!) {
+	private async Task Refresh() {
 
 		await Dispatcher.DispatchAsync(async () => {
 

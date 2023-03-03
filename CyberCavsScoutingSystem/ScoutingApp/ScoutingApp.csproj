@@ -51,6 +51,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="QRCoder" Version="1.4.3" />
+		<PackageReference Include="ZXing.Net.Maui" Version="0.3.0-preview.1" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.3.0-preview.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -69,28 +71,34 @@
 	  <Compile Update="Views\DataTemplates\TextDataFieldInputView.xaml.cs">
 	    <DependentUpon>TextDataFieldInputView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Pages\MatchQrCodePage.xaml.cs">
+	    <DependentUpon>MatchQrCodePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\QrCodePage.xaml.cs">
+	    <DependentUpon>QrCodePage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\QrCodeDisplay.xaml.cs">
 	    <DependentUpon>QrCodeDisplay.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Tabs\AutoTab.xaml.cs">
+	  <Compile Update="Views\Pages\AutoTab.xaml.cs">
 	    <DependentUpon>AutoTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Tabs\ConfirmTab.xaml.cs">
+	  <Compile Update="Views\Pages\ConfirmTab.xaml.cs">
 	    <DependentUpon>ConfirmTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Tabs\EndgameTab.xaml.cs">
+	  <Compile Update="Views\Pages\EndgameTab.xaml.cs">
 	    <DependentUpon>EndgameTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Tabs\EventPage.xaml.cs">
+	  <Compile Update="Views\Pages\EventPage.xaml.cs">
 	    <DependentUpon>EventPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Tabs\ScoutPage.xaml.cs">
+	  <Compile Update="Views\Pages\ScoutPage.xaml.cs">
 	    <DependentUpon>ScoutPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Tabs\SetupTab.xaml.cs">
+	  <Compile Update="Views\Pages\SetupTab.xaml.cs">
 	    <DependentUpon>SetupTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Tabs\TeleTab.xaml.cs">
+	  <Compile Update="Views\Pages\TeleTab.xaml.cs">
 	    <DependentUpon>TeleTab.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
@@ -102,22 +110,28 @@
 	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\MatchQrCodePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\QrCodePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\QrCodeDisplay.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Tabs\AutoTab.xaml">
+	  <MauiXaml Update="Views\Pages\AutoTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Tabs\EndgameTab.xaml">
+	  <MauiXaml Update="Views\Pages\EndgameTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Tabs\EventPage.xaml">
+	  <MauiXaml Update="Views\Pages\EventPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Tabs\ScoutPage.xaml">
+	  <MauiXaml Update="Views\Pages\ScoutPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Tabs\SetupTab.xaml">
+	  <MauiXaml Update="Views\Pages\SetupTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

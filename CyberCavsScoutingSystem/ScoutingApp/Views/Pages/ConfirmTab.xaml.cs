@@ -1,10 +1,12 @@
 ﻿using Microsoft.Maui.Controls;
 
-namespace ScoutingApp.Views.Tabs; 
+namespace ScoutingApp.Views.Pages; 
 
 
 
 public partial class ConfirmTab : ContentPage {
+
+	public static string Route => "Confirm";
 
 	public ConfirmTab() {
 		InitializeComponent();

@@ -4,11 +4,13 @@ using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
 using UtilitiesLibrary.Collections;
 
-namespace ScoutingApp.Views.Tabs; 
+namespace ScoutingApp.Views.Pages; 
 
 
 
 public partial class SetupTab : ContentPage {
+
+	public static string Route => "Setup";
 
 	public ObservableCollection<DataField> Inputs { get; } = new(new() {
 
