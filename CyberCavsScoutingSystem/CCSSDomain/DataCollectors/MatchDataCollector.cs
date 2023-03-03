@@ -16,6 +16,8 @@ public class MatchDataCollector {
 
 	private GameSpec GameSpecification { get; }
 
+	public Optional<string> Scout { get; set; } = Optional.NoValue;
+
 	public Optional<Event> Event { get; set; } = Optional.NoValue;
 
 	public Optional<uint> MatchNumber { get; set; } = Optional.NoValue;
@@ -52,6 +54,7 @@ public class MatchDataCollector {
 	public string ConvertDataToCsv() {
 
         StringBuilder matchData = new(
+            $"{Scout.Value.ToCsvFriendly()}," +
             $"{Event.Value.Name.ToCsvFriendly()}," +
             $"{MatchNumber.Value.ToString().ToCsvFriendly()}," +
             $"{ReplayNumber.Value.ToString().ToCsvFriendly()}," +

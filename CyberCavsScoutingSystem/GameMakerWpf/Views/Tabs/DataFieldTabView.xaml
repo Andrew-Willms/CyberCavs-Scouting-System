@@ -1,143 +1,152 @@
-﻿<appManagement:AppManagerDependent x:Class="GameMakerWpf.Views.Tabs.DataFieldTabView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:GameMakerWpf.Views.Tabs"
-             xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData.TabViews"
-             xmlns:dataFieldEditors="clr-namespace:GameMakerWpf.Domain.Editors.DataFieldEditors"
-             xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataTemplates.DataField"
-             xmlns:appManagement="clr-namespace:GameMakerWpf.AppManagement"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=local:DataFieldTabView, IsDesignTimeCreatable=True}">
+﻿<appManagement:AppManagerDependent 
+	x:Class="GameMakerWpf.Views.Tabs.DataFieldTabView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+	xmlns:local="clr-namespace:GameMakerWpf.Views.Tabs"
+	xmlns:displayData="clr-namespace:GameMakerWpf.DisplayData.TabViews"
+	xmlns:dataFieldEditors="clr-namespace:GameMakerWpf.Domain.Editors.DataFieldEditors"
+	xmlns:dataField="clr-namespace:GameMakerWpf.Views.DataTemplates.DataField"
+	xmlns:appManagement="clr-namespace:GameMakerWpf.AppManagement"
+	mc:Ignorable="d" 
+	d:DesignHeight="450" d:DesignWidth="800"
+	d:DataContext="{d:DesignInstance Type=local:DataFieldTabView, IsDesignTimeCreatable=True}">
 
-    <appManagement:AppManagerDependent.Resources>
-        <displayData:DataFieldTabData x:Key="DataFieldTabData"/>
-    </appManagement:AppManagerDependent.Resources>
+	<appManagement:AppManagerDependent.Resources>
+		<displayData:DataFieldTabData x:Key="DataFieldTabData"/>
+	</appManagement:AppManagerDependent.Resources>
 
-    <Grid>
+	<ScrollViewer>
+		<Grid>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
 
-        <Grid 
-            Margin="5,5,5,5"
-            Grid.Column="0">
+			<Grid 
+			Margin="5,5,5,5"
+			Grid.Column="0">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+				</Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="1*"/>
-            </Grid.ColumnDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="1*"/>
+				</Grid.ColumnDefinitions>
 
-            <TextBlock Text="{Binding DataFieldsText, Source={StaticResource DataFieldTabData}}"
-                   Margin="5,5,5,5"
-                   Width="auto"
-                   Grid.Row="0"
-                   Grid.Column="0"/>
+				<TextBlock Text="{Binding DataFieldsText, Source={StaticResource DataFieldTabData}}"
+				   Margin="5,5,5,5"
+				   Width="auto"
+				   Grid.Row="0"
+				   Grid.Column="0"/>
+						
+				<ListBox
+					ItemsSource="{Binding Path=DataFields}"
+					SelectedItem="{Binding Path=SelectedDataField}"
+					Margin="5,5,5,5"
+					MinHeight="20"
+					HorizontalContentAlignment="Stretch"
+					Grid.Row="0"
+					Grid.Column="1">
 
-            <ListBox ItemsSource="{Binding Path=DataFields}"
-                 SelectedItem="{Binding Path=SelectedDataField}"
-                 Margin="5,5,5,5"
-                 MinHeight="20"
-                 Grid.Row="0"
-                 Grid.Column="1"
-                 HorizontalContentAlignment="Stretch">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<dataField:DataFieldView/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <dataField:DataFieldView/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+				</ListBox>
 
-            </ListBox>
+				<StackPanel
+					Orientation="Horizontal"
+					Grid.Row="1"
+					Grid.Column="1">
+					
+					<Button
+						Content="{Binding AddText, Source={StaticResource DataFieldTabData}}"
+						Click="AddButton_Click"
+						Margin="5,5,5,5"
+						Padding="4,4,4,4"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"/>
 
-            <StackPanel Orientation="Horizontal"
-                    Grid.Row="1"
-                    Grid.Column="1">
+					<Button
+						Content="{Binding RemoveText, Source={StaticResource DataFieldTabData}}"
+						Click="RemoveButton_Click"
+						IsEnabled="{Binding Path=RemoveButtonIsEnabled}"
+						Margin="5,5,5,5"
+						Padding="4,4,4,4"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"/>
 
-                <Button Content="{Binding AddText, Source={StaticResource DataFieldTabData}}"
-                    Click="AddButton_Click"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"/>
+					<Button
+						Content="{Binding MoveUpText, Source={StaticResource DataFieldTabData}}"
+						Click="MoveUpButton_Click"
+						Margin="5,5,5,5"
+						Padding="4,4,4,4"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						IsEnabled="False"
+						Visibility="Hidden"/>
 
-                <Button Content="{Binding RemoveText, Source={StaticResource DataFieldTabData}}"
-                    Click="RemoveButton_Click"
-                    IsEnabled="{Binding Path=RemoveButtonIsEnabled}"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"/>
+					<Button
+						Content="{Binding MoveDownText, Source={StaticResource DataFieldTabData}}"
+						Click="MoveDownButton_Click"
+						Margin="5,5,5,5"
+						Padding="4,4,4,4"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top"
+						IsEnabled="False"
+						Visibility="Hidden"/>
 
-                <Button Content="{Binding MoveUpText, Source={StaticResource DataFieldTabData}}"
-                    Click="MoveUpButton_Click"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    IsEnabled="False"
-                    Visibility="Hidden"/>
+				</StackPanel>
 
-                <Button Content="{Binding MoveDownText, Source={StaticResource DataFieldTabData}}"
-                    Click="MoveDownButton_Click"
-                    Margin="5,5,5,5"
-                    Padding="4,4,4,4"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    IsEnabled="False"
-                    Visibility="Hidden"/>
+			</Grid>
 
-            </StackPanel>
+			<Border
+				BorderBrush="{Binding PropertyPanelBorderBrush, Source={StaticResource DataFieldTabData}}"
+				BorderThickness="1"
+				Margin="5,5,5,5"
+				Grid.Column="1">
 
-        </Grid>
+				<ContentPresenter>
 
-        <Border
-            BorderBrush="{Binding PropertyPanelBorderBrush, Source={StaticResource DataFieldTabData}}"
-            BorderThickness="1"
-            Margin="5,5,5,5"
-            Grid.Column="1">
+					<ContentPresenter.Content>
+						<Binding Path="SelectedDataField.DataFieldTypeEditor">
+							<Binding.FallbackValue>
+								<Label
+								Content="Select a Data Field to view and edit it's properties."
+								Margin="5,5,5,5"/>
+							</Binding.FallbackValue>
+						</Binding>
+					</ContentPresenter.Content>
 
-            <ContentPresenter>
+					<ContentPresenter.Resources>
 
-                <ContentPresenter.Content>
-                    <Binding Path="SelectedDataField.DataFieldTypeEditor">
-                        <Binding.FallbackValue>
-                            <Label
-                                Content="Select a Data Field to view and edit it's properties."
-                                Margin="5,5,5,5"/>
-                        </Binding.FallbackValue>
-                    </Binding>
-                </ContentPresenter.Content>
+						<DataTemplate DataType="{x:Type dataFieldEditors:TextDataFieldEditor}">
+							<dataField:TextDataFieldView/>
+						</DataTemplate>
 
-                <ContentPresenter.Resources>
+						<DataTemplate DataType="{x:Type dataFieldEditors:SelectionDataFieldEditor}">
+							<dataField:SelectionDataFieldView/>
+						</DataTemplate>
 
-                    <DataTemplate DataType="{x:Type dataFieldEditors:TextDataFieldEditor}">
-                        <dataField:TextDataFieldView/>
-                    </DataTemplate>
+						<DataTemplate DataType="{x:Type dataFieldEditors:IntegerDataFieldEditor}">
+							<dataField:IntegerDataFieldView/>
+						</DataTemplate>
 
-                    <DataTemplate DataType="{x:Type dataFieldEditors:SelectionDataFieldEditor}">
-                        <dataField:SelectionDataFieldView/>
-                    </DataTemplate>
+					</ContentPresenter.Resources>
 
-                    <DataTemplate DataType="{x:Type dataFieldEditors:IntegerDataFieldEditor}">
-                        <dataField:IntegerDataFieldView/>
-                    </DataTemplate>
+				</ContentPresenter>
 
-                </ContentPresenter.Resources>
+			</Border>
 
-            </ContentPresenter>
-
-        </Border>
-
-    </Grid>
+		</Grid>
+	</ScrollViewer>
 
 </appManagement:AppManagerDependent>

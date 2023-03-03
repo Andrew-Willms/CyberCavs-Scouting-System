@@ -114,12 +114,13 @@ public class GameSpec {
 	public string GetCsvHeaders() {
 
 		StringBuilder columnHeaders = new(
-			$"{nameof(Event).ToCsvFriendly()}," +
+			$"{nameof(MatchDataCollector.Event).ToCsvFriendly()}," +
+			$"{nameof(MatchDataCollector.Scout).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.MatchNumber).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.ReplayNumber).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.IsPlayoff).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.TeamNumber).ToCsvFriendly()}," +
-			$"{nameof(Alliance).ToCsvFriendly()}," +
+			$"{nameof(MatchDataCollector.Alliance).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.Time).ToCsvFriendly()}"
 		);
 
