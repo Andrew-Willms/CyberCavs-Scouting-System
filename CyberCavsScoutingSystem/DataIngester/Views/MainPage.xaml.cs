@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CCSSDomain.GameSpecification;
 using DataIngester.Services;
 using MediaDevices;
 using Microsoft.Maui.Controls;
@@ -100,8 +101,18 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 		if (!File.Exists(targetFilePath)) {
 
+			IResult<GameSpec> result = await App.GetGameSpec();
+
+			if (result is IResult<GameSpec>.Error error) {
+				log($"Error while parsing game specification file: \"{error.Message.Value}\"");
+				return null;
+			}
+
+			GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
+
 			try {
-				await File.WriteAllTextAsync(targetFilePath, App.GameSpecification.GetCsvHeaders());
+				await File.WriteAllTextAsync(targetFilePath, gameSpec.GetCsvHeaders());
+
 			} catch {
 				log($"Target File \"{targetFilePath}\" does not exist and could not be created.");
 				return null;

@@ -1,0 +1,303 @@
+{
+  "$type": "CCSSDomain.GameSpecification.GameSpec, CCSSDomain",
+  "Version": {
+    "$type": "CCSSDomain.GameSpecification.Version, CCSSDomain",
+    "MajorNumber": 1,
+    "MinorNumber": 0,
+    "PatchNumber": 0,
+    "Name": "",
+    "Description": ""
+  },
+  "VersionReleaseDate": "2023-03-03T19:16:24.2479546-05:00",
+  "Name": "Charged Up",
+  "Description": "",
+  "Year": 2023,
+  "RobotsPerAlliance": 3,
+  "AlliancesPerMatch": 2,
+  "Alliances": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.Alliance, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.Alliance[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.Alliance, CCSSDomain",
+          "Name": "Red Alliance",
+          "Color": "255, 0, 0"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.Alliance, CCSSDomain",
+          "Name": "Blue Alliance",
+          "Color": "0, 0, 255"
+        }
+      ]
+    }
+  },
+  "DataFields": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.DataFieldSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.DataFieldSpec[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 6,
+          "Name": "Auto High Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 6,
+          "Name": "Auto Mid Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 9,
+          "Name": "Auto Low Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 3,
+          "Name": "Auto High Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 3,
+          "Name": "Auto Mid Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 9,
+          "Name": "Auto Low Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Didn't Attempt",
+                "Attempted and Failed",
+                "Docked",
+                "Engaged"
+              ]
+            }
+          },
+          "Name": "Auto Charge Station"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Left Community",
+                "Didn't Leave Community"
+              ]
+            }
+          },
+          "Name": "Mobility"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 6,
+          "Name": "Tele High Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 6,
+          "Name": "Tele Mid Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 9,
+          "Name": "Tele Low Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 3,
+          "Name": "Tele High Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 3,
+          "Name": "Tele Mid Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 9,
+          "Name": "Tele Low Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Didn't Attempt",
+                "Attempted and Failed",
+                "Docked",
+                "Engaged"
+              ]
+            }
+          },
+          "Name": "Endgame Charge Station"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "Name": "Upright Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "Name": "Tipped Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "Name": "Shelf Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "Name": "Chute Cones"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "Name": "Ground Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "Name": "Shelf Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "Name": "Chute Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.TextDataFieldSpec, CCSSDomain",
+          "Name": "Comments"
+        }
+      ]
+    }
+  },
+  "SetupTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": []
+    }
+  },
+  "AutoTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": []
+    }
+  },
+  "TeleTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": []
+    }
+  },
+  "EndgameTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": []
+    }
+  }
+}
