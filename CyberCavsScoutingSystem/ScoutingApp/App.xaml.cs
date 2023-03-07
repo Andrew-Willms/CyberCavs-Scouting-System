@@ -28,6 +28,11 @@ public partial class App : Application {
 		ServiceHelper.GetService<IAppManager>().ApplicationStartup();
 
 		MainPage = new LoadingGameSpecPage();
+	}
+
+
+
+	protected override void OnStart() {
 
 		Task<IGameSpecRetrievalResult> gameSpecTask = GetGameSpec();
 
@@ -39,9 +44,9 @@ public partial class App : Application {
 				MainPage = GameSpecification is Success ? new AppShell() : new GameSpecCouldNotBeLoadedPage();
 			});
 		});
+
+		base.OnStart();
 	}
-
-
 
 	public static async Task<IGameSpecRetrievalResult> GetGameSpec() {
 
