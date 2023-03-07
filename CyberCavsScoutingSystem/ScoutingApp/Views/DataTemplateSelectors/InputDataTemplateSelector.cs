@@ -41,6 +41,8 @@ public class NullOrValueTemplateSelector : DataTemplateSelector {
 }
 
 
+// This doesn't work because DataTemplateSelectors created from code can't fulfill constructor injection dependencies like normal
+// DataTemplateSelectors can.
 public class NullOrValueTemplateSelectorGenerator : IMarkupExtension<DataTemplate> {
 
 	public DataTemplate NullTemplate { get; set; } = null!;

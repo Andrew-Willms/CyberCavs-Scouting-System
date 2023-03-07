@@ -10,7 +10,8 @@
 
 	<FlyoutItem Title="Match">
 
-		<!--<Tab 
+		<!--Tried using it here but this doesn't work-->
+		<Tab 
 			Title="Setup"
 			Route="{x:Static pages:SetupTab.Route}">
 
@@ -22,8 +23,9 @@
 				</ShellContent.ContentTemplate>
 			</ShellContent>
 
-		</Tab>-->
+		</Tab>
 
+		<!--This however does work-->
 		<Tab
 			Title="Setup"
 			Route="{x:Static pages:SetupTab.Route}">
