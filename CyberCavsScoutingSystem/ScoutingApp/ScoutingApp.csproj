@@ -57,6 +57,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
+		<ProjectReference Include="..\MauiUtilities\MauiUtilities.csproj" />
 		<ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
 
@@ -70,34 +71,37 @@
 	  <Compile Update="Views\DataTemplates\TextDataFieldInputView.xaml.cs">
 	    <DependentUpon>TextDataFieldInputView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\MatchQrCodePage.xaml.cs">
+	  <Compile Update="Views\Pages\GameSpecCouldNotBeLoadedPage.xaml.cs">
+	    <DependentUpon>GameSpecCouldNotBeLoadedPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Flyout\MatchQrCodePage.xaml.cs">
 	    <DependentUpon>MatchQrCodePage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\QrCodePage.xaml.cs">
+	  <Compile Update="Views\Pages\Flyout\QrCodePage.xaml.cs">
 	    <DependentUpon>QrCodePage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\QrCodeDisplay.xaml.cs">
-	    <DependentUpon>QrCodeDisplay.xaml</DependentUpon>
+	  <Compile Update="Views\Pages\LoadingGameSpecPage.xaml.cs">
+	    <DependentUpon>LoadingGameSpecPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\AutoTab.xaml.cs">
+	  <Compile Update="Views\Pages\Match\AutoTab.xaml.cs">
 	    <DependentUpon>AutoTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\ConfirmTab.xaml.cs">
+	  <Compile Update="Views\Pages\Match\ConfirmTab.xaml.cs">
 	    <DependentUpon>ConfirmTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\EndgameTab.xaml.cs">
+	  <Compile Update="Views\Pages\Match\EndgameTab.xaml.cs">
 	    <DependentUpon>EndgameTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\EventPage.xaml.cs">
+	  <Compile Update="Views\Pages\Flyout\EventPage.xaml.cs">
 	    <DependentUpon>EventPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\ScoutPage.xaml.cs">
+	  <Compile Update="Views\Pages\Flyout\ScoutPage.xaml.cs">
 	    <DependentUpon>ScoutPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\SetupTab.xaml.cs">
+	  <Compile Update="Views\Pages\Match\SetupTab.xaml.cs">
 	    <DependentUpon>SetupTab.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\TeleTab.xaml.cs">
+	  <Compile Update="Views\Pages\Match\TeleTab.xaml.cs">
 	    <DependentUpon>TeleTab.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
@@ -109,28 +113,28 @@
 	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\MatchQrCodePage.xaml">
+	  <MauiXaml Update="Views\Pages\GameSpecCouldNotBeLoadedPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\QrCodePage.xaml">
+	  <MauiXaml Update="Views\Pages\Flyout\MatchQrCodePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\QrCodeDisplay.xaml">
+	  <MauiXaml Update="Views\Pages\Flyout\QrCodePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\AutoTab.xaml">
+	  <MauiXaml Update="Views\Pages\Match\AutoTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\EndgameTab.xaml">
+	  <MauiXaml Update="Views\Pages\Match\EndgameTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\EventPage.xaml">
+	  <MauiXaml Update="Views\Pages\Flyout\EventPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\ScoutPage.xaml">
+	  <MauiXaml Update="Views\Pages\Flyout\ScoutPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\SetupTab.xaml">
+	  <MauiXaml Update="Views\Pages\Match\SetupTab.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

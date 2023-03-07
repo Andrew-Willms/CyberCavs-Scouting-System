@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
-using ScoutingApp.Views.Pages;
+using ScoutingApp.Views.Pages.Flyout;
 
 namespace ScoutingApp;
 

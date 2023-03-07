@@ -3,7 +3,7 @@ using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;
 
-namespace ScoutingApp.Views.Pages; 
+namespace ScoutingApp.Views.Pages.Match; 
 
 
 

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 
-namespace ScoutingApp.Views.Pages;
+namespace ScoutingApp.Views.Pages.Flyout;
 
 
 

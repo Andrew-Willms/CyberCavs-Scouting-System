@@ -11,7 +11,7 @@ using Microsoft.Maui.Dispatching;
 using Microsoft.Maui.Storage;
 using UtilitiesLibrary.Collections;
 
-namespace ScoutingApp.Views.Pages; 
+namespace ScoutingApp.Views.Pages.Flyout; 
 
 
 

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Xaml;
 
 namespace ScoutingApp.Views.DataTemplateSelectors;
 
@@ -36,23 +34,6 @@ public class NullOrValueTemplateSelector : DataTemplateSelector {
 	protected override DataTemplate OnSelectTemplate(object? item, BindableObject container) {
 
 		return item is null ? NullTemplate : ValueTemplate;
-	}
-
-}
-
-
-public class NullOrValueTemplateSelectorGenerator : IMarkupExtension<DataTemplate> {
-
-	public DataTemplate NullTemplate { get; set; } = null!;
-	public DataTemplate ValueTemplate { get; set; } = null!;
-
-	public DataTemplate ProvideValue(IServiceProvider serviceProvider) {
-
-		return new NullOrValueTemplateSelector { NullTemplate = NullTemplate, ValueTemplate = ValueTemplate };
-	}
-
-	object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider) {
-		return ProvideValue(serviceProvider);
 	}
 
 }

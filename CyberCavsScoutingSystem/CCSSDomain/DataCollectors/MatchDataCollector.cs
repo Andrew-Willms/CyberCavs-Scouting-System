@@ -20,9 +20,9 @@ public class MatchDataCollector {
 
 	public Optional<Event> Event { get; set; } = Optional.NoValue;
 
-	public Optional<uint> MatchNumber { get; set; } = 2u.Optionalize();
-	public Optional<uint> ReplayNumber { get; set; } = 2u.Optionalize();
-	public Optional<bool> IsPlayoff { get; set; } = true.Optionalize();
+	public Optional<uint> MatchNumber { get; set; } = Optional.NoValue;
+	public Optional<uint> ReplayNumber { get; set; } = 0u.Optionalize();
+	public Optional<bool> IsPlayoff { get; set; } = false.Optionalize();
 
 	public Optional<uint> TeamNumber { get; set; } = Optional.NoValue;
 

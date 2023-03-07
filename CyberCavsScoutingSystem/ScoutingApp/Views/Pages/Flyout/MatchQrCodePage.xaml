@@ -2,10 +2,10 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
 			 xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
-			 x:Class="ScoutingApp.Views.Pages.MatchQrCodePage"
-			 x:DataType="pages:MatchQrCodePage"
+			 xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
+			 x:Class="ScoutingApp.Views.Pages.Flyout.MatchQrCodePage"
+			 x:DataType="flyout:MatchQrCodePage"
 			 Title="{Binding Path=SavedMatch.Name}">
 
 	<ContentPage.ToolbarItems>

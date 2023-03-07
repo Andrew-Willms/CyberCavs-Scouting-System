@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.Maui.Controls;
 
-namespace ScoutingApp.Views.Pages; 
+namespace ScoutingApp.Views.Pages.Flyout; 
 
 
 

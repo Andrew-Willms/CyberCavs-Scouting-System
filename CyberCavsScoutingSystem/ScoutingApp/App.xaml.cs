@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using CCSSDomain.GameSpecification;
 using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Dispatching;
 using Microsoft.Maui.Storage;
 using Newtonsoft.Json;
 using ScoutingApp.AppManagement;
+using ScoutingApp.Views.Pages;
 using UtilitiesLibrary.Results;
 using static ScoutingApp.IGameSpecRetrievalResult;
 
@@ -25,14 +27,25 @@ public partial class App : Application {
 
 		ServiceHelper.GetService<IAppManager>().ApplicationStartup();
 
-		MainPage = new AppShell();
+		MainPage = new LoadingGameSpecPage();
+
+		Task<IGameSpecRetrievalResult> gameSpecTask = GetGameSpec();
+
+		gameSpecTask.ContinueWith(async task => {
+
+			GameSpecification = await task;
+
+			await Dispatcher.DispatchAsync(() => {
+				MainPage = GameSpecification is Success ? new AppShell() : new GameSpecCouldNotBeLoadedPage();
+			});
+		});
 	}
 
 
 
 	public static async Task<IGameSpecRetrievalResult> GetGameSpec() {
 
-		if (GameSpecification is Done) {
+		if (GameSpecification is Loaded) {
 			return GameSpecification;
 		}
 
@@ -54,7 +67,7 @@ public partial class App : Application {
 			return GameSpecification;
 		}
 
-		GameSpecification = new Done { Value = gameSpecification };
+		GameSpecification = new Loaded { Value = gameSpecification };
 		return GameSpecification;
 	}
 
@@ -64,7 +77,7 @@ public partial class App : Application {
 
 public interface IGameSpecRetrievalResult : IResult<GameSpec> {
 
-	public class Done : Success, IGameSpecRetrievalResult { }
+	public class Loaded : Success, IGameSpecRetrievalResult { }
 
 	public class Loading : Error, IGameSpecRetrievalResult { }
 

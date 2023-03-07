@@ -4,83 +4,59 @@
 	x:Class="ScoutingApp.AppShell"
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
-	xmlns:dataTemplateSelectors="clr-namespace:ScoutingApp.Views.DataTemplateSelectors"
+	xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
+	xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
 	FlyoutBehavior="Flyout">
 
 	<FlyoutItem Title="Match">
 
-		<!--<Tab 
-			Title="Setup"
-			Route="{x:Static pages:SetupTab.Route}">
-
-			<ShellContent Title="Setup">
-				<ShellContent.ContentTemplate>
-					<dataTemplateSelectors:NullOrValueTemplateSelectorGenerator
-						NullTemplate="{DataTemplate pages:SetupTab}"
-						ValueTemplate="{DataTemplate pages:ConfirmTab}"/>
-				</ShellContent.ContentTemplate>
-			</ShellContent>
-
-		</Tab>-->
-
 		<Tab
 			Title="Setup"
-			Route="{x:Static pages:SetupTab.Route}">
+			Route="{x:Static match:SetupTab.Route}">
 
 			<ShellContent
 				Title="Setup"
-				ContentTemplate="{StaticResource NullOrValueTemplateSelector}"/>
+				ContentTemplate="{DataTemplate match:SetupTab}"/>
 
 		</Tab>
 
-		<!--<Tab
-			Title="Setup"
-			Route="{x:Static pages:SetupTab.Route}">
-
-			<ShellContent
-				Title="Setup"
-				ContentTemplate="{DataTemplate pages:SetupTab}"/>
-
-		</Tab>-->
-
 		<Tab
 			Title="Auto"
-			Route="{x:Static pages:AutoTab.Route}">
+			Route="{x:Static match:AutoTab.Route}">
 
 			<ShellContent
 				Title="Auto"
-				ContentTemplate="{DataTemplate pages:AutoTab}"/>
+				ContentTemplate="{DataTemplate match:AutoTab}"/>
 
 		</Tab>
 
 		<Tab 
 			Title="Tele"
-			Route="{x:Static pages:TeleTab.Route}">
+			Route="{x:Static match:TeleTab.Route}">
 
 			<ShellContent
 				Title="Tele"
-				ContentTemplate="{DataTemplate pages:TeleTab}"/>
+				ContentTemplate="{DataTemplate match:TeleTab}"/>
 
 		</Tab>
 
 		<Tab
 			Title="Endgame"
-			Route="{x:Static pages:EndgameTab.Route}">
+			Route="{x:Static match:EndgameTab.Route}">
 
 			<ShellContent
 				Title="Endgame"
-				ContentTemplate="{DataTemplate pages:EndgameTab}"/>
+				ContentTemplate="{DataTemplate match:EndgameTab}"/>
 
 		</Tab>
 
 		<Tab
 			Title="Confirm"
-			Route="{x:Static pages:ConfirmTab.Route}">
+			Route="{x:Static match:ConfirmTab.Route}">
 
 			<ShellContent
 				Title="Confirm"
-				ContentTemplate="{DataTemplate pages:ConfirmTab}"/>
+				ContentTemplate="{DataTemplate match:ConfirmTab}"/>
 
 		</Tab>
 
@@ -88,31 +64,31 @@
 
 	<FlyoutItem
 		Title="Event"
-		Route="{x:Static pages:EventPage.Route}">
+		Route="{x:Static flyout:EventPage.Route}">
 
 		<ShellContent
 			Title="Event"
-			ContentTemplate="{DataTemplate pages:EventPage}"/>
+			ContentTemplate="{DataTemplate flyout:EventPage}"/>
 
 	</FlyoutItem>
 
 	<FlyoutItem
 		Title="Scout"
-		Route="{x:Static pages:ScoutPage.Route}">
+		Route="{x:Static flyout:ScoutPage.Route}">
 
 		<ShellContent
 			Title ="Scout Name"
-			ContentTemplate="{DataTemplate pages:ScoutPage}"/>
+			ContentTemplate="{DataTemplate flyout:ScoutPage}"/>
 
 	</FlyoutItem>
 
 	<FlyoutItem
 		Title="Qr Codes"
-		Route="{x:Static pages:QrCodePage.Route}">
+		Route="{x:Static flyout:QrCodePage.Route}">
 
 		<ShellContent
 			Title="QR Codes" 
-			ContentTemplate="{DataTemplate pages:QrCodePage}"/>
+			ContentTemplate="{DataTemplate flyout:QrCodePage}"/>
 
 	</FlyoutItem>
 

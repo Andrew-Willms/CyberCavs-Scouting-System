@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 
-namespace ScoutingApp.Views.Pages; 
+namespace ScoutingApp.Views.Pages.Match; 
 
 
 
