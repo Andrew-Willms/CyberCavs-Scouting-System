@@ -1,4 +1,5 @@
 ﻿using System;
+using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
 using IntegerDataField = CCSSDomain.DataCollectors.IntegerDataField;
 
@@ -14,13 +15,13 @@ public partial class IntegerDataFieldInputView : ContentView {
 
 	private void IncrementButton_OnClick(object? sender, EventArgs e) {
 
-		IntegerDataField dataField = BindingContext as IntegerDataField ?? throw new InvalidOperationException();
+		IntegerInputDataCollector dataField = BindingContext as IntegerInputDataCollector ?? throw new InvalidOperationException();
 		dataField.Value++;
 	}
 
 	private void DecrementButton_OnClicked(object? sender, EventArgs e) {
 
-		IntegerDataField dataField = BindingContext as IntegerDataField ?? throw new InvalidOperationException();
+		IntegerInputDataCollector dataField = BindingContext as IntegerInputDataCollector ?? throw new InvalidOperationException();
 		dataField.Value--;
 	}
 

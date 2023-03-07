@@ -1,4 +1,5 @@
-﻿using CCSSDomain.DataCollectors;
+﻿using System.Linq;
+using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
@@ -59,18 +60,17 @@ public partial class SetupTab : ContentPage {
 			: Optional.NoValue;
 	}
 
-	public Alliance? Alliance {
-
+	public string? Alliance {
 		get => AppManager.ActiveMatchData.Alliance.HasValue
-			? AppManager.ActiveMatchData.Alliance.Value
+			? AppManager.ActiveMatchData.Alliance.Value.Name
 			: null;
 
-		set => AppManager.ActiveMatchData.Alliance = value is not null
-			? value.Optionalize()
+		set => AppManager.ActiveMatchData.Alliance = Alliances.Contains(value) 
+			? AppManager.ActiveMatchData.GameSpecification.Alliances.First(x => x.Name == value).Optionalize() 
 			: Optional.NoValue;
 	}
 
-	public ReadOnlyList<Alliance> Alliances => AppManager.ActiveMatchData.GameSpecification.Alliances;
+	public ReadOnlyList<string> Alliances => AppManager.ActiveMatchData.GameSpecification.Alliances.Select(x => x.Name).ToReadOnly();
 
 	public ReadOnlyList<InputDataCollector> Inputs => AppManager.ActiveMatchData.SetupTabInputs;
 

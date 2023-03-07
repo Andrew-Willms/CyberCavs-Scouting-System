@@ -78,7 +78,7 @@ public class SelectionInputDataCollector : InputDataCollector, INotifyPropertyCh
 	public SelectionInputDataCollector(SelectionDataField dataField) {
 
 		DataField = dataField;
-		DataField.OnValueChange.Subscribe(() => OnPropertyChanged(""));
+		DataField.OnValueChange.Subscribe(() => OnPropertyChanged(nameof(SelectedOption)));
 	}
 
 	public string SelectedOption {

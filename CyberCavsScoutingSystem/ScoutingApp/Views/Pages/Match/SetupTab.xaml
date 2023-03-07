@@ -10,53 +10,99 @@
 		Margin="10"
 		Spacing="10">
 
-		<VerticalStackLayout>
+		<Grid ColumnSpacing="10">
 
-			<Label Text="Match Number"/>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+
+			<Label 
+				Text="Match Number"
+				VerticalOptions="Center"
+				Grid.Column="0"/>
 
 			<Entry
 				Text="{Binding Path=MatchNumber}"
-				Keyboard="Numeric"/>
+				Keyboard="Numeric"
+				Grid.Column="1"/>
 
-		</VerticalStackLayout>
+		</Grid>
 
-		<VerticalStackLayout>
+		<Grid ColumnSpacing="10">
 
-			<Label Text="Replay Number"/>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+
+			<Label
+				Text="Replay Number"
+			    VerticalOptions="Center"
+				Grid.Column="0"/>
 
 			<Entry
 				Text="{Binding Path=ReplayNumber}"
-				Keyboard="Numeric"/>
+				Keyboard="Numeric"
+				Grid.Column="1"/>
 
-		</VerticalStackLayout>
+		</Grid>
 
-		<HorizontalStackLayout Spacing="10">
+		<Grid ColumnSpacing="10">
 
-			<Label Text="Is Playoff"/>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
 
-			<Switch IsToggled="{Binding Path=IsPlayoff}"/>
+			<Label 
+				Text="Is Playoff"
+				VerticalOptions="Center"
+				Grid.Column="0"/>
 
-		</HorizontalStackLayout>
+			<Switch 
+				IsToggled="{Binding Path=IsPlayoff}"
+				Grid.Column="1"/>
 
-		<VerticalStackLayout>
+		</Grid>
 
-			<Label Text="Alliance"/>
+		<Grid ColumnSpacing="10">
+
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+
+			<Label 
+				Text="Alliance"
+				VerticalOptions="Center"
+				Grid.Column="0"/>
 
 			<Picker
 				SelectedItem="{Binding Path=Alliance}"
-				ItemsSource="{Binding Path=Alliances, Converter={StaticResource ReadOnlyListOfAlliancesToIListConverter}}"/>
+				ItemsSource="{Binding Path=Alliances, Converter={StaticResource ReadOnlyListOfStringsToIListConverter}}"
+				Grid.Column="1"/>
 
-		</VerticalStackLayout>
+		</Grid>
 
-		<VerticalStackLayout>
+		<Grid ColumnSpacing="10">
 
-			<Label Text="Team Number"/>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+
+			<Label 
+				Text="Team Number"
+				VerticalOptions="Center"
+				Grid.Column="0"/>
 
 			<Entry
 				Text="{Binding Path=TeamNumber}"
-				Keyboard="Numeric"/>
+				Keyboard="Numeric"
+				Grid.Column="1"/>
 
-		</VerticalStackLayout>
+		</Grid>
 
 		<CollectionView
 			ItemsSource="{Binding Path=Inputs}"
