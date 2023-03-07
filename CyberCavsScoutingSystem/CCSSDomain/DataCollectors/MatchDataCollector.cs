@@ -14,15 +14,15 @@ namespace CCSSDomain.DataCollectors;
 
 public class MatchDataCollector {
 
-	private GameSpec GameSpecification { get; }
+	public GameSpec GameSpecification { get; }
 
 	public Optional<string> Scout { get; set; } = Optional.NoValue;
 
 	public Optional<Event> Event { get; set; } = Optional.NoValue;
 
-	public Optional<uint> MatchNumber { get; set; } = Optional.NoValue;
-	public Optional<uint> ReplayNumber { get; set; } = 0u.Optionalize();
-	public Optional<bool> IsPlayoff { get; set; } = false.Optionalize();
+	public Optional<uint> MatchNumber { get; set; } = 2u.Optionalize();
+	public Optional<uint> ReplayNumber { get; set; } = 2u.Optionalize();
+	public Optional<bool> IsPlayoff { get; set; } = true.Optionalize();
 
 	public Optional<uint> TeamNumber { get; set; } = Optional.NoValue;
 
@@ -45,10 +45,10 @@ public class MatchDataCollector {
 
 		DataFields = GameSpecification.DataFields.Select(DataField.FromSpec).ToReadOnly();
 
-        SetupTabInputs = GameSpecification.SetupTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        TeleTabInputs = GameSpecification.TeleTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+		SetupTabInputs = GameSpecification.SetupTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+        AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+        TeleTabInputs = GameSpecification.TeleTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+        EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
     }
 
 	public string ConvertDataToCsv() {
@@ -59,8 +59,8 @@ public class MatchDataCollector {
             $"{MatchNumber.Value.ToString().ToCsvFriendly()}," +
             $"{ReplayNumber.Value.ToString().ToCsvFriendly()}," +
             $"{IsPlayoff.Value.ToString().ToCsvFriendly()}," +
-            $"{TeamNumber.Value.ToString().ToCsvFriendly()}," +
             $"{Alliance.Value.Name.ToCsvFriendly()}," +
+			$"{TeamNumber.Value.ToString().ToCsvFriendly()}," +
             $"{Time.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
 
         foreach (DataField dataField in DataFields) {

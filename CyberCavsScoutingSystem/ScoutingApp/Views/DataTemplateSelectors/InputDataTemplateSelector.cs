@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Xaml;
 
 namespace ScoutingApp.Views.DataTemplateSelectors;
 
@@ -15,11 +17,42 @@ public class InputDataTemplateSelector : DataTemplateSelector {
 	protected override DataTemplate OnSelectTemplate(object item, BindableObject container) {
 
 		return item switch {
-			TextDataField => TextDataFieldTemplate,
-			IntegerDataField => IntegerDataFieldTemplate,
-			SelectionDataField => SelectionDataFieldTemplate,
-			_ => throw new InvalidOperationException()
+			TextInputDataCollector => TextDataFieldTemplate,
+			IntegerInputDataCollector => IntegerDataFieldTemplate,
+			SelectionInputDataCollector => SelectionDataFieldTemplate,
+			_ => throw new UnreachableException()
 		};
+	}
+
+}
+
+
+
+public class NullOrValueTemplateSelector : DataTemplateSelector {
+
+	public required DataTemplate NullTemplate { get; init; } = null!;
+	public required DataTemplate ValueTemplate { get; init; } = null!;
+
+	protected override DataTemplate OnSelectTemplate(object? item, BindableObject container) {
+
+		return item is null ? NullTemplate : ValueTemplate;
+	}
+
+}
+
+
+public class NullOrValueTemplateSelectorGenerator : IMarkupExtension<DataTemplate> {
+
+	public DataTemplate NullTemplate { get; set; } = null!;
+	public DataTemplate ValueTemplate { get; set; } = null!;
+
+	public DataTemplate ProvideValue(IServiceProvider serviceProvider) {
+
+		return new NullOrValueTemplateSelector { NullTemplate = NullTemplate, ValueTemplate = ValueTemplate };
+	}
+
+	object IMarkupExtension.ProvideValue(IServiceProvider serviceProvider) {
+		return ProvideValue(serviceProvider);
 	}
 
 }

@@ -57,7 +57,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
-		<ProjectReference Include="..\MauiUtilities\MauiUtilities.csproj" />
 		<ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
 

@@ -1,6 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.IO;
+using System.Threading.Tasks;
+using CCSSDomain.GameSpecification;
+using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
+using Newtonsoft.Json;
 using ScoutingApp.AppManagement;
+using UtilitiesLibrary.Results;
+using static ScoutingApp.IGameSpecRetrievalResult;
 
 namespace ScoutingApp;
 
@@ -8,35 +15,69 @@ namespace ScoutingApp;
 
 public partial class App : Application {
 
-	private static ServiceProvider? _ServiceProvider;
-	public static ServiceProvider ServiceProvider {
-		get {
+	private static IGameSpecRetrievalResult GameSpecification { get; set; } = new Loading();
 
-			if (_ServiceProvider is not null) {
-				return _ServiceProvider;
-			}
 
-			ServiceCollection services = new();
-			ConfigureServices(services);
-			_ServiceProvider = services.BuildServiceProvider();
-
-			return _ServiceProvider;
-		}
-	}
 
 	public App() {
 
 		InitializeComponent();
 
-		//ServiceProvider.GetRequiredService<IAppManager>().ApplicationStartup();
+		ServiceHelper.GetService<IAppManager>().ApplicationStartup();
 
-		MainPage = ServiceProvider.GetRequiredService<IMainView>().AsPage();
+		MainPage = new AppShell();
 	}
 
-	private static void ConfigureServices(in IServiceCollection services) {
 
-		services.AddSingleton<IAppManager, AppManager>();
-		services.AddSingleton<IMainView, AppShell>();
+
+	public static async Task<IGameSpecRetrievalResult> GetGameSpec() {
+
+		if (GameSpecification is Done) {
+			return GameSpecification;
+		}
+
+		string fileContents;
+		try {
+			await using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync("ChargedUp.cgs");
+			using StreamReader reader = new(fileStream);
+			fileContents = await reader.ReadToEndAsync();
+
+		} catch {
+			GameSpecification = new FileCouldNotBeOpened();
+			return GameSpecification;
+		}
+
+		GameSpec? gameSpecification = JsonConvert.DeserializeObject<GameSpec>(fileContents, JsonSettings.JsonSerializerSettings);
+
+		if (gameSpecification is null) {
+			GameSpecification = new InvalidFileContents();
+			return GameSpecification;
+		}
+
+		GameSpecification = new Done { Value = gameSpecification };
+		return GameSpecification;
+	}
+
+}
+
+
+
+public interface IGameSpecRetrievalResult : IResult<GameSpec> {
+
+	public class Done : Success, IGameSpecRetrievalResult { }
+
+	public class Loading : Error, IGameSpecRetrievalResult { }
+
+	public class FileCouldNotBeOpened : Error, IGameSpecRetrievalResult {
+
+		public override string Message { get; init; } = "Could not open the file containing the GameSpecification.";
+
+	}
+
+	public class InvalidFileContents : Error, IGameSpecRetrievalResult {
+
+		public override string Message { get; init; } = "Could not parse the contents of the file containing the GameSpecification.";
+
 	}
 
 }

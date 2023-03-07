@@ -1,12 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
-			 x:Class="ScoutingApp.Views.Pages.SetupTab"
-			 x:DataType="pages:SetupTab">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
+             x:Class="ScoutingApp.Views.Pages.SetupTab"
+             x:DataType="pages:SetupTab"
+             Loaded="SetupTab_OnLoaded">
 
-	<Grid Margin="10">
+	<VerticalStackLayout
+		Margin="10"
+		Spacing="10">
+
+		<VerticalStackLayout>
+
+			<Label Text="Match Number"/>
+
+			<Entry
+				Text="{Binding Path=MatchNumber, Mode=TwoWay}"
+				Keyboard="Numeric"/>
+
+		</VerticalStackLayout>
+
+		<VerticalStackLayout>
+
+			<Label Text="Replay Number"/>
+
+			<Entry
+				Text="{Binding Path=ReplayNumber, Mode=TwoWay}"
+				Keyboard="Numeric"/>
+
+		</VerticalStackLayout>
+
+		<VerticalStackLayout>
+
+			<Label Text="Is Playoff"/>
+
+			<Switch IsToggled="{Binding Path=IsPlayoff, Mode=TwoWay}"/>
+
+		</VerticalStackLayout>
+
+		<VerticalStackLayout>
+
+			<Label Text="Alliance"/>
+
+			<Picker
+				ItemsSource="{Binding Path=Alliances, Converter={StaticResource ReadOnlyListOfAlliancesToIListConverter}, Mode=OneWay}"/>
+
+			<Picker
+				SelectedItem="{Binding Path=Alliance, Mode=TwoWay}"
+				ItemsSource="{Binding Path=Alliances, Converter={StaticResource ReadOnlyListOfAlliancesToIListConverter}, Mode=OneWay}"/>
+
+		</VerticalStackLayout>
+
+		<VerticalStackLayout>
+
+			<Label Text="Team Number"/>
+
+			<Entry
+				Text="{Binding Path=TeamNumber, Mode=TwoWay}"
+				Keyboard="Numeric"/>
+
+		</VerticalStackLayout>
 
 		<CollectionView
 			ItemsSource="{Binding Path=Inputs}"
@@ -24,6 +78,6 @@
 
 		</CollectionView>
 
-	</Grid>
+	</VerticalStackLayout>
 
 </ContentPage>

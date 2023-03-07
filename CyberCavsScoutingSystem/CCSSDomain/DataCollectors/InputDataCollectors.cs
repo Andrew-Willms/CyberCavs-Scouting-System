@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
 
 namespace CCSSDomain.DataCollectors;
@@ -8,20 +9,22 @@ namespace CCSSDomain.DataCollectors;
 
 public abstract class InputDataCollector : INotifyPropertyChanged {
 
-	public event PropertyChangedEventHandler? PropertyChanged;
+	public required string Label { get; init; }
 
-	protected void OnPropertyChanged(string propertyName) {
-		PropertyChanged?.Invoke(this, new(propertyName));
-	}
+    public static InputDataCollector FromDataField(InputSpec inputSpec, DataField dataField) {
 
-    public static InputDataCollector FromDataField(DataField inputSpec) {
-
-        return inputSpec switch {
-			TextDataField textDataField => new TextInputDataCollector(textDataField),
-			IntegerDataField integerDataField => new IntegerInputDataCollector(integerDataField),
-			SelectionDataField selectionDataField => new SelectionInputDataCollector(selectionDataField),
+	    return dataField switch {
+			TextDataField textDataField => new TextInputDataCollector(textDataField) { Label = inputSpec.Label },
+			IntegerDataField integerDataField => new IntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
+			SelectionDataField selectionDataField => new SelectionInputDataCollector(selectionDataField) { Label = inputSpec.Label },
 			_ => throw new UnreachableException()
         };
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected void OnPropertyChanged(string propertyName) {
+	    PropertyChanged?.Invoke(this, new(propertyName));
     }
 
 }
@@ -70,7 +73,7 @@ public class SelectionInputDataCollector : InputDataCollector, INotifyPropertyCh
 
 	private readonly SelectionDataField DataField;
 
-	private ReadOnlyList<string> Options => DataField.Options;
+	public ReadOnlyList<string> Options => DataField.Options;
 
 	public SelectionInputDataCollector(SelectionDataField dataField) {
 
@@ -78,7 +81,7 @@ public class SelectionInputDataCollector : InputDataCollector, INotifyPropertyCh
 		DataField.OnValueChange.Subscribe(() => OnPropertyChanged(""));
 	}
 
-	public string Value {
+	public string SelectedOption {
 		get => DataField.SelectedOption;
 		set => DataField.SelectedOption = value;
 	}

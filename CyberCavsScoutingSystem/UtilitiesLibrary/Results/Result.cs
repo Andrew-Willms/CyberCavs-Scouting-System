@@ -9,14 +9,14 @@ public abstract class Success { }
 
 public abstract class Error {
 
-	public Optional<string> Message { get; init; } = Optional.Optional.NoValue;
+	public virtual string Message { get; init; } = string.Empty;
 
 	public Optional<Error> InnerError { get; init; } = Optional.Optional.NoValue;
 
 	public Error() { }
 
 	public Error(string message) {
-		Message = message.Optionalize();
+		Message = message;
 	}
 
 	public Error(Error innerError) {
@@ -24,7 +24,7 @@ public abstract class Error {
 	}
 
 	public Error(string message, Error innerError) {
-		Message = message.Optionalize();
+		Message = message;
 		InnerError = innerError.Optionalize();
 	}
 

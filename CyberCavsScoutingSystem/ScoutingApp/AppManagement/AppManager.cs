@@ -1,30 +1,27 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using CCSSDomain.DataCollectors;
-using MauiUtilities;
-using Microsoft.Extensions.DependencyInjection;
-using UtilitiesLibrary.Optional;
+using CCSSDomain.GameSpecification;
+using UtilitiesLibrary.Results;
+using static ScoutingApp.IGameSpecRetrievalResult;
+using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;
 
 
 
-public abstract class AppManagerDependent : DependentView<IAppManager> {
-
-	protected override IAppManager SingletonGetter => App.ServiceProvider.GetRequiredService<IAppManager>();
-
-}
-
-
-
 public interface IAppManager : INotifyPropertyChanged {
 
-	public Optional<MatchDataCollector> ActiveMatchData { get; }
+	public MatchDataCollector ActiveMatchData { get; }
 
-	public void ApplicationStartup();
+	public Task ApplicationStartup();
 
-	public void StartNewMatch();
+	public Task StartNewMatch();
 
-	public void StoreMatchData();
+	public Task StoreMatchData();
+
+	public Event OnMatchStarted { get; }
 
 }
 
@@ -32,8 +29,8 @@ public interface IAppManager : INotifyPropertyChanged {
 
 public class AppManager : IAppManager, INotifyPropertyChanged {
 
-	private Optional<MatchDataCollector> _ActiveMatchData = Optional.NoValue;
-	public Optional<MatchDataCollector> ActiveMatchData {
+	private MatchDataCollector _ActiveMatchData = null!;
+	public MatchDataCollector ActiveMatchData {
 		get => _ActiveMatchData;
 		private set {
 			_ActiveMatchData = value;
@@ -41,29 +38,49 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		}
 	}
 
+	public Event OnMatchStarted { get; } = new();
+
+	private static IErrorPresenter ErrorPresenter => ServiceHelper.GetService<IErrorPresenter>();
 
 
-	private IMainView MainView => App.ServiceProvider.GetRequiredService<IMainView>();
-	private static IErrorPresenter ErrorPresenter => App.ServiceProvider.GetRequiredService<IErrorPresenter>();
 
+	public async Task ApplicationStartup() {
 
-	public AppManager() {
-
+		await StartNewMatch();
 	}
 
+	public async Task StartNewMatch() {
 
+		IGameSpecRetrievalResult result = await App.GetGameSpec();
 
+		while (result is Loading) {
 
+			await Task.Delay(100);
+			result = await App.GetGameSpec();
+		}
 
-	public void ApplicationStartup() {
-		throw new System.NotImplementedException();
+		if (result is Error error) {
+
+			ErrorPresenter.DisplayError("Error ", error.Message);
+		}
+
+		GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
+
+		ActiveMatchData = new(gameSpec);
+
+		OnMatchStarted.Invoke();
 	}
 
-	public void StartNewMatch() {
-		throw new System.NotImplementedException();
-	}
+	public async Task StoreMatchData() {
 
-	public void StoreMatchData() {
+
+
+
+
+		ActiveMatchData.ConvertDataToCsv();
+
+
+
 		throw new System.NotImplementedException();
 	}
 

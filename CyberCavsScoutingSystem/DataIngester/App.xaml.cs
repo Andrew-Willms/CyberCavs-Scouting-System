@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using CCSSDomain.GameSpecification;
+using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using Newtonsoft.Json;
@@ -11,11 +12,6 @@ namespace DataIngester;
 
 
 public partial class App : Application {
-
-	private static readonly JsonSerializerSettings JsonSerializerSettings = new() {
-		TypeNameHandling = TypeNameHandling.All,
-		Formatting = Formatting.Indented
-	};
 
 	private static GameSpec? GameSpecification { get; set; }
 
@@ -41,7 +37,7 @@ public partial class App : Application {
 			return new IResult<GameSpec>.Error("The game specification file could not be read.");
 		}
 
-		GameSpec? gameSpecification = JsonConvert.DeserializeObject<GameSpec>(fileContents, JsonSerializerSettings);
+		GameSpec? gameSpecification = JsonConvert.DeserializeObject<GameSpec>(fileContents, JsonSettings.JsonSerializerSettings);
 
 		if (gameSpecification is null) {
 			return new IResult<GameSpec>.Error("The game specification file could not be read.");

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using CCSSDomain.GameSpecification;
+using CCSSDomain.Serialization;
 using GameMakerWpf.Domain.Editors;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -37,11 +38,6 @@ public interface IPublisher {
 
 
 public class Publisher : IPublisher {
-
-	private static readonly JsonSerializerSettings JsonSerializerSettings = new() {
-		TypeNameHandling = TypeNameHandling.All,
-		Formatting = Formatting.Indented
-	};
 
 	private static SaveFileDialog SaveFileDialog => new() {
 		Title = "Select a file name and location for the published Game Specification.",
@@ -86,7 +82,7 @@ public class Publisher : IPublisher {
 
 		string serializedGameSpecification;
 		try {
-			serializedGameSpecification = JsonConvert.SerializeObject(gameSpecSpecification, JsonSerializerSettings);
+			serializedGameSpecification = JsonConvert.SerializeObject(gameSpecSpecification, JsonSettings.JsonSerializerSettings);
 
 		} catch {
 			return new IPublishResult.GameSpecificationCouldNotBeConvertedToSaveData();

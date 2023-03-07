@@ -1,6 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using CCSSDomain.DataCollectors;
+﻿using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
+using ScoutingApp.AppManagement;
+using UtilitiesLibrary.Collections;
 
 namespace ScoutingApp.Views.Pages; 
 
@@ -10,16 +11,14 @@ public partial class TeleTab : ContentPage {
 
 	public static string Route => "Tele";
 
-	public ObservableCollection<DataField> Inputs { get; } = new(new() {
-		new IntegerDataField(new() { Name = "High Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),
-		new IntegerDataField(new() { Name = "High Cubes", InitialValue = 0, MinValue = 0, MaxValue = 3 }),
-		new IntegerDataField(new() { Name = "Mid Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),
-		new IntegerDataField(new() { Name = "Mid Cubes", InitialValue = 0, MinValue = 0, MaxValue = 3 }),
-		new IntegerDataField(new() { Name = "Low Cones", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
-		new IntegerDataField(new() { Name = "Low Cubes", InitialValue = 0, MinValue = 0, MaxValue = 9 })
-	});
+	// These can't be static or PropertyChanged events on them won't work.
+	private IAppManager AppManager => ServiceHelper.GetService<IAppManager>();
+
+	public ReadOnlyList<InputDataCollector> Inputs => AppManager.ActiveMatchData.TeleTabInputs;
 
 	public TeleTab() {
+
+		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
 
 		BindingContext = this;
 		InitializeComponent();

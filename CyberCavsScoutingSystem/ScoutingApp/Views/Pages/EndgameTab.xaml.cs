@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using CCSSDomain.DataCollectors;
+﻿using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
+using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;
 
 namespace ScoutingApp.Views.Pages; 
@@ -12,55 +11,14 @@ public partial class EndgameTab : ContentPage {
 
 	public static string Route => "Endgame";
 
-	public ObservableCollection<DataField> Inputs { get; } = new(new() {
+	// These can't be static or PropertyChanged events on them won't work.
+	private IAppManager AppManager => ServiceHelper.GetService<IAppManager>();
 
-		new SelectionDataField(new() { Name = "Charge Station", OptionNames = new List<string> {
-			"None",
-			"Attempted",
-			"Docked",
-			"Engaged"
-		}.ToReadOnly()}),
-
-		new SelectionDataField(new() { Name = "Shelf Cones", OptionNames = new List<string> {
-			"Yes",
-			"No",
-		}.ToReadOnly()}),
-
-		new SelectionDataField(new() { Name = "Chute Cones", OptionNames = new List<string> {
-			"Yes",
-			"No",
-		}.ToReadOnly()}),
-
-		new SelectionDataField(new() { Name = "Upright Cones", OptionNames = new List<string> {
-			"Yes",
-			"No",
-		}.ToReadOnly()}),
-
-		new SelectionDataField(new() { Name = "Tipped Cones", OptionNames = new List<string> {
-			"Yes",
-			"No",
-		}.ToReadOnly()}),
-
-		new SelectionDataField(new() { Name = "Shelf Cubes", OptionNames = new List<string> {
-			"Yes",
-			"No",
-		}.ToReadOnly()}),
-
-		new SelectionDataField(new() { Name = "Chute Cubes", OptionNames = new List<string> {
-			"Yes",
-			"No",
-		}.ToReadOnly()}),
-
-		new SelectionDataField(new() { Name = "Ground Cubes", OptionNames = new List<string> {
-			"Yes",
-			"No",
-		}.ToReadOnly()}),
-
-		new TextDataField(new() { Name = "Comments"}),
-
-	});
+	public ReadOnlyList<InputDataCollector> Inputs => AppManager.ActiveMatchData.EndgameTabInputs;
 
 	public EndgameTab() {
+
+		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
 
 		BindingContext = this;
 		InitializeComponent();

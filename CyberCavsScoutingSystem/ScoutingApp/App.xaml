@@ -5,6 +5,7 @@
 			 xmlns:dataTemplates="clr-namespace:ScoutingApp.Views.DataTemplates"
 			 xmlns:dataTemplateSelectors="clr-namespace:ScoutingApp.Views.DataTemplateSelectors"
 			 xmlns:converters="clr-namespace:ScoutingApp.Views.Converters"
+			 xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
 			 x:Class="ScoutingApp.App">
 
 	<Application.Resources>
@@ -34,11 +35,15 @@
 				x:Key="InputDataTemplateSelector"
 				TextDataFieldTemplate="{StaticResource TextDataFieldTemplate}"
 				IntegerDataFieldTemplate="{StaticResource IntegerDataFieldTemplate}"
-				SelectionDataFieldTemplate="{StaticResource SelectionDataFieldTemplate}" />
+				SelectionDataFieldTemplate="{StaticResource SelectionDataFieldTemplate}"/>
 
-
+			<dataTemplateSelectors:NullOrValueTemplateSelector
+				x:Key="NullOrValueTemplateSelector"
+				NullTemplate="{DataTemplate pages:ConfirmTab}"
+				ValueTemplate="{DataTemplate pages:SetupTab}"/>
 
 			<converters:ReadOnlyListOfStringsToIListConverter x:Key="ReadOnlyListOfStringsToIListConverter"/>
+			<converters:ReadOnlyListOfAlliancesToIListConverter x:Key="ReadOnlyListOfAlliancesToIListConverter"/>
 
 		</ResourceDictionary>
 

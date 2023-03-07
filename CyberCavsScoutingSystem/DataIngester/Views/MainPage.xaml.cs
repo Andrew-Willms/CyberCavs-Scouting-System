@@ -104,7 +104,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 			IResult<GameSpec> result = await App.GetGameSpec();
 
 			if (result is IResult<GameSpec>.Error error) {
-				log($"Error while parsing game specification file: \"{error.Message.Value}\"");
+				log($"Error while parsing game specification file: \"{error.Message}\"");
 				return null;
 			}
 
@@ -145,7 +145,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 					switch (fileContents) {
 
 						case IResult<string>.Error error:
-							log(error.Message.Value);
+							log(error.Message);
 							continue;
 
 						case IResult<string>.Success success:

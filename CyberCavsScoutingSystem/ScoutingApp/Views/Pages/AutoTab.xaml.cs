@@ -1,39 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.ComponentModel;
 using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
+using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;
 
 namespace ScoutingApp.Views.Pages; 
 
 
 
-public partial class AutoTab : ContentPage {
+public partial class AutoTab : ContentPage, INotifyPropertyChanged {
 
 	public static string Route => "Auto";
 
-	public ObservableCollection<DataField> Inputs { get; } = new(new() {
+	// These can't be static or PropertyChanged events on them won't work.
+	private IAppManager AppManager => ServiceHelper.GetService<IAppManager>();
 
-		new IntegerDataField(new() { Name = "High Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),
-		new IntegerDataField(new() { Name = "High Cubes", InitialValue = 0, MinValue = 0, MaxValue = 3 }),
-		new IntegerDataField(new() { Name = "Mid Cones", InitialValue = 0, MinValue = 0, MaxValue = 6 }),
-		new IntegerDataField(new() { Name = "Mid Cubes", InitialValue = 0, MinValue = 0, MaxValue = 3 }),
-		new IntegerDataField(new() { Name = "Low Cones", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
-		new IntegerDataField(new() { Name = "Low Cubes", InitialValue = 0, MinValue = 0, MaxValue = 9 }),
+	public ReadOnlyList<InputDataCollector> Inputs => AppManager.ActiveMatchData.AutoTabInputs;
 
-		new SelectionDataField(new() { Name = "Charge Station", OptionNames = new List<string> {
-			"None",
-			"Attempted",
-			"Docked",
-			"Engaged"
-		}.ToReadOnly()}),
-
-		new SelectionDataField(new() { Name = "Mobility", OptionNames = new List<string> {
-			"Yes",
-			"No",
-		}.ToReadOnly()})
-
-	});
 
 	public AutoTab() {
 

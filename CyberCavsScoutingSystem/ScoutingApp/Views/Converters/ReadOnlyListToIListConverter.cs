@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
 
 namespace ScoutingApp.Views.Converters;
@@ -56,5 +57,13 @@ public class ReadOnlyListOfStringsToIListConverter : ReadOnlyListToIListConverte
 	protected override Type NonGenericReadOnlyListType { get; } = typeof(ReadOnlyList<string>);
 
 	protected override Type NonGenericIListType { get; } = typeof(IList<string>);
+
+}
+
+public class ReadOnlyListOfAlliancesToIListConverter : ReadOnlyListToIListConverter<Alliance> {
+
+	protected override Type NonGenericReadOnlyListType { get; } = typeof(ReadOnlyList<Alliance>);
+
+	protected override Type NonGenericIListType { get; } = typeof(IList<Alliance>);
 
 }

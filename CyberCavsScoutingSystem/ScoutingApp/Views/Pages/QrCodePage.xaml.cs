@@ -65,13 +65,6 @@ public partial class QrCodePage : ContentPage, INotifyPropertyChanged {
 
 	private static async Task<SerializedMatch[]> GetSavedGetScannedMatchesFromFiles() {
 
-		return new[] {
-			new SerializedMatch { Name = "Name 1", Content = "some content here 1"},
-			new SerializedMatch { Name = "Name 2", Content = "some content here 2"},
-			new SerializedMatch { Name = "Name 3", Content = "some content here 3"},
-			new SerializedMatch { Name = "Name 4", Content = "some content here 4"},
-		};
-
 		Directory.CreateDirectory(MatchFileDirectoryPath);
 
 		string[] filePaths = Directory.GetFiles(MatchFileDirectoryPath, $"*{FileExtension}", SearchOption.TopDirectoryOnly);

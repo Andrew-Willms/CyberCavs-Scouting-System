@@ -5,9 +5,24 @@
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
+	xmlns:dataTemplateSelectors="clr-namespace:ScoutingApp.Views.DataTemplateSelectors"
 	FlyoutBehavior="Flyout">
 
 	<FlyoutItem Title="Match">
+
+		<!--<Tab 
+			Title="Setup"
+			Route="{x:Static pages:SetupTab.Route}">
+
+			<ShellContent Title="Setup">
+				<ShellContent.ContentTemplate>
+					<dataTemplateSelectors:NullOrValueTemplateSelectorGenerator
+						NullTemplate="{DataTemplate pages:SetupTab}"
+						ValueTemplate="{DataTemplate pages:ConfirmTab}"/>
+				</ShellContent.ContentTemplate>
+			</ShellContent>
+
+		</Tab>-->
 
 		<Tab
 			Title="Setup"
@@ -15,9 +30,19 @@
 
 			<ShellContent
 				Title="Setup"
-				ContentTemplate="{DataTemplate pages:SetupTab}"/>
+				ContentTemplate="{StaticResource NullOrValueTemplateSelector}"/>
 
 		</Tab>
+
+		<!--<Tab
+			Title="Setup"
+			Route="{x:Static pages:SetupTab.Route}">
+
+			<ShellContent
+				Title="Setup"
+				ContentTemplate="{DataTemplate pages:SetupTab}"/>
+
+		</Tab>-->
 
 		<Tab
 			Title="Auto"

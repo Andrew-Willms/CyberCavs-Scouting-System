@@ -119,8 +119,8 @@ public class GameSpec {
 			$"{nameof(MatchDataCollector.MatchNumber).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.ReplayNumber).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.IsPlayoff).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.TeamNumber).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.Alliance).ToCsvFriendly()}," +
+			$"{nameof(MatchDataCollector.TeamNumber).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.Time).ToCsvFriendly()}"
 		);
 

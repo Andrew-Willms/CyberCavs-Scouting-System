@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.IO;
+using CCSSDomain.Serialization;
 using GameMakerWpf.Domain.EditingData;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -75,7 +76,7 @@ public class Saver : ISaver {
 
 		string serializedProject;
 		try {
-			serializedProject = JsonConvert.SerializeObject(gameEditingData, JsonSerializerSettings);
+			serializedProject = JsonConvert.SerializeObject(gameEditingData, JsonSettings.JsonSerializerSettings);
 
 		} catch {
 			return new ISaveResult.GameEditingDataCouldNotBeConvertedToSaveData();
@@ -136,7 +137,7 @@ public class Saver : ISaver {
 
 		try {
 			GameEditingData newGameEditingData =
-				JsonConvert.DeserializeObject<GameEditingData>(serializedGameEditingData, JsonSerializerSettings)
+				JsonConvert.DeserializeObject<GameEditingData>(serializedGameEditingData, JsonSettings.JsonSerializerSettings)
 				?? throw new NoNullAllowedException();
 
 			FilePath = filePath.Optionalize();
@@ -148,11 +149,6 @@ public class Saver : ISaver {
 	}
 
 
-
-	private static readonly JsonSerializerSettings JsonSerializerSettings = new() {
-		TypeNameHandling = TypeNameHandling.All,
-		Formatting = Formatting.Indented
-	};
 
 	private static OpenFileDialog OpenFileDialog => new() {
 		Title = "Select a file to open.",

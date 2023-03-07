@@ -4,12 +4,12 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:dataCollectors="clr-namespace:CCSSDomain.DataCollectors;assembly=CCSSDomain"
 			 x:Class="ScoutingApp.Views.DataTemplates.SelectionDataFieldInputView"
-			 x:DataType="dataCollectors:SelectionDataField">
+			 x:DataType="dataCollectors:SelectionInputDataCollector">
 
 	<VerticalStackLayout>
 
 		<Label
-			Text="{Binding Path=Name}"
+			Text="{Binding Path=Label}"
 			HorizontalTextAlignment="Center"
 			VerticalTextAlignment="Center"/>
 

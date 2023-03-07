@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
+using ScoutingApp.AppManagement;
+using ScoutingApp.Views.Pages;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
 
@@ -30,6 +33,11 @@ public static class MauiProgram {
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
+		builder.Services.AddSingleton<IAppManager, AppManager>();
+		builder.Services.AddTransient<SetupTab>();
+
+		//builder.Services.AddSingleton<SetupTab>();
 
 		return builder.Build();
 	}
