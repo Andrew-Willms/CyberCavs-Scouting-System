@@ -5,8 +5,6 @@
 			 xmlns:dataTemplates="clr-namespace:ScoutingApp.Views.DataTemplates"
 			 xmlns:dataTemplateSelectors="clr-namespace:ScoutingApp.Views.DataTemplateSelectors"
 			 xmlns:converters="clr-namespace:ScoutingApp.Views.Converters"
-			 xmlns:pages="clr-namespace:ScoutingApp.Views.Pages"
-			 xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
 			 x:Class="ScoutingApp.App">
 
 	<Application.Resources>
