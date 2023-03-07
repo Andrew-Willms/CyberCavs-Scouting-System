@@ -42,7 +42,7 @@ public class NullOrValueTemplateSelector : DataTemplateSelector {
 
 
 // This doesn't work because DataTemplateSelectors created from code can't fulfill constructor injection dependencies like normal
-// DataTemplateSelectors can.
+// DataTemplateSelectors can. When this runs you get an exception saying the view doesn't have a public parameterless constructor.
 public class NullOrValueTemplateSelectorGenerator : IMarkupExtension<DataTemplate> {
 
 	public DataTemplate NullTemplate { get; set; } = null!;
