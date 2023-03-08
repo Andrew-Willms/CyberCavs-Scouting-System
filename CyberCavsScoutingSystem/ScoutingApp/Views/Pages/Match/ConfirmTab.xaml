@@ -8,15 +8,19 @@
 			 x:DataType="match:ConfirmTab"
 			 NavigatedTo="ConfirmTab_OnNavigatedTo">
 
-	<ScrollView>
+	<ScrollView Orientation="Both">
 
 		<VerticalStackLayout
 			Margin="10"
 			Spacing="10">
 
 			<CollectionView
-				ItemsSource="{Binding Path=Errors}"
-				ItemsLayout="VerticalList">
+				ItemsSource="{Binding Path=Errors}">
+
+				<CollectionView.ItemsLayout>
+					<LinearItemsLayout Orientation="Vertical"
+					                   ItemSpacing="10" />
+				</CollectionView.ItemsLayout>
 
 				<CollectionView.ItemTemplate>
 					<DataTemplate x:DataType="system:String">

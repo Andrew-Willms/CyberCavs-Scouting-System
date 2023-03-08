@@ -8,7 +8,7 @@
     "Name": "",
     "Description": ""
   },
-  "VersionReleaseDate": "2023-03-05T23:24:47.8667418-05:00",
+  "VersionReleaseDate": "2023-03-08T16:29:20.326351-05:00",
   "Name": "Charged Up",
   "Description": "",
   "Year": 2023,
@@ -409,6 +409,11 @@
           "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
           "DataFieldName": "Chute Cubes",
           "Label": "Intaked Chute Cubes"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Comments",
+          "Label": "Comments"
         }
       ]
     }
