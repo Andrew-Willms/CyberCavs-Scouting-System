@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using CCSSDomain.DataCollectors;
-using CCSSDomain.GameSpecification;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;
@@ -18,6 +17,7 @@ public partial class SetupTab : ContentPage {
 
 	public uint? MatchNumber {
 
+		//TODO this sometimes throws a null reference exception, figure out why (it's ActiveMatchData that is null)
 		get => AppManager.ActiveMatchData.MatchNumber.HasValue
 			? AppManager.ActiveMatchData.MatchNumber.Value
 			: null;

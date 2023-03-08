@@ -12,13 +12,15 @@ public partial class AutoTab : ContentPage, INotifyPropertyChanged {
 
 	public static string Route => "Auto";
 
-	// These can't be static or PropertyChanged events on them won't work.
-	private IAppManager AppManager => ServiceHelper.GetService<IAppManager>();
+	private IAppManager AppManager { get; }
 
 	public ReadOnlyList<InputDataCollector> Inputs => AppManager.ActiveMatchData.AutoTabInputs;
 
 
-	public AutoTab() {
+	public AutoTab(IAppManager appManager) {
+
+		AppManager = appManager;
+		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
 
 		BindingContext = this;
 		InitializeComponent();

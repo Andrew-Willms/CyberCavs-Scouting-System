@@ -1,8 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace CCSSDomain.DataCollectors;
@@ -98,11 +100,16 @@ public class SelectionDataField : DataField {
 
     public ReadOnlyList<string> Options => SelectionDataFieldSpec.OptionNames;
 
-    private string _SelectedOption = "";
-    public string SelectedOption {
+    private Optional<string> _SelectedOption = Optional.NoValue;
+    public Optional<string> SelectedOption {
         get => _SelectedOption;
         set {
-            _SelectedOption = Options.Contains(value) ? value : "";
+
+	        if (value != Optional.NoValue && !Options.Contains(value.Value)) {
+		        throw new InvalidOperationException();
+	        }
+
+	        _SelectedOption = value;
             OnValueChange.Invoke();
         }
     }

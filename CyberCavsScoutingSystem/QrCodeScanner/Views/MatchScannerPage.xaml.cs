@@ -56,7 +56,7 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
     private async void Button_OnClicked(object? sender, EventArgs e) {
 
         ScannedMatch match = new() {
-	        Name = $"{DateTime.Now:yyyy-MM-dd H.mm.ss}",
+	        Name = $"{DateTime.Now:yyyy-MM-dd HH.mm.ss}",
 	        Content = QrCodeData
         };
 

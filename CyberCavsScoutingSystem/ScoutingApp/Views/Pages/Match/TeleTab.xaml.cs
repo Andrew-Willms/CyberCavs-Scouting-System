@@ -11,13 +11,13 @@ public partial class TeleTab : ContentPage {
 
 	public static string Route => "Tele";
 
-	// These can't be static or PropertyChanged events on them won't work.
-	private IAppManager AppManager => ServiceHelper.GetService<IAppManager>();
+	private IAppManager AppManager { get; }
 
 	public ReadOnlyList<InputDataCollector> Inputs => AppManager.ActiveMatchData.TeleTabInputs;
 
-	public TeleTab() {
+	public TeleTab(IAppManager appManager) {
 
+		AppManager = appManager;
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
 
 		BindingContext = this;

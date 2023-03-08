@@ -4,8 +4,8 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
 			 xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
-			 x:Class="ScoutingApp.Views.Pages.Flyout.MatchQrCodePage"
-			 x:DataType="flyout:MatchQrCodePage"
+			 x:Class="ScoutingApp.Views.Pages.Flyout.MatchDetailsPage"
+			 x:DataType="flyout:MatchDetailsPage"
 			 Title="{Binding Path=SavedMatch.Name}">
 
 	<ContentPage.ToolbarItems>

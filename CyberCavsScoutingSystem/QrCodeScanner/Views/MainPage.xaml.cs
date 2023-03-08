@@ -154,6 +154,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		return (await Task.WhenAll(fileContents))
 			.Pair(fileNames)
 			.Select(x => new ScannedMatch { Name = x.second, Content = x.first })
+			.OrderByDescending(x => x.Name)
 			.ToArray();
 	}
 

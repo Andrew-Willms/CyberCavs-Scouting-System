@@ -9,7 +9,7 @@ public partial class AppShell : Shell {
 
 	public AppShell() {
 
-		Routing.RegisterRoute($"{MatchQrCodePage.Route}", typeof(MatchQrCodePage));
+		Routing.RegisterRoute($"{MatchDetailsPage.Route}", typeof(MatchDetailsPage));
 
 		InitializeComponent();
 	}

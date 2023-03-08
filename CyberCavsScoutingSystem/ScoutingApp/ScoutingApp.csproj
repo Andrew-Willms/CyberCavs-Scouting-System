@@ -74,11 +74,11 @@
 	  <Compile Update="Views\Pages\GameSpecCouldNotBeLoadedPage.xaml.cs">
 	    <DependentUpon>GameSpecCouldNotBeLoadedPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\Flyout\MatchQrCodePage.xaml.cs">
-	    <DependentUpon>MatchQrCodePage.xaml</DependentUpon>
+	  <Compile Update="Views\Pages\Flyout\MatchDetailsPage.xaml.cs">
+	    <DependentUpon>MatchDetailsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\Flyout\QrCodePage.xaml.cs">
-	    <DependentUpon>QrCodePage.xaml</DependentUpon>
+	  <Compile Update="Views\Pages\Flyout\SavedMatchesPage.xaml.cs">
+	    <DependentUpon>SavedMatchesPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Pages\LoadingGameSpecPage.xaml.cs">
 	    <DependentUpon>LoadingGameSpecPage.xaml</DependentUpon>
@@ -116,10 +116,10 @@
 	  <MauiXaml Update="Views\Pages\GameSpecCouldNotBeLoadedPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\Flyout\MatchQrCodePage.xaml">
+	  <MauiXaml Update="Views\Pages\Flyout\MatchDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\Flyout\QrCodePage.xaml">
+	  <MauiXaml Update="Views\Pages\Flyout\SavedMatchesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Match\AutoTab.xaml">

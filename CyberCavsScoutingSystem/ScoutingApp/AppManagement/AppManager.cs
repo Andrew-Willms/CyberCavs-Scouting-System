@@ -1,8 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
+using QRCoder;
+using ScoutingApp.Views.Pages.Flyout;
 using UtilitiesLibrary.Results;
 using static ScoutingApp.IGameSpecRetrievalResult;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
@@ -14,12 +20,14 @@ namespace ScoutingApp.AppManagement;
 public interface IAppManager : INotifyPropertyChanged {
 
 	public MatchDataCollector ActiveMatchData { get; }
+	public string Scout { get; set; }
+	public string Event { get; set; }
 
 	public Task ApplicationStartup();
 
-	public Task StartNewMatch();
+	public Task SaveMatchData();
 
-	public Task StoreMatchData();
+	public Task DiscardAndStartNewMatch();
 
 	public Event OnMatchStarted { get; }
 
@@ -38,6 +46,18 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		}
 	}
 
+	private string _Scout = string.Empty;
+	public string Scout {
+		get => _Scout;
+		set {
+			_Scout = value;
+			OnPropertyChanged(nameof(Scout));
+			Task _ = WriteScoutToDisk();
+		}
+	}
+
+	public string Event { get; set; } = string.Empty;
+
 	public Event OnMatchStarted { get; } = new();
 
 	private static IErrorPresenter ErrorPresenter => ServiceHelper.GetService<IErrorPresenter>();
@@ -47,9 +67,11 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 	public async Task ApplicationStartup() {
 
 		await StartNewMatch();
+
+		await ReadScoutFromDisk();
 	}
 
-	public async Task StartNewMatch() {
+	private async Task StartNewMatch() {
 
 		IGameSpecRetrievalResult result = await App.GetGameSpec();
 
@@ -71,17 +93,44 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		OnMatchStarted.Invoke();
 	}
 
-	public async Task StoreMatchData() {
+	public async Task SaveMatchData() {
 
+		string csvData = ActiveMatchData.ConvertDataToCsv(Scout, Event);
 
+		string path = Path.Combine(SavedMatchesPage.MatchFileDirectoryPath, $"{DateTime.Now:yyyy-MM-dd HH.mm.ss}{SavedMatchesPage.FileExtension}");
 
+		await File.WriteAllTextAsync(path, csvData);
 
+		await StartNewMatch();
+	}
 
-		ActiveMatchData.ConvertDataToCsv();
+	public async Task DiscardAndStartNewMatch() {
 
+		bool discard = await Shell.Current.DisplayAlert(
+			"Discard Current Match?",
+			"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
+			"Discard and start new.",
+			"Continue with current match.");
 
+		if (!discard) {
+			return;
+		}
 
-		throw new System.NotImplementedException();
+		await StartNewMatch();
+	}
+
+	private async Task ReadScoutFromDisk() {
+
+		string scoutFilePath = Path.Combine(FileSystem.Current.CacheDirectory, nameof(Scout));
+
+		Scout = await File.ReadAllTextAsync(scoutFilePath);
+	}
+
+	private async Task WriteScoutToDisk() {
+
+		string scoutFilePath = Path.Combine(FileSystem.Current.CacheDirectory, nameof(Scout));
+
+		await File.WriteAllTextAsync(scoutFilePath, Scout);
 	}
 
 

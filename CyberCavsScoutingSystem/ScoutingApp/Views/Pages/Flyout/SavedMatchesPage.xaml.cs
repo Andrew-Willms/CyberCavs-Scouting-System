@@ -15,11 +15,11 @@ namespace ScoutingApp.Views.Pages.Flyout;
 
 
 
-public partial class QrCodePage : ContentPage, INotifyPropertyChanged {
+public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
-	public static string Route => "QrCode";
-	private static readonly string MatchFileDirectoryPath = Path.Combine(FileSystem.Current.CacheDirectory, "MatchData");
-	private const string FileExtension = ".csvl";
+	public static string Route => "SavedMatches";
+	public static readonly string MatchFileDirectoryPath = Path.Combine(FileSystem.Current.CacheDirectory, "MatchData");
+	public const string FileExtension = ".csvl";
 
 	private bool IsActuallyRefreshing;
 	private bool _IsRefreshing;
@@ -34,7 +34,7 @@ public partial class QrCodePage : ContentPage, INotifyPropertyChanged {
 
 
 
-	public QrCodePage() {
+	public SavedMatchesPage() {
 
 		BindingContext = this;
 		InitializeComponent();
@@ -75,6 +75,7 @@ public partial class QrCodePage : ContentPage, INotifyPropertyChanged {
 		return (await Task.WhenAll(fileContents))
 			.Pair(fileNames)
 			.Select(x => new SerializedMatch { Name = x.second, Content = x.first })
+			.OrderByDescending(x => x.Name)
 			.ToArray();
 	}
 
@@ -110,7 +111,7 @@ public partial class QrCodePage : ContentPage, INotifyPropertyChanged {
 
 
 
-	private async void QrCodePage_OnLoaded(object? sender, EventArgs e) {
+	private async void SavedMatchesPage_OnLoaded(object? sender, EventArgs e) {
 		await Refresh();
 	}
 
@@ -124,13 +125,16 @@ public partial class QrCodePage : ContentPage, INotifyPropertyChanged {
 		SerializedMatch scannedMatch = button.BindingContext is SerializedMatch match ? match : throw new ArgumentException();
 
 		Dictionary<string, object> parameters = new() {
-			{ MatchQrCodePage.SerializedMatchNavigationParameterName, scannedMatch },
-			{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
+			{ MatchDetailsPage.SerializedMatchNavigationParameterName, scannedMatch },
+			{ MatchDetailsPage.MatchDeleterNavigationParameterName, DeleteMatch }
 		};
 
-		await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromQrCodePage, parameters);
+		await Shell.Current.GoToAsync(MatchDetailsPage.RouteFromQrCodePage, parameters);
 	}
 
+	private async void SavedMatchesPage_OnNavigatedTo(object? sender, NavigatedToEventArgs e) {
+		await Refresh();
+	}
 
 
 	public new event PropertyChangedEventHandler? PropertyChanged;

@@ -14,7 +14,9 @@
 			Text="Event"
 			HorizontalTextAlignment="Start"/>
 
-		<Picker ItemsSource="{Binding Path=Events, Converter={StaticResource ReadOnlyListOfStringsToIListConverter}}"/>
+		<Picker
+			ItemsSource="{Binding Path=Events, Converter={StaticResource ReadOnlyListOfStringsToIListConverter}}"
+			SelectedItem="{Binding Path=AppManager.Event}"/>
 
 	</VerticalStackLayout>
 

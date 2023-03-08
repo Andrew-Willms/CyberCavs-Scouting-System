@@ -84,11 +84,11 @@
 
 	<FlyoutItem
 		Title="Qr Codes"
-		Route="{x:Static flyout:QrCodePage.Route}">
+		Route="{x:Static flyout:SavedMatchesPage.Route}">
 
 		<ShellContent
 			Title="QR Codes" 
-			ContentTemplate="{DataTemplate flyout:QrCodePage}"/>
+			ContentTemplate="{DataTemplate flyout:SavedMatchesPage}"/>
 
 	</FlyoutItem>
 

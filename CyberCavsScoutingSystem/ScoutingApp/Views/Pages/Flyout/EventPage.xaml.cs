@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Maui.Controls;
+using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;
 
 namespace ScoutingApp.Views.Pages.Flyout; 
@@ -10,13 +11,18 @@ public partial class EventPage : ContentPage {
 
 	public static string Route => "Event";
 
-	public ReadOnlyList<string> Events { get; set; } = new List<string> {
+	public IAppManager AppManager { get; }
+
+	public ReadOnlyList<string> Events { get; } = new List<string> {
+		"Test Event",
 		"Waterloo",
 		"Windsor",
 		"Ontario Champs"
 	}.ToReadOnly();
 
-	public EventPage() {
+	public EventPage(IAppManager appManager) {
+
+		AppManager = appManager;
 
 		BindingContext = this;
 		InitializeComponent();

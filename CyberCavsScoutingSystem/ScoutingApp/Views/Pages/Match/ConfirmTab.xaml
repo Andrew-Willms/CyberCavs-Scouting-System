@@ -1,7 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ScoutingApp.Views.Pages.Match.ConfirmTab">
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
+			 xmlns:system="clr-namespace:System;assembly=mscorlib"
+			 x:Class="ScoutingApp.Views.Pages.Match.ConfirmTab"
+			 x:DataType="match:ConfirmTab"
+			 NavigatedTo="ConfirmTab_OnNavigatedTo">
+
+	<ScrollView>
+
+		<VerticalStackLayout
+			Margin="10"
+			Spacing="10">
+
+			<CollectionView
+				ItemsSource="{Binding Path=Errors}"
+				ItemsLayout="VerticalList">
+
+				<CollectionView.ItemTemplate>
+					<DataTemplate x:DataType="system:String">
+						<HorizontalStackLayout>
+							<Label Text="{Binding}"/>
+						</HorizontalStackLayout>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+
+			</CollectionView>
+
+			<Button
+				Text="Save"
+				IsEnabled="{Binding Path=MatchIstValid}"
+				HorizontalOptions="Start"
+				Clicked="SaveButton_OnClicked"/>
+
+			<Button
+				Text="Discard Match"
+				HorizontalOptions="Start"
+				Clicked="DiscardButton_OnClicked"/>
+
+		</VerticalStackLayout>
+
+	</ScrollView>
 
 </ContentPage>

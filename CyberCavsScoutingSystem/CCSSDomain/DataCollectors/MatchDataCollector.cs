@@ -16,10 +16,6 @@ public class MatchDataCollector {
 
 	public GameSpec GameSpecification { get; }
 
-	public Optional<string> Scout { get; set; } = Optional.NoValue;
-
-	public Optional<Event> Event { get; set; } = Optional.NoValue;
-
 	public Optional<uint> MatchNumber { get; set; } = Optional.NoValue;
 	public Optional<uint> ReplayNumber { get; set; } = 0u.Optionalize();
 	public Optional<bool> IsPlayoff { get; set; } = false.Optionalize();
@@ -28,7 +24,7 @@ public class MatchDataCollector {
 
 	public Optional<Alliance> Alliance { get; set; } = Optional.NoValue;
 
-	public DateTime Time { get; set; } = DateTime.Now;
+	public DateTime Time { get; } = DateTime.Now;
 
 	public ReadOnlyList<DataField> DataFields { get; }
 
@@ -51,11 +47,11 @@ public class MatchDataCollector {
         EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
     }
 
-	public string ConvertDataToCsv() {
+	public string ConvertDataToCsv(string scout, string @event) {
 
         StringBuilder matchData = new(
-            $"{Scout.Value.ToCsvFriendly()}," +
-            $"{Event.Value.Name.ToCsvFriendly()}," +
+            $"{scout.ToCsvFriendly()}," +
+            $"{@event.ToCsvFriendly()}," +
             $"{MatchNumber.Value.ToString().ToCsvFriendly()}," +
             $"{ReplayNumber.Value.ToString().ToCsvFriendly()}," +
             $"{IsPlayoff.Value.ToString().ToCsvFriendly()}," +
@@ -76,7 +72,7 @@ public class MatchDataCollector {
                     break;
 
                 case SelectionDataField selectionDataField:
-                    matchData.Append($"{selectionDataField.SelectedOption.ToCsvFriendly()},");
+                    matchData.Append($"{selectionDataField.SelectedOption.Value.ToCsvFriendly()},");
                     break;
 
                 default:

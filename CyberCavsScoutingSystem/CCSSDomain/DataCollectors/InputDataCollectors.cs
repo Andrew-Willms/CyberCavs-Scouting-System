@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 
 namespace CCSSDomain.DataCollectors;
 
@@ -82,8 +83,8 @@ public class SelectionInputDataCollector : InputDataCollector, INotifyPropertyCh
 	}
 
 	public string SelectedOption {
-		get => DataField.SelectedOption;
-		set => DataField.SelectedOption = value;
+		get => DataField.SelectedOption.HasValue ? DataField.SelectedOption.Value : "";
+		set => DataField.SelectedOption = value == "" ? Optional.NoValue : value.Optionalize();
 	}
 
 }

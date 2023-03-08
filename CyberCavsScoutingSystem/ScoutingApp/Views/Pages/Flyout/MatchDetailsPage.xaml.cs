@@ -9,9 +9,9 @@ namespace ScoutingApp.Views.Pages.Flyout;
 
 [QueryProperty(nameof(SavedMatch), SerializedMatchNavigationParameterName)]
 [QueryProperty(nameof(MatchDeleter), MatchDeleterNavigationParameterName)]
-public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
+public partial class MatchDetailsPage : ContentPage, INotifyPropertyChanged {
 
-	public static string Route => $"{QrCodePage.Route}/Details";
+	public static string Route => $"{SavedMatchesPage.Route}/Details";
 	public static string RouteFromQrCodePage => "/Details";
 
 	public const string SerializedMatchNavigationParameterName = nameof(SerializedMatch);
@@ -30,7 +30,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 
 
-	public MatchQrCodePage() {
+	public MatchDetailsPage() {
 
 		BindingContext = this;
 		InitializeComponent();

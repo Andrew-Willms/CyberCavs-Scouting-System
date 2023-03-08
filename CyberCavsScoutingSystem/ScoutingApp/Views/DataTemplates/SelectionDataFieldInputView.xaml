@@ -15,8 +15,7 @@
 
 		<Picker
 			ItemsSource="{Binding Path=Options, Converter={StaticResource ReadOnlyListOfStringsToIListConverter}}"
-			SelectedItem="{Binding Path=SelectedOption}"
-			SelectedIndexChanged="Picker_OnSelectedIndexChanged"/>
+			SelectedItem="{Binding Path=SelectedOption}"/>
 
 	</VerticalStackLayout>
 

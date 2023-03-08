@@ -1,31 +1,22 @@
-﻿using System.ComponentModel;
-using Microsoft.Maui.Controls;
+﻿using Microsoft.Maui.Controls;
+using ScoutingApp.AppManagement;
 
 namespace ScoutingApp.Views.Pages.Flyout; 
 
 
 
-public partial class ScoutPage : ContentPage, INotifyPropertyChanged {
+public partial class ScoutPage : ContentPage {
 
 	public static string Route => "Scout";
 
-	private string _ScoutName = "";
-	public string ScoutName {
-		get => _ScoutName;
-		set {
-			_ScoutName = value;
-			OnPropertyChanged(nameof(ScoutName));
-		}
-	}
+	public IAppManager AppManager { get; }
 
-	public ScoutPage() {
+	public ScoutPage(IAppManager appManager) {
+
+		AppManager = appManager;
+
+		BindingContext = this;
 		InitializeComponent();
-	}
-
-	public new event PropertyChangedEventHandler? PropertyChanged;
-
-	private new void OnPropertyChanged(string propertyName) {
-		PropertyChanged?.Invoke(this, new(propertyName));
 	}
 
 } 

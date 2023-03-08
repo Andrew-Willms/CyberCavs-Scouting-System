@@ -19,8 +19,6 @@ public partial class App : Application {
 
 	private static IGameSpecRetrievalResult GameSpecification { get; set; } = new Loading();
 
-
-
 	public App() {
 
 		InitializeComponent();
@@ -29,8 +27,6 @@ public partial class App : Application {
 
 		MainPage = new LoadingGameSpecPage();
 	}
-
-
 
 	protected override void OnStart() {
 
