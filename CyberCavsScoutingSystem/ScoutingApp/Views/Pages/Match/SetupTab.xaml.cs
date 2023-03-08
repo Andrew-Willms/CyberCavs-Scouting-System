@@ -17,7 +17,6 @@ public partial class SetupTab : ContentPage {
 
 	public uint? MatchNumber {
 
-		//TODO this sometimes throws a null reference exception, figure out why (it's ActiveMatchData that is null)
 		get => AppManager.ActiveMatchData.MatchNumber.HasValue
 			? AppManager.ActiveMatchData.MatchNumber.Value
 			: null;

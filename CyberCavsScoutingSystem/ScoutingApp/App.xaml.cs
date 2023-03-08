@@ -23,13 +23,6 @@ public partial class App : Application {
 
 		InitializeComponent();
 
-		ServiceHelper.GetService<IAppManager>().ApplicationStartup();
-
-		MainPage = new LoadingGameSpecPage();
-	}
-
-	protected override void OnStart() {
-
 		Task<IGameSpecRetrievalResult> gameSpecTask = GetGameSpec();
 
 		gameSpecTask.ContinueWith(async task => {
@@ -41,7 +34,9 @@ public partial class App : Application {
 			});
 		});
 
-		base.OnStart();
+		ServiceHelper.GetService<IAppManager>().ApplicationStartup();
+
+		MainPage = new LoadingGameSpecPage();
 	}
 
 	public static async Task<IGameSpecRetrievalResult> GetGameSpec() {

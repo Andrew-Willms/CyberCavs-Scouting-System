@@ -106,7 +106,7 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 			return;
 		}
 
-		//TODO maybe throw an error if code execution gets here.
+		throw new UnreachableException();
 	}
 
 
