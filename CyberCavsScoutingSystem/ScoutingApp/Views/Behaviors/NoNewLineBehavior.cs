@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Microsoft.Maui.Controls;
+using System;
 using System.Linq;
-using Microsoft.Maui.Controls;
 using UtilitiesLibrary.Collections;
 
 namespace ScoutingApp.Views.Behaviors; 
 
 
 
-public class DigitOnlyBehavior : Behavior<Entry> {
+public class NoNewLineBehavior : Behavior<Entry>  {
 
 	protected override void OnAttachedTo(Entry entry) {
 		entry.TextChanged += OnEntryTextChanged;
@@ -29,7 +29,7 @@ public class DigitOnlyBehavior : Behavior<Entry> {
 			return;
 		}
 
-		entry.Text = args.NewTextValue.Where(char.IsDigit).CharArrayToString();
+		entry.Text = args.NewTextValue.Where(x => x is not '\n').CharArrayToString();
 	}
 
 }

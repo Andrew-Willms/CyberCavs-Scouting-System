@@ -3,6 +3,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
+             xmlns:behaviors="clr-namespace:ScoutingApp.Views.Behaviors"
              x:Class="ScoutingApp.Views.Pages.Flyout.ScoutPage"
              x:DataType="flyout:ScoutPage">
 
@@ -14,7 +15,11 @@
 			Text="Scout Name"
 			HorizontalTextAlignment="Start"/>
 
-		<Entry Text="{Binding Path=AppManager.Scout}"/>
+		<Entry Text="{Binding Path=AppManager.Scout}">
+			<Entry.Behaviors>
+				<behaviors:NoNewLineBehavior/>
+			</Entry.Behaviors>
+		</Entry>
 
 	</VerticalStackLayout>
 

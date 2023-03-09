@@ -3,6 +3,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:dataCollectors="clr-namespace:CCSSDomain.DataCollectors;assembly=CCSSDomain"
+			 xmlns:behaviors="clr-namespace:ScoutingApp.Views.Behaviors"
 			 x:Class="ScoutingApp.Views.DataTemplates.TextDataFieldInputView"
 			 x:DataType="dataCollectors:TextInputDataCollector">
 	
@@ -16,7 +17,13 @@
 		<Editor
 			Text="{Binding Path=Text}"
 			HorizontalOptions="Fill"
-			MinimumHeightRequest="200"/>
+			MinimumHeightRequest="200">
+
+			<Entry.Behaviors>
+				<behaviors:NoNewLineBehavior/>
+			</Entry.Behaviors>
+
+		</Editor>
 
 	</VerticalStackLayout>
 
