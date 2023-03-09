@@ -7,7 +7,7 @@ namespace ScoutingApp.Views.Behaviors;
 
 
 
-public class NoNewLineBehavior : Behavior<Editor>  {
+public class CloseEditorOnNewLineBehavior : Behavior<Editor>  {
 
 	protected override void OnAttachedTo(Editor entry) {
 		entry.TextChanged += OnEntryTextChanged;
@@ -29,11 +29,17 @@ public class NoNewLineBehavior : Behavior<Editor>  {
 			return;
 		}
 
-		int cursorPosition = editor.CursorPosition;
+		bool enterPressed = args.NewTextValue.Contains('\n');
 
 		editor.Text = args.NewTextValue.Where(x => x is not '\n').CharArrayToString();
 
-		editor.CursorPosition = int.Max(cursorPosition, editor.Text.Length);
+		if (!enterPressed) {
+			return;
+		}
+
+		// Trick to hide keyboard
+		editor.IsEnabled = false;
+		editor.IsEnabled = true;
 	}
 
 }

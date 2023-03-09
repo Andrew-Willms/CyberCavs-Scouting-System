@@ -20,7 +20,7 @@
 			MinimumHeightRequest="200">
 
 			<Editor.Behaviors>
-				<behaviors:NoNewLineBehavior/>
+				<behaviors:CloseEditorOnNewLineBehavior/>
 			</Editor.Behaviors>
 
 		</Editor>
