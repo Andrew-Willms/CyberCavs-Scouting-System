@@ -22,6 +22,7 @@ public partial class App : Application {
 	public App() {
 
 		InitializeComponent();
+		MainPage = new LoadingGameSpecPage();
 
 		Task<IGameSpecRetrievalResult> gameSpecTask = GetGameSpec();
 
@@ -29,14 +30,18 @@ public partial class App : Application {
 
 			GameSpecification = await task;
 
-			await Dispatcher.DispatchAsync(() => {
-				MainPage = GameSpecification is Success ? new AppShell() : new GameSpecCouldNotBeLoadedPage();
+			// Dispatching this to the main thread is required.
+			await Dispatcher.DispatchAsync(async () => {
+
+				if (GameSpecification is not Success) {
+					MainPage = new GameSpecCouldNotBeLoadedPage();
+					return;
+				}
+
+				await ServiceHelper.GetService<IAppManager>().ApplicationStartup();
+				MainPage = new AppShell();
 			});
 		});
-
-		ServiceHelper.GetService<IAppManager>().ApplicationStartup();
-
-		MainPage = new LoadingGameSpecPage();
 	}
 
 	public static async Task<IGameSpecRetrievalResult> GetGameSpec() {

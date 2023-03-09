@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace UtilitiesLibrary.MiscExtensions;
 
@@ -52,4 +54,5 @@ public static class TextExtensions {
         text = "\"" + text + "\"";
         return text;
     }
+
 }
