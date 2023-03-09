@@ -15,11 +15,7 @@
 			Text="Scout Name"
 			HorizontalTextAlignment="Start"/>
 
-		<Entry Text="{Binding Path=AppManager.Scout}">
-			<Entry.Behaviors>
-				<behaviors:NoNewLineBehavior/>
-			</Entry.Behaviors>
-		</Entry>
+		<Entry Text="{Binding Path=AppManager.Scout}"/>
 
 	</VerticalStackLayout>
 

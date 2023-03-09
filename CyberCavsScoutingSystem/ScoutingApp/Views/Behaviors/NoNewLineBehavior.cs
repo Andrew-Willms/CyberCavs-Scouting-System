@@ -7,21 +7,21 @@ namespace ScoutingApp.Views.Behaviors;
 
 
 
-public class NoNewLineBehavior : Behavior<Entry>  {
+public class NoNewLineBehavior : Behavior<Editor>  {
 
-	protected override void OnAttachedTo(Entry entry) {
+	protected override void OnAttachedTo(Editor entry) {
 		entry.TextChanged += OnEntryTextChanged;
 		base.OnAttachedTo(entry);
 	}
 
-	protected override void OnDetachingFrom(Entry entry) {
+	protected override void OnDetachingFrom(Editor entry) {
 		entry.TextChanged -= OnEntryTextChanged;
 		base.OnDetachingFrom(entry);
 	}
 
 	private static void OnEntryTextChanged(object? sender, TextChangedEventArgs args) {
 
-		if (sender is not Entry entry) {
+		if (sender is not Editor editor) {
 			throw new InvalidOperationException();
 		}
 
@@ -29,7 +29,11 @@ public class NoNewLineBehavior : Behavior<Entry>  {
 			return;
 		}
 
-		entry.Text = args.NewTextValue.Where(x => x is not '\n').CharArrayToString();
+		int cursorPosition = editor.CursorPosition;
+
+		editor.Text = args.NewTextValue.Where(x => x is not '\n').CharArrayToString();
+
+		editor.CursorPosition = int.Max(cursorPosition, editor.Text.Length);
 	}
 
 }

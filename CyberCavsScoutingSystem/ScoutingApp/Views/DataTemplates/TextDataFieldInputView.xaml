@@ -19,9 +19,9 @@
 			HorizontalOptions="Fill"
 			MinimumHeightRequest="200">
 
-			<Entry.Behaviors>
+			<Editor.Behaviors>
 				<behaviors:NoNewLineBehavior/>
-			</Entry.Behaviors>
+			</Editor.Behaviors>
 
 		</Editor>
 
