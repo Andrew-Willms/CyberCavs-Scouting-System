@@ -123,7 +123,14 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 		string scoutFilePath = Path.Combine(FileSystem.Current.CacheDirectory, nameof(Scout));
 
-		Scout = await File.ReadAllTextAsync(scoutFilePath);
+		try {
+
+			if (!File.Exists(scoutFilePath)) {
+				await File.WriteAllTextAsync(scoutFilePath, "");
+			}
+
+			Scout = await File.ReadAllTextAsync(scoutFilePath);
+		} catch { /*ignored*/ }
 	}
 
 	private async Task WriteScoutToDisk() {
