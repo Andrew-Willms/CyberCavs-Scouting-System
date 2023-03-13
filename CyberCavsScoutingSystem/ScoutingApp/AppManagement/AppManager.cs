@@ -66,6 +66,8 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public async Task ApplicationStartup() {
 
+		EnsureMatchDataDirectoryExists();
+
 		await StartNewMatch();
 
 		await ReadScoutFromDisk();
@@ -96,10 +98,16 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 	public async Task SaveMatchData() {
 
 		string csvData = ActiveMatchData.ConvertDataToCsv(Scout, Event);
-
 		string path = Path.Combine(SavedMatchesPage.MatchFileDirectoryPath, $"{DateTime.Now:yyyy-MM-dd HH.mm.ss}{SavedMatchesPage.FileExtension}");
 
-		await File.WriteAllTextAsync(path, csvData);
+		try {
+			await File.WriteAllTextAsync(path, csvData);
+
+		} catch {
+			ErrorPresenter.DisplayError(
+				"Match Data Could Not Be Saved", 
+				"A file could not be created to store the scouting data.");
+		}
 
 		await StartNewMatch();
 	}
@@ -140,6 +148,23 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		await File.WriteAllTextAsync(scoutFilePath, Scout);
 	}
 
+	private static void EnsureMatchDataDirectoryExists() {
+
+		if (Directory.Exists(SavedMatchesPage.MatchFileDirectoryPath)) {
+			return;
+		}
+
+		try {
+			Directory.CreateDirectory(SavedMatchesPage.MatchFileDirectoryPath);
+
+		} catch {
+			ErrorPresenter.DisplayError(
+				"Match Data Directory Could Not Be Created", 
+				"For unknown reasons the directory for holding scouting data could not be created. " +
+				"Because of this match data will not be able to be saved. " +
+				"Contact the creators of the CCSS to alert them of this problem.");
+		}
+	}
 
 
 	public event PropertyChangedEventHandler? PropertyChanged;
