@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
@@ -25,8 +26,9 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	private const string FileExtension = ".csvl";
 
 
-
+	private static readonly Mutex RefreshMutex = new();
 	private bool IsActuallyRefreshing;
+
 	private bool _IsRefreshing;
 	public bool IsRefreshing {
 		get => _IsRefreshing;
@@ -42,14 +44,15 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	public MainPage() {
 
-		InitializeComponent();
 		BindingContext = this;
+		InitializeComponent();
 	}
 
 
 
-	private async void MainPage_OnLoaded(object? sender, EventArgs e) {
-		await Refresh();
+	private void MainPage_OnLoaded(object? sender, EventArgs e) {
+
+		Task _ = Refresh();
 	}
 
 	private async void ScanNewMatchButton_OnClicked(object? sender, EventArgs e) {
@@ -82,23 +85,24 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private async Task Refresh() {
 
-		await Dispatcher.DispatchAsync(async () => {
+		await Dispatcher.DispatchAsync(RefreshMutex.WaitOne);
 
-			if (IsActuallyRefreshing) {
-				return;
-			}
+		if (IsActuallyRefreshing) {
+			return;
+		}
 
-			IsRefreshing = true;
-			IsActuallyRefreshing = true;
+		IsRefreshing = true;
+		IsActuallyRefreshing = true;
 
-			ScannedMatches.Clear();
-			foreach (ScannedMatch match in await GetScannedMatchesFromFiles()) {
-				ScannedMatches.Add(match);
-			}
+		await Dispatcher.DispatchAsync(RefreshMutex.ReleaseMutex);
 
-			IsActuallyRefreshing = false;
-			IsRefreshing = false;
-		});
+		ScannedMatches.Clear();
+		foreach (ScannedMatch match in await GetScannedMatchesFromFiles()) {
+			ScannedMatches.Add(match);
+		}
+
+		IsRefreshing = false;
+		IsActuallyRefreshing = false;
 	}
 
 	private async Task AddMatch(ScannedMatch match) {
