@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
@@ -21,7 +22,9 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 	public static readonly string MatchFileDirectoryPath = Path.Combine(FileSystem.Current.CacheDirectory, "MatchData");
 	public const string FileExtension = ".csvl";
 
+	private static readonly Mutex RefreshMutex = new();
 	private bool IsActuallyRefreshing;
+
 	private bool _IsRefreshing;
 	public bool IsRefreshing {
 		get => _IsRefreshing;
@@ -44,23 +47,24 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 	private async Task Refresh() {
 
-		await Dispatcher.DispatchAsync(async () => {
+		await Dispatcher.DispatchAsync(RefreshMutex.WaitOne);
 
-			if (IsActuallyRefreshing) {
-				return;
-			}
+		if (IsActuallyRefreshing) {
+			return;
+		}
 
-			IsRefreshing = false;
-			IsActuallyRefreshing = true;
+		IsRefreshing = true;
+		IsActuallyRefreshing = true;
 
-			SavedMatches.Clear();
-			foreach (SerializedMatch match in await GetSavedGetScannedMatchesFromFiles()) {
-				SavedMatches.Add(match);
-			}
+		await Dispatcher.DispatchAsync(RefreshMutex.ReleaseMutex);
 
-			IsActuallyRefreshing = false;
-			IsRefreshing = false;
-		});
+		SavedMatches.Clear();
+		foreach (SerializedMatch match in await GetSavedGetScannedMatchesFromFiles()) {
+			SavedMatches.Add(match);
+		}
+
+		IsRefreshing = false;
+		IsActuallyRefreshing = false;
 	}
 
 	private static async Task<SerializedMatch[]> GetSavedGetScannedMatchesFromFiles() {

@@ -5,7 +5,7 @@
 			 xmlns:views="clr-namespace:QrCodeScanner.Views"
 			 x:Class="QrCodeScanner.Views.MainPage"
 			 x:DataType="views:MainPage"
-			 Loaded="MainPage_OnLoaded">
+			 NavigatedTo="MainPage_OnLoaded">
 
 	<Grid>
 
