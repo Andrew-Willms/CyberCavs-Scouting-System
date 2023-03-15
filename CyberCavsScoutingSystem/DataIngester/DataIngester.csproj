@@ -20,11 +20,11 @@
 		<ApplicationIdGuid>7e650c6c-9308-4c5c-88b2-de79d626941c</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<Version>1.1.1</Version>
-		<VersionPrefix>RC</VersionPrefix>
+		<!--<Version>1.1.1</Version>
+		<VersionPrefix>RC</VersionPrefix>-->
 		<!--<VersionSuffix>RC</VersionSuffix>-->
-		<ApplicationDisplayVersion>1.0.22</ApplicationDisplayVersion>
-		<ApplicationVersion>69</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
