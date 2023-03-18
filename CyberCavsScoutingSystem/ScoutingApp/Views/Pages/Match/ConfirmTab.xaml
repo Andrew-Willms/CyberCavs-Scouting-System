@@ -14,6 +14,21 @@
 			Margin="10"
 			Spacing="10">
 
+			<HorizontalStackLayout Spacing="10">
+
+				<Button
+					Text="Save"
+					IsEnabled="{Binding Path=MatchIstValid}"
+					HorizontalOptions="Start"
+					Clicked="SaveButton_OnClicked"/>
+
+				<Button
+					Text="Discard Match"
+					HorizontalOptions="Start"
+					Clicked="DiscardButton_OnClicked"/>
+
+			</HorizontalStackLayout>
+
 			<CollectionView
 				ItemsSource="{Binding Path=Errors}">
 
@@ -31,17 +46,6 @@
 				</CollectionView.ItemTemplate>
 
 			</CollectionView>
-
-			<Button
-				Text="Save"
-				IsEnabled="{Binding Path=MatchIstValid}"
-				HorizontalOptions="Start"
-				Clicked="SaveButton_OnClicked"/>
-
-			<Button
-				Text="Discard Match"
-				HorizontalOptions="Start"
-				Clicked="DiscardButton_OnClicked"/>
 
 		</VerticalStackLayout>
 
