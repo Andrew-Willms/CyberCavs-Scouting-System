@@ -121,7 +121,7 @@ public class GameSpec {
 			$"{nameof(MatchDataCollector.IsPlayoff).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.Alliance).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.TeamNumber).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.Time).ToCsvFriendly()}"
+			$"{nameof(MatchDataCollector.Time).ToCsvFriendly()},"
 		);
 
 		DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));
