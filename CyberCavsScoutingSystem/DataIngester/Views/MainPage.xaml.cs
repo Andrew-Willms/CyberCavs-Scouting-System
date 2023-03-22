@@ -169,9 +169,25 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 		newMatchData.Foreach(x => log($"Writing match data from \"{x.sourceDirectory.Path}\" to \"{targetFilePath}\"."));
 
+		string? targetFileDirectory;
 		try {
+			targetFileDirectory = Path.GetDirectoryName(targetFilePath);
+		} catch {
+			log($"The target file path \"{targetFilePath}\" is invalid.");
+			return;
+		}
 
-			System.IO.Directory.CreateDirectory(targetFilePath);
+		try {
+			if (targetFileDirectory is not null) {
+				System.IO.Directory.CreateDirectory(targetFilePath);
+			}
+
+		} catch {
+			log($"The directory of the target file \"{targetFileDirectory}\" could not be created.");
+			return;
+		}
+
+		try {
 
 			string fileContents = await File.ReadAllTextAsync(targetFilePath);
 
