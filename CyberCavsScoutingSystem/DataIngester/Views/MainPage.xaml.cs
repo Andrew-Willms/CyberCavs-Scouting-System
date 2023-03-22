@@ -55,7 +55,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 		SourceDirectories.Add(new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
 		SourceDirectories.Add(new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
-		SourceDirectories.Add(new() { Path = @"\First's Galaxy S9+\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
+		SourceDirectories.Add(new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
 
 		Dispatcher.StartTimer(new(0, 0, 0, 1), () => {
 			Dispatcher.DispatchAsync(async () => await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger));
@@ -170,6 +170,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		newMatchData.Foreach(x => log($"Writing match data from \"{x.sourceDirectory.Path}\" to \"{targetFilePath}\"."));
 
 		try {
+
+			System.IO.Directory.CreateDirectory(targetFilePath);
 
 			string fileContents = await File.ReadAllTextAsync(targetFilePath);
 
