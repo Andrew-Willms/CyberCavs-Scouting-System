@@ -112,6 +112,24 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 			GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
 
+			string? targetFileDirectory;
+			try {
+				targetFileDirectory = Path.GetDirectoryName(targetFilePath);
+			} catch {
+				log($"The target file path \"{targetFilePath}\" is invalid.");
+				return null;
+			}
+
+			try {
+				if (targetFileDirectory is not null) {
+					System.IO.Directory.CreateDirectory(targetFileDirectory);
+				}
+
+			} catch {
+				log($"The directory of the target file \"{targetFileDirectory}\" could not be created.");
+				return null;
+			}
+
 			try {
 				await File.WriteAllTextAsync(targetFilePath, gameSpec.GetCsvHeaders());
 
@@ -168,24 +186,6 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		ReadOnlyList<(Directory sourceDirectory, string fileContents)> newMatchData, Action<string> log) {
 
 		newMatchData.Foreach(x => log($"Writing match data from \"{x.sourceDirectory.Path}\" to \"{targetFilePath}\"."));
-
-		string? targetFileDirectory;
-		try {
-			targetFileDirectory = Path.GetDirectoryName(targetFilePath);
-		} catch {
-			log($"The target file path \"{targetFilePath}\" is invalid.");
-			return;
-		}
-
-		try {
-			if (targetFileDirectory is not null) {
-				System.IO.Directory.CreateDirectory(targetFilePath);
-			}
-
-		} catch {
-			log($"The directory of the target file \"{targetFileDirectory}\" could not be created.");
-			return;
-		}
 
 		try {
 
