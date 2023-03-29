@@ -5,11 +5,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CCSSDomain.GameSpecification;
 using DataIngester.Services;
 using MediaDevices;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Dispatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 
@@ -40,10 +42,17 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	public bool RemoveButtonEnabled => SelectedDirectory is not null;
 
-	public ObservableCollection<Directory> SourceDirectories { get; } = new();
+	public ObservableCollection<Directory> SourceDirectories { get; } = new() {
+		new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" },
+		new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" },
+		new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" }
+	};
 
 	public ObservableCollection<string> LogMessages { get; } = new();
 	private Action<string> Logger => text => LogMessages.Add(DateTime.Now + ": " + text);
+
+	private static bool AlreadyAccessingDevices = false;
+	private static readonly Mutex AlreadyAccessingDevicesMutex = new();
 
 
 
@@ -52,14 +61,10 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		InitializeComponent();
 		BindingContext = this;
 
-		SourceDirectories.Add(new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
-		SourceDirectories.Add(new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
-		SourceDirectories.Add(new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
-
 		Task.Run(async () => {
 
 			while (true) {
-				await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger);
+				await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger, Dispatcher);
 				await Task.Delay(new TimeSpan(0, 0, 0, 2));
 			}
 		});
@@ -79,7 +84,17 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	private static async Task RunBackgroundTask(ReadOnlyList<Directory> sourceDirectories, string targetFilePath, Action<string> log) {
+	private static async Task RunBackgroundTask(ReadOnlyList<Directory> sourceDirectories, string targetFilePath, Action<string> log, IDispatcher dispatcher) {
+
+		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.WaitOne);
+
+		if (AlreadyAccessingDevices) {
+			return;
+		}
+
+		AlreadyAccessingDevices = true;
+
+		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.ReleaseMutex);
 
 		UpdateSourceDirectoryAccessibilities(sourceDirectories);
 
@@ -93,6 +108,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
 
 		await WriteMatchDataToTargetFile(targetFilePath, matchDataFromDevices.ToReadOnly(), log);
+
+		AlreadyAccessingDevices = false;
 	}
 
 	private static void UpdateSourceDirectoryAccessibilities(IEnumerable<Directory> sourceDirectories) {
