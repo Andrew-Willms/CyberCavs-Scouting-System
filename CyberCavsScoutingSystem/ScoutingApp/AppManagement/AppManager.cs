@@ -117,7 +117,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		bool discard = await Shell.Current.DisplayAlert(
 			"Discard Current Match?",
 			"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
-			"Discard and start new.",
+			"Discard and start new match.",
 			"Continue with current match.");
 
 		if (!discard) {
