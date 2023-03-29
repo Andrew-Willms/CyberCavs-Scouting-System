@@ -10,7 +10,6 @@ using CCSSDomain.GameSpecification;
 using DataIngester.Services;
 using MediaDevices;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Dispatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 
@@ -57,18 +56,24 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		SourceDirectories.Add(new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
 		SourceDirectories.Add(new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
 
-		Dispatcher.StartTimer(new(0, 0, 0, 1), () => {
-			Dispatcher.DispatchAsync(async () => await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger));
-			return true;
+		Task.Run(async () => {
+
+			while (true) {
+				await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger);
+				await Task.Delay(new TimeSpan(0, 0, 0, 2));
+			}
 		});
 
-		Dispatcher.StartTimer(new(0, 0, 0, 1), () => {
+		Task.Run(async () => {
 
-			while (LogMessages.Count > 100) {
-				LogMessages.RemoveAt(0);
+			while (true) {
+
+				if (LogMessages.Count > 100) {
+					LogMessages.RemoveAt(0);
+				}
+
+				await Task.Delay(new TimeSpan(0, 0, 0, 2));
 			}
-
-			return true;
 		});
 	}
 
