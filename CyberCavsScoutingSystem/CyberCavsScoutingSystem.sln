@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiUtilities", "MauiUtilit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrCodeScanner", "QrCodeScanner\QrCodeScanner.csproj", "{70924D49-D995-4FC8-AD08-7C90D7816E29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataIngester", "DataIngester\DataIngester.csproj", "{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataIngester", "DataIngester\DataIngester.csproj", "{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluetoothTest", "BluetoothTest\BluetoothTest.csproj", "{414491A1-3E0D-4208-B591-05DCA1AA376A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,12 @@ Global
 		{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
