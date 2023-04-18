@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CCSSDomain.GameSpecification;
 using DataIngester.Services;
@@ -41,10 +42,17 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	public bool RemoveButtonEnabled => SelectedDirectory is not null;
 
-	public ObservableCollection<Directory> SourceDirectories { get; } = new();
+	public ObservableCollection<Directory> SourceDirectories { get; } = new() {
+		new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" },
+		new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" },
+		new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" }
+	};
 
 	public ObservableCollection<string> LogMessages { get; } = new();
 	private Action<string> Logger => text => LogMessages.Add(DateTime.Now + ": " + text);
+
+	private static bool AlreadyAccessingDevices = false;
+	private static readonly Mutex AlreadyAccessingDevicesMutex = new();
 
 
 
@@ -53,26 +61,40 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		InitializeComponent();
 		BindingContext = this;
 
-		SourceDirectories.Add(new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" });
+		Task.Run(async () => {
 
-		Dispatcher.StartTimer(new(0, 0, 0, 1), () => {
-			Dispatcher.DispatchAsync(async () => await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger));
-			return true;
+			while (true) {
+				await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger, Dispatcher);
+				await Task.Delay(new TimeSpan(0, 0, 0, 2));
+			}
 		});
 
-		Dispatcher.StartTimer(new(0, 0, 0, 1), () => {
+		Task.Run(async () => {
 
-			while (LogMessages.Count > 100) {
-				LogMessages.RemoveAt(0);
+			while (true) {
+
+				if (LogMessages.Count > 100) {
+					LogMessages.RemoveAt(0);
+				}
+
+				await Task.Delay(new TimeSpan(0, 0, 0, 2));
 			}
-
-			return true;
 		});
 	}
 
 
 
-	private static async Task RunBackgroundTask(ReadOnlyList<Directory> sourceDirectories, string targetFilePath, Action<string> log) {
+	private static async Task RunBackgroundTask(ReadOnlyList<Directory> sourceDirectories, string targetFilePath, Action<string> log, IDispatcher dispatcher) {
+
+		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.WaitOne);
+
+		if (AlreadyAccessingDevices) {
+			return;
+		}
+
+		AlreadyAccessingDevices = true;
+
+		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.ReleaseMutex);
 
 		UpdateSourceDirectoryAccessibilities(sourceDirectories);
 
@@ -86,6 +108,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
 
 		await WriteMatchDataToTargetFile(targetFilePath, matchDataFromDevices.ToReadOnly(), log);
+
+		AlreadyAccessingDevices = false;
 	}
 
 	private static void UpdateSourceDirectoryAccessibilities(IEnumerable<Directory> sourceDirectories) {
@@ -109,6 +133,24 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 			}
 
 			GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
+
+			string? targetFileDirectory;
+			try {
+				targetFileDirectory = Path.GetDirectoryName(targetFilePath);
+			} catch {
+				log($"The target file path \"{targetFilePath}\" is invalid.");
+				return null;
+			}
+
+			try {
+				if (targetFileDirectory is not null) {
+					System.IO.Directory.CreateDirectory(targetFileDirectory);
+				}
+
+			} catch {
+				log($"The directory of the target file \"{targetFileDirectory}\" could not be created.");
+				return null;
+			}
 
 			try {
 				await File.WriteAllTextAsync(targetFilePath, gameSpec.GetCsvHeaders());

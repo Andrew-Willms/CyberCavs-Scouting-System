@@ -19,7 +19,7 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
 
 	public Func<ScannedMatch, Task> ScanAdder { get; init; } = null!;
 
-	public bool CanSave => QrCodeData != "";
+	public bool CanSave => QrCodeData != "" && !QrCodeData.All(character => character is '0');
 
 	private string _QrCodeData = "";
 	public string QrCodeData {

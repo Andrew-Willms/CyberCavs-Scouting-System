@@ -196,6 +196,17 @@ public static class CollectionExtensions {
 		}
 	}
 
+	public static void PruneEntriesFrom<T1, T2>(this List<T1> list, IEnumerable<T2> other, Func<T2, T1> selector) {
+
+		IEnumerable<T1> transformedOther = other.Select(selector).ToArray();
+
+		T1[] duplicates = list.Where(transformedOther.Contains).ToArray();
+
+		foreach (T1 item in duplicates) {
+			list.Remove(item);
+		}
+	}
+
 	public static void PruneToUnionAndDispose<T>(this List<T> list, IEnumerable<T> other) where T : IDisposable {
 
 		T[] uniqueValuesInList = list.Where(item => !other.Contains(item)).ToArray();
