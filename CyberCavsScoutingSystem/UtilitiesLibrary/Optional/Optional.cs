@@ -57,6 +57,11 @@ public class Optional<T> {
 		return NoValue;
 	}
 
+	public static implicit operator Optional<T>(T value) {
+
+		return new(value);
+	}
+
 
 
 	private bool Equals(Optional<T> other) {
