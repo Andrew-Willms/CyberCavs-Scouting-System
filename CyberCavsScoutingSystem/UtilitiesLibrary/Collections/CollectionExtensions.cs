@@ -54,6 +54,7 @@ public static class CollectionExtensions {
 		return enumerable.Select(selector).Where(x => x is not null);
 	}
 
+	// todo rename selector to transformer?
 	public static IEnumerable<TTarget> SelectIfHasValue<TCollection, TTarget>
 		(this IEnumerable<TCollection> enumerable, Func<TCollection, Optional<TTarget>> selector) {
 
