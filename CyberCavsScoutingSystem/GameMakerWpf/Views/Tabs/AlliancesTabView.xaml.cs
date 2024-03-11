@@ -41,7 +41,7 @@ public partial class AlliancesTabView : AppManagerDependent, INotifyPropertyChan
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}
 	}
-
+	
 	public bool RemoveButtonIsEnabled => _SelectedAlliance is not null;
 
 
