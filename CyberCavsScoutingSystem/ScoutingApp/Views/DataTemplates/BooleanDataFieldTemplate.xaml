@@ -14,9 +14,7 @@
 			HorizontalTextAlignment="Center"
 			VerticalTextAlignment="Center"/>
 
-		<CheckBox 
-			IsChecked="{Binding Path=Value}"
-			MinimumHeightRequest="200"/>
+		<CheckBox IsChecked="{Binding Path=Value}"/>
 
 	</VerticalStackLayout>
 

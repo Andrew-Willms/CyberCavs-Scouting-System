@@ -1,0 +1,125 @@
+{
+  "$type": "CCSSDomain.GameSpecification.GameSpec, CCSSDomain",
+  "Version": {
+    "$type": "CCSSDomain.GameSpecification.Version, CCSSDomain",
+    "MajorNumber": 1,
+    "MinorNumber": 0,
+    "PatchNumber": 0,
+    "Name": "",
+    "Description": ""
+  },
+  "VersionReleaseDate": "2024-03-12T16:27:48.593529-04:00",
+  "Name": "Reliable Space",
+  "Description": "",
+  "Year": 2024,
+  "RobotsPerAlliance": 3,
+  "AlliancesPerMatch": 2,
+  "Alliances": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.Alliance, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.Alliance[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.Alliance, CCSSDomain",
+          "Name": "Red Alliance",
+          "Color": "255, 0, 0"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.Alliance, CCSSDomain",
+          "Name": "Blue Alliance",
+          "Color": "0, 0, 255"
+        }
+      ]
+    }
+  },
+  "DataFields": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.DataFieldSpecBase, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.DataFieldSpecBase[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "InitialValue": true,
+          "Name": "Boolean Data Field"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.TextDataFieldSpec, CCSSDomain",
+          "InitialValue": "initial value",
+          "MustNotBeEmpty": false,
+          "MustNotBeInitialValue": false,
+          "Name": "Text Data Field"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 1,
+          "MinValue": -10,
+          "MaxValue": 100,
+          "Name": "Integer Data Field"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Option 1",
+                "Option 2"
+              ]
+            }
+          },
+          "Name": "Selection Data Field"
+        }
+      ]
+    }
+  },
+  "SetupTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": []
+    }
+  },
+  "AutoTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Boolean Data Field",
+          "Label": "Boolean"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Text Data Field",
+          "Label": "Text"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Integer Data Field",
+          "Label": "Integer"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Selection Data Field",
+          "Label": "Selection"
+        }
+      ]
+    }
+  },
+  "TeleTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": []
+    }
+  },
+  "EndgameTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": []
+    }
+  }
+}

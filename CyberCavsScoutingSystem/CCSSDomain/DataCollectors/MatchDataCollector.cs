@@ -38,7 +38,7 @@ public class MatchDataCollector {
 
 		GameSpecification = gameSpecification;
 
-		DataFields = GameSpecification.DataFields.Select(DataField.FromSpec).ToReadOnly();
+		DataFields = GameSpecification.DataFields.Select(x => x.ToDataField()).ToReadOnly();
 
 		SetupTabInputs = GameSpecification.SetupTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
 		AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();

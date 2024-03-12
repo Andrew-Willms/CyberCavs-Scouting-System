@@ -129,7 +129,7 @@
 					<ContentPresenter.Resources>
 
 						<DataTemplate DataType="{x:Type dataFieldEditors:BooleanDataFieldEditor}">
-							<dataField:TextDataFieldView/>
+							<dataField:BooleanDataFieldView/>
 						</DataTemplate>
 
 						<DataTemplate DataType="{x:Type dataFieldEditors:TextDataFieldEditor}">

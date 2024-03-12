@@ -16,35 +16,35 @@ public interface ISaver {
 
 	public interface ISaveResult : IResult {
 
-		public class Success : IResult.Success, ISaveResult { }
+		public class Success : IResult.Success, ISaveResult;
 
-		public class NoSaveLocationSpecified : Error, ISaveResult { }
+		public class NoSaveLocationSpecified : Error, ISaveResult;
 
-		public class GameEditingDataCouldNotBeConvertedToSaveData : Error, ISaveResult { }
+		public class GameEditingDataCouldNotBeConvertedToSaveData : Error, ISaveResult;
 
-		public class SaveLocationInaccessible : Error, ISaveResult { }
+		public class SaveLocationInaccessible : Error, ISaveResult;
 
 	}
 
 	public interface ISaveAsResult : IResult {
 
-		public class Success : IResult.Success, ISaveAsResult { }
+		public class Success : IResult.Success, ISaveAsResult;
 
-		public class Aborted : Error, ISaveAsResult { }
+		public class Aborted : Error, ISaveAsResult;
 
-		public class SaveLocationIsInvalid : Error, ISaveAsResult { }
+		public class SaveLocationIsInvalid : Error, ISaveAsResult;
 
 	}
 
 	public interface IOpenResult : IResult<GameEditingData> {
 
-		public class Success : IResult<GameEditingData>.Success, IOpenResult { }
+		public class Success : IResult<GameEditingData>.Success, IOpenResult;
 
-		public class Aborted : Error, IOpenResult { }
+		public class Aborted : Error, IOpenResult;
 
-		public class SaveLocationInaccessible : Error, IOpenResult { }
+		public class SaveLocationInaccessible : Error, IOpenResult;
 		
-		public class SavedDataCouldNotBeConvertedToGameEditingData : Error, IOpenResult { }
+		public class SavedDataCouldNotBeConvertedToGameEditingData : Error, IOpenResult;
 
 	}
 

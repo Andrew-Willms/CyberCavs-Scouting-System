@@ -43,15 +43,6 @@ public partial class DataField : OneOfBase<BooleanDataField, TextDataField, Inte
 		integerDataField => integerDataField,
 		selectionDataField => selectionDataField);
 
-	public static DataField FromSpec(DataFieldSpec dataFieldSpec) {
-
-		return dataFieldSpec.Match<DataField>(
-			booleanDataFieldSpec => new BooleanDataField(booleanDataFieldSpec),
-			textDataFieldSpec => new TextDataField(textDataFieldSpec),
-			integerDataFieldSpec => new IntegerDataField(integerDataFieldSpec),
-			selectionDataFieldSpec => new SelectionDataField(selectionDataFieldSpec));
-	}
-
 }
 
 

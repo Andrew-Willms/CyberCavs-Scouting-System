@@ -97,7 +97,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 			booleanDataFieldEditor => new BooleanDataFieldEditingData {
 				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Text,
+				DataFieldType = DataFieldType.Boolean,
 				InitialValue = booleanDataFieldEditor.InitialValue.InputObject,
 			},
 

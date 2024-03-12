@@ -52,7 +52,8 @@ public partial class App : Application {
 
 		string fileContents;
 		try {
-			await using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync("ChargedUp.cgs");
+			//await using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync("ChargedUp.cgs");
+			await using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync("Test.cgs");
 			using StreamReader reader = new(fileStream);
 			fileContents = await reader.ReadToEndAsync();
 

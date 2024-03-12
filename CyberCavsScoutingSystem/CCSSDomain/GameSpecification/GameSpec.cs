@@ -24,7 +24,7 @@ public class GameSpec {
 
 	public required ReadOnlyList<Alliance> Alliances { get; init; }
 
-	public required ReadOnlyList<DataFieldSpec> DataFields { get; init; }
+	public required ReadOnlyList<DataFieldSpecBase> DataFields { get; init; }
 
 	public required ReadOnlyList<InputSpec> SetupTabInputs { get; init; }
 	public required ReadOnlyList<InputSpec> AutoTabInputs { get; init; }
@@ -101,7 +101,7 @@ public class GameSpec {
 				RobotsPerAlliance = robotsPerAlliance,
 				AlliancesPerMatch = alliancesPerMatch,
 				Alliances = alliances,
-				DataFields = dataFields,
+				DataFields = dataFields.Select(x => x.AsBase).ToReadOnly(),
 				SetupTabInputs = setupTabInputs,
 				AutoTabInputs = autoTabInputs,
 				TeleTabInputs = teleTabInputs,
@@ -124,7 +124,7 @@ public class GameSpec {
 			$"{nameof(MatchDataCollector.Time).ToCsvFriendly()},"
 		);
 
-		DataFields.Foreach(x => columnHeaders.Append($"{x.AsBase.Name.ToCsvFriendly()},"));
+		DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));
 
 		return columnHeaders.ToString();
 	}
