@@ -220,17 +220,17 @@ public class GameEditor {
 	}
 
 	public bool IsValid => Name.IsValid && 
-	                       Year.IsValid && 
-	                       Description.IsValid &&
-	                       Version.IsValid &&
-	                       RobotsPerAlliance.IsValid &&
-	                       AlliancesPerMatch.IsValid &&
-	                       Alliances.All(x => x.IsValid) &&
-	                       DataFields.All(x => x.IsValid) &&
-	                       SetupTabInputs.All(x => x.IsValid) &&
-	                       AutoTabInputs.All(x => x.IsValid) &&
-	                       TeleTabInputs.All(x => x.IsValid) &&
-	                       EndgameTabInputs.All(x => x.IsValid);
+						   Year.IsValid && 
+						   Description.IsValid &&
+						   Version.IsValid &&
+						   RobotsPerAlliance.IsValid &&
+						   AlliancesPerMatch.IsValid &&
+						   Alliances.All(x => x.IsValid) &&
+						   DataFields.All(x => x.IsValid) &&
+						   SetupTabInputs.All(x => x.IsValid) &&
+						   AutoTabInputs.All(x => x.IsValid) &&
+						   TeleTabInputs.All(x => x.IsValid) &&
+						   EndgameTabInputs.All(x => x.IsValid);
 
 	public IEditorToGameSpecificationResult<GameSpec> ToGameSpecification() {
 
@@ -238,45 +238,45 @@ public class GameEditor {
 			return new IEditorToGameSpecificationResult<GameSpec>.EditorIsInvalid();
 		}
 
-        IResult<GameSpec> creationResult = GameSpec.Create(
-            name: Name.OutputObject.Value,
-            year: Year.OutputObject.Value,
-            description: Description.OutputObject.Value,
-            version: Version.OutputObject.Value,
-            robotsPerAlliance: RobotsPerAlliance.OutputObject.Value,
-            alliancesPerMatch: AlliancesPerMatch.OutputObject.Value,
+		IResult<GameSpec> creationResult = GameSpec.Create(
+			name: Name.OutputObject.Value,
+			year: Year.OutputObject.Value,
+			description: Description.OutputObject.Value,
+			version: Version.OutputObject.Value,
+			robotsPerAlliance: RobotsPerAlliance.OutputObject.Value,
+			alliancesPerMatch: AlliancesPerMatch.OutputObject.Value,
 
-            alliances: Alliances.Select(x =>
-                (x.ToGameSpecification() as IEditorToGameSpecificationResult<Alliance>.Success)?.Value ??
-                throw new UnreachableException()).ToReadOnly(),
+			alliances: Alliances.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Alliance>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
 
-            dataFields: DataFields.Select(x =>
-                (x.ToGameSpecification() as IEditorToGameSpecificationResult<DataFieldSpec>.Success)?.Value ??
-                throw new UnreachableException()).ToReadOnly(),
+			dataFields: DataFields.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<DataFieldSpec>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
 
-            setupTabInputs: SetupTabInputs.Select(x =>
-                (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-                throw new UnreachableException()).ToReadOnly(),
+			setupTabInputs: SetupTabInputs.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
 
-            autoTabInputs: AutoTabInputs.Select(x =>
-                (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-                throw new UnreachableException()).ToReadOnly(),
+			autoTabInputs: AutoTabInputs.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
 
-            teleTabInputs: TeleTabInputs.Select(x =>
-                (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-                throw new UnreachableException()).ToReadOnly(),
+			teleTabInputs: TeleTabInputs.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly(),
 
-            endgameTabInputs: EndgameTabInputs.Select(x =>
-                (x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-                throw new UnreachableException()).ToReadOnly()
-        );
+			endgameTabInputs: EndgameTabInputs.Select(x =>
+				(x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
+				throw new UnreachableException()).ToReadOnly()
+		);
 
-        return creationResult switch {
+		return creationResult switch {
 			IResult<GameSpec>.Success success => new IEditorToGameSpecificationResult<GameSpec>.Success { Value = success.Value },
 			IResult<GameSpec>.Error => new IEditorToGameSpecificationResult<GameSpec>.EditorIsInvalid(),
-            _ => throw new UnreachableException()
-        };
-    }
+			_ => throw new UnreachableException()
+		};
+	}
 
 }
 

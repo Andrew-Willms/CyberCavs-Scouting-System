@@ -46,7 +46,7 @@ public class Optional<T> {
 		_Value = value;
 	}
 
-	private static readonly Optional<T> NoValue = new();
+	public static readonly Optional<T> NoValue = new();
 
 	public static implicit operator Optional<T>(Optional noValue) {
 

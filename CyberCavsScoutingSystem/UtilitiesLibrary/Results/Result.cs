@@ -5,11 +5,11 @@ namespace UtilitiesLibrary.Results;
 
 
 
-public abstract class Success { }
+public abstract class Success;
 
 public abstract class Error {
 
-	public virtual string Message { get; init; } = string.Empty;
+	public string Message { get; init; } = string.Empty;
 
 	public Optional<Error> InnerError { get; init; } = Optional.Optional.NoValue;
 
@@ -32,11 +32,28 @@ public abstract class Error {
 
 
 
+public class Test {
+
+	public void TestTest() {
+
+		IResult<int> test1 = ResultFunction();
+
+		IResult test2 = ResultFunction();
+
+	}
+
+	private static IResult<int> ResultFunction() {
+
+		return null!;
+	}
+
+}
+
 public interface IResult {
 
-	public class Success : Results.Success, IResult { }
+	public class Success : Results.Success, IResult;
 
-	public class Error : Results.Error, IResult { }
+	public class Error : Results.Error, IResult;
 
 }
 

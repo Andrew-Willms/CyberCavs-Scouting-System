@@ -127,10 +127,22 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 			IResult<GameSpec> result = await App.GetGameSpec();
 
-			if (result is IResult<GameSpec>.Error error) {
-				log($"Error while parsing game specification file: \"{error.Message}\"");
-				return null;
+			switch (result) {
+				case IResult<GameSpec>.Error error:
+					log($"Error while parsing game specification file: \"{error.Message}\"");
+					return null;
+
+				case GameSpec test:
+					throw new NotImplementedException();
+
+				default:
+					throw new UnreachableException();
 			}
+
+			//if (result is IResult<GameSpec>.Error error) {
+			//	log($"Error while parsing game specification file: \"{error.Message}\"");
+			//	return null;
+			//}
 
 			GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
 
