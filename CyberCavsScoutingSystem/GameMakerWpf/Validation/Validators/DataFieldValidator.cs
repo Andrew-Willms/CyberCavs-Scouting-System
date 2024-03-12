@@ -50,8 +50,42 @@ public static class DataFieldValidator {
 	}
 }
 
+public static class TextDataFieldValidator {
+
+	public static (Optional<string>, ReadOnlyList<Error>) DefaultValueConverter(string inputString) {
+
+		NullInputObjectInConverterException.ThrowIfNull(inputString);
+
+		return (inputString.Optionalize(), ReadOnlyList.Empty);
+	}
+
+	public static (Optional<string>, ReadOnlyList<Error>) DefaultValueInverter(string name) {
+
+		NullInputObjectInInverterException.ThrowIfNull(name);
+
+		return (name.Optionalize(), ReadOnlyList.Empty);
+	}
+
+}
+
+public static class IntegerDataFieldValidator {
+
+	public static (Optional<int>, ReadOnlyList<Error>) IntegerValueConverter(string inputString) {
+
+		NullInputObjectInConverterException.ThrowIfNull(inputString);
+
+		return StringConversion.ToInt(inputString, DataFieldValidationData.IntegerValue.ConversionErrorSet);
+	}
+
+	public static (Optional<string>, ReadOnlyList<Error>) IntegerValueInverter(int integerValue) {
+
+		return (integerValue.ToString().Optionalize(), ReadOnlyList.Empty);
+	}
+
+}
+
 public static class SelectionDataFieldValidator {
-	
+
 	public static (Optional<string>, ReadOnlyList<Error>) OptionNameConverter(string inputString) {
 
 		NullInputObjectInConverterException.ThrowIfNull(inputString);
@@ -82,22 +116,6 @@ public static class SelectionDataFieldValidator {
 			>= DataFieldValidationData.Option.UpperAdvisoryThreshold => DataFieldValidationData.Name.Length.TooLongAdvisory.ReadOnlyListify(),
 			_ => ReadOnlyList.Empty
 		};
-	}
-
-}
-
-public static class IntegerDataFieldValidator {
-
-	public static (Optional<int>, ReadOnlyList<Error>) IntegerValueConverter(string inputString) {
-
-		NullInputObjectInConverterException.ThrowIfNull(inputString);
-
-		return StringConversion.ToInt(inputString, DataFieldValidationData.IntegerValue.ConversionErrorSet);
-	}
-
-	public static (Optional<string>, ReadOnlyList<Error>) IntegerValueInverter(int integerValue) {
-
-		return (integerValue.ToString().Optionalize(), ReadOnlyList.Empty);
 	}
 
 }

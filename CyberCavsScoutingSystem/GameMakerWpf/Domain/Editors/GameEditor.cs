@@ -171,7 +171,7 @@ public class GameEditor {
 		}.CreateSingleInput();
 
 		initialValues.Alliances.Foreach(Alliances.Add);
-		initialValues.DataFields.Foreach(DataFields.Add);
+		initialValues.DataFields.Select(x => x.ToOneOf()).Foreach(DataFields.Add);
 
 		initialValues.SetupTabInputs.Foreach(SetupTabInputs.Add);
 		initialValues.AutoTabInputs.Foreach(AutoTabInputs.Add);
@@ -209,7 +209,7 @@ public class GameEditor {
 			AlliancesPerMatch = AlliancesPerMatch.InputObject,
 
 			Alliances = Alliances.Select(x => x.ToEditingData()).ToReadOnly(),
-			DataFields = DataFields.Select(x => x.ToEditingData()).ToReadOnly(),
+			DataFields = DataFields.Select(x => x.ToEditingData().AsBase).ToReadOnly(),
 
 			SetupTabInputs = SetupTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
 			AutoTabInputs = AutoTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),

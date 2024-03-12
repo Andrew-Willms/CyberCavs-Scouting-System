@@ -9,6 +9,7 @@ using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation.Inputs;
 using static CCSSDomain.GameSpecification.DataFieldSpec;
+using static GameMakerWpf.Domain.Editors.IEditorToGameSpecificationResult<CCSSDomain.GameSpecification.DataFieldSpec>;
 
 namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
@@ -22,6 +23,8 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 	public DataFieldTypeEditor DataFieldTypeEditor { get; private set; }
 
+	public DataFieldTypeEditorBase DataFieldTypeEditorBase => DataFieldTypeEditor.AsBase;
+
 	private DataFieldType _DataFieldType;
 	public DataFieldType DataFieldType {
 		get => _DataFieldType;
@@ -34,7 +37,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 			_DataFieldType = value;
 			ChangeDataFieldType(value);
 			OnPropertyChanged(nameof(DataFieldType));
-			OnPropertyChanged(nameof(DataFieldTypeEditor));
+			OnPropertyChanged(nameof(DataFieldTypeEditorBase));
 		}
 	}
 
@@ -47,8 +50,8 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		DataFieldType = initialValues.AsBase.DataFieldType;
 
 		DataFieldTypeEditor = initialValues.Match<DataFieldTypeEditor>(
-			booleanDataFieldEditingData => new BooleanDataFieldEditor(),
-			textDataFieldEditingData => new TextDataFieldEditor(),
+			booleanDataFieldEditingData => new BooleanDataFieldEditor(GameEditor, booleanDataFieldEditingData),
+			textDataFieldEditingData => new TextDataFieldEditor(GameEditor, textDataFieldEditingData),
 			integerDataField => new IntegerDataFieldEditor(GameEditor, integerDataField),
 			selectionDataField => new SelectionDataFieldEditor(GameEditor, selectionDataField)
 		);
@@ -67,7 +70,8 @@ public class DataFieldEditor : INotifyPropertyChanged {
 	private void ChangeDataFieldType(DataFieldType dataFieldType) {
 
 		DataFieldTypeEditor = dataFieldType switch {
-			DataFieldType.Text => new TextDataFieldEditor(),
+			DataFieldType.Boolean => new BooleanDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultBooleanDataFieldEditingData),
+			DataFieldType.Text => new TextDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultTextDataFieldEditingData),
 			DataFieldType.Selection => new SelectionDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultSelectionDataFieldEditingData),
 			DataFieldType.Integer => new IntegerDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultIntegerDataFieldEditingData),
 			_ => throw new UnreachableException()
@@ -89,20 +93,23 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 	public DataFieldEditingData ToEditingData() {
 
-		return DataFieldTypeEditor switch {
+		return DataFieldTypeEditor.Match<DataFieldEditingData>(
 
-			TextDataFieldEditor => new TextDataFieldEditingData {
+			booleanDataFieldEditor => new BooleanDataFieldEditingData {
 				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Text
+				DataFieldType = DataFieldType.Text,
+				InitialValue = booleanDataFieldEditor.InitialValue.InputObject,
 			},
 
-			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldEditingData {
+			textDataFieldEditor => new TextDataFieldEditingData {
 				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Selection,
-				OptionNames = selectionDataFieldEditor.Options.Select(x => x.InputObject).ToReadOnly()
+				DataFieldType = DataFieldType.Text,
+				InitialValue = textDataFieldEditor.InitialValue.InputObject,
+				MustNotBeEmpty = textDataFieldEditor.MustNotBeInitialValue.InputObject,
+				MustNotBeInitialValue = textDataFieldEditor.MustNotBeInitialValue.InputObject
 			},
 
-			IntegerDataFieldEditor integerDataFieldEditor => new IntegerDataFieldEditingData {
+			integerDataFieldEditor => new IntegerDataFieldEditingData {
 				Name = Name.InputObject,
 				DataFieldType = DataFieldType.Integer,
 				InitialValue = integerDataFieldEditor.InitialValue.InputObject,
@@ -110,54 +117,67 @@ public class DataFieldEditor : INotifyPropertyChanged {
 				MaxValue = integerDataFieldEditor.MaxValue.InputObject
 			},
 
-			_ => throw new UnreachableException()
-		};
+			selectionDataFieldEditor => new SelectionDataFieldEditingData {
+				Name = Name.InputObject,
+				DataFieldType = DataFieldType.Selection,
+				OptionNames = selectionDataFieldEditor.Options.Select(x => x.InputObject).ToReadOnly()
+			}
+		);
 	}
 
 	public bool IsValid {
 		get {
-			return Name.IsValid && DataFieldTypeEditor switch {
-
-				TextDataFieldEditor => true,
-
-				SelectionDataFieldEditor selectionDataFieldEditor => selectionDataFieldEditor.Options.All(x => x.IsValid),
-
-				IntegerDataFieldEditor integerDataFieldEditor => integerDataFieldEditor.InitialValue.IsValid &&
-				                                                 integerDataFieldEditor.MinValue.IsValid &&
-				                                                 integerDataFieldEditor.MaxValue.IsValid,
-
-				_ => throw new UnreachableException()
-			};
-
+			return Name.IsValid && DataFieldTypeEditor.Match(
+				booleanDataFieldEditor => true,
+				textDataFieldEditor => true,
+				integerDataFieldEditor => integerDataFieldEditor.InitialValue.IsValid &&
+				                          integerDataFieldEditor.MinValue.IsValid &&
+				                          integerDataFieldEditor.MaxValue.IsValid,
+				selectionDataFieldEditor =>
+					selectionDataFieldEditor.Options.All(x => x.IsValid)
+			);
 		}
 	}
 
 	public IEditorToGameSpecificationResult<DataFieldSpec> ToGameSpecification() {
 
 		if (!IsValid) {
-			return new IEditorToGameSpecificationResult<DataFieldSpec>.EditorIsInvalid();
+			return new EditorIsInvalid();
 		}
 
-		return DataFieldTypeEditor switch {
+		return DataFieldTypeEditor.Match(
 
-			TextDataFieldEditor => new() { Value = new TextDataFieldSpec {
-				Name = Name.InputObject
-			}},
+			booleanDataFieldEditor => new() {
+				Value = new BooleanDataFieldSpec {
+					Name = Name.InputObject,
+					InitialValue = booleanDataFieldEditor.InitialValue.OutputObject.Value
+				}
+			},
 
-			SelectionDataFieldEditor selectionDataFieldEditor => new() { Value = new SelectionDataFieldSpec {
-				Name = Name.InputObject,
-				OptionNames = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
-			}},
+			textDataFieldEditor => new() {
+				Value = new TextDataFieldSpec {
+					Name = Name.InputObject,
+					InitialValue = textDataFieldEditor.InitialValue.OutputObject.Value,
+					MustNotBeEmpty = textDataFieldEditor.MustNotBeEmpty.OutputObject.Value,
+					MustNotBeInitialValue = textDataFieldEditor.MustNotBeInitialValue.OutputObject.Value
+				}
+			},
 
-			IntegerDataFieldEditor integerDataFieldEditor => new IEditorToGameSpecificationResult<DataFieldSpec>.Success { Value = new IntegerDataFieldSpec {
-				Name = Name.InputObject,
-				InitialValue = integerDataFieldEditor.InitialValue.OutputObject.Value,
-				MinValue = integerDataFieldEditor.MinValue.OutputObject.Value,
-				MaxValue = integerDataFieldEditor.MaxValue.OutputObject.Value
-			}},
+			integerDataFieldEditor => new Success {
+				Value = new IntegerDataFieldSpec {
+					Name = Name.InputObject,
+					InitialValue = integerDataFieldEditor.InitialValue.OutputObject.Value,
+					MinValue = integerDataFieldEditor.MinValue.OutputObject.Value,
+					MaxValue = integerDataFieldEditor.MaxValue.OutputObject.Value
+				}
+			},
 
-			_ => throw new UnreachableException()
-		};
+			selectionDataFieldEditor => new() { Value = new SelectionDataFieldSpec {
+					Name = Name.InputObject,
+					OptionNames = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
+				}
+			}
+		);
 	}
 
 }

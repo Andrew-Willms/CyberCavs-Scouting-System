@@ -32,17 +32,17 @@ public partial class
 
 public class BooleanDataFieldSpec : DataFieldSpecBase {
 
-	public bool InitialValue { get; init; } = false;
+	public required bool InitialValue { get; init; } = false;
 
 }
 
 public class TextDataFieldSpec : DataFieldSpecBase {
 
-	public string InitialValue { get; init; } = string.Empty;
+	public required string InitialValue { get; init; } = string.Empty;
 
-	public bool MustNotBeEmpty { get; init; }
+	public required bool MustNotBeEmpty { get; init; }
 
-	public bool MustNotBeInitialValue { get; init; }
+	public required bool MustNotBeInitialValue { get; init; }
 
 }
 
@@ -54,10 +54,10 @@ public class SelectionDataFieldSpec : DataFieldSpecBase {
 
 public class IntegerDataFieldSpec : DataFieldSpecBase {
 
-	public int InitialValue { get; init; }
+	public required int InitialValue { get; init; }
 
-	public int MinValue { get; init; } = int.MinValue;
+	public required int MinValue { get; init; } = int.MinValue;
 
-	public int MaxValue { get; init; } = int.MaxValue;
+	public required int MaxValue { get; init; } = int.MaxValue;
 
 }

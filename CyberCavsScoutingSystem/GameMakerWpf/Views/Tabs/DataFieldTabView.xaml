@@ -117,16 +117,20 @@
 				<ContentPresenter>
 
 					<ContentPresenter.Content>
-						<Binding Path="SelectedDataField.DataFieldTypeEditor">
+						<Binding Path="SelectedDataField.DataFieldTypeEditorBase">
 							<Binding.FallbackValue>
 								<Label
-								Content="Select a Data Field to view and edit it's properties."
-								Margin="5,5,5,5"/>
+									Content="Select a Data Field to view and edit it's properties."
+									Margin="5,5,5,5"/>
 							</Binding.FallbackValue>
 						</Binding>
 					</ContentPresenter.Content>
 
 					<ContentPresenter.Resources>
+
+						<DataTemplate DataType="{x:Type dataFieldEditors:BooleanDataFieldEditor}">
+							<dataField:TextDataFieldView/>
+						</DataTemplate>
 
 						<DataTemplate DataType="{x:Type dataFieldEditors:TextDataFieldEditor}">
 							<dataField:TextDataFieldView/>

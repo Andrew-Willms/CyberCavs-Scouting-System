@@ -19,7 +19,7 @@ public class GameEditingData {
 	public required string AlliancesPerMatch { get; init; }
 
 	public required ReadOnlyList<AllianceEditingData> Alliances { get; init; }
-	public required ReadOnlyList<DataFieldEditingData> DataFields { get; init; }
+	public required ReadOnlyList<DataFieldEditingDataBase> DataFields { get; init; }
 
 	public required ReadOnlyList<InputEditingData> SetupTabInputs { get; init; }
 	public required ReadOnlyList<InputEditingData> AutoTabInputs { get; init; }

@@ -9,7 +9,7 @@ namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 
 
-public class SelectionDataFieldEditor : DataFieldTypeEditor {
+public class SelectionDataFieldEditor : DataFieldTypeEditorBase {
 
 	private GameEditor GameEditor { get; }
 

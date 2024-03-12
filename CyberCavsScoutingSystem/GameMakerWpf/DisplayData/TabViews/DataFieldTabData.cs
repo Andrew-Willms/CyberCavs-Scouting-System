@@ -22,7 +22,15 @@ public class DataFieldTabData {
 
 }
 
+public class TextDataFieldData {
 
+	public static string InitialValueText => "Initial Value";
+
+	public static string MustNotBeEmptyText => "Must Not Be Empty";
+
+	public static string MustNotBeInitialValueText => "Must Not Be Initial Value";
+
+}
 
 public class IntegerDataFieldData {
 

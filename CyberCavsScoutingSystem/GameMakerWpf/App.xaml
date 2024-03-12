@@ -141,5 +141,86 @@
 
 		</Style>
 
+		<Style x:Key="BooleanInputStyle" TargetType="{x:Type TypeName=CheckBox}">
+
+			<d:Style.DataContext>
+				<d:DesignInstance Type="wpfUtilities:ISingleInput, IsDesignTimeCreatable=True"/>
+			</d:Style.DataContext>
+
+			<!--I have to override the template in order to change the border color when focused or hovered over-->
+			<!--<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type CheckBox}">
+						<Border x:Name="border"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								BorderThickness="{TemplateBinding BorderThickness}"
+								Background="{TemplateBinding Background}"
+								SnapsToDevicePixels="True">
+							<ScrollViewer x:Name="PART_ContentHost"
+										  Focusable="false"
+										  HorizontalScrollBarVisibility="Hidden"
+										  VerticalScrollBarVisibility="Hidden"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsEnabled" Value="false">
+								<Setter Property="Opacity" TargetName="border" Value="0.56"/>
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="true">
+								<Setter Property="BorderBrush"
+										TargetName="border"
+										Value="{Binding Path=ErrorLevel,
+														Converter={StaticResource ErrorToMouseOverBrushConverter},
+														Mode=OneWay}"/>
+							</Trigger>
+							<Trigger Property="IsFocused" Value="true">
+								<Setter Property="BorderBrush"
+										TargetName="border"
+										Value="{Binding Path=ErrorLevel,
+														Converter={StaticResource ErrorToFocusedBrushConverter},
+														Mode=OneWay}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>-->
+
+			<Setter Property="BorderBrush" Value="{Binding Path=ErrorLevel, Converter={StaticResource ErrorToNormalBrushConverter}, Mode=OneWay}"/>
+
+			<Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+			<Setter Property="ToolTipService.BetweenShowDelay" Value="1000"/>
+			<Setter Property="IsChecked" Value="{Binding Path=InputObject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+			<Style.Triggers>
+				<DataTrigger Binding="{Binding Path=Errors.IsEmpty}" Value="False">
+
+					<Setter Property="ToolTip">
+						<Setter.Value>
+							<StackPanel>
+								<ItemsControl ItemsSource="{Binding Errors}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate d:DataType="{wpf:GenericObjectFactory Type={x:Type utilitiesLibrary:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}">
+											<!--<DataTemplate.DataType>d:DataType="{wpf:GenericObjectFactory Type={x:Type wpfUtilities:Validation.Errors.ValidationError`1}, T=domain:ErrorSeverity}"</DataTemplate.DataType>-->
+											<DataTemplate.Resources>
+												<Style TargetType="TextBlock">
+													<Setter Property="Foreground"
+													        Value="{Binding Path=Severity,
+															Converter={StaticResource ErrorToToolTipTextBrushConverter},
+															Mode=OneTime}"/>
+												</Style>
+											</DataTemplate.Resources>
+											<TextBlock Text="{Binding Description}"/>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</StackPanel>
+						</Setter.Value>
+					</Setter>
+
+				</DataTrigger>
+			</Style.Triggers>
+
+		</Style>
+
 	</Application.Resources>
 </Application>

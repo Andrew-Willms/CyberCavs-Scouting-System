@@ -22,7 +22,11 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 
 
 
-	private SelectionDataFieldEditor? Editor => App.ServiceProvider.GetRequiredService<IAppManager>().SelectedDataField?.DataFieldTypeEditor as SelectionDataFieldEditor;
+	private SelectionDataFieldEditor? Editor => App
+		.ServiceProvider
+		.GetRequiredService<IAppManager>()
+		.SelectedDataField?
+		.DataFieldTypeEditor.AsT3;
 	
 	[DependsOn(nameof(AppManager.GameEditor))]
 	[DependsOn(nameof(AppManager.SelectedDataField))]
