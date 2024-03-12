@@ -1,12 +1,25 @@
-﻿using UtilitiesLibrary.Collections;
+﻿using OneOf;
+using UtilitiesLibrary.Collections;
 
 namespace CCSSDomain.GameSpecification;
 
 
 
-public abstract class DataFieldSpec {
+public abstract class DataFieldSpecBase {
 
 	public required string Name { get; init; }
+
+}
+
+[GenerateOneOf]
+public partial class
+	DataFieldSpec : OneOfBase<BooleanDataFieldSpec, TextDataFieldSpec, IntegerDataFieldSpec, SelectionDataFieldSpec> {
+
+	public DataFieldSpecBase AsBase => Match<DataFieldSpecBase>(
+		booleanDataFieldSpec => booleanDataFieldSpec,
+		textDataFieldSpec => textDataFieldSpec,
+		integerDataFieldSpec => integerDataFieldSpec,
+		selectionDataFieldSpec => selectionDataFieldSpec);
 
 	public enum DataFieldType {
 		Boolean,
@@ -17,25 +30,29 @@ public abstract class DataFieldSpec {
 
 }
 
-public class BooleanDataFieldSpec : DataFieldSpec {
+public class BooleanDataFieldSpec : DataFieldSpecBase {
 
 	public bool InitialValue { get; init; } = false;
 
 }
 
-public class TextDataFieldSpec : DataFieldSpec {
+public class TextDataFieldSpec : DataFieldSpecBase {
 
 	public string InitialValue { get; init; } = string.Empty;
 
+	public bool MustNotBeEmpty { get; init; }
+
+	public bool MustNotBeInitialValue { get; init; }
+
 }
 
-public class SelectionDataFieldSpec : DataFieldSpec {
+public class SelectionDataFieldSpec : DataFieldSpecBase {
 
 	public required ReadOnlyList<string> OptionNames { get; init; }
 
 }
 
-public class IntegerDataFieldSpec : DataFieldSpec {
+public class IntegerDataFieldSpec : DataFieldSpecBase {
 
 	public int InitialValue { get; init; }
 

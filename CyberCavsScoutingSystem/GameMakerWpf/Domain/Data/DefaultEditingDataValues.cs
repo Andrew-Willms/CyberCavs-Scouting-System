@@ -27,6 +27,11 @@ public static class DefaultEditingDataValues {
 
 
 
+	public static readonly BooleanDataFieldEditingData DefaultBooleanDataFieldEditingData = new() {
+		Name = "New Data Field",
+		DataFieldType = DataFieldSpec.DataFieldType.Boolean
+	};
+
 	public static readonly TextDataFieldEditingData DefaultTextDataFieldEditingData = new() {
 		Name = "New Data Field",
 		DataFieldType = DataFieldSpec.DataFieldType.Text

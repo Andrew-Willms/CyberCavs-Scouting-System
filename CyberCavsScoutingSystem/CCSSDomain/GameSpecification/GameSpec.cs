@@ -58,7 +58,7 @@ public class GameSpec {
 
 		foreach (InputSpec input in setupTabInputs) {
 
-			if (!dataFields.Select(x => x.Name).Contains(input.DataFieldName)) {
+			if (!dataFields.Select(x => x.AsBase.Name).Contains(input.DataFieldName)) {
 
 				return new IResult<GameSpec>.Error($"Input '{input.Label}' from {nameof(SetupTabInputs)} targets the DataField with the " +
 												   $"name '{input.DataFieldName}' but no DataField of that name was found.");
@@ -67,7 +67,7 @@ public class GameSpec {
 
 		foreach (InputSpec input in autoTabInputs) {
 
-			if (!dataFields.Select(x => x.Name).Contains(input.DataFieldName)) {
+			if (!dataFields.Select(x => x.AsBase.Name).Contains(input.DataFieldName)) {
 
 				return new IResult<GameSpec>.Error($"Input '{input.Label}' from {nameof(AutoTabInputs)} targets the DataField with the " +
 												   $"name '{input.DataFieldName}' but no DataField of that name was found.");
@@ -76,7 +76,7 @@ public class GameSpec {
 
 		foreach (InputSpec input in teleTabInputs) {
 
-			if (!dataFields.Select(x => x.Name).Contains(input.DataFieldName)) {
+			if (!dataFields.Select(x => x.AsBase.Name).Contains(input.DataFieldName)) {
 
 				return new IResult<GameSpec>.Error($"Input '{input.Label}' from {nameof(TeleTabInputs)} targets the DataField with the " +
 												   $"name '{input.DataFieldName}' but no DataField of that name was found.");
@@ -85,7 +85,7 @@ public class GameSpec {
 
 		foreach (InputSpec input in endgameTabInputs) {
 
-			if (!dataFields.Select(x => x.Name).Contains(input.DataFieldName)) {
+			if (!dataFields.Select(x => x.AsBase.Name).Contains(input.DataFieldName)) {
 
 				return new IResult<GameSpec>.Error($"Input '{input.Label}' from {nameof(EndgameTabInputs)} targets the DataField with the " +
 												   $"name '{input.DataFieldName}' but no DataField of that name was found.");
@@ -124,7 +124,7 @@ public class GameSpec {
 			$"{nameof(MatchDataCollector.Time).ToCsvFriendly()},"
 		);
 
-		DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));
+		DataFields.Foreach(x => columnHeaders.Append($"{x.AsBase.Name.ToCsvFriendly()},"));
 
 		return columnHeaders.ToString();
 	}

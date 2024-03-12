@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
@@ -14,12 +13,12 @@ public abstract class InputDataCollector : INotifyPropertyChanged {
 
     public static InputDataCollector FromDataField(InputSpec inputSpec, DataField dataField) {
 
-	    return dataField switch {
-			TextDataField textDataField => new TextInputDataCollector(textDataField) { Label = inputSpec.Label },
-			IntegerDataField integerDataField => new IntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
-			SelectionDataField selectionDataField => new SelectionInputDataCollector(selectionDataField) { Label = inputSpec.Label },
-			_ => throw new UnreachableException()
-        };
+	    return dataField.Match<InputDataCollector>(
+			booleanDataField => new BooleanInputDataCollector(booleanDataField) { Label = inputSpec.Label }, 
+			textDataField => new TextInputDataCollector(textDataField) { Label = inputSpec.Label },
+			integerDataField => new IntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
+			selectionDataField => new SelectionInputDataCollector(selectionDataField) { Label = inputSpec.Label }
+        );
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -27,6 +26,25 @@ public abstract class InputDataCollector : INotifyPropertyChanged {
     protected void OnPropertyChanged(string propertyName) {
 	    PropertyChanged?.Invoke(this, new(propertyName));
     }
+
+}
+
+
+
+public class BooleanInputDataCollector : InputDataCollector, INotifyPropertyChanged {
+
+	private readonly BooleanDataField DataField;
+
+	public BooleanInputDataCollector(BooleanDataField dataField) {
+
+		DataField = dataField;
+		DataField.OnValueChange.Subscribe(() => OnPropertyChanged(""));
+	}
+
+	public bool Value {
+		get => DataField.Value;
+		set => DataField.Value = value;
+	}
 
 }
 

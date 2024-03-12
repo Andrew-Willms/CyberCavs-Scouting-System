@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using CCSSDomain.GameSpecification;
+using OneOf;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
@@ -11,141 +11,180 @@ namespace CCSSDomain.DataCollectors;
 
 
 
-public abstract class DataField : INotifyPropertyChanged {
+public abstract class DataFieldBase : INotifyPropertyChanged {
 
-    public DataFieldSpec DataFieldSpec { get; }
+	public DataFieldSpec DataFieldSpec { get; }
 
-    public string Name => DataFieldSpec.Name;
+	public string Name => DataFieldSpec.AsBase.Name;
 
-    public readonly Event OnValueChange = new();
+	public readonly Event OnValueChange = new();
 
-    protected DataField(DataFieldSpec dataFieldSpec) {
-        DataFieldSpec = dataFieldSpec;
-    }
+	protected DataFieldBase(DataFieldSpec dataFieldSpec) {
+		DataFieldSpec = dataFieldSpec;
+	}
 
-    public static DataField FromSpec(DataFieldSpec dataFieldSpec) {
+	public event PropertyChangedEventHandler? PropertyChanged;
 
-        return dataFieldSpec switch {
-            TextDataFieldSpec textDataFieldSpec => new TextDataField(textDataFieldSpec),
-            IntegerDataFieldSpec integerDataFieldSpec => new IntegerDataField(integerDataFieldSpec),
-            SelectionDataFieldSpec selectionDataFieldSpec => new SelectionDataField(selectionDataFieldSpec),
-            _ => throw new UnreachableException()
-        };
-    }
+	protected void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
+	}
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+	public abstract void AddErrorsToCollection(Action<string> addErrorString);
 
-    protected void OnPropertyChanged(string propertyName) {
-	    PropertyChanged?.Invoke(this, new(propertyName));
-    }
+}
+
+
+[GenerateOneOf]
+public partial class DataField : OneOfBase<BooleanDataField, TextDataField, IntegerDataField, SelectionDataField> {
+
+	public DataFieldBase AsBase => Match<DataFieldBase>(
+		booleanDataField => booleanDataField,
+		dataFieldSpec => dataFieldSpec,
+		integerDataField => integerDataField,
+		selectionDataField => selectionDataField);
+
+	public static DataField FromSpec(DataFieldSpec dataFieldSpec) {
+
+		return dataFieldSpec.Match<DataField>(
+			booleanDataFieldSpec => new BooleanDataField(booleanDataFieldSpec),
+			textDataFieldSpec => new TextDataField(textDataFieldSpec),
+			integerDataFieldSpec => new IntegerDataField(integerDataFieldSpec),
+			selectionDataFieldSpec => new SelectionDataField(selectionDataFieldSpec));
+	}
 
 }
 
 
 
-public class BooleanDataField : DataField {
+public class BooleanDataField : DataFieldBase {
 
 	public BooleanDataFieldSpec BooleanDataFieldSpec { get; }
 
-	private bool _Bool;
-	public bool Bool {
-		get => _Bool;
+	private bool _Value;
+	public bool Value {
+		get => _Value;
 		set {
-			_Bool = value;
+			_Value = value;
 			OnValueChange.Invoke();
 		}
 	}
 
 	public BooleanDataField(BooleanDataFieldSpec dataField) : base(dataField) {
-		_Bool = dataField.InitialValue;
+		_Value = dataField.InitialValue;
 		BooleanDataFieldSpec = dataField;
+	}
+
+	public override void AddErrorsToCollection(Action<string> addErrorString) { }
+
+}
+
+
+
+public class TextDataField : DataFieldBase {
+
+	public TextDataFieldSpec TextDataFieldSpec { get; }
+
+	private string _Text;
+	public string Text {
+		get => _Text;
+		set {
+			_Text = value;
+			OnValueChange.Invoke();
+		}
+	}
+
+	public TextDataField(TextDataFieldSpec dataField) : base(dataField) {
+		_Text = dataField.InitialValue;
+		TextDataFieldSpec = dataField;
+	}
+
+	public override void AddErrorsToCollection(Action<string> addErrorString) {
+
+		if (Text == string.Empty &&
+		    (TextDataFieldSpec.MustNotBeEmpty || 
+		     TextDataFieldSpec is { MustNotBeInitialValue: true, InitialValue: "" })) {
+
+			addErrorString($"The data field \"{TextDataFieldSpec.Name}\" is empty.");
+		}
+
+		if (TextDataFieldSpec.MustNotBeInitialValue && Text == TextDataFieldSpec.InitialValue) {
+
+			addErrorString($"The data field \"{TextDataFieldSpec.Name}\" must not be the default value {TextDataFieldSpec.InitialValue}.");
+		}
 	}
 
 }
 
 
 
-public class TextDataField : DataField {
+public class IntegerDataField : DataFieldBase {
 
-    public TextDataFieldSpec TextDataFieldSpec { get; }
+	public IntegerDataFieldSpec IntegerDataFieldSpec { get; }
 
-    private string _Text;
-    public string Text {
-        get => _Text;
-        set {
-            _Text = value;
-            OnValueChange.Invoke();
-        }
-    }
+	public int MinValue => IntegerDataFieldSpec.MinValue;
 
-    public TextDataField(TextDataFieldSpec dataField) : base(dataField) {
-	    _Text = dataField.InitialValue;
-        TextDataFieldSpec = dataField;
-    }
+	public int MaxValue => IntegerDataFieldSpec.MaxValue;
 
-}
+	private int _Value;
+	public int Value {
+		get => _Value;
+		set {
 
+			if (value > MaxValue) {
+				_Value = MaxValue;
 
+			} else if (value < MinValue) {
+				_Value = MinValue;
 
-public class IntegerDataField : DataField {
-
-    public IntegerDataFieldSpec IntegerDataFieldSpec { get; }
-
-    public int MinValue => IntegerDataFieldSpec.MinValue;
-
-    public int MaxValue => IntegerDataFieldSpec.MaxValue;
-
-    private int _Value;
-    public int Value {
-        get => _Value;
-        set {
-
-            if (value > MaxValue) {
-                _Value = MaxValue;
-
-            } else if (value < MinValue) {
-                _Value = MinValue;
-
-            } else {
-	            _Value = value;
+			} else {
+				_Value = value;
 			}
 
 			OnValueChange.Invoke();
-            OnPropertyChanged(nameof(Value));
-        }
-    }
+			OnPropertyChanged(nameof(Value));
+		}
+	}
 
-    public IntegerDataField(IntegerDataFieldSpec dataField) : base(dataField) {
-	    _Value = dataField.InitialValue;
+	public IntegerDataField(IntegerDataFieldSpec dataField) : base(dataField) {
+		_Value = dataField.InitialValue;
 		IntegerDataFieldSpec = dataField;
-    }
+	}
+
+	public override void AddErrorsToCollection(Action<string> addErrorString) { }
 
 }
 
 
 
-public class SelectionDataField : DataField {
+public class SelectionDataField : DataFieldBase {
 
-    public SelectionDataFieldSpec SelectionDataFieldSpec { get; }
+	public SelectionDataFieldSpec SelectionDataFieldSpec { get; }
 
-    public ReadOnlyList<string> Options => SelectionDataFieldSpec.OptionNames;
+	public ReadOnlyList<string> Options => SelectionDataFieldSpec.OptionNames;
 
-    private Optional<string> _SelectedOption = Optional.NoValue;
-    public Optional<string> SelectedOption {
-        get => _SelectedOption;
-        set {
+	private Optional<string> _SelectedOption = Optional.NoValue;
+	public Optional<string> SelectedOption {
+		get => _SelectedOption;
+		set {
 
-	        if (value != Optional.NoValue && !Options.Contains(value.Value)) {
-		        throw new InvalidOperationException();
-	        }
+			if (value != Optional.NoValue && !Options.Contains(value.Value)) {
+				throw new InvalidOperationException();
+			}
 
-	        _SelectedOption = value;
-            OnValueChange.Invoke();
-        }
-    }
+			_SelectedOption = value;
+			OnValueChange.Invoke();
+		}
+	}
 
-    public SelectionDataField(SelectionDataFieldSpec dataField) : base(dataField) {
-        SelectionDataFieldSpec = dataField;
-    }
+	public SelectionDataField(SelectionDataFieldSpec dataField) : base(dataField) {
+		SelectionDataFieldSpec = dataField;
+	}
+
+	public override void AddErrorsToCollection(Action<string> addErrorString) {
+
+		if (SelectedOption == Optional<string>.NoValue) {
+			addErrorString($"The data field \"{Name}\" does not have a selected value.");
+		}
+	}
 
 }

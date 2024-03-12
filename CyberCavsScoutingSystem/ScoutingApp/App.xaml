@@ -16,7 +16,9 @@
 				<ResourceDictionary Source="Resources/Styles/Styles.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 
-
+			<DataTemplate x:Key="BooleanDataFieldTemplate">
+				<dataTemplates:BooleanDataFieldInputView/>
+			</DataTemplate>
 
 			<DataTemplate x:Key="TextDataFieldTemplate">
 				<dataTemplates:TextDataFieldInputView/>
@@ -29,9 +31,10 @@
 			<DataTemplate x:Key="SelectionDataFieldTemplate">
 				<dataTemplates:SelectionDataFieldInputView/>
 			</DataTemplate>
-
+			
 			<dataTemplateSelectors:InputDataTemplateSelector
 				x:Key="InputDataTemplateSelector"
+				BooleanDataFieldTemplate="{StaticResource BooleanDataFieldTemplate}"
 				TextDataFieldTemplate="{StaticResource TextDataFieldTemplate}"
 				IntegerDataFieldTemplate="{StaticResource IntegerDataFieldTemplate}"
 				SelectionDataFieldTemplate="{StaticResource SelectionDataFieldTemplate}"/>

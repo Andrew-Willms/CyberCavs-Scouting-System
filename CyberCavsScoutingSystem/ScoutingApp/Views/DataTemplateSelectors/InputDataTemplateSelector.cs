@@ -8,6 +8,7 @@ namespace ScoutingApp.Views.DataTemplateSelectors;
 
 public class InputDataTemplateSelector : DataTemplateSelector {
 
+	public DataTemplate BooleanDataFieldTemplate { get; set; } = null!;
 	public DataTemplate TextDataFieldTemplate { get; set; } = null!;
 	public DataTemplate IntegerDataFieldTemplate { get; set; } = null!;
 	public DataTemplate SelectionDataFieldTemplate { get; set; } = null!;
@@ -15,6 +16,7 @@ public class InputDataTemplateSelector : DataTemplateSelector {
 	protected override DataTemplate OnSelectTemplate(object item, BindableObject container) {
 
 		return item switch {
+			BooleanInputDataCollector => BooleanDataFieldTemplate,
 			TextInputDataCollector => TextDataFieldTemplate,
 			IntegerInputDataCollector => IntegerDataFieldTemplate,
 			SelectionInputDataCollector => SelectionDataFieldTemplate,

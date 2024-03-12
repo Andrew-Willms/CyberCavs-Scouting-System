@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -41,46 +40,35 @@ public class MatchDataCollector {
 
 		DataFields = GameSpecification.DataFields.Select(DataField.FromSpec).ToReadOnly();
 
-		SetupTabInputs = GameSpecification.SetupTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        TeleTabInputs = GameSpecification.TeleTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-        EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-    }
+		SetupTabInputs = GameSpecification.SetupTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
+		AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
+		TeleTabInputs = GameSpecification.TeleTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
+		EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
+	}
 
 	public string ConvertDataToCsv(string scout, string @event) {
 
-        StringBuilder matchData = new(
-            $"{scout.ToCsvFriendly()}," +
-            $"{@event.ToCsvFriendly()}," +
-            $"{MatchNumber.Value.ToString().ToCsvFriendly()}," +
-            $"{ReplayNumber.Value.ToString().ToCsvFriendly()}," +
-            $"{IsPlayoff.Value.ToString().ToCsvFriendly()}," +
-            $"{Alliance.Value.Name.ToCsvFriendly()}," +
+		StringBuilder matchData = new(
+			$"{scout.ToCsvFriendly()}," +
+			$"{@event.ToCsvFriendly()}," +
+			$"{MatchNumber.Value.ToString().ToCsvFriendly()}," +
+			$"{ReplayNumber.Value.ToString().ToCsvFriendly()}," +
+			$"{IsPlayoff.Value.ToString().ToCsvFriendly()}," +
+			$"{Alliance.Value.Name.ToCsvFriendly()}," +
 			$"{TeamNumber.Value.ToString().ToCsvFriendly()}," +
-            $"{Time.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
+			$"{Time.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
 
-        foreach (DataField dataField in DataFields) {
+		foreach (DataField dataField in DataFields) {
 
-            switch (dataField) {
+			dataField.Switch(
+				booleanDataField => matchData.Append($"{booleanDataField.Value.ToString().ToCsvFriendly()},"),
+				textDataField => matchData.Append($"{textDataField.Text.ToCsvFriendly()},"),
+				integerDataField => matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},"),
+				selectionDataField => matchData.Append($"{selectionDataField.SelectedOption.Value.ToString().ToCsvFriendly()},")
+			);
+		}
 
-                case TextDataField textDataField:
-                    matchData.Append($"{textDataField.Text.ToCsvFriendly()},");
-                    break;
-
-                case IntegerDataField integerDataField:
-                    matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},");
-                    break;
-
-                case SelectionDataField selectionDataField:
-                    matchData.Append($"{selectionDataField.SelectedOption.Value.ToCsvFriendly()},");
-                    break;
-
-                default:
-                    throw new UnreachableException();
-            }
-        }
-
-        return matchData.ToString();
-    }
+		return matchData.ToString();
+	}
 
 }

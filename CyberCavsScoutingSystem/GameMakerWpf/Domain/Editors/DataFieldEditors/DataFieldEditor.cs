@@ -44,19 +44,19 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 		GameEditor = gameEditor;
 
-		DataFieldType = initialValues.DataFieldType;
+		DataFieldType = initialValues.AsBase.DataFieldType;
 
-		DataFieldTypeEditor = initialValues switch {
-			TextDataFieldEditingData => new TextDataFieldEditor(),
-			SelectionDataFieldEditingData selectionDataField => new SelectionDataFieldEditor(GameEditor, selectionDataField),
-			IntegerDataFieldEditingData integerDataField => new IntegerDataFieldEditor(GameEditor, integerDataField),
-			_ => throw new UnreachableException()
-		};
+		DataFieldTypeEditor = initialValues.Match<DataFieldTypeEditor>(
+			booleanDataFieldEditingData => new BooleanDataFieldEditor(),
+			textDataFieldEditingData => new TextDataFieldEditor(),
+			integerDataField => new IntegerDataFieldEditor(GameEditor, integerDataField),
+			selectionDataField => new SelectionDataFieldEditor(GameEditor, selectionDataField)
+		);
 
 		Name = new SingleInputCreator<string, string, ErrorSeverity> {
 			Converter = DataFieldValidator.NameConverter,
 			Inverter = DataFieldValidator.NameInverter,
-			InitialInput = initialValues.Name
+			InitialInput = initialValues.AsBase.Name
 		}.AddValidationRule(DataFieldValidator.NameValidator_Length)
 		.AddValidationRule<IEnumerable<DataFieldEditor>>(DataFieldValidator.NameValidator_Uniqueness, () => GameEditor.DataFields, false, GameEditor.DataFieldNameChanged)
 		.CreateSingleInput();

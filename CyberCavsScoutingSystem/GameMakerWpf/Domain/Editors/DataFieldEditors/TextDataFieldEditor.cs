@@ -2,4 +2,4 @@
 
 
 
-public class TextDataFieldEditor : DataFieldTypeEditor { }
+public class TextDataFieldEditor : DataFieldTypeEditor;

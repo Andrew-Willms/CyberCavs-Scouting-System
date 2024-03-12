@@ -82,6 +82,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\DataTemplates\BooleanDataFieldTemplate.xaml.cs">
+	    <DependentUpon>BooleanDataFieldTemplate.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\DataTemplates\IntegerDataFieldInputView.xaml.cs">
 	    <DependentUpon>IntegerDataFieldInputView.xaml</DependentUpon>
 	  </Compile>

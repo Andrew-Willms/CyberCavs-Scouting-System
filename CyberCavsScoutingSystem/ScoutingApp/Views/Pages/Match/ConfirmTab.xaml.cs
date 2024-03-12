@@ -52,18 +52,7 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 			}
 
 			foreach (DataField dataField in AppManager.ActiveMatchData.DataFields) {
-
-				if (dataField is TextDataField { Text: "" } textDataField) {
-					errors.Add($"The data field \"{textDataField.Name}\" is empty.");
-				}
-
-				if (dataField is not SelectionDataField selectionDataField) {
-					continue;
-				}
-
-				if (selectionDataField.SelectedOption == Optional.NoValue) {
-					errors.Add($"The data field \"{dataField.Name}\" does not have a selected value.");
-				}
+				dataField.AsBase.AddErrorsToCollection(errors.Add);
 			}
 
 			return errors;
