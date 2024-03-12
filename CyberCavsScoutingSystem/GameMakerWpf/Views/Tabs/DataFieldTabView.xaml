@@ -26,8 +26,8 @@
 			</Grid.ColumnDefinitions>
 
 			<Grid 
-			Margin="5,5,5,5"
-			Grid.Column="0">
+				Margin="5,5,5,5"
+				Grid.Column="0">
 
 				<Grid.RowDefinitions>
 					<RowDefinition Height="auto"/>

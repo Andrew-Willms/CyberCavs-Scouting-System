@@ -45,13 +45,15 @@
 				Grid.Row="1"
 				Grid.Column="0"/>
 
-			<TextBlock Text="{Binding AlliancesText, Source={StaticResource AllianceTabData}}"
-				   Margin="5,5,5,5"
-				   Width="auto"
-				   Grid.Row="2"
-				   Grid.Column="0"/>
+			<TextBlock
+				Text="{Binding AlliancesText, Source={StaticResource AllianceTabData}}"
+				Margin="5,5,5,5"
+				Width="auto"
+				Grid.Row="2"
+				Grid.Column="0"/>
 
-			<TextBox DataContext="{Binding Path=RobotsPerAlliance}"
+			<TextBox
+				DataContext="{Binding Path=RobotsPerAlliance}"
 				 Style="{StaticResource StringInputStyle}"
 				 HorizontalAlignment="Left"
 				 Margin="5,5,5,5"
@@ -61,7 +63,8 @@
 				 Grid.Row="0"
 				 Grid.Column="1"/>
 
-			<TextBox DataContext="{Binding Path=AlliancesPerMatch}"
+			<TextBox
+				DataContext="{Binding Path=AlliancesPerMatch}"
 				 Style="{StaticResource StringInputStyle}"
 				 HorizontalAlignment="Left"
 				 Margin="5,5,5,5"
@@ -71,9 +74,10 @@
 				 Grid.Row="1"
 				 Grid.Column="1"/>
 
-			<ListBox ItemsSource="{Binding Path=Alliances}"
+			<ListBox
+				ItemsSource="{Binding Path=Alliances}"
 				 SelectedItem="{Binding Path=SelectedAlliance}"
-				 Margin="5,5,5,5"
+				 Margin="5,0,5,5"
 				 MinHeight="20"
 				 Grid.Row="2"
 				 Grid.Column="1"

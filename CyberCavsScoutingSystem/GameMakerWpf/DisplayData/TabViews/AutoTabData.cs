@@ -32,7 +32,7 @@ public class AutoTabData {
 
 	public static string InputsText => "Inputs";
 
-	public static string InputsDataFieldNameText => "Data Field";
+	public static string InputsDataFieldNameText => "Data Field Name";
 
 	public static string InputTextText => "Input Text";
 
