@@ -53,7 +53,7 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 			foreach (DataField dataField in AppManager.ActiveMatchData.DataFields) {
 
-				if (dataField is TextDataField { Text:"" } textDataField) {
+				if (dataField is TextDataField { Text: "" } textDataField) {
 					errors.Add($"The data field \"{textDataField.Name}\" is empty.");
 				}
 

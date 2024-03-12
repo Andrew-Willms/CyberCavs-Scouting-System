@@ -9,14 +9,25 @@ public abstract class DataFieldSpec {
 	public required string Name { get; init; }
 
 	public enum DataFieldType {
+		Boolean,
 		Text,
-		Selection,
-		Integer
+		Integer,
+		Selection
 	}
 
 }
 
-public class TextDataFieldSpec : DataFieldSpec { }
+public class BooleanDataFieldSpec : DataFieldSpec {
+
+	public bool InitialValue { get; init; } = false;
+
+}
+
+public class TextDataFieldSpec : DataFieldSpec {
+
+	public string InitialValue { get; init; } = string.Empty;
+
+}
 
 public class SelectionDataFieldSpec : DataFieldSpec {
 
@@ -26,7 +37,7 @@ public class SelectionDataFieldSpec : DataFieldSpec {
 
 public class IntegerDataFieldSpec : DataFieldSpec {
 
-	public int InitialValue { get; init; } = 0;
+	public int InitialValue { get; init; }
 
 	public int MinValue { get; init; } = int.MinValue;
 

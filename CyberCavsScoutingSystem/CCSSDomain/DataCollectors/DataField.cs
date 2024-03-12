@@ -41,11 +41,35 @@ public abstract class DataField : INotifyPropertyChanged {
 
 }
 
+
+
+public class BooleanDataField : DataField {
+
+	public BooleanDataFieldSpec BooleanDataFieldSpec { get; }
+
+	private bool _Bool;
+	public bool Bool {
+		get => _Bool;
+		set {
+			_Bool = value;
+			OnValueChange.Invoke();
+		}
+	}
+
+	public BooleanDataField(BooleanDataFieldSpec dataField) : base(dataField) {
+		_Bool = dataField.InitialValue;
+		BooleanDataFieldSpec = dataField;
+	}
+
+}
+
+
+
 public class TextDataField : DataField {
 
     public TextDataFieldSpec TextDataFieldSpec { get; }
 
-    private string _Text = "";
+    private string _Text;
     public string Text {
         get => _Text;
         set {
@@ -55,10 +79,13 @@ public class TextDataField : DataField {
     }
 
     public TextDataField(TextDataFieldSpec dataField) : base(dataField) {
+	    _Text = dataField.InitialValue;
         TextDataFieldSpec = dataField;
     }
 
 }
+
+
 
 public class IntegerDataField : DataField {
 
@@ -89,10 +116,13 @@ public class IntegerDataField : DataField {
     }
 
     public IntegerDataField(IntegerDataFieldSpec dataField) : base(dataField) {
-        IntegerDataFieldSpec = dataField;
+	    _Value = dataField.InitialValue;
+		IntegerDataFieldSpec = dataField;
     }
 
 }
+
+
 
 public class SelectionDataField : DataField {
 
