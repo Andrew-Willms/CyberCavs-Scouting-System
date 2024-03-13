@@ -51,7 +51,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	public ObservableCollection<string> LogMessages { get; } = new();
 	private Action<string> Logger => text => LogMessages.Add(DateTime.Now + ": " + text);
 
-	private static bool AlreadyAccessingDevices = false;
+	private static bool AlreadyAccessingDevices;
 	private static readonly Mutex AlreadyAccessingDevicesMutex = new();
 
 
