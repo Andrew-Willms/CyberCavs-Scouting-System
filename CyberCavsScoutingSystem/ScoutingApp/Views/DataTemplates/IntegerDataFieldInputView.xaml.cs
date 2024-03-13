@@ -1,7 +1,6 @@
 ﻿using System;
 using CCSSDomain.DataCollectors;
 using Microsoft.Maui.Controls;
-using IntegerDataField = CCSSDomain.DataCollectors.IntegerDataField;
 
 namespace ScoutingApp.Views.DataTemplates; 
 

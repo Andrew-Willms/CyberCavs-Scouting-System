@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
-			 xmlns:system="clr-namespace:System;assembly=mscorlib"
-			 x:Class="ScoutingApp.Views.Pages.Match.ConfirmTab"
-			 x:DataType="match:ConfirmTab"
-			 NavigatedTo="ConfirmTab_OnNavigatedTo">
+<ContentPage
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
+	xmlns:system="clr-namespace:System;assembly=mscorlib"
+	x:Class="ScoutingApp.Views.Pages.Match.ConfirmTab"
+	x:DataType="match:ConfirmTab"
+	NavigatedTo="ConfirmTab_OnNavigatedTo">
 
 	<ScrollView Orientation="Both">
 

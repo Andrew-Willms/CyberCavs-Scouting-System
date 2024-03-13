@@ -1,5 +1,4 @@
 ﻿using Microsoft.Maui.Controls;
-using QrCodeScanner.Views;
 
 namespace QrCodeScanner;
 

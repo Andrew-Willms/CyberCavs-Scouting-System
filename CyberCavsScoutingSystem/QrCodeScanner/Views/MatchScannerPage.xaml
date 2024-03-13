@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
-			 xmlns:views="clr-namespace:QrCodeScanner.Views"
-			 x:Class="QrCodeScanner.Views.MatchScannerPage"
-			 x:DataType="views:MatchScannerPage">
+<ContentPage
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+	xmlns:views="clr-namespace:QrCodeScanner.Views"
+	x:Class="QrCodeScanner.Views.MatchScannerPage"
+	x:DataType="views:MatchScannerPage">
 
 	<Grid Margin="5">
 

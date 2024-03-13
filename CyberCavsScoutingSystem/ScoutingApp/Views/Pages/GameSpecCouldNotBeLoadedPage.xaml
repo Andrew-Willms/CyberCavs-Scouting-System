@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ScoutingApp.Views.Pages.GameSpecCouldNotBeLoadedPage">
+<ContentPage
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	x:Class="ScoutingApp.Views.Pages.GameSpecCouldNotBeLoadedPage">
 
 	<Label 
 		Text="There is currently no MatchDataCollector loaded. This likely means the GameSpec file could not be parsed."

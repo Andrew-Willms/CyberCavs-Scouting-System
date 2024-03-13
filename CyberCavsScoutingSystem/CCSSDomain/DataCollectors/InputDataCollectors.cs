@@ -11,21 +11,21 @@ public abstract class InputDataCollector : INotifyPropertyChanged {
 
 	public required string Label { get; init; }
 
-    public static InputDataCollector FromDataField(InputSpec inputSpec, DataField dataField) {
+	public static InputDataCollector FromDataField(InputSpec inputSpec, DataField dataField) {
 
-	    return dataField.Match<InputDataCollector>(
+		return dataField.Match<InputDataCollector>(
 			booleanDataField => new BooleanInputDataCollector(booleanDataField) { Label = inputSpec.Label }, 
 			textDataField => new TextInputDataCollector(textDataField) { Label = inputSpec.Label },
 			integerDataField => new IntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
 			selectionDataField => new SelectionInputDataCollector(selectionDataField) { Label = inputSpec.Label }
-        );
-    }
+		);
+	}
 
-    public event PropertyChangedEventHandler? PropertyChanged;
+	public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected void OnPropertyChanged(string propertyName) {
-	    PropertyChanged?.Invoke(this, new(propertyName));
-    }
+	protected void OnPropertyChanged(string propertyName) {
+		PropertyChanged?.Invoke(this, new(propertyName));
+	}
 
 }
 

@@ -51,10 +51,10 @@ public class GameSpec {
 
 		foreach (Alliance alliance in alliances) {
 
-            if (alliances.Where(x => x != alliance).Any(x => x.Name == alliance.Name)) {
-                return new IResult<GameSpec>.Error($"There are multiple alliances with the name '{nameof(alliance.Name)}'.");
-            }
-        }
+			if (alliances.Where(x => x != alliance).Any(x => x.Name == alliance.Name)) {
+				return new IResult<GameSpec>.Error($"There are multiple alliances with the name '{nameof(alliance.Name)}'.");
+			}
+		}
 
 		foreach (InputSpec input in setupTabInputs) {
 
