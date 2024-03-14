@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using CCSSDomain.GameSpecification;
 using CCSSDomain.Serialization;
 using GameMakerWpf.Domain.Editors;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Results;
 using static GameMakerWpf.AppManagement.IPublisher;
 
@@ -19,17 +17,17 @@ public interface IPublisher {
 
 	public interface IPublishResult : IResult {
 
-		public class Success : IResult.Success, IPublishResult { }
+		public class Success : IResult.Success, IPublishResult;
 
-		public class Aborted : Error, IPublishResult { }
+		public class Aborted : Error, IPublishResult;
 
-		public class GameEditorCouldNotBeConvertedToGameSpecification : Error, IPublishResult { }
+		public class GameEditorCouldNotBeConvertedToGameSpecification : Error, IPublishResult;
 
-		public class GameSpecificationCouldNotBeConvertedToSaveData : Error, IPublishResult { }
+		public class GameSpecificationCouldNotBeConvertedToSaveData : Error, IPublishResult;
 
-		public class SaveLocationDoesNotExist : Error, IPublishResult { }
+		public class SaveLocationDoesNotExist : Error, IPublishResult;
 
-		public class SaveLocationCouldNotBeWrittenTo : Error, IPublishResult { }
+		public class SaveLocationCouldNotBeWrittenTo : Error, IPublishResult;
 
 	}
 
@@ -46,26 +44,13 @@ public class Publisher : IPublisher {
 
 	public IPublishResult Publish(GameEditor gameEditor) {
 
-		IEditorToGameSpecificationResult<GameSpec> result = gameEditor.ToGameSpecification();
-		GameSpec gameSpecSpecification;
+		GameSpec? gameSpecSpecification = gameEditor.ToGameSpecification();
 
-		switch (result) {
-
-			case IEditorToGameSpecificationResult<GameSpec>.Success success:
-				gameSpecSpecification = success.Value;
-				break;
-
-			case IEditorToGameSpecificationResult<GameSpec>.Error error:
-				return new IPublishResult.GameEditorCouldNotBeConvertedToGameSpecification {
-					InnerError = ((Error)error).Optionalize()
-				};
-
-			default:
-				throw new UnreachableException();
+		if (gameSpecSpecification is null) {
+			return new IPublishResult.GameEditorCouldNotBeConvertedToGameSpecification();
 		}
 
 		SaveFileDialog saveFileDialog = SaveFileDialog;
-
 		bool? proceed = saveFileDialog.ShowDialog();
 
 		if (proceed is null or false) {

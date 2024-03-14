@@ -171,7 +171,7 @@ public class GameEditor {
 		}.CreateSingleInput();
 
 		initialValues.Alliances.Foreach(Alliances.Add);
-		initialValues.DataFields.Select(x => x.ToOneOf()).Foreach(DataFields.Add);
+		initialValues.DataFields.Foreach(DataFields.Add);
 
 		initialValues.SetupTabInputs.Foreach(SetupTabInputs.Add);
 		initialValues.AutoTabInputs.Foreach(AutoTabInputs.Add);
@@ -209,7 +209,7 @@ public class GameEditor {
 			AlliancesPerMatch = AlliancesPerMatch.InputObject,
 
 			Alliances = Alliances.Select(x => x.ToEditingData()).ToReadOnly(),
-			DataFields = DataFields.Select(x => x.ToEditingData().AsBase).ToReadOnly(),
+			DataFields = DataFields.Select(x => x.ToEditingData()).ToReadOnly(),
 
 			SetupTabInputs = SetupTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
 			AutoTabInputs = AutoTabInputs.Select(x => x.ToEditingData()).ToReadOnly(),
@@ -232,10 +232,10 @@ public class GameEditor {
 						   TeleTabInputs.All(x => x.IsValid) &&
 						   EndgameTabInputs.All(x => x.IsValid);
 
-	public IEditorToGameSpecificationResult<GameSpec> ToGameSpecification() {
+	public GameSpec? ToGameSpecification() {
 
 		if (!IsValid) {
-			return new IEditorToGameSpecificationResult<GameSpec>.EditorIsInvalid();
+			return null;
 		}
 
 		IResult<GameSpec> creationResult = GameSpec.Create(
@@ -246,46 +246,36 @@ public class GameEditor {
 			robotsPerAlliance: RobotsPerAlliance.OutputObject.Value,
 			alliancesPerMatch: AlliancesPerMatch.OutputObject.Value,
 
-			alliances: Alliances.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<Alliance>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+			alliances: Alliances
+				.Select(x => x.ToGameSpecification() ?? throw new UnreachableException())
+				.ToReadOnly(),
 
-			dataFields: DataFields.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<DataFieldSpec>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+			dataFields: DataFields
+				.Select(x => x.ToGameSpecification() ?? throw new UnreachableException())
+				.ToReadOnly(),
 
-			setupTabInputs: SetupTabInputs.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+			setupTabInputs: SetupTabInputs
+				.Select(x => x.ToGameSpecification() ?? throw new UnreachableException())
+				.ToReadOnly(),
 
-			autoTabInputs: AutoTabInputs.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+			autoTabInputs: AutoTabInputs
+				.Select(x => x.ToGameSpecification() ?? throw new UnreachableException())
+				.ToReadOnly(),
 
-			teleTabInputs: TeleTabInputs.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly(),
+			teleTabInputs: TeleTabInputs
+				.Select(x => x.ToGameSpecification() ?? throw new UnreachableException())
+				.ToReadOnly(),
 
-			endgameTabInputs: EndgameTabInputs.Select(x =>
-				(x.ToGameSpecification() as IEditorToGameSpecificationResult<InputSpec>.Success)?.Value ??
-				throw new UnreachableException()).ToReadOnly()
+			endgameTabInputs: EndgameTabInputs
+				.Select(x => x.ToGameSpecification() ?? throw new UnreachableException())
+				.ToReadOnly()
 		);
 
 		return creationResult switch {
-			IResult<GameSpec>.Success success => new IEditorToGameSpecificationResult<GameSpec>.Success { Value = success.Value },
-			IResult<GameSpec>.Error => new IEditorToGameSpecificationResult<GameSpec>.EditorIsInvalid(),
+			IResult<GameSpec>.Success success => success.Value ,
+			IResult<GameSpec>.Error => null,
 			_ => throw new UnreachableException()
 		};
 	}
-
-}
-
-
-
-public interface IEditorToGameSpecificationResult<TGameSpecification> : IResult<TGameSpecification> {
-
-	public class Success : IResult<TGameSpecification>.Success, IEditorToGameSpecificationResult<TGameSpecification> { }
-
-	public class EditorIsInvalid : Error, IEditorToGameSpecificationResult<TGameSpecification> { }
 
 }

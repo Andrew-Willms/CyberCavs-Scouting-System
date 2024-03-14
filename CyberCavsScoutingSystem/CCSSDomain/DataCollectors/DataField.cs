@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using CCSSDomain.GameSpecification;
-using OneOf;
+using ExhaustiveMatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
@@ -11,15 +11,16 @@ namespace CCSSDomain.DataCollectors;
 
 
 
-public abstract class DataFieldBase : INotifyPropertyChanged {
+[Closed(typeof(BooleanDataField), typeof(TextDataField), typeof(IntegerDataField), typeof(SelectionDataField))]
+public abstract class DataField : INotifyPropertyChanged {
 
 	public DataFieldSpec DataFieldSpec { get; }
 
-	public string Name => DataFieldSpec.AsBase.Name;
+	public string Name => DataFieldSpec.Name;
 
 	public readonly Event OnValueChange = new();
 
-	protected DataFieldBase(DataFieldSpec dataFieldSpec) {
+	protected DataField(DataFieldSpec dataFieldSpec) {
 		DataFieldSpec = dataFieldSpec;
 	}
 
@@ -34,20 +35,8 @@ public abstract class DataFieldBase : INotifyPropertyChanged {
 }
 
 
-[GenerateOneOf]
-public partial class DataField : OneOfBase<BooleanDataField, TextDataField, IntegerDataField, SelectionDataField> {
 
-	public DataFieldBase AsBase => Match<DataFieldBase>(
-		booleanDataField => booleanDataField,
-		dataFieldSpec => dataFieldSpec,
-		integerDataField => integerDataField,
-		selectionDataField => selectionDataField);
-
-}
-
-
-
-public class BooleanDataField : DataFieldBase {
+public class BooleanDataField : DataField {
 
 	public BooleanDataFieldSpec BooleanDataFieldSpec { get; }
 
@@ -71,7 +60,7 @@ public class BooleanDataField : DataFieldBase {
 
 
 
-public class TextDataField : DataFieldBase {
+public class TextDataField : DataField {
 
 	public TextDataFieldSpec TextDataFieldSpec { get; }
 
@@ -108,7 +97,7 @@ public class TextDataField : DataFieldBase {
 
 
 
-public class IntegerDataField : DataFieldBase {
+public class IntegerDataField : DataField {
 
 	public IntegerDataFieldSpec IntegerDataFieldSpec { get; }
 
@@ -147,7 +136,7 @@ public class IntegerDataField : DataFieldBase {
 
 
 
-public class SelectionDataField : DataFieldBase {
+public class SelectionDataField : DataField {
 
 	public SelectionDataFieldSpec SelectionDataFieldSpec { get; }
 

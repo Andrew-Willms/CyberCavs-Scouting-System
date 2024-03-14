@@ -6,7 +6,7 @@ namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
 
 
-public class IntegerDataFieldEditor : DataFieldTypeEditorBase {
+public class IntegerDataFieldEditor : DataFieldTypeEditor {
 
 	private GameEditor GameEditor { get; }
 

@@ -11,8 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="OneOf" Version="3.0.263" />
-	  <PackageReference Include="OneOf.SourceGenerator" Version="3.0.263" />
+	  <PackageReference Include="ExhaustiveMatching.Analyzer" Version="0.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>

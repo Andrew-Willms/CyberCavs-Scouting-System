@@ -24,7 +24,7 @@ public class GameSpec {
 
 	public required ReadOnlyList<Alliance> Alliances { get; init; }
 
-	public required ReadOnlyList<DataFieldSpecBase> DataFields { get; init; }
+	public required ReadOnlyList<DataFieldSpec> DataFields { get; init; }
 
 	public required ReadOnlyList<InputSpec> SetupTabInputs { get; init; }
 	public required ReadOnlyList<InputSpec> AutoTabInputs { get; init; }
@@ -58,7 +58,7 @@ public class GameSpec {
 
 		foreach (InputSpec input in setupTabInputs) {
 
-			if (!dataFields.Select(x => x.AsBase.Name).Contains(input.DataFieldName)) {
+			if (!dataFields.Select(x => x.Name).Contains(input.DataFieldName)) {
 
 				return new IResult<GameSpec>.Error($"Input '{input.Label}' from {nameof(SetupTabInputs)} targets the DataField with the " +
 												   $"name '{input.DataFieldName}' but no DataField of that name was found.");
@@ -67,7 +67,7 @@ public class GameSpec {
 
 		foreach (InputSpec input in autoTabInputs) {
 
-			if (!dataFields.Select(x => x.AsBase.Name).Contains(input.DataFieldName)) {
+			if (!dataFields.Select(x => x.Name).Contains(input.DataFieldName)) {
 
 				return new IResult<GameSpec>.Error($"Input '{input.Label}' from {nameof(AutoTabInputs)} targets the DataField with the " +
 												   $"name '{input.DataFieldName}' but no DataField of that name was found.");
@@ -76,7 +76,7 @@ public class GameSpec {
 
 		foreach (InputSpec input in teleTabInputs) {
 
-			if (!dataFields.Select(x => x.AsBase.Name).Contains(input.DataFieldName)) {
+			if (!dataFields.Select(x => x.Name).Contains(input.DataFieldName)) {
 
 				return new IResult<GameSpec>.Error($"Input '{input.Label}' from {nameof(TeleTabInputs)} targets the DataField with the " +
 												   $"name '{input.DataFieldName}' but no DataField of that name was found.");
@@ -85,7 +85,7 @@ public class GameSpec {
 
 		foreach (InputSpec input in endgameTabInputs) {
 
-			if (!dataFields.Select(x => x.AsBase.Name).Contains(input.DataFieldName)) {
+			if (!dataFields.Select(x => x.Name).Contains(input.DataFieldName)) {
 
 				return new IResult<GameSpec>.Error($"Input '{input.Label}' from {nameof(EndgameTabInputs)} targets the DataField with the " +
 												   $"name '{input.DataFieldName}' but no DataField of that name was found.");
@@ -101,7 +101,7 @@ public class GameSpec {
 				RobotsPerAlliance = robotsPerAlliance,
 				AlliancesPerMatch = alliancesPerMatch,
 				Alliances = alliances,
-				DataFields = dataFields.Select(x => x.AsBase).ToReadOnly(),
+				DataFields = dataFields.ToReadOnly(),
 				SetupTabInputs = setupTabInputs,
 				AutoTabInputs = autoTabInputs,
 				TeleTabInputs = teleTabInputs,

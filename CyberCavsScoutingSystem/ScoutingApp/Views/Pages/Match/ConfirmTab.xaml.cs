@@ -52,7 +52,7 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 			}
 
 			foreach (DataField dataField in AppManager.ActiveMatchData.DataFields) {
-				dataField.AsBase.AddErrorsToCollection(errors.Add);
+				dataField.AddErrorsToCollection(errors.Add);
 			}
 
 			return errors;

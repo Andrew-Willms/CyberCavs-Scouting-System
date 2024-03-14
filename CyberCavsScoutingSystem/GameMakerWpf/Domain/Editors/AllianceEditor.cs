@@ -85,16 +85,16 @@ public class AllianceEditor {
 
 	public bool IsValid => Name.IsValid && Color.IsValid;
 
-	public IEditorToGameSpecificationResult<Alliance> ToGameSpecification() {
+	public Alliance? ToGameSpecification() {
 
 		if (!IsValid) {
-			return new IEditorToGameSpecificationResult<Alliance>.EditorIsInvalid();
+			return null;
 		}
 
-		return new IEditorToGameSpecificationResult<Alliance>.Success { Value = new() {
+		return new() {
 			Name = Name.OutputObject.Value,
 			Color = Color.OutputObject.Value.ToDrawingColor()
-		}};
+		};
 	}
 
 }

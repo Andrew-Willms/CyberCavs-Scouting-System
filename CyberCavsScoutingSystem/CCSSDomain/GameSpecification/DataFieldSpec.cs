@@ -1,28 +1,17 @@
 ﻿using CCSSDomain.DataCollectors;
-using OneOf;
+using ExhaustiveMatching;
 using UtilitiesLibrary.Collections;
 
 namespace CCSSDomain.GameSpecification;
 
 
 
-public abstract class DataFieldSpecBase {
+[Closed(typeof(BooleanDataFieldSpec), typeof(TextDataFieldSpec), typeof(IntegerDataFieldSpec), typeof(SelectionDataFieldSpec))]
+public abstract class DataFieldSpec {
 
 	public required string Name { get; init; }
 
 	public abstract DataField ToDataField();
-
-}
-
-[GenerateOneOf]
-public partial class
-	DataFieldSpec : OneOfBase<BooleanDataFieldSpec, TextDataFieldSpec, IntegerDataFieldSpec, SelectionDataFieldSpec> {
-
-	public DataFieldSpecBase AsBase => Match<DataFieldSpecBase>(
-		booleanDataFieldSpec => booleanDataFieldSpec,
-		textDataFieldSpec => textDataFieldSpec,
-		integerDataFieldSpec => integerDataFieldSpec,
-		selectionDataFieldSpec => selectionDataFieldSpec);
 
 	public enum DataFieldType {
 		Boolean,
@@ -33,7 +22,7 @@ public partial class
 
 }
 
-public class BooleanDataFieldSpec : DataFieldSpecBase {
+public class BooleanDataFieldSpec : DataFieldSpec {
 
 	public required bool InitialValue { get; init; }
 
@@ -43,7 +32,7 @@ public class BooleanDataFieldSpec : DataFieldSpecBase {
 
 }
 
-public class TextDataFieldSpec : DataFieldSpecBase {
+public class TextDataFieldSpec : DataFieldSpec {
 
 	public required string InitialValue { get; init; } = string.Empty;
 
@@ -57,7 +46,7 @@ public class TextDataFieldSpec : DataFieldSpecBase {
 
 }
 
-public class IntegerDataFieldSpec : DataFieldSpecBase {
+public class IntegerDataFieldSpec : DataFieldSpec {
 
 	public required int InitialValue { get; init; }
 
@@ -71,7 +60,7 @@ public class IntegerDataFieldSpec : DataFieldSpecBase {
 
 }
 
-public class SelectionDataFieldSpec : DataFieldSpecBase {
+public class SelectionDataFieldSpec : DataFieldSpec {
 
 	public required ReadOnlyList<string> OptionNames { get; init; }
 

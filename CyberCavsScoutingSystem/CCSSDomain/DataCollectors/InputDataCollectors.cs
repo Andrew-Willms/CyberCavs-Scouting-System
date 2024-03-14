@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using CCSSDomain.GameSpecification;
+using ExhaustiveMatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 
@@ -13,12 +14,13 @@ public abstract class InputDataCollector : INotifyPropertyChanged {
 
 	public static InputDataCollector FromDataField(InputSpec inputSpec, DataField dataField) {
 
-		return dataField.Match<InputDataCollector>(
-			booleanDataField => new BooleanInputDataCollector(booleanDataField) { Label = inputSpec.Label }, 
-			textDataField => new TextInputDataCollector(textDataField) { Label = inputSpec.Label },
-			integerDataField => new IntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
-			selectionDataField => new SelectionInputDataCollector(selectionDataField) { Label = inputSpec.Label }
-		);
+		return dataField switch {
+			BooleanDataField booleanDataField => new BooleanInputDataCollector(booleanDataField) { Label = inputSpec.Label },
+			TextDataField textDataField => new TextInputDataCollector(textDataField) { Label = inputSpec.Label },
+			IntegerDataField integerDataField => new IntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
+			SelectionDataField selectionDataField => new SelectionInputDataCollector(selectionDataField) { Label = inputSpec.Label },
+			_ => throw ExhaustiveMatch.Failed(dataField)
+		};
 	}
 
 	public event PropertyChangedEventHandler? PropertyChanged;

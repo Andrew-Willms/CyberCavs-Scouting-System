@@ -54,16 +54,16 @@ public class InputEditor {
 
 	public bool IsValid => DataFieldName.IsValid && Label.IsValid;
 
-	public IEditorToGameSpecificationResult<InputSpec> ToGameSpecification() {
+	public InputSpec? ToGameSpecification() {
 
 		if (!IsValid) {
-			return new IEditorToGameSpecificationResult<InputSpec>.EditorIsInvalid();
+			return null;
 		}
 
-		return new IEditorToGameSpecificationResult<InputSpec>.Success { Value = new() {
+		return new() {
 			DataFieldName = DataFieldName.OutputObject.Value,
 			Label = Label.OutputObject.Value
-		}};
+		};
 	}
 
 }

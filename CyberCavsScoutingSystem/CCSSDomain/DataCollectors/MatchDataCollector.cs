@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using CCSSDomain.GameSpecification;
+using ExhaustiveMatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Optional;
@@ -40,10 +41,10 @@ public class MatchDataCollector {
 
 		DataFields = GameSpecification.DataFields.Select(x => x.ToDataField()).ToReadOnly();
 
-		SetupTabInputs = GameSpecification.SetupTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
-		AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
-		TeleTabInputs = GameSpecification.TeleTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
-		EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.AsBase.Name == x.DataFieldName))).ToReadOnly();
+		SetupTabInputs = GameSpecification.SetupTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+		AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+		TeleTabInputs = GameSpecification.TeleTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
+		EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
 	}
 
 	public string ConvertDataToCsv(string scout, string @event) {
@@ -60,12 +61,21 @@ public class MatchDataCollector {
 
 		foreach (DataField dataField in DataFields) {
 
-			dataField.Switch(
-				booleanDataField => matchData.Append($"{booleanDataField.Value.ToString().ToCsvFriendly()},"),
-				textDataField => matchData.Append($"{textDataField.Text.ToCsvFriendly()},"),
-				integerDataField => matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},"),
-				selectionDataField => matchData.Append($"{selectionDataField.SelectedOption.Value.ToString().ToCsvFriendly()},")
-			);
+			switch (dataField) {
+				case BooleanDataField booleanDataField:
+					matchData.Append($"{booleanDataField.Value.ToString().ToCsvFriendly()},");
+					break;
+				case TextDataField textDataField:
+					matchData.Append($"{textDataField.Text.ToCsvFriendly()},");
+					break;
+				case IntegerDataField integerDataField:
+					matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},");
+					break;
+				case SelectionDataField selectionDataField:
+					matchData.Append($"{selectionDataField.SelectedOption.Value.ToCsvFriendly()},");
+					break;
+				default: throw ExhaustiveMatch.Failed(dataField);
+			}
 		}
 
 		return matchData.ToString();
