@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Data;
 using UtilitiesLibrary.Collections;
@@ -32,12 +31,11 @@ public static class ButtonValidators {
 	}
 
 	public static ReadOnlyList<Error> DataFieldNameValidator_DataFieldOfNameExists(string name, IEnumerable<DataFieldEditor> dataFields) {
-
+		
 		return dataFields.None(x => x.Name.OutputObject.HasValue &&
-		                           x.Name.OutputObject.Value == name &&
-		                           x.DataFieldType == DataFieldSpec.DataFieldType.Integer)
-
-			? ButtonValidationData.DataField.DataFieldDoesNotExistError.ReadOnlyListify()
+		                            x.Name.OutputObject.Value == name &&
+		                            x.DataFieldTypeEditor is IntegerDataFieldEditor) 
+			? ButtonValidationData.DataField.DataFieldDoesNotExistError.ReadOnlyListify() 
 			: ReadOnlyList.Empty;
 	}
 
