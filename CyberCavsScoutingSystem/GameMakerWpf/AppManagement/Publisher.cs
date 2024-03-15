@@ -77,7 +77,6 @@ public class Publisher : IPublisher {
 			File.WriteAllText(filePath, serializedGameSpecification);
 
 		} catch {
-
 			return new IPublishResult.SaveLocationCouldNotBeWrittenTo();
 		}
 
