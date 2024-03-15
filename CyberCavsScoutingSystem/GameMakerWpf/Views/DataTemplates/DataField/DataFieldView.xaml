@@ -5,7 +5,6 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	xmlns:dataFieldEditors="clr-namespace:GameMakerWpf.Domain.Editors.DataFieldEditors"
-	xmlns:models="clr-namespace:CCSSDomain.GameSpecification;assembly=CCSSDomain"
 	x:Class="GameMakerWpf.Views.DataTemplates.DataField.DataFieldView"
 	mc:Ignorable="d" 
 	d:DesignHeight="450"
@@ -15,7 +14,7 @@
 	<UserControl.Resources>
 		<ObjectDataProvider x:Key="DataFieldTypes" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
 			<ObjectDataProvider.MethodParameters>
-				<x:Type TypeName="models:DataFieldSpec+DataFieldType"/>
+				<x:Type TypeName="dataFieldEditors:DataFieldEditor+DataFieldTypes"/>
 			</ObjectDataProvider.MethodParameters>
 		</ObjectDataProvider>
 	</UserControl.Resources>

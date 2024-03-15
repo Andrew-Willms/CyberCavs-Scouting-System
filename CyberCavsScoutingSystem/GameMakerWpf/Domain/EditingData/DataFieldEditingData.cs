@@ -1,6 +1,5 @@
 ﻿using ExhaustiveMatching;
 using UtilitiesLibrary.Collections;
-using static CCSSDomain.GameSpecification.DataFieldSpec;
 
 namespace GameMakerWpf.Domain.EditingData;
 
@@ -10,8 +9,6 @@ namespace GameMakerWpf.Domain.EditingData;
 public abstract class DataFieldEditingData {
 
 	public required string Name { get; init; }
-
-	public required DataFieldType DataFieldType { get; init; }
 
 }
 

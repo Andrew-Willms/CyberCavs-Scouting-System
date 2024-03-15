@@ -13,13 +13,6 @@ public abstract class DataFieldSpec {
 
 	public abstract DataField ToDataField();
 
-	public enum DataFieldType {
-		Boolean,
-		Text,
-		Integer,
-		Selection
-	}
-
 }
 
 public class BooleanDataFieldSpec : DataFieldSpec {

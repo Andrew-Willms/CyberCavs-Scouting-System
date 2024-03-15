@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CCSSDomain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors;
 using UtilitiesLibrary.Collections;
@@ -13,29 +12,27 @@ public static class DefaultEditingDataValues {
 
 	private static readonly AllianceEditingData DefaultRedAlliance = new() {
 		Name = "Red Alliance",
-		RedColorValue = $"{255}",
-		GreenColorValue = $"{0}",
-		BlueColorValue = $"{0}"
+		RedColorValue = "255",
+		GreenColorValue = "0",
+		BlueColorValue = "0"
 	};
 
 	private static readonly AllianceEditingData DefaultBlueAlliance = new() {
 		Name = "Blue Alliance",
-		RedColorValue = $"{0}",
-		GreenColorValue = $"{0}",
-		BlueColorValue = $"{255}",
+		RedColorValue = "0",
+		GreenColorValue = "0",
+		BlueColorValue = "255"
 	};
 
 
 
 	public static readonly BooleanDataFieldEditingData DefaultBooleanDataFieldEditingData = new() {
 		Name = "New Data Field",
-		DataFieldType = DataFieldSpec.DataFieldType.Boolean,
 		InitialValue = false
 	};
 
 	public static readonly TextDataFieldEditingData DefaultTextDataFieldEditingData = new() {
 		Name = "New Data Field",
-		DataFieldType = DataFieldSpec.DataFieldType.Text,
 		InitialValue = "",
 		MustNotBeEmpty = false,
 		MustNotBeInitialValue = false
@@ -44,15 +41,13 @@ public static class DefaultEditingDataValues {
 	public static readonly SelectionDataFieldEditingData DefaultSelectionDataFieldEditingData = new() {
 		Name = "New Data Field",
 		OptionNames = ReadOnlyList.Empty,
-		DataFieldType = DataFieldSpec.DataFieldType.Selection
 	};
 
 	public static readonly IntegerDataFieldEditingData DefaultIntegerDataFieldEditingData = new() {
 		Name = "New Data Field",
-		InitialValue = $"{0}",
+		InitialValue = "0",
 		MinValue = $"{int.MinValue}",
 		MaxValue = $"{int.MaxValue}",
-		DataFieldType = DataFieldSpec.DataFieldType.Integer
 	};
 
 	public static readonly DataFieldEditingData DefaultDataFieldEditingData = DefaultTextDataFieldEditingData;
@@ -72,13 +67,13 @@ public static class DefaultEditingDataValues {
 		Year = DateTime.Now.Year.ToString(),
 		Description = "",
 
-		VersionMajorNumber = $"{1}",
-		VersionMinorNumber = $"{0}",
-		VersionPatchNumber = $"{0}",
+		VersionMajorNumber = "1",
+		VersionMinorNumber = "0",
+		VersionPatchNumber = "0",
 		VersionDescription = "",
 
-		RobotsPerAlliance = $"{3}",
-		AlliancesPerMatch = $"{2}",
+		RobotsPerAlliance = "3",
+		AlliancesPerMatch = "2",
 		Alliances = new List<AllianceEditingData> { DefaultRedAlliance, DefaultBlueAlliance }.ToReadOnly(),
 		DataFields = ReadOnlyList.Empty,
 

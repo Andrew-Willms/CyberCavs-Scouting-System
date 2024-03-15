@@ -9,7 +9,6 @@ using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Validation.Inputs;
-using static CCSSDomain.GameSpecification.DataFieldSpec;
 
 namespace GameMakerWpf.Domain.Editors.DataFieldEditors;
 
@@ -23,8 +22,15 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 	public DataFieldTypeEditor DataFieldTypeEditor { get; private set; }
 
-	private DataFieldType _DataFieldType;
-	public DataFieldType DataFieldType {
+	public enum DataFieldTypes {
+		Boolean,
+		Text,
+		Integer,
+		Selection
+	}
+
+	private DataFieldTypes _DataFieldType;
+	public DataFieldTypes DataFieldType {
 		get => _DataFieldType;
 		set {
 
@@ -45,7 +51,14 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 		GameEditor = gameEditor;
 
-		DataFieldType = initialValues.DataFieldType;
+		DataFieldType = initialValues switch {
+			BooleanDataFieldEditingData => DataFieldTypes.Boolean,
+			TextDataFieldEditingData => DataFieldTypes.Text,
+			IntegerDataFieldEditingData => DataFieldTypes.Integer,
+			SelectionDataFieldEditingData => DataFieldTypes.Selection,
+			_ => throw new UnreachableException()
+			//_ => throw ExhaustiveMatch.Failed(initialValues)
+		};
 
 		DataFieldTypeEditor = initialValues switch {
 			BooleanDataFieldEditingData booleanDataFieldEditingData => new BooleanDataFieldEditor(GameEditor, booleanDataFieldEditingData),
@@ -66,13 +79,13 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		Name.OutputObjectChanged.Subscribe(GameEditor.AnythingChanged.Invoke);
 	}
 
-	private void ChangeDataFieldType(DataFieldType dataFieldType) {
+	private void ChangeDataFieldType(DataFieldTypes dataFieldType) {
 
 		DataFieldTypeEditor = dataFieldType switch {
-			DataFieldType.Boolean => new BooleanDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultBooleanDataFieldEditingData),
-			DataFieldType.Text => new TextDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultTextDataFieldEditingData),
-			DataFieldType.Selection => new SelectionDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultSelectionDataFieldEditingData),
-			DataFieldType.Integer => new IntegerDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultIntegerDataFieldEditingData),
+			DataFieldTypes.Boolean => new BooleanDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultBooleanDataFieldEditingData),
+			DataFieldTypes.Text => new TextDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultTextDataFieldEditingData),
+			DataFieldTypes.Selection => new SelectionDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultSelectionDataFieldEditingData),
+			DataFieldTypes.Integer => new IntegerDataFieldEditor(GameEditor, DefaultEditingDataValues.DefaultIntegerDataFieldEditingData),
 			_ => throw new UnreachableException()
 		};
 
@@ -96,13 +109,11 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 			BooleanDataFieldEditor booleanDataFieldEditor => new BooleanDataFieldEditingData {
 				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Boolean,
 				InitialValue = booleanDataFieldEditor.InitialValue.InputObject,
 			},
 
 			TextDataFieldEditor textDataFieldEditor => new TextDataFieldEditingData {
 				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Text,
 				InitialValue = textDataFieldEditor.InitialValue.InputObject,
 				MustNotBeEmpty = textDataFieldEditor.MustNotBeInitialValue.InputObject,
 				MustNotBeInitialValue = textDataFieldEditor.MustNotBeInitialValue.InputObject
@@ -110,7 +121,6 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 			IntegerDataFieldEditor integerDataFieldEditor => new IntegerDataFieldEditingData {
 				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Integer,
 				InitialValue = integerDataFieldEditor.InitialValue.InputObject,
 				MinValue = integerDataFieldEditor.MinValue.InputObject,
 				MaxValue = integerDataFieldEditor.MaxValue.InputObject
@@ -118,7 +128,6 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldEditingData {
 				Name = Name.InputObject,
-				DataFieldType = DataFieldType.Selection,
 				OptionNames = selectionDataFieldEditor.Options.Select(x => x.InputObject).ToReadOnly()
 			},
 
