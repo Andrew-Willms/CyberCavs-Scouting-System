@@ -134,7 +134,8 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		    integerDataFieldEditor.MinValue.IsValid &&
 		    integerDataFieldEditor.MaxValue.IsValid,
 		SelectionDataFieldEditor selectionDataFieldEditor => selectionDataFieldEditor.Options.All(x => x.IsValid),
-		_ => throw ExhaustiveMatch.Failed(DataFieldTypeEditor)
+		_ => throw new UnreachableException()
+		//_ => throw ExhaustiveMatch.Failed(DataFieldTypeEditor) // not supported by nuget package
 	};
 
 	public DataFieldSpec? ToGameSpecification() {
