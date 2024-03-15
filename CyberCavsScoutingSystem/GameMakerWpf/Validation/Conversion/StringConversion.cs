@@ -20,6 +20,7 @@ public interface INumberConversionErrorSet {
 	public Func<char[], ValidationError> InvalidCharactersErrorGetter { get; init; }
 
 	public Func<string, ValidationError> ValueTooLargeErrorGetter { get; init; }
+
 }
 
 public interface ISignedNumberConversionErrorSet : INumberConversionErrorSet {
@@ -27,21 +28,25 @@ public interface ISignedNumberConversionErrorSet : INumberConversionErrorSet {
 	public ValidationError MinusSignMustBeAtStartError { get; init; }
 	
 	public Func<string, ValidationError> ValueTooNegativeErrorGetter { get; init; }
+
 }
 
 public interface IUnsignedNumberConversionErrorSet : INumberConversionErrorSet {
 
 	public ValidationError CannotBeNegativeError { get; init; }
+
 }
 
 public interface IIntegerConversionErrorSet : INumberConversionErrorSet {
 
 	public ValidationError MustBeIntegerError { get; init; }
+
 }
 
 public interface IFloatConversionErrorSet : INumberConversionErrorSet {
 
 	public ValidationError TooManyDecimalPointsError { get; init; }
+
 }
 
 
@@ -89,6 +94,7 @@ public class WholeConversionErrorSet : IUnsignedNumberConversionErrorSet, IInteg
 	public required ValidationError MustBeIntegerError { get; init; }
 	
 	public required ValidationError CannotBeNegativeError { get; init; }
+
 }
 
 

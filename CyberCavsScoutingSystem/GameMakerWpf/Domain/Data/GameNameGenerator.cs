@@ -15,7 +15,7 @@ public static class GameNameGenerator {
 	private static string GetRandomAdjective() {
 
 		string solutionDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.Parent!.FullName;
-		string fileDirectory = solutionDirectory + "\\\\GameMakerWpf\\\\Domain\\\\Data\\\\" + "adjectives.txt";
+		string fileDirectory = solutionDirectory + @"\\GameMakerWpf\\Domain\\Data\\" + "adjectives.txt";
 
 		string[] lines = File.ReadAllLines(fileDirectory);
 		Random rand = new();
@@ -25,7 +25,7 @@ public static class GameNameGenerator {
 	private static string GetRandomNoun() {
 
 		string solutionDirectory = Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.Parent!.FullName;
-		string fileDirectory = solutionDirectory + "\\\\GameMakerWpf\\\\Domain\\\\Data\\\\" + "nouns.txt";
+		string fileDirectory = solutionDirectory + @"\\GameMakerWpf\\Domain\\Data\\" + "nouns.txt";
 
 		string[] lines = File.ReadAllLines(fileDirectory);
 		Random rand = new();
