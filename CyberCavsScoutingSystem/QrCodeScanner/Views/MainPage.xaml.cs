@@ -66,8 +66,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private async void ViewMatchDetailsButton_OnClicked(object? sender, EventArgs e) {
 
-		Button button = sender as Button ?? throw new ArgumentException();
-		ScannedMatch scannedMatch = button.BindingContext is ScannedMatch match ? match : throw new ArgumentException();
+		Button button = sender as Button ?? throw new UnreachableException();
+		ScannedMatch scannedMatch = button.BindingContext is ScannedMatch match ? match : throw new UnreachableException();
 
 		Dictionary<string, object> parameters = new() {
 			{ MatchDetailsPage.ScannedMatchNavigationParameterName, scannedMatch },

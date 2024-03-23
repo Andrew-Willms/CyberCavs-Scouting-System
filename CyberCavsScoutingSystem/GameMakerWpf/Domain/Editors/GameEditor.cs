@@ -191,8 +191,6 @@ public class GameEditor {
 		AnythingChanged.SubscribeTo(DataFieldTypeChanged);
 	}
 
-
-
 	public GameEditingData ToEditingData() {
 
 		return new() {
