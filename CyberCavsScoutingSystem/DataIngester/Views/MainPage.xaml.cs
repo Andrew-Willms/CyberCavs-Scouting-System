@@ -7,13 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CCSSDomain.GameSpecification;
 using DataIngester.Services;
 using MediaDevices;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
+using Exception = System.Exception;
 
 namespace DataIngester.Views;
 
@@ -67,6 +67,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 				await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger, Dispatcher);
 				await Task.Delay(new TimeSpan(0, 0, 0, 2));
 			}
+			// ReSharper disable once FunctionNeverReturns
 		});
 
 		Task.Run(async () => {
@@ -79,6 +80,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 				await Task.Delay(new TimeSpan(0, 0, 0, 2));
 			}
+			// ReSharper disable once FunctionNeverReturns
 		});
 	}
 
@@ -96,20 +98,27 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.ReleaseMutex);
 
-		UpdateSourceDirectoryAccessibilities(sourceDirectories);
+		try {
 
-		List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile(targetFilePath, log);
-		if (targetFileContents is null) {
-			return;
+			UpdateSourceDirectoryAccessibilities(sourceDirectories);
+
+			List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile(targetFilePath, log);
+			if (targetFileContents is null) {
+				return;
+			}
+
+			List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories(sourceDirectories, log);
+
+			matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
+
+			await WriteMatchDataToTargetFile(targetFilePath, matchDataFromDevices.ToReadOnly(), log);
+
+			AlreadyAccessingDevices = false;
+
+		} catch (Exception exception) {
+
+			Trace.WriteLine(exception);
 		}
-
-		List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories(sourceDirectories, log);
-
-		matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
-
-		await WriteMatchDataToTargetFile(targetFilePath, matchDataFromDevices.ToReadOnly(), log);
-
-		AlreadyAccessingDevices = false;
 	}
 
 	private static void UpdateSourceDirectoryAccessibilities(IEnumerable<Directory> sourceDirectories) {
@@ -125,26 +134,21 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 		if (!File.Exists(targetFilePath)) {
 
-			IResult<GameSpec> result = await App.GetGameSpec();
-
-			switch (result) {
-				case IResult<GameSpec>.Error error:
-					log($"Error while parsing game specification file: \"{error.Message}\"");
-					return null;
-
-				case GameSpec test:
-					throw new NotImplementedException();
-
-				default:
-					throw new UnreachableException();
-			}
-
+			//IResult<GameSpec> result = await App.GetGameSpec();
+			//switch (result) {
+			//	case IResult<GameSpec>.Error error:
+			//		log($"Error while parsing game specification file: \"{error.Message}\"");
+			//		return null;
+			//	case GameSpec test:
+			//		throw new NotImplementedException();
+			//	default:
+			//		throw new UnreachableException();
+			//}
 			//if (result is IResult<GameSpec>.Error error) {
 			//	log($"Error while parsing game specification file: \"{error.Message}\"");
 			//	return null;
 			//}
-
-			GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
+			//GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
 
 			string? targetFileDirectory;
 			try {
@@ -165,8 +169,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 			}
 
 			try {
-				await File.WriteAllTextAsync(targetFilePath, gameSpec.GetCsvHeaders());
-
+				File.Create(targetFilePath);
 			} catch {
 				log($"Target File \"{targetFilePath}\" does not exist and could not be created.");
 				return null;
@@ -279,7 +282,9 @@ public static class MtpDeviceExtensions {
 
 		try {
 			device.DownloadFile(filePath, memoryStream);
-		} catch {
+		} catch (Exception exception) {
+
+			Trace.WriteLine(exception);
 			return new IResult<string>.Error("The specified file could not be downloaded from the device.");
 		}
 
