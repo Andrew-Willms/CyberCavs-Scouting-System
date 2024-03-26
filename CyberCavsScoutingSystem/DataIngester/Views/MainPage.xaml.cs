@@ -7,19 +7,22 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using DataIngester.Services;
 using MediaDevices;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Dispatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 using Exception = System.Exception;
+using Timer = System.Timers.Timer;
 
 namespace DataIngester.Views;
 
 
 
 public partial class MainPage : ContentPage, INotifyPropertyChanged {
+
+	private readonly IMtpDeviceService MtpService;
 
 	private string _TargetFile = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Documents\CCSS\ScoutingData\Data.csv");
 	public string TargetFile {
@@ -51,110 +54,81 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	public ObservableCollection<string> LogMessages { get; } = new();
 	private Action<string> Logger => text => LogMessages.Add(DateTime.Now + ": " + text);
 
-	private static bool AlreadyAccessingDevices;
-	private static readonly Mutex AlreadyAccessingDevicesMutex = new();
+	private static readonly SemaphoreSlim Mutex = new(1);
+
+	private readonly Timer Timer = new(TimeSpan.FromSeconds(1));
 
 
 
-	public MainPage() {
+	public MainPage(IMtpDeviceService mtpService) {
+
+		MtpService = mtpService;
 
 		InitializeComponent();
 		BindingContext = this;
 
-		Task.Run(async () => {
-
-			while (true) {
-				await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger, Dispatcher);
-				await Task.Delay(new TimeSpan(0, 0, 0, 2));
-			}
-			// ReSharper disable once FunctionNeverReturns
-		});
-
-		Task.Run(async () => {
-
-			while (true) {
-
-				if (LogMessages.Count > 100) {
-					LogMessages.RemoveAt(0);
-				}
-
-				await Task.Delay(new TimeSpan(0, 0, 0, 2));
-			}
-			// ReSharper disable once FunctionNeverReturns
-		});
+		Timer.Elapsed += TrimLog;
+		Timer.Elapsed += CopyData;
+		Timer.Start();
 	}
 
 
 
-	private static async Task RunBackgroundTask(ReadOnlyList<Directory> sourceDirectories, string targetFilePath, Action<string> log, IDispatcher dispatcher) {
+	private void TrimLog(object? sender, ElapsedEventArgs eventArgs) {
 
-		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.WaitOne);
+		if (LogMessages.Count > 100) {
+			LogMessages.RemoveAt(0);
+		}
+	}
 
-		if (AlreadyAccessingDevices) {
+	private async void CopyData(object? sender, ElapsedEventArgs eventArgs) {
+
+		if (Mutex.CurrentCount == 0) {
 			return;
 		}
 
-		AlreadyAccessingDevices = true;
-
-		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.ReleaseMutex);
-
+		await Mutex.WaitAsync();
+		
 		try {
 
-			UpdateSourceDirectoryAccessibilities(sourceDirectories);
+			UpdateSourceDirectoryAccessibilities();
 
-			List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile(targetFilePath, log);
+			List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile();
 			if (targetFileContents is null) {
 				return;
 			}
 
-			List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories(sourceDirectories, log);
+			List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories();
 
 			matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
 
-			await WriteMatchDataToTargetFile(targetFilePath, matchDataFromDevices.ToReadOnly(), log);
-
-			AlreadyAccessingDevices = false;
+			await WriteMatchDataToTargetFile(matchDataFromDevices.ToReadOnly());
 
 		} catch (Exception exception) {
 
 			Trace.WriteLine(exception);
 		}
+
+		Mutex.Release();
 	}
 
-	private static void UpdateSourceDirectoryAccessibilities(IEnumerable<Directory> sourceDirectories) {
+	private void UpdateSourceDirectoryAccessibilities() {
 
-		foreach (Directory sourceDirectory in sourceDirectories) {
+		foreach (Directory sourceDirectory in SourceDirectories) {
 
-			sourceDirectory.IsAccessible = StaticServiceResolver.Resolve<IMtpDeviceService>()
-				.GetDevices().Any(device => device.DirectoryExistsSafe(sourceDirectory.Path));
+			sourceDirectory.IsAccessible = MtpService.GetDevices().Any(device => device.DirectoryExistsSafe(sourceDirectory.Path));
 		}
 	}
 
-	private static async Task<List<string>?> GetExistingMatchDataFromTargetFile(string targetFilePath, Action<string> log) {
+	private async Task<List<string>?> GetExistingMatchDataFromTargetFile() {
 
-		if (!File.Exists(targetFilePath)) {
-
-			//IResult<GameSpec> result = await App.GetGameSpec();
-			//switch (result) {
-			//	case IResult<GameSpec>.Error error:
-			//		log($"Error while parsing game specification file: \"{error.Message}\"");
-			//		return null;
-			//	case GameSpec test:
-			//		throw new NotImplementedException();
-			//	default:
-			//		throw new UnreachableException();
-			//}
-			//if (result is IResult<GameSpec>.Error error) {
-			//	log($"Error while parsing game specification file: \"{error.Message}\"");
-			//	return null;
-			//}
-			//GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
+		if (!File.Exists(TargetFile)) {
 
 			string? targetFileDirectory;
 			try {
-				targetFileDirectory = Path.GetDirectoryName(targetFilePath);
+				targetFileDirectory = Path.GetDirectoryName(TargetFile);
 			} catch {
-				log($"The target file path \"{targetFilePath}\" is invalid.");
+				Logger($"The target file path \"{TargetFile}\" is invalid.");
 				return null;
 			}
 
@@ -164,36 +138,35 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 				}
 
 			} catch {
-				log($"The directory of the target file \"{targetFileDirectory}\" could not be created.");
+				Logger($"The directory of the target file \"{targetFileDirectory}\" could not be created.");
 				return null;
 			}
 
 			try {
-				File.Create(targetFilePath);
+				File.Create(TargetFile);
 			} catch {
-				log($"Target File \"{targetFilePath}\" does not exist and could not be created.");
+				Logger($"Target File \"{TargetFile}\" does not exist and could not be created.");
 				return null;
 			}
 		}
 
 		string[]? fileContents = null;
 		try {
-			fileContents = await File.ReadAllLinesAsync(targetFilePath);
+			fileContents = await File.ReadAllLinesAsync(TargetFile);
 		} catch {
-			log($"Target File \"{targetFilePath}\" exists but could not be read.");
+			Logger($"Target File \"{TargetFile}\" exists but could not be read.");
 		}
 
 		return fileContents?.ToList();
 	}
 
-	private static async Task<List<(Directory, string)>> GetMatchDataFromSourceDirectories(
-		IEnumerable<Directory> sourceDirectories, Action<string> log) {
+	private async Task<List<(Directory, string)>> GetMatchDataFromSourceDirectories() {
 
 		List<(Directory, string)> matchData = new();
 
-		foreach (Directory directory in sourceDirectories.Where(directory => directory.IsAccessible)) {
+		foreach (Directory directory in SourceDirectories.Where(directory => directory.IsAccessible)) {
 
-			foreach (MediaDevice device in StaticServiceResolver.Resolve<IMtpDeviceService>().GetDevices()) {
+			foreach (MediaDevice device in MtpService.GetDevices()) {
 
 				foreach (string filePath in device.EnumerateFiles(directory.Path)) {
 
@@ -202,7 +175,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 					switch (fileContents) {
 
 						case IResult<string>.Error error:
-							log(error.Message);
+							Logger(error.Message);
 							continue;
 
 						case IResult<string>.Success success:
@@ -219,23 +192,26 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		return matchData;
 	}
 
-	private static async Task WriteMatchDataToTargetFile(string targetFilePath, 
-		ReadOnlyList<(Directory sourceDirectory, string fileContents)> newMatchData, Action<string> log) {
+	private async Task WriteMatchDataToTargetFile(ReadOnlyList<(Directory sourceDirectory, string fileContents)> newMatchData) {
 
-		newMatchData.Foreach(x => log($"Writing match data from \"{x.sourceDirectory.Path}\" to \"{targetFilePath}\"."));
+		if (newMatchData.IsEmpty()) {
+			return;
+		}
+
+		newMatchData.Foreach(x => Logger($"Writing match data from \"{x.sourceDirectory.Path}\" to \"{TargetFile}\"."));
 
 		try {
 
-			string fileContents = await File.ReadAllTextAsync(targetFilePath);
+			string fileContents = await File.ReadAllTextAsync(TargetFile);
 
-			if (!fileContents.EndsWith("\n")) {
-				await File.AppendAllTextAsync(targetFilePath, "\n");
+			if (!fileContents.IsEmpty() && !fileContents.EndsWith('\n') && !fileContents.EndsWith('\r')) {
+				await File.AppendAllTextAsync(TargetFile, "\n");
 			}
 
-			await File.AppendAllLinesAsync(targetFilePath, newMatchData.Select(x => x.fileContents));
+			await File.AppendAllLinesAsync(TargetFile, newMatchData.Select(x => x.fileContents));
 
 		} catch {
-			log($"Could not write match data to the file \"{targetFilePath}\".");
+			Logger($"Could not write match data to the file \"{TargetFile}\".");
 		}
 	}
 
@@ -244,7 +220,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	private void DeleteSourceFile_OnClick(object? sender, EventArgs e) {
 
 		if (SelectedDirectory is null) {
-			throw new InvalidOperationException();
+			throw new UnreachableException();
 		}
 
 		SourceDirectories.Remove(SelectedDirectory);
@@ -257,8 +233,8 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private void SourceFileCollectionViewItem_OnFocus(object? sender, FocusEventArgs e) {
 
-		FileSystemItemView sourceDirectoryView = sender as FileSystemItemView ?? throw new ArgumentException();
-		Directory sourceDirectory = sourceDirectoryView.BindingContext as Directory ?? throw new ArgumentException();
+		FileSystemItemView sourceDirectoryView = sender as FileSystemItemView ?? throw new UnreachableException();
+		Directory sourceDirectory = sourceDirectoryView.BindingContext as Directory ?? throw new UnreachableException();
 		SelectedDirectory = sourceDirectory;
 	}
 
