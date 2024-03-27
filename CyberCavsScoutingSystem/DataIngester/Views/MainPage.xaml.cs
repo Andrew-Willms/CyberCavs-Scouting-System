@@ -83,31 +83,39 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private async void CopyData(object? sender, ElapsedEventArgs eventArgs) {
 
-		if (Mutex.CurrentCount == 0) {
+		DateTime previousTime = DateTime.Now;
+		Trace.WriteLine($"{previousTime:HH:mm:ss.fffffff} entering function");
+
+		if (!await Mutex.WaitAsync(TimeSpan.FromMilliseconds(400))) {
+			Trace.WriteLine($"{DateTime.Now - previousTime:s\\.fffffff} early exit");
 			return;
 		}
 
-		await Mutex.WaitAsync();
-		
-		try {
+		Trace.WriteLine($"{DateTime.Now - previousTime:s\\.fffffff} mutex acquired");
+		previousTime = DateTime.Now;
 
-			UpdateSourceDirectoryAccessibilities();
+		UpdateSourceDirectoryAccessibilities();
+		Trace.WriteLine($"{DateTime.Now - previousTime:s\\.fffffff} source directories updated");
+		previousTime = DateTime.Now;
 
-			List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile();
-			if (targetFileContents is null) {
-				return;
-			}
+		List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile();
+		Trace.WriteLine($"{DateTime.Now - previousTime:s\\.fffffff} existing file contents read");
+		previousTime = DateTime.Now;
 
-			List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories();
-
-			matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
-
-			await WriteMatchDataToTargetFile(matchDataFromDevices.ToReadOnly());
-
-		} catch (Exception exception) {
-
-			Trace.WriteLine(exception);
+		if (targetFileContents is null) {
+			return;
 		}
+
+		List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories();
+		Trace.WriteLine($"{DateTime.Now - previousTime:s\\.fffffff} devices read");
+		previousTime = DateTime.Now;
+
+		matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
+		Trace.WriteLine($"{DateTime.Now - previousTime:s\\.fffffff} duplicate entries removed");
+		previousTime = DateTime.Now;
+
+		await WriteMatchDataToTargetFile(matchDataFromDevices.ToReadOnly());
+		Trace.WriteLine($"{DateTime.Now - previousTime:s\\.fffffff} file written");
 
 		Mutex.Release();
 	}
@@ -160,9 +168,27 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		return fileContents?.ToList();
 	}
 
+
+
 	private async Task<List<(Directory, string)>> GetMatchDataFromSourceDirectories() {
 
-		List<(Directory, string)> matchData = new();
+		//IEnumerable<Task<(Directory, string)?>> taskList = SourceDirectories
+		//	.Where(directory => directory.IsAccessible)
+		//	.SelectMany(directory => MtpService.GetDevices(), (directory, device) => (directory, device))
+		//	.SelectMany(x => x.device.EnumerateFiles(x.directory.Path), (x, filePath) => (x.directory, x.device, filePath))
+		//	.Select(x => (x.directory, x.device.ReadFromMtpDevice(x.filePath)))
+		//	.Select(x => x.Item2.ContinueWith<(Directory, string)?>(task => task.Result switch {
+		//		IResult<string>.Error => null,
+		//		IResult<string>.Success success => (x.directory, success.Value),
+		//		_ => throw new UnreachableException()
+		//	}));
+
+		//return (await Task.WhenAll(taskList))
+		//	.Where(x => x is not null)
+		//	.Select(x => (x!.Value.Item1, x.Value.Item2))
+		//	.ToList();
+
+		List<Task<(Directory, string)?>> taskList = new();
 
 		foreach (Directory directory in SourceDirectories.Where(directory => directory.IsAccessible)) {
 
@@ -170,26 +196,38 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 				foreach (string filePath in device.EnumerateFiles(directory.Path)) {
 
-					IResult<string> fileContents = await device.ReadFromMtpDevice(filePath);
+					Task<IResult<string>> getFileContentsTask = device.ReadFromMtpDevice(filePath);
 
-					switch (fileContents) {
+					Trace.WriteLine($"{filePath} reading started");
 
-						case IResult<string>.Error error:
-							Logger(error.Message);
-							continue;
+					taskList.Add(getFileContentsTask.ContinueWith<(Directory, string)?>(x => {
 
-						case IResult<string>.Success success:
-							matchData.Add((directory, success.Value));
-							continue;
+						Trace.WriteLine($"{filePath} reading finished");
 
-						default:
-							throw new UnreachableException();
-					}
+						switch (getFileContentsTask.Result) {
+
+							case IResult<string>.Error error:
+								Logger(error.Message);
+								return null;
+
+							case IResult<string>.Success success:
+								return (directory, success.Value);
+
+							default:
+								throw new UnreachableException();
+						}
+					}));
 				}
 			}
 		}
 
-		return matchData;
+		await Task.WhenAll(taskList);
+
+		return taskList
+			.Select(x => x.Result)
+			.Where(x => x is not null)
+			.Select(x => (x!.Value.Item1, x.Value.Item2))
+			.ToList();
 	}
 
 	private async Task WriteMatchDataToTargetFile(ReadOnlyList<(Directory sourceDirectory, string fileContents)> newMatchData) {
