@@ -17,7 +17,7 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	public Func<ScannedMatch, Task> ScanAdder { get; init; } = null!;
+	public Func<string, Task> ScanAdder { get; init; } = null!;
 
 	public bool CanSave => QrCodeData != "" && !QrCodeData.All(character => character is '0');
 
@@ -55,13 +55,8 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
 
 	private async void Button_OnClicked(object? sender, EventArgs e) {
 
-		ScannedMatch match = new() {
-			Name = $"{DateTime.Now:yyyy-MM-dd HH.mm.ss}",
-			Content = QrCodeData
-		};
-
+		await ScanAdder(QrCodeData);
 		QrCodeData = "";
-		await ScanAdder(match);
 	}
 
 

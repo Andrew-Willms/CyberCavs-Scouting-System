@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
-using UtilitiesLibrary.Collections;
 
 namespace QrCodeScanner.Views;
 
@@ -19,11 +18,9 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	public static string Route => string.Empty;
 
-	private static readonly string MatchFileDirectoryPath = Path.Combine(
+	private static readonly string MatchFilePath = Path.Combine(
 		Android.App.Application.Context.GetExternalFilesDir(Android.OS.Environment.DirectoryDocuments)!.AbsolutePath,
-		$"CCSS.{nameof(QrCodeScanner)}");
-
-	private const string FileExtension = ".csvl";
+		"Data.csv");
 
 
 	private static readonly Mutex RefreshMutex = new();
@@ -38,7 +35,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		}
 	}
 
-	public ObservableCollection<ScannedMatch> ScannedMatches { get; } = new();
+	public ObservableCollection<string> ScannedMatches { get; } = new();
 
 
 
@@ -67,7 +64,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	private async void ViewMatchDetailsButton_OnClicked(object? sender, EventArgs e) {
 
 		Button button = sender as Button ?? throw new UnreachableException();
-		ScannedMatch scannedMatch = button.BindingContext is ScannedMatch match ? match : throw new UnreachableException();
+		string scannedMatch = button.BindingContext is string match ? match : throw new UnreachableException();
 
 		Dictionary<string, object> parameters = new() {
 			{ MatchDetailsPage.ScannedMatchNavigationParameterName, scannedMatch },
@@ -97,17 +94,17 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		await Dispatcher.DispatchAsync(RefreshMutex.ReleaseMutex);
 
 		ScannedMatches.Clear();
-		foreach (ScannedMatch match in await GetScannedMatchesFromFiles()) {
-			ScannedMatches.Add(match);
+		foreach (string matchData in await GetScannedMatches()) {
+			ScannedMatches.Add(matchData);
 		}
 
 		IsRefreshing = false;
 		IsActuallyRefreshing = false;
 	}
 
-	private async Task AddMatch(ScannedMatch match) {
+	private async Task AddMatch(string matchData) {
 
-		if (ScannedMatches.Contains(match)) {
+		if (ScannedMatches.Contains(matchData)) {
 
 			await Shell.Current.DisplayAlert(
 				"Error",
@@ -117,11 +114,11 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 			return;
 		}
 
-		ScannedMatches.Add(match);
-		await SaveMatchToFile(match);
+		ScannedMatches.Add(matchData);
+		await File.WriteAllLinesAsync(MatchFilePath, ScannedMatches);
 	}
 
-	private async Task DeleteMatch(ScannedMatch match) {
+	private async Task DeleteMatch(string match) {
 
 		if (!ScannedMatches.Contains(match)) {
 
@@ -135,41 +132,17 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		}
 
 		ScannedMatches.Remove(match);
+		await File.WriteAllLinesAsync(MatchFilePath, ScannedMatches);
+	}
 
-		string[] fileNames = Directory.GetFiles(MatchFileDirectoryPath, $"*{FileExtension}", SearchOption.TopDirectoryOnly);
+	private static async Task<string[]> GetScannedMatches() {
 
-		foreach (string filePath in fileNames) {
-
-			if (match.Content == await File.ReadAllTextAsync(filePath)) {
-				File.Delete(filePath);
-			}
+		if (File.Exists(MatchFilePath)) {
+			return (await File.ReadAllTextAsync(MatchFilePath)).Split("\n").Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
 		}
-	}
 
-	private static async Task<ScannedMatch[]> GetScannedMatchesFromFiles() {
-
-		Directory.CreateDirectory(MatchFileDirectoryPath);
-
-		string[] filePaths = Directory.GetFiles(MatchFileDirectoryPath, $"*{FileExtension}", SearchOption.TopDirectoryOnly);
-
-		Task<string>[] fileContents = filePaths.Select(fileName => File.ReadAllTextAsync(fileName)).ToArray();
-		string[] fileNames = filePaths.Select(x => Path.GetFileNameWithoutExtension(x) ?? throw new UnreachableException()).ToArray();
-
-		return (await Task.WhenAll(fileContents))
-			.Pair(fileNames)
-			.Select(x => new ScannedMatch { Name = x.second, Content = x.first })
-			.OrderByDescending(x => x.Name)
-			.ToArray();
-	}
-
-	private static async Task SaveMatchToFile(ScannedMatch scannedMatch) {
-
-		Directory.CreateDirectory(MatchFileDirectoryPath);
-
-		string fileName = $"{scannedMatch.Name}{FileExtension}";
-		string filePath = Path.Combine(MatchFileDirectoryPath, fileName);
-
-		await File.WriteAllTextAsync(filePath, scannedMatch.Content);
+		File.Create(MatchFilePath).Close();
+		return Array.Empty<string>();
 	}
 
 
@@ -181,52 +154,3 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	}
 
 }
-
-
-
-public readonly struct ScannedMatch {
-
-	public bool Equals(ScannedMatch other) {
-		return Content == other.Content;
-	}
-
-	public override bool Equals(object? obj) {
-		return obj is ScannedMatch other && Equals(other);
-	}
-
-	public override int GetHashCode() {
-		return Content.GetHashCode();
-	}
-
-	public required string Name { get; init; }
-
-	public required string Content { get; init; }
-
-	public static bool operator ==(ScannedMatch left, ScannedMatch right) {
-		return left.Equals(right);
-	}
-
-	public static bool operator !=(ScannedMatch left, ScannedMatch right) {
-		return !left.Equals(right);
-	}
-
-}
-
-
-
-// this is a fancy one for later
-//public class MatchSummary {
-
-//    public required DateTime ScanTime { get; init; }
-
-//    public required uint MatchNumber { get; init; }
-
-//    public required uint TeamNumber { get; init; }
-
-//    public required string ScoutedBy { get; init; }
-
-//    public MatchSummary(MatchData matchData) {
-
-//    }
-
-//}

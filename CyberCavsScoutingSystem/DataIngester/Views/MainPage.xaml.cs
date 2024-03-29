@@ -45,9 +45,9 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	public bool RemoveButtonEnabled => SelectedDirectory is not null;
 
 	public ObservableCollection<File> SourceDirectories { get; } = new() {
-		new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner\Data.csv" },
-		new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner\Data.csv" },
-		new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner\Data.csv" }
+		new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" },
+		new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" },
+		new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" }
 	};
 
 	public ObservableCollection<string> LogMessages { get; } = new();
@@ -148,7 +148,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 			Logger($"Target File \"{TargetFile}\" exists but could not be read.");
 		}
 
-		return fileContents?.ToList();
+		return fileContents?.Where(x => !string.IsNullOrEmpty(x)).ToList();
 	}
 
 	private async Task<List<string>> GetMatchDataFromSourceDirectories() {
@@ -167,11 +167,12 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 				if (result is IResult<string>.Error error) {
 					Logger(error.Message);
+					continue;
 				}
 
 				string fileContents = (result as IResult<string>.Success)?.Value ?? throw new UnreachableException();
 
-				matchData.AddRange(fileContents.Split("\r\n").Where(x => !string.IsNullOrEmpty(x)));
+				matchData.AddRange(fileContents.Split("\n").Where(x => !string.IsNullOrEmpty(x)));
 			}
 		}
 
