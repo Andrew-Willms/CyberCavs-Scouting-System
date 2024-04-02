@@ -25,17 +25,16 @@
 		<ApplicationIdGuid>7e650c6c-9308-4c5c-88b2-de79d626941c</ApplicationIdGuid>
 
 		<!--Settings for exe distribution-->
-		<WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>
-
-		<!--Settings for creating a .msix file... which I couldn't get working-->
-		<!--<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+		<!--For some reason, when the below line is commented out it won't build normally but with it this application won't publish-->
+		<!--<WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>-->
+		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-		<PackageCertificateThumbprint>AEBE1442F21775BB64F4CD832D8E9CA47A04E74A</PackageCertificateThumbprint>
+		<PackageCertificateThumbprint>1D963349B7A9C0DE3750213461952859C5C318AE</PackageCertificateThumbprint>
 		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
 		<AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
 		<AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
 		<GenerateTestArtifacts>True</GenerateTestArtifacts>
-		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>-->
+		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 
 	</PropertyGroup>
 
