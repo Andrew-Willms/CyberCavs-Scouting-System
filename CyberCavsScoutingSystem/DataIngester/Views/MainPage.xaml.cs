@@ -91,6 +91,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile();
 
 		if (targetFileContents is null) {
+			// this is an error state, if there is no match data the function will return an empty list
 			return;
 		}
 
@@ -134,7 +135,10 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 			}
 
 			try {
-				System.IO.File.Create(TargetFile).Close();
+				await System.IO.File.WriteAllTextAsync(
+					TargetFile,
+					"ScouterInitials    Event    Match    Team    LeaveStartingZone    AutoNotes    Note1    Note2    Note3    Note4    Note5    Note6    Note7    Note8    FieldIgnored    AmpScores    SpeakerScores    NotesFed    EndGameStatus    TrapNote    Died    Comments\r\n");
+
 			} catch {
 				Logger($"Target File \"{TargetFile}\" does not exist and could not be created.");
 				return null;
