@@ -2,7 +2,10 @@
 
 	<PropertyGroup>
 
+		<!-- Platform -->
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 
 		<OutputType>Exe</OutputType>
 		<RootNamespace>DataIngester</RootNamespace>
@@ -10,6 +13,7 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<LangVersion>preview</LangVersion>
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 
 		<!-- Display name -->
@@ -18,16 +22,6 @@
 		<!-- App Identifier -->
 		<ApplicationId>CCSS.DataiIngester</ApplicationId>
 		<ApplicationIdGuid>7e650c6c-9308-4c5c-88b2-de79d626941c</ApplicationIdGuid>
-
-		<!-- Versions -->
-		<!--<Version>1.1.1</Version>
-		<VersionPrefix>RC</VersionPrefix>-->
-		<!--<VersionSuffix>RC</VersionSuffix>-->
-		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
-
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 
 		<!--Settings for exe distribution-->
 		<WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>
