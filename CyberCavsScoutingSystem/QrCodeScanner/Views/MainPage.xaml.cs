@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
 
@@ -102,20 +103,15 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 		IsActuallyRefreshing = false;
 	}
 
-	private async Task AddMatch(string matchData) {
+	private async Task<bool> AddMatch(string matchData) {
 
 		if (ScannedMatches.Contains(matchData)) {
-
-			await Shell.Current.DisplayAlert(
-				"Error",
-				"The match you are trying to add is already in the list of matches.",
-				"Continue on with life I guess.");
-
-			return;
+			return false;
 		}
 
 		ScannedMatches.Add(matchData);
 		await File.WriteAllLinesAsync(MatchFilePath, ScannedMatches);
+		return true;
 	}
 
 	private async Task DeleteMatch(string match) {

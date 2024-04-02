@@ -12,28 +12,35 @@
 
 		<Grid.RowDefinitions>
 			<RowDefinition Height="60"/>
-			<RowDefinition Height="auto"/>
+			<RowDefinition Height="60"/>
 			<RowDefinition Height="auto"/>
 		</Grid.RowDefinitions>
 
 		<Label
-			Text="{Binding Path=QrCodeData}"
-			FontSize="12"
+			Text="{Binding Path=QrCodeCount}"
+			FontSize="24"
+			FontAttributes="Bold"
 			Margin="5"
 			Grid.Row="0"/>
+
+		<!--<Label
+			Text="{Binding Path=QrCodeCount, StringFormat='Qr Code Count: {0}'}"
+			FontSize="24"
+			FontAttributes="Bold"
+			Margin="5"
+			Grid.Row="0"/>-->
+
+		<Label
+			Text="{Binding Path=LastQrCodeScanned}"
+			FontSize="12"
+			Margin="5"
+			Grid.Row="1"/>
 
 		<controls:CameraBarcodeReaderView
 			x:Name="QrCodeReader"
 			IsDetecting="true"
 			BarcodesDetected="CameraBarcodeReaderView_OnBarcodesDetected"
 			Margin="5, 50"
-			Grid.Row="1"/>
-
-		<Button
-			Text="Save"
-			IsEnabled="{Binding Path=CanSave}"
-			Clicked="Button_OnClicked"
-			Margin="5"
 			Grid.Row="2"/>
 
 	</Grid>
