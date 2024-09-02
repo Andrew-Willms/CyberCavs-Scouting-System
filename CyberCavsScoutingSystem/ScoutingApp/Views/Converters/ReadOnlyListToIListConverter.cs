@@ -60,10 +60,10 @@ public class ReadOnlyListOfStringsToIListConverter : ReadOnlyListToIListConverte
 
 }
 
-public class ReadOnlyListOfAlliancesToIListConverter : ReadOnlyListToIListConverter<Alliance> {
+public class ReadOnlyListOfAlliancesToIListConverter : ReadOnlyListToIListConverter<AllianceColor> {
 
-	protected override Type NonGenericReadOnlyListType { get; } = typeof(ReadOnlyList<Alliance>);
+	protected override Type NonGenericReadOnlyListType { get; } = typeof(ReadOnlyList<AllianceColor>);
 
-	protected override Type NonGenericIListType { get; } = typeof(IList<Alliance>);
+	protected override Type NonGenericIListType { get; } = typeof(IList<AllianceColor>);
 
 }
