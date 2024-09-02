@@ -22,7 +22,7 @@ public class GameSpec {
 	public required uint RobotsPerAlliance { get; init; }
 	public required uint AlliancesPerMatch { get; init; }
 
-	public required ReadOnlyList<Alliance> Alliances { get; init; }
+	public required ReadOnlyList<AllianceColor> Alliances { get; init; }
 
 	public required ReadOnlyList<DataFieldSpec> DataFields { get; init; }
 
@@ -42,14 +42,14 @@ public class GameSpec {
 		Version version,
 		uint robotsPerAlliance,
 		uint alliancesPerMatch,
-		ReadOnlyList<Alliance> alliances,
+		ReadOnlyList<AllianceColor> alliances,
 		ReadOnlyList<DataFieldSpec> dataFields,
 		ReadOnlyList<InputSpec> setupTabInputs,
 		ReadOnlyList<InputSpec> autoTabInputs,
 		ReadOnlyList<InputSpec> teleTabInputs,
 		ReadOnlyList<InputSpec> endgameTabInputs) {
 
-		foreach (Alliance alliance in alliances) {
+		foreach (AllianceColor alliance in alliances) {
 
 			if (alliances.Where(x => x != alliance).Any(x => x.Name == alliance.Name)) {
 				return new IResult<GameSpec>.Error($"There are multiple alliances with the name '{nameof(alliance.Name)}'.");

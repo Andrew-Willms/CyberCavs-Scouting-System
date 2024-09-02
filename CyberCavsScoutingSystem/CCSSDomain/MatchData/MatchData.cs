@@ -1,73 +1,127 @@
-﻿//using System;
-//using CCSSDomain.DataCollectors;
-//using CCSSDomain.GameSpecification;
-//using UtilitiesLibrary.Collections;
-//using UtilitiesLibrary.Results;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using CCSSDomain.GameSpecification;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Results;
+using UtilitiesLibrary.SimpleEvent;
 
-//namespace CCSSDomain.MatchData;
-
-
-
-//public class MatchData {
-
-//	public GameSpec GameSpecification { get; }
-
-//	public required Event Event { get; init; }
-
-//	public required uint MatchNumber { get; init; }
-//	public required uint ReplayNumber { get; init; }
-//	public required bool IsPlayoff { get; init; }
-
-//    public required uint TeamNumber { get; init; }
-
-//	public required Alliance Alliance { get; init; }
-
-//	public required DateTime Time { get; init; }
-
-//	public ReadOnlyList<DataFieldResult> DataFields { get; }
-
-
-
-//	public MatchData(GameSpec gameSpecification, ReadOnlyList<DataFieldResult> dataFieldResults) {
-
-//		//TODO: validate that the DataFields passed in match up with the DataFields in the GameSpecification
-
-//		GameSpecification = gameSpecification;
-//		DataFields = dataFieldResults;
+namespace CCSSDomain.MatchData;
 
 
 
 
 
+public class MatchData {
+
+	public required GameSpec GameSpecification { get; init; }
+
+	public required EventCode EventCode { get; init; }
+
+	public required Match Match { get; init; }
+
+	public required uint TeamNumber { get; init; }
+
+	public required AllianceColor AllianceColor { get; init; }
+
+	public required DateTime StartTime { get; init; }
+	public required DateTime EndTime { get; init; }
+
+	public required ReadOnlyList<DataFieldResult> DataFields { get; init; }
+
+	public required ReadOnlyList<object> DataCollectionWarnings { get; init; } // todo figure out the type for this
+
+	private MatchData() { }
 
 
+	public static IResult<MatchData> Create(
+		out ReadOnlyList<DomainError> errors,
+		GameSpec gameSpecification,
+		EventCode eventCode,
+		EventInfo? eventInfo,
+		Match match,
+		uint teamNumber,
+		AllianceColor allianceColor,
+		DateTime startTime,
+		DateTime endTime,
+		ReadOnlyList<DataFieldResult> data,
+		ReadOnlyList<object> dataCollectionWarnings) {
 
-//	}
-
-//	public static IResult<MatchData> Create(GameSpec gameSpecification, ReadOnlyList<DataFieldResult> dataFieldResults) {
-
-//		if (gameSpecification.DataFields.Count != dataFieldResults.Count) {
-//			return new IResult<MatchData>.Error("The DataFields do not match.");
-//		}
-
-//		for (int i = 0; i < gameSpecification.DataFields.Count; i++) {
-
-//			if (dataFieldResults[i].DataFieldSpec != gameSpecification.DataFields[i]) {
-//				return new IResult<MatchData>.Error();
-//			}
-
-//			if (gameSpecification.DataFields[i].GetType() != dataFieldResults[i].GetType() ||
-//                gameSpecification.DataFields[i].Name != dataFieldResults[i].Name) {
-
-//				return new IResult<MatchData>.Error("The DataFields do not match.");
-//			}
-
-//            if (gameSpecification.DataFields[i] is SelectionDataField selectionDataField) {
-
-//            }
-//        }
+		List<DomainError> domainErrors = [];
 
 
-//	}
+		// todo validate match
 
-//}
+		// Validation that happens if there is event info
+		if (eventInfo is not null) {
+
+			// todo this will need to be updated to support other tournament formats
+			switch (match.Type) {
+
+				case MatchType.Practice:
+					break;
+
+				case MatchType.Qualification:
+					if (match.MatchNumber > eventInfo.Matches.Count) {
+
+					}
+					break;
+
+				case MatchType.DoubleElimination:
+					if (match.MatchNumber > 13) {
+
+					}
+					break;
+
+				case MatchType.Final:
+					if (match.MatchNumber > 3) {
+
+					}
+					break;
+
+				default:
+					throw new UnreachableException();
+			}
+
+			if (!eventInfo.Teams.Contains(teamNumber)) {
+
+			}
+
+			if (match.MatchNumber < eventInfo.Matches.Count
+			    
+			    
+			    && eventInfo.Matches[match.MatchNumber])
+
+		}
+
+		if (!gameSpecification.Alliances.Contains(allianceColor)) {
+			domainErrors.Add(new AllianceDoesNotMatch { AllianceColor = allianceColor });
+		}
+
+		if (endTime < startTime) {
+			domainErrors.Add(new StartTimeAfterEndTime { StartTime = startTime, EndTime = endTime});
+		}
+
+		for (int i = 0; i < gameSpecification.DataFields.Count; i++) {
+
+		}
+
+		errors = domainErrors.ToReadOnly();
+
+		return new IResult<MatchData>.Success {
+			Value = new() { 
+				GameSpecification = gameSpecification, 
+				EventCode = eventCode,
+				Match = match,
+				TeamNumber = teamNumber,
+				AllianceColor = allianceColor,
+				StartTime = startTime,
+				EndTime = endTime,
+				DataFields = data,
+				DataCollectionWarnings = dataCollectionWarnings
+			}
+		};
+	}
+
+}

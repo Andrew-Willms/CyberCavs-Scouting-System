@@ -1,76 +1,78 @@
-﻿//using System.Linq;
-//using CCSSDomain.GameSpecification;
-//using UtilitiesLibrary.Results;
+﻿using System.Linq;
+using CCSSDomain.GameSpecification;
+using UtilitiesLibrary.Results;
 
-//namespace CCSSDomain.MatchData;
+namespace CCSSDomain.MatchData;
 
 
 
-//public abstract class DataFieldResult {
+public abstract class DataFieldResult {
 
-//	public DataFieldSpec DataFieldSpec { get; }
+	public DataFieldSpec DataFieldSpec { get; }
 
-//	public string Name => DataFieldSpec.Name;
+	public string Name => DataFieldSpec.Name;
 
-//	protected DataFieldResult(DataFieldSpec dataFieldSpec) {
-//		DataFieldSpec = dataFieldSpec;
-//	}
+	protected DataFieldResult(DataFieldSpec dataFieldSpec) {
+		DataFieldSpec = dataFieldSpec;
+	}
 
-//}
+}
 
-//public class TextDataFieldResult : DataFieldResult {
+public class TextDataFieldResult : DataFieldResult {
 
-//	public string Text { get; }
+	public string Text { get; }
 
-//	private TextDataFieldResult(TextDataFieldSpec dataFieldSpec, string text) : base(dataFieldSpec) {
-//		Text = text;
-//	}
+	private TextDataFieldResult(TextDataFieldSpec dataFieldSpec, string text) : base(dataFieldSpec) {
+		Text = text;
+	}
 
-//	public static TextDataFieldResult Create(TextDataFieldSpec dataFieldSpec, string text) {
+	public static TextDataFieldResult Create(TextDataFieldSpec dataFieldSpec, string text) {
 
-//		return new(dataFieldSpec, text);
-//	}
+		if (dataFieldSpec.MustNotBeEmpty && string.IsNullOrEmpty(text) )
 
-//}
+		return new(dataFieldSpec, text);
+	}
 
-//public class IntegerDataFieldResult : DataFieldResult {
+}
 
-//	public int Value { get; }
+public class IntegerDataFieldResult : DataFieldResult {
 
-//	private IntegerDataFieldResult(IntegerDataFieldSpec dataFieldSpec, int value) : base(dataFieldSpec) {
-//		Value = value;
-//	}
+	public int Value { get; }
 
-//	public static IResult<IntegerDataFieldResult> Create(IntegerDataFieldSpec dataFieldSpec, int value) {
+	private IntegerDataFieldResult(IntegerDataFieldSpec dataFieldSpec, int value) : base(dataFieldSpec) {
+		Value = value;
+	}
 
-//		if (value > dataFieldSpec.MaxValue) {
-//			return new IResult<IntegerDataFieldResult>.Error();
-//		}
+	public static IResult<IntegerDataFieldResult> Create(IntegerDataFieldSpec dataFieldSpec, int value) {
 
-//		if (value < dataFieldSpec.MinValue) {
-//			return new IResult<IntegerDataFieldResult>.Error();
-//		}
+		if (value > dataFieldSpec.MaxValue) {
+			return new IResult<IntegerDataFieldResult>.Error();
+		}
 
-//		return new IResult<IntegerDataFieldResult>.Success { Value = new(dataFieldSpec, value) };
-//	}
+		if (value < dataFieldSpec.MinValue) {
+			return new IResult<IntegerDataFieldResult>.Error();
+		}
 
-//}
+		return new IResult<IntegerDataFieldResult>.Success { Value = new(dataFieldSpec, value) };
+	}
 
-//public class SelectionDataFieldResult : DataFieldResult {
+}
 
-//	public string SelectedOption { get; }
+public class SelectionDataFieldResult : DataFieldResult {
 
-//	private SelectionDataFieldResult(SelectionDataFieldSpec dataFieldSpec, string selectedOption) : base(dataFieldSpec) {
-//		SelectedOption = selectedOption;
-//	}
+	public string SelectedOption { get; }
 
-//	public static IResult<SelectionDataFieldResult> Create(SelectionDataFieldSpec dataFieldSpec, string selection) {
+	private SelectionDataFieldResult(SelectionDataFieldSpec dataFieldSpec, string selectedOption) : base(dataFieldSpec) {
+		SelectedOption = selectedOption;
+	}
 
-//		if (!dataFieldSpec.OptionNames.Contains(selection)) {
-//			return new IResult<SelectionDataFieldResult>.Error();
-//		}
+	public static IResult<SelectionDataFieldResult> Create(SelectionDataFieldSpec dataFieldSpec, string selection) {
 
-//		return new IResult<SelectionDataFieldResult>.Success { Value = new(dataFieldSpec, selection) };
-//	}
+		if (!dataFieldSpec.OptionNames.Contains(selection)) {
+			return new IResult<SelectionDataFieldResult>.Error();
+		}
 
-//}
+		return new IResult<SelectionDataFieldResult>.Success { Value = new(dataFieldSpec, selection) };
+	}
+
+}

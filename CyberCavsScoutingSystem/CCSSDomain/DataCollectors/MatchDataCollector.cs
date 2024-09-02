@@ -16,15 +16,17 @@ public class MatchDataCollector {
 
 	public GameSpec GameSpecification { get; }
 
+	// todo event selection
+
 	public Optional<uint> MatchNumber { get; set; } = Optional.NoValue;
 	public Optional<uint> ReplayNumber { get; set; } = 0u.Optionalize();
 	public Optional<bool> IsPlayoff { get; set; } = false.Optionalize();
 
 	public Optional<uint> TeamNumber { get; set; } = Optional.NoValue;
 
-	public Optional<Alliance> Alliance { get; set; } = Optional.NoValue;
+	public Optional<AllianceColor> Alliance { get; set; } = Optional.NoValue;
 
-	public DateTime Time { get; } = DateTime.Now;
+	public DateTime StartTime { get; } = DateTime.Now;
 
 	public ReadOnlyList<DataField> DataFields { get; }
 
@@ -57,7 +59,7 @@ public class MatchDataCollector {
 			$"{IsPlayoff.Value.ToString().ToCsvFriendly()}," +
 			$"{Alliance.Value.Name.ToCsvFriendly()}," +
 			$"{TeamNumber.Value.ToString().ToCsvFriendly()}," +
-			$"{Time.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
+			$"{StartTime.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
 
 		foreach (DataField dataField in DataFields) {
 

@@ -85,7 +85,7 @@ public class AllianceEditor {
 
 	public bool IsValid => Name.IsValid && Color.IsValid;
 
-	public Alliance? ToGameSpecification() {
+	public AllianceColor? ToGameSpecification() {
 
 		if (!IsValid) {
 			return null;
