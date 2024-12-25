@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
 
@@ -133,12 +132,34 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private static async Task<string[]> GetScannedMatches() {
 
-		if (File.Exists(MatchFilePath)) {
-			return (await File.ReadAllTextAsync(MatchFilePath)).Split("\n").Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+		if (!File.Exists(MatchFilePath)) {
+			File.Create(MatchFilePath).Close();
+			return Array.Empty<string>();
 		}
 
-		File.Create(MatchFilePath).Close();
-		return Array.Empty<string>();
+		string[] lines = (await File.ReadAllTextAsync(MatchFilePath))
+			.Split("\n")
+			.Where(x => !string.IsNullOrWhiteSpace(x))
+			.ToArray();
+
+		string[] orderedLines = lines.OrderByDescending(x => {
+
+			string[] xParts = x.Split('\t');
+
+			if (xParts.Length < 3) {
+				return -1; // todo
+			}
+
+			bool success = int.TryParse(xParts[2], out int xMatchNumber);
+
+			if (!success) {
+				return -1; // todo
+			}
+
+			return xMatchNumber;
+		}).ToArray();
+
+		return orderedLines;
 	}
 
 

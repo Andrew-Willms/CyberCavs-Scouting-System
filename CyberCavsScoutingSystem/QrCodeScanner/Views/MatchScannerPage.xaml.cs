@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
@@ -57,7 +56,7 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
 
 	private async void CameraBarcodeReaderView_OnBarcodesDetected(object? sender, BarcodeDetectionEventArgs e) {
 
-		string? data = e.Results.FirstOrDefault(x => !x.Value.All(character => character is '0'))?.Value;
+		string? data = e.Results.FirstOrDefault(IsValidQrCode)?.Value;
 
 		if (data is null) {
 			return;
@@ -69,6 +68,14 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
 
 		QrCodeCount++;
 		LastQrCodeScanned = data;
+	}
+
+	private static bool IsValidQrCode(BarcodeResult qrCode) {
+
+		return
+			!qrCode.Value.All(character => character is '0') &&
+			qrCode.Value.Length > 25;
+
 	}
 
 

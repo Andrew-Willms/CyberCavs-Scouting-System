@@ -30,35 +30,29 @@ public class SingleInput<TOutput, TInput, TSeverity> : Input<TOutput, TSeverity>
 	where TOutput : IEquatable<TOutput>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
 
-	private Optional<TOutput> _OutputObject = Optional.Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
-
-		// TODO: .Net 7.0 remove backing field
-		get => _OutputObject;
+		get;
 
 		protected set {
-
-			if (value.Equals(_OutputObject)) {
+			if (value.Equals(field)) {
 				return;
 			}
 
 			if (HasValueAndIsNotInvertible(value)) {
-				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to a value that cannot be inverted.");
+				throw new InvalidOperationException(
+					$"You are setting {nameof(OutputObject)} to a value that cannot be inverted.");
 			}
 
-			_OutputObject = value;
+			field = value;
 			OnOutputObjectChanged();
 		}
-	}
+	} = Optional.Optional.NoValue;
 
-	private TInput _InputObject = default!;
 	public TInput InputObject {
-
-		// TODO: .Net 7.0 remove backing field
-		get => _InputObject;
+		get;
 
 		set {
-			_InputObject = value;
+			field = value;
 			OnInputChanged();
 			Validate();
 		}
@@ -109,7 +103,7 @@ public class SingleInput<TOutput, TInput, TSeverity> : Input<TOutput, TSeverity>
 	public new event PropertyChangedEventHandler? PropertyChanged;
 
 	private void OnInputChanged() {
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(InputObject)));
+		PropertyChanged?.Invoke(this, new(nameof(InputObject)));
 	}
 
 	private void OnOutputObjectChanged() {

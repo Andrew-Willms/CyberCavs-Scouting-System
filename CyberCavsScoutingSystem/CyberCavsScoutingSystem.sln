@@ -23,8 +23,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QrCodeScanner", "QrCodeScan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataIngester", "DataIngester\DataIngester.csproj", "{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluetoothTest", "BluetoothTest\BluetoothTest.csproj", "{414491A1-3E0D-4208-B591-05DCA1AA376A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleInputer", "ScheduleInputer\ScheduleInputer.csproj", "{8AF40381-8222-4229-8387-4FD8CE84BE68}"
 EndProject
 Global
@@ -79,12 +77,6 @@ Global
 		{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC96FB4E-DAB1-46F5-9BD1-E59F5BA64116}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{414491A1-3E0D-4208-B591-05DCA1AA376A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{8AF40381-8222-4229-8387-4FD8CE84BE68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8AF40381-8222-4229-8387-4FD8CE84BE68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AF40381-8222-4229-8387-4FD8CE84BE68}.Debug|Any CPU.Deploy.0 = Debug|Any CPU

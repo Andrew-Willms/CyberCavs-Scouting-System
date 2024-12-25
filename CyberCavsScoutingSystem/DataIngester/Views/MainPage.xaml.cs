@@ -137,7 +137,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 			try {
 				await System.IO.File.WriteAllTextAsync(
 					TargetFile,
-					"ScouterInitials    Event    Match    Team    LeaveStartingZone    AutoNotes    Note1    Note2    Note3    Note4    Note5    Note6    Note7    Note8    FieldIgnored    AmpScores    SpeakerScores    NotesFed    EndGameStatus    TrapNote    Died    Comments\r\n");
+					"ScouterInitials\tEvent	Match\tTeam\tLeaveStartingZone\tAutoNotes\tNote1\tNote2\tNote3\tNote4\tNote5\tNote6\tNote7\tNote8\tFieldIgnored\tAmpScores\tSpeakerScores\tNotesFed\tEndGameStatus\tTrapNote\tDied\tComments\r\n");
 
 			} catch {
 				Logger($"Target File \"{TargetFile}\" does not exist and could not be created.");
