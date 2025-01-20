@@ -40,17 +40,17 @@ public class BooleanDataField : DataField {
 
 	public BooleanDataFieldSpec BooleanDataFieldSpec { get; }
 
-	private bool _Value;
 	public bool Value {
-		get => _Value;
+		get;
 		set {
-			_Value = value;
+			field = value;
 			OnValueChange.Invoke();
+			OnPropertyChanged(nameof(Value));
 		}
 	}
 
 	public BooleanDataField(BooleanDataFieldSpec dataField) : base(dataField) {
-		_Value = dataField.InitialValue;
+		Value = dataField.InitialValue;
 		BooleanDataFieldSpec = dataField;
 	}
 
@@ -64,17 +64,17 @@ public class TextDataField : DataField {
 
 	public TextDataFieldSpec TextDataFieldSpec { get; }
 
-	private string _Text;
 	public string Text {
-		get => _Text;
+		get;
 		set {
-			_Text = value;
+			field = value;
 			OnValueChange.Invoke();
+			OnPropertyChanged(nameof(Text));
 		}
 	}
 
 	public TextDataField(TextDataFieldSpec dataField) : base(dataField) {
-		_Text = dataField.InitialValue;
+		Text = dataField.InitialValue;
 		TextDataFieldSpec = dataField;
 	}
 
@@ -105,19 +105,15 @@ public class IntegerDataField : DataField {
 
 	public int MaxValue => IntegerDataFieldSpec.MaxValue;
 
-	private int _Value;
 	public int Value {
-		get => _Value;
+		get;
 		set {
-
 			if (value > MaxValue) {
-				_Value = MaxValue;
-
+				field = MaxValue;
 			} else if (value < MinValue) {
-				_Value = MinValue;
-
+				field = MinValue;
 			} else {
-				_Value = value;
+				field = value;
 			}
 
 			OnValueChange.Invoke();
@@ -126,7 +122,7 @@ public class IntegerDataField : DataField {
 	}
 
 	public IntegerDataField(IntegerDataFieldSpec dataField) : base(dataField) {
-		_Value = dataField.InitialValue;
+		Value = dataField.InitialValue;
 		IntegerDataFieldSpec = dataField;
 	}
 
@@ -142,19 +138,18 @@ public class SelectionDataField : DataField {
 
 	public ReadOnlyList<string> Options => SelectionDataFieldSpec.OptionNames;
 
-	private Optional<string> _SelectedOption = Optional.NoValue;
 	public Optional<string> SelectedOption {
-		get => _SelectedOption;
+		get;
 		set {
-
 			if (value != Optional.NoValue && !Options.Contains(value.Value)) {
 				throw new InvalidOperationException();
 			}
 
-			_SelectedOption = value;
+			field = value;
 			OnValueChange.Invoke();
+			OnPropertyChanged(nameof(SelectedOption));
 		}
-	}
+	} = Optional.NoValue;
 
 	public SelectionDataField(SelectionDataFieldSpec dataField) : base(dataField) {
 		SelectionDataFieldSpec = dataField;

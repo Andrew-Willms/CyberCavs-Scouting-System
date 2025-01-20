@@ -29,22 +29,19 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		Selection
 	}
 
-	private DataFieldTypes _DataFieldType;
 	public DataFieldTypes DataFieldType {
-		get => _DataFieldType;
+		get;
 		set {
-
-			if (_DataFieldType == value) {
+			if (field == value) {
 				return;
 			}
 
-			_DataFieldType = value;
+			field = value;
 			ChangeDataFieldType(value);
 			OnPropertyChanged(nameof(DataFieldType));
 			OnPropertyChanged(nameof(DataFieldTypeEditor));
 		}
 	}
-
 
 
 	public DataFieldEditor(GameEditor gameEditor, DataFieldEditingData initialValues) {

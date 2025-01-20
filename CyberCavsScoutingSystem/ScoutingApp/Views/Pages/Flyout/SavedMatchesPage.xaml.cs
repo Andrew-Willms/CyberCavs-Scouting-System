@@ -25,12 +25,12 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 	private static readonly Mutex RefreshMutex = new();
 	private bool IsActuallyRefreshing;
 
-	private bool _IsRefreshing;
 	public bool IsRefreshing {
-		get => _IsRefreshing;
+		get;
 		set {
-			_IsRefreshing = value;
-			OnPropertyChanged(nameof(IsRefreshing)); }
+			field = value;
+			OnPropertyChanged(nameof(IsRefreshing));
+		}
 	}
 
 	public ObservableCollection<SerializedMatch> SavedMatches { get; } = new();

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.Views;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,19 +10,19 @@ namespace GameMakerWpf;
 
 public partial class App : Application {
 
-	private static ServiceProvider? _ServiceProvider;
+	[field: AllowNull, MaybeNull]
 	public static ServiceProvider ServiceProvider {
 		get {
 
-			if (_ServiceProvider is not null) {
-				return _ServiceProvider;
+			if (field is not null) {
+				return field;
 			}
 
 			ServiceCollection services = new();
 			ConfigureServices(services);
-			_ServiceProvider = services.BuildServiceProvider();
+			field = services.BuildServiceProvider();
 
-			return _ServiceProvider;
+			return field;
 		}
 	}
 

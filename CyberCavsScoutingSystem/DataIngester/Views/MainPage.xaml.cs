@@ -23,20 +23,18 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private readonly IMtpDeviceService MtpService;
 
-	private string _TargetFile = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Documents\CCSS\ScoutingData\Data.csv");
 	public string TargetFile {
-		get => _TargetFile;
+		get;
 		set {
-			_TargetFile = value;
+			field = value;
 			OnPropertyChanged(nameof(TargetFile));
 		}
-	}
+	} = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Documents\CCSS\ScoutingData\Data.csv");
 
-	private File? _SelectedDirectory;
 	public File? SelectedDirectory {
-		get => _SelectedDirectory;
+		get;
 		set {
-			_SelectedDirectory = value;
+			field = value;
 			OnPropertyChanged(nameof(SelectedDirectory));
 			OnPropertyChanged(nameof(RemoveButtonEnabled));
 		}
