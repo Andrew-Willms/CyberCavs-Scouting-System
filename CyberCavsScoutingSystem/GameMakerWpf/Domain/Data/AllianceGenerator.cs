@@ -12,7 +12,7 @@ public static class AllianceGenerator {
 
 	private static readonly Random Random = new();
 
-	private static readonly (string name, Color color)[] PossibleAllianceColors =  {
+	private static readonly (string name, Color color)[] PossibleAllianceColors = [
 		("Almond", Colors.BlanchedAlmond),
 		("Aqua", Colors.Aqua),
 		("Aquamarine", Colors.Aquamarine),
@@ -82,19 +82,19 @@ public static class AllianceGenerator {
 		("White", Colors.White),
 		("Wood", Colors.BurlyWood),
 		("Yellow", Colors.Yellow)
-	};
+	];
 
 	public static AllianceEditingData GenerateUniqueAlliance(IEnumerable<Color> allianceColors) {
 
 		(string name, Color color)[] unusedColors = PossibleAllianceColors.ExceptBy(allianceColors, tuple => tuple.color).ToArray();
 
-		(string name, Color color) colorNamePair = unusedColors[Random.Next(unusedColors.Length)];
+		(string? name, Color color) = unusedColors[Random.Next(unusedColors.Length)];
 
 		return new() {
-			Name = $"{colorNamePair.name} Alliance",
-			RedColorValue = colorNamePair.color.R.ToString(),
-			GreenColorValue = colorNamePair.color.G.ToString(),
-			BlueColorValue = colorNamePair.color.B.ToString(),
+			Name = $"{name} Alliance",
+			RedColorValue = color.R.ToString(),
+			GreenColorValue = color.G.ToString(),
+			BlueColorValue = color.B.ToString(),
 		};
 	}
 

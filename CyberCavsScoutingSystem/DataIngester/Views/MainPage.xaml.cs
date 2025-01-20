@@ -42,13 +42,13 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	public bool RemoveButtonEnabled => SelectedDirectory is not null;
 
-	public ObservableCollection<File> SourceDirectories { get; } = new() {
+	public ObservableCollection<File> SourceDirectories { get; } = [
 		new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" },
 		new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" },
 		new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" }
-	};
+	];
 
-	public ObservableCollection<string> LogMessages { get; } = new();
+	public ObservableCollection<string> LogMessages { get; } = [];
 	private Action<string> Logger => text => LogMessages.Add(DateTime.Now + ": " + text);
 
 	private static readonly SemaphoreSlim Mutex = new(1);
@@ -155,7 +155,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private async Task<List<string>> GetMatchDataFromSourceDirectories() {
 
-		List<string> matchData = new();
+		List<string> matchData = [];
 
 		foreach (File file in SourceDirectories.Where(directory => directory.IsAccessible)) {
 

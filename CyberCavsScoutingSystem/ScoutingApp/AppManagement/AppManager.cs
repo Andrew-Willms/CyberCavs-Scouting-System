@@ -7,7 +7,6 @@ using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
-using QRCoder;
 using ScoutingApp.Views.Pages.Flyout;
 using UtilitiesLibrary.Results;
 using static ScoutingApp.IGameSpecRetrievalResult;
@@ -36,6 +35,7 @@ public interface IAppManager : INotifyPropertyChanged {
 
 
 public class AppManager : IAppManager, INotifyPropertyChanged {
+
 	public MatchDataCollector ActiveMatchData {
 		get;
 		private set {

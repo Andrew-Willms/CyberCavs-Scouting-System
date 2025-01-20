@@ -141,7 +141,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		    integerDataFieldEditor.MaxValue.IsValid,
 		SelectionDataFieldEditor selectionDataFieldEditor => selectionDataFieldEditor.Options.All(x => x.IsValid),
 		_ => throw new UnreachableException()
-		//_ => throw ExhaustiveMatch.Failed(DataFieldTypeEditor) // not supported by nuget package
+		//_ => throw ExhaustiveMatch.Failed(DataFieldTypeEditor) // not supported by NuGet package
 	};
 
 	public DataFieldSpec? ToGameSpecification() {

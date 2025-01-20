@@ -125,8 +125,8 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 	private async void ViewMatch_OnClicked(object? sender, EventArgs e) {
 
-		Button button = sender as Button ?? throw new ArgumentException();
-		SerializedMatch scannedMatch = button.BindingContext is SerializedMatch match ? match : throw new ArgumentException();
+		Button button = sender as Button ?? throw new ArgumentException("sender not valid");
+		SerializedMatch scannedMatch = button.BindingContext is SerializedMatch match ? match : throw new ArgumentException("sender not valid");
 
 		Dictionary<string, object> parameters = new() {
 			{ MatchDetailsPage.SerializedMatchNavigationParameterName, scannedMatch },
