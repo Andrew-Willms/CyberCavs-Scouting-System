@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net9.0-windows9.0</TargetFramework>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFramework>net9.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
 
