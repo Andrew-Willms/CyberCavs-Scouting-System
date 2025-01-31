@@ -5,7 +5,6 @@ using System.Linq;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
-using UtilitiesLibrary.SimpleEvent;
 
 namespace CCSSDomain.MatchData;
 
@@ -49,9 +48,6 @@ public class MatchData {
 		ReadOnlyList<object> dataCollectionWarnings) {
 
 		List<DomainError> domainErrors = [];
-
-					}
-					break;
 
 		// todo validate match
 
