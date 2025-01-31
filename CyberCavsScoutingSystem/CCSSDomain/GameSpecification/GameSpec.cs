@@ -120,8 +120,8 @@ public class GameSpec {
 			$"{nameof(MatchDataCollector.ReplayNumber).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.IsPlayoff).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.Alliance).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.TeamNumber).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.Time).ToCsvFriendly()},"
+			$"{nameof(MatchDataCollector.TeamNumber).ToCsvFriendly()},"// +
+			//$"{nameof(MatchDataCollector.Time).ToCsvFriendly()}," // todo figure this out
 		);
 
 		DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));

@@ -26,11 +26,13 @@ public class TextDataFieldResult : DataFieldResult {
 		Text = text;
 	}
 
-	public static TextDataFieldResult Create(TextDataFieldSpec dataFieldSpec, string text) {
+	public static IResult<TextDataFieldResult> Create(TextDataFieldSpec dataFieldSpec, string text) {
 
-		if (dataFieldSpec.MustNotBeEmpty && string.IsNullOrEmpty(text) )
+		if (dataFieldSpec.MustNotBeEmpty && string.IsNullOrEmpty(text)) {
+			return new IResult<TextDataFieldResult>.Error();
+		}
 
-		return new(dataFieldSpec, text);
+		return new IResult<TextDataFieldResult>.Success(new (dataFieldSpec, text));
 	}
 
 }
