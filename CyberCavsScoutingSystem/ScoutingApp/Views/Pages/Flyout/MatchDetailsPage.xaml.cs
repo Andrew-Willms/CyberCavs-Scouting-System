@@ -17,11 +17,10 @@ public partial class MatchDetailsPage : ContentPage, INotifyPropertyChanged {
 	public const string SerializedMatchNavigationParameterName = nameof(SerializedMatch);
 	public const string MatchDeleterNavigationParameterName = nameof(MatchDeleter);
 
-	private SerializedMatch _SavedMatch;
 	public SerializedMatch SavedMatch {
-		get => _SavedMatch;
+		get;
 		set {
-			_SavedMatch = value;
+			field = value;
 			OnPropertyChanged(nameof(SavedMatch));
 		}
 	}

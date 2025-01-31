@@ -29,22 +29,19 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		Selection
 	}
 
-	private DataFieldTypes _DataFieldType;
 	public DataFieldTypes DataFieldType {
-		get => _DataFieldType;
+		get;
 		set {
-
-			if (_DataFieldType == value) {
+			if (field == value) {
 				return;
 			}
 
-			_DataFieldType = value;
+			field = value;
 			ChangeDataFieldType(value);
 			OnPropertyChanged(nameof(DataFieldType));
 			OnPropertyChanged(nameof(DataFieldTypeEditor));
 		}
 	}
-
 
 
 	public DataFieldEditor(GameEditor gameEditor, DataFieldEditingData initialValues) {
@@ -144,7 +141,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 		    integerDataFieldEditor.MaxValue.IsValid,
 		SelectionDataFieldEditor selectionDataFieldEditor => selectionDataFieldEditor.Options.All(x => x.IsValid),
 		_ => throw new UnreachableException()
-		//_ => throw ExhaustiveMatch.Failed(DataFieldTypeEditor) // not supported by nuget package
+		//_ => throw ExhaustiveMatch.Failed(DataFieldTypeEditor) // not supported by NuGet package
 	};
 
 	public DataFieldSpec? ToGameSpecification() {

@@ -65,9 +65,9 @@ public class ObservableList<TItem, TAdd> : INotifyCollectionChanged, IEnumerable
 
 
 
-public interface IListRemoveResult : IResult { }
+public interface IListRemoveResult : IResult;
 
-// TODO: Move to it's own file
+// TODO: Move to its own file
 public interface IListRemoveResult<T> : IListRemoveResult {
 
 	public class Success : IResult.Success, IListRemoveResult<T> { }

@@ -6,7 +6,7 @@
 	xmlns:views="clr-namespace:DataIngester.Views"
 	xmlns:converters="clr-namespace:DataIngester.Converters"
 	x:Class="DataIngester.Views.FileSystemItemView"
-	x:DataType="views:Directory">
+	x:DataType="views:File">
 	
 	<ContentView.Resources>
 		<converters:BoolToAccessibilityIndicatorColorConverter x:Key="IntToColor"/>

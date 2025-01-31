@@ -32,11 +32,10 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 	[DependsOn(nameof(AppManager.SelectedDataField))]
 	public ObservableList<SingleInput<string, string, ErrorSeverity>, string>? Options => Editor?.Options;
 
-	private SingleInput<string, string, ErrorSeverity>? _SelectedOption;
 	public SingleInput<string, string, ErrorSeverity>? SelectedOption {
-		get => _SelectedOption;
+		get;
 		set {
-			_SelectedOption = value;
+			field = value;
 			OnPropertyChanged(nameof(SelectedOption));
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}

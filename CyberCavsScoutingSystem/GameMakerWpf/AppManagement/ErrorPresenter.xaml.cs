@@ -18,25 +18,21 @@ public interface IErrorPresenter {
 
 
 public partial class ErrorPresenter : Window, IErrorPresenter, INotifyPropertyChanged {
-
-	private string _Caption = "";
 	public string Caption {
-		get => _Caption;
+		get;
 		set {
-			_Caption = value;
+			field = value;
 			OnPropertyChanged(nameof(Caption));
 		}
-	}
+	} = "";
 
-	private string _Message = "";
 	public string Message {
-		get => _Message;
+		get;
 		set {
-			_Message = value;
+			field = value;
 			OnPropertyChanged(nameof(Message));
 		}
-	}
-
+	} = "";
 
 
 	public ErrorPresenter() {

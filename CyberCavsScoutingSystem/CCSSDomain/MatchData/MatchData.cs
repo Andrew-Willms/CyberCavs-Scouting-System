@@ -50,6 +50,8 @@ public class MatchData {
 
 		List<DomainError> domainErrors = [];
 
+					}
+					break;
 
 		// todo validate match
 
@@ -64,19 +66,19 @@ public class MatchData {
 
 				case MatchType.Qualification:
 					if (match.MatchNumber > eventInfo.Matches.Count) {
-
+						throw new NotImplementedException();
 					}
 					break;
 
 				case MatchType.DoubleElimination:
 					if (match.MatchNumber > 13) {
-
+						throw new NotImplementedException();
 					}
 					break;
 
 				case MatchType.Final:
 					if (match.MatchNumber > 3) {
-
+						throw new NotImplementedException();
 					}
 					break;
 
@@ -85,13 +87,13 @@ public class MatchData {
 			}
 
 			if (!eventInfo.Teams.Contains(teamNumber)) {
-
+				throw new NotImplementedException();
 			}
 
-			if (match.MatchNumber < eventInfo.Matches.Count
-			    
-			    
-			    && eventInfo.Matches[match.MatchNumber])
+			//if (match.MatchNumber < eventInfo.Matches.Count
+			//    && eventInfo.Matches[match.MatchNumber]) {
+			//	// idk what I was thinking here
+			//}
 
 		}
 

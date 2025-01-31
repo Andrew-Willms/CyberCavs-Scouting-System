@@ -75,16 +75,11 @@ public class MultiInput<TOutput, TSeverity,
 		TInput1, TInput2, TInput3>
 	: MultiInput<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
-
-	private Optional<TOutput> _OutputObject = Optional.Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
-
-		// TODO: .Net 7.0 remove backing field
-		get => _OutputObject;
-
+		get;
 		protected set {
 
-			if (value.Equals(_OutputObject)) {
+			if (value.Equals(field)) {
 				return;
 			}
 
@@ -92,10 +87,10 @@ public class MultiInput<TOutput, TSeverity,
 				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
 			}
 
-			_OutputObject = value;
+			field = value;
 			OnOutputObjectChanged();
 		}
-	}
+	} = Optional.Optional.NoValue;
 
 	private InputConverter<TOutput,
 		(TInput1, TInput2, TInput3),
@@ -176,16 +171,10 @@ public class MultiInput<TOutput, TSeverity,
 		TInput1, TInput2, TInput3, TInput4>
 	: MultiInput<TOutput, TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
-
-	private Optional<TOutput> _OutputObject = Optional.Optional.NoValue;
 	public override Optional<TOutput> OutputObject {
-
-		// TODO: .Net 7.0 remove backing field
-		get => _OutputObject;
-
+		get;
 		protected set {
-
-			if (value.Equals(_OutputObject)) {
+			if (value.Equals(field)) {
 				return;
 			}
 
@@ -193,10 +182,10 @@ public class MultiInput<TOutput, TSeverity,
 				throw new InvalidOperationException($"You are setting {nameof(OutputObject)} to an invalid value.");
 			}
 
-			_OutputObject = value;
+			field = value;
 			OnOutputObjectChanged();
 		}
-	}
+	} = Optional.Optional.NoValue;
 
 	private InputConverter<TOutput,
 		(TInput1, TInput2, TInput3, TInput4),

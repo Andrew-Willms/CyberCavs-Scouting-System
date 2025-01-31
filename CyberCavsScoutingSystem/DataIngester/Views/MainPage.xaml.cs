@@ -7,13 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CCSSDomain.GameSpecification;
+using System.Timers;
 using DataIngester.Services;
 using MediaDevices;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Dispatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
+using Timer = System.Timers.Timer;
 
 namespace DataIngester.Views;
 
@@ -21,20 +21,20 @@ namespace DataIngester.Views;
 
 public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
-	private string _TargetFile = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Documents\CCSS\ScoutingData\Data.csv");
+	private readonly IMtpDeviceService MtpService;
+
 	public string TargetFile {
-		get => _TargetFile;
+		get;
 		set {
-			_TargetFile = value;
+			field = value;
 			OnPropertyChanged(nameof(TargetFile));
 		}
-	}
+	} = Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\Documents\CCSS\ScoutingData\Data.csv");
 
-	private Directory? _SelectedDirectory;
-	public Directory? SelectedDirectory {
-		get => _SelectedDirectory;
+	public File? SelectedDirectory {
+		get;
 		set {
-			_SelectedDirectory = value;
+			field = value;
 			OnPropertyChanged(nameof(SelectedDirectory));
 			OnPropertyChanged(nameof(RemoveButtonEnabled));
 		}
@@ -42,197 +42,165 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	public bool RemoveButtonEnabled => SelectedDirectory is not null;
 
-	public ObservableCollection<Directory> SourceDirectories { get; } = new() {
-		new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" },
-		new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" },
-		new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\CCSS.QrCodeScanner" }
-	};
+	public ObservableCollection<File> SourceDirectories { get; } = [
+		new() { Path = @"\Internal shared storage\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" },
+		new() { Path = @"\Internal storage\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" },
+		new() { Path = @"\Phone\Android\data\CCSS.QrCodeScanner\files\Documents\Data.csv" }
+	];
 
-	public ObservableCollection<string> LogMessages { get; } = new();
+	public ObservableCollection<string> LogMessages { get; } = [];
 	private Action<string> Logger => text => LogMessages.Add(DateTime.Now + ": " + text);
 
-	private static bool AlreadyAccessingDevices;
-	private static readonly Mutex AlreadyAccessingDevicesMutex = new();
+	private static readonly SemaphoreSlim Mutex = new(1);
+
+	private readonly Timer Timer = new(TimeSpan.FromSeconds(1));
 
 
 
-	public MainPage() {
+	public MainPage(IMtpDeviceService mtpService) {
+
+		MtpService = mtpService;
 
 		InitializeComponent();
 		BindingContext = this;
 
-		Task.Run(async () => {
-
-			while (true) {
-				await RunBackgroundTask(SourceDirectories.ToReadOnly(), TargetFile, Logger, Dispatcher);
-				await Task.Delay(new TimeSpan(0, 0, 0, 2));
-			}
-		});
-
-		Task.Run(async () => {
-
-			while (true) {
-
-				if (LogMessages.Count > 100) {
-					LogMessages.RemoveAt(0);
-				}
-
-				await Task.Delay(new TimeSpan(0, 0, 0, 2));
-			}
-		});
+		Timer.Elapsed += TrimLog;
+		Timer.Elapsed += CopyData;
+		Timer.Start();
 	}
 
 
 
-	private static async Task RunBackgroundTask(ReadOnlyList<Directory> sourceDirectories, string targetFilePath, Action<string> log, IDispatcher dispatcher) {
+	private void TrimLog(object? sender, ElapsedEventArgs eventArgs) {
 
-		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.WaitOne);
+		while (LogMessages.Count > 100) {
+			LogMessages.RemoveAt(0);
+		}
+	}
 
-		if (AlreadyAccessingDevices) {
+	private async void CopyData(object? sender, ElapsedEventArgs eventArgs) {
+
+		if (!await Mutex.WaitAsync(TimeSpan.FromMilliseconds(400))) {
 			return;
 		}
 
-		AlreadyAccessingDevices = true;
+		UpdateSourceDirectoryAccessibilities();
 
-		await dispatcher.DispatchAsync(AlreadyAccessingDevicesMutex.ReleaseMutex);
+		List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile();
 
-		UpdateSourceDirectoryAccessibilities(sourceDirectories);
-
-		List<string>? targetFileContents = await GetExistingMatchDataFromTargetFile(targetFilePath, log);
 		if (targetFileContents is null) {
+			// this is an error state, if there is no match data the function will return an empty list
 			return;
 		}
 
-		List<(Directory sourceDirectory, string fileContents)> matchDataFromDevices = await GetMatchDataFromSourceDirectories(sourceDirectories, log);
+		List<string> matchDataFromDevices = await GetMatchDataFromSourceDirectories();
 
-		matchDataFromDevices.PruneEntriesFrom(targetFileContents, (tuple, matchDataFileLine) => tuple.fileContents == matchDataFileLine);
+		matchDataFromDevices.PruneEntriesFrom(targetFileContents);
 
-		await WriteMatchDataToTargetFile(targetFilePath, matchDataFromDevices.ToReadOnly(), log);
+		await WriteMatchDataToTargetFile(matchDataFromDevices.ToReadOnly());
 
-		AlreadyAccessingDevices = false;
+		Mutex.Release();
 	}
 
-	private static void UpdateSourceDirectoryAccessibilities(IEnumerable<Directory> sourceDirectories) {
+	private void UpdateSourceDirectoryAccessibilities() {
 
-		foreach (Directory sourceDirectory in sourceDirectories) {
+		foreach (File sourceDirectory in SourceDirectories) {
 
-			sourceDirectory.IsAccessible = StaticServiceResolver.Resolve<IMtpDeviceService>()
-				.GetDevices().Any(device => device.DirectoryExistsSafe(sourceDirectory.Path));
+			sourceDirectory.IsAccessible = MtpService.GetDevices().Any(device => device.FileExistsSafe(sourceDirectory.Path));
 		}
 	}
 
-	private static async Task<List<string>?> GetExistingMatchDataFromTargetFile(string targetFilePath, Action<string> log) {
+	private async Task<List<string>?> GetExistingMatchDataFromTargetFile() {
 
-		if (!File.Exists(targetFilePath)) {
-
-			IResult<GameSpec> result = await App.GetGameSpec();
-
-			switch (result) {
-				case IResult<GameSpec>.Error error:
-					log($"Error while parsing game specification file: \"{error.Message}\"");
-					return null;
-
-				case GameSpec test:
-					throw new NotImplementedException();
-
-				default:
-					throw new UnreachableException();
-			}
-
-			//if (result is IResult<GameSpec>.Error error) {
-			//	log($"Error while parsing game specification file: \"{error.Message}\"");
-			//	return null;
-			//}
-
-			GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
+		if (!System.IO.File.Exists(TargetFile)) {
 
 			string? targetFileDirectory;
 			try {
-				targetFileDirectory = Path.GetDirectoryName(targetFilePath);
+				targetFileDirectory = Path.GetDirectoryName(TargetFile);
 			} catch {
-				log($"The target file path \"{targetFilePath}\" is invalid.");
+				Logger($"The target file path \"{TargetFile}\" is invalid.");
 				return null;
 			}
 
 			try {
 				if (targetFileDirectory is not null) {
-					System.IO.Directory.CreateDirectory(targetFileDirectory);
+					Directory.CreateDirectory(targetFileDirectory);
 				}
 
 			} catch {
-				log($"The directory of the target file \"{targetFileDirectory}\" could not be created.");
+				Logger($"The directory of the target file \"{targetFileDirectory}\" could not be created.");
 				return null;
 			}
 
 			try {
-				await File.WriteAllTextAsync(targetFilePath, gameSpec.GetCsvHeaders());
+				await System.IO.File.WriteAllTextAsync(
+					TargetFile,
+					"ScouterInitials\tEvent	Match\tTeam\tLeaveStartingZone\tAutoNotes\tNote1\tNote2\tNote3\tNote4\tNote5\tNote6\tNote7\tNote8\tFieldIgnored\tAmpScores\tSpeakerScores\tNotesFed\tEndGameStatus\tTrapNote\tDied\tComments\r\n");
 
 			} catch {
-				log($"Target File \"{targetFilePath}\" does not exist and could not be created.");
+				Logger($"Target File \"{TargetFile}\" does not exist and could not be created.");
 				return null;
 			}
 		}
 
 		string[]? fileContents = null;
 		try {
-			fileContents = await File.ReadAllLinesAsync(targetFilePath);
+			fileContents = await System.IO.File.ReadAllLinesAsync(TargetFile);
 		} catch {
-			log($"Target File \"{targetFilePath}\" exists but could not be read.");
+			Logger($"Target File \"{TargetFile}\" exists but could not be read.");
 		}
 
-		return fileContents?.ToList();
+		return fileContents?.Where(x => !string.IsNullOrEmpty(x)).ToList();
 	}
 
-	private static async Task<List<(Directory, string)>> GetMatchDataFromSourceDirectories(
-		IEnumerable<Directory> sourceDirectories, Action<string> log) {
+	private async Task<List<string>> GetMatchDataFromSourceDirectories() {
 
-		List<(Directory, string)> matchData = new();
+		List<string> matchData = [];
 
-		foreach (Directory directory in sourceDirectories.Where(directory => directory.IsAccessible)) {
+		foreach (File file in SourceDirectories.Where(directory => directory.IsAccessible)) {
 
-			foreach (MediaDevice device in StaticServiceResolver.Resolve<IMtpDeviceService>().GetDevices()) {
+			foreach (MediaDevice device in MtpService.GetDevices()) {
 
-				foreach (string filePath in device.EnumerateFiles(directory.Path)) {
-
-					IResult<string> fileContents = await device.ReadFromMtpDevice(filePath);
-
-					switch (fileContents) {
-
-						case IResult<string>.Error error:
-							log(error.Message);
-							continue;
-
-						case IResult<string>.Success success:
-							matchData.Add((directory, success.Value));
-							continue;
-
-						default:
-							throw new UnreachableException();
-					}
+				if (!device.FileExistsSafe(file.Path)) {
+					continue;
 				}
+
+				IResult<string> result = await device.ReadFromMtpDevice(file.Path);
+
+				if (result is IResult<string>.Error error) {
+					Logger(error.Message);
+					continue;
+				}
+
+				string fileContents = (result as IResult<string>.Success)?.Value ?? throw new UnreachableException();
+
+				matchData.AddRange(fileContents.Split("\n").Where(x => !string.IsNullOrEmpty(x)));
 			}
 		}
 
 		return matchData;
 	}
 
-	private static async Task WriteMatchDataToTargetFile(string targetFilePath, 
-		ReadOnlyList<(Directory sourceDirectory, string fileContents)> newMatchData, Action<string> log) {
+	private async Task WriteMatchDataToTargetFile(ReadOnlyList<string> newMatchData) {
 
-		newMatchData.Foreach(x => log($"Writing match data from \"{x.sourceDirectory.Path}\" to \"{targetFilePath}\"."));
+		if (newMatchData.IsEmpty()) {
+			return;
+		}
+
+		newMatchData.Foreach(x => Logger($"Writing match \"{x}\"data to target file."));
 
 		try {
 
-			string fileContents = await File.ReadAllTextAsync(targetFilePath);
+			string fileContents = await System.IO.File.ReadAllTextAsync(TargetFile);
 
-			if (!fileContents.EndsWith("\n")) {
-				await File.AppendAllTextAsync(targetFilePath, "\n");
+			if (!fileContents.IsEmpty() && !fileContents.EndsWith('\n') && !fileContents.EndsWith('\r')) {
+				await System.IO.File.AppendAllTextAsync(TargetFile, "\n");
 			}
 
-			await File.AppendAllLinesAsync(targetFilePath, newMatchData.Select(x => x.fileContents));
+			await System.IO.File.AppendAllLinesAsync(TargetFile, newMatchData);
 
 		} catch {
-			log($"Could not write match data to the file \"{targetFilePath}\".");
+			Logger($"Could not write match data to the file \"{TargetFile}\".");
 		}
 	}
 
@@ -241,7 +209,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	private void DeleteSourceFile_OnClick(object? sender, EventArgs e) {
 
 		if (SelectedDirectory is null) {
-			throw new InvalidOperationException();
+			throw new UnreachableException();
 		}
 
 		SourceDirectories.Remove(SelectedDirectory);
@@ -254,9 +222,9 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 	private void SourceFileCollectionViewItem_OnFocus(object? sender, FocusEventArgs e) {
 
-		FileSystemItemView sourceDirectoryView = sender as FileSystemItemView ?? throw new ArgumentException();
-		Directory sourceDirectory = sourceDirectoryView.BindingContext as Directory ?? throw new ArgumentException();
-		SelectedDirectory = sourceDirectory;
+		FileSystemItemView sourceDirectoryView = sender as FileSystemItemView ?? throw new UnreachableException();
+		File sourceFile = sourceDirectoryView.BindingContext as File ?? throw new UnreachableException();
+		SelectedDirectory = sourceFile;
 	}
 
 
@@ -296,10 +264,10 @@ public static class MtpDeviceExtensions {
 		return new IResult<string>.Success(matchData);
 	}
 
-	public static bool DirectoryExistsSafe(this MediaDevice device, string directoryPath) {
+	public static bool FileExistsSafe(this MediaDevice device, string filePath) {
 
 		try {
-			return device.DirectoryExists(directoryPath);
+			return device.FileExists(filePath);
 		} catch {
 			return false;
 		}

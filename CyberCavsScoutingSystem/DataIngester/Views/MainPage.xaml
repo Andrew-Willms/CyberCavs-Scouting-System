@@ -7,92 +7,90 @@
 	x:Class="DataIngester.Views.MainPage"
 	x:DataType="views:MainPage">
 
-	<ScrollView>
+	<Grid
+		Margin="10"
+		RowSpacing="50">
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<VerticalStackLayout
+			Margin="10"
+			Spacing="5"
+			Grid.Row="0">
+
+			<Label Text="Target File"/>
+
+			<Entry
+				Text="{Binding Path=TargetFile}"
+				Margin="0,0,5,0"/>
+
+		</VerticalStackLayout>
+
+		<VerticalStackLayout
+			Margin="10"
+			Spacing="5"
+			Grid.Row="1">
+
+			<Label Text="Source Directories"/>
+
+			<CollectionView
+				ItemsSource="{Binding Path=SourceDirectories}"
+				SelectionMode="Single"
+				SelectedItem="{Binding Path=SelectedDirectory}">
+
+				<CollectionView.ItemsLayout>
+					<GridItemsLayout Orientation="Vertical"  VerticalItemSpacing="5" />
+				</CollectionView.ItemsLayout>
+
+				<CollectionView.ItemTemplate>
+					<DataTemplate x:DataType="views:File">
+						<views:FileSystemItemView
+							HorizontalOptions="Fill"
+							Focused="SourceFileCollectionViewItem_OnFocus"/>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+			</CollectionView>
+
+			<HorizontalStackLayout Spacing="10">
+
+				<Button
+					Text="Add Source Directory"
+					Clicked="AddSourceFileButton_OnClick"
+					HorizontalOptions="Start"/>
+
+				<Button
+					Text="Delete Source Directory"
+					Clicked="DeleteSourceFile_OnClick"
+					IsEnabled="{Binding Path=RemoveButtonEnabled}"
+					HorizontalOptions="Start"/>
+
+			</HorizontalStackLayout>
+
+		</VerticalStackLayout>
 
 		<Grid
 			Margin="10"
-			RowSpacing="50">
-	
+			RowSpacing="5"
+			Grid.Row="2">
+
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
-				<RowDefinition Height="auto"/>
-				<RowDefinition Height="1*"/>
+				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
 
-			<VerticalStackLayout
-				Margin="10"
-				Spacing="5"
-				Grid.Row="0">
-	
-				<Label Text="Target File"/>
+			<Label
+				Text="Log"
+				Grid.Row="0"/>
 
-				<Entry
-					Text="{Binding Path=TargetFile}"
-					Margin="0,0,5,0"/>
-	
-			</VerticalStackLayout>
-	
-			<VerticalStackLayout
-				Margin="10"
-				Spacing="5"
-				Grid.Row="1">
-	
-				<Label Text="Source Directories"/>
-	
-				<CollectionView
-					ItemsSource="{Binding Path=SourceDirectories}"
-					SelectionMode="Single"
-					SelectedItem="{Binding Path=SelectedDirectory}">
-	
-					<CollectionView.ItemsLayout>
-						<GridItemsLayout Orientation="Vertical"  VerticalItemSpacing="5" />
-					</CollectionView.ItemsLayout>
-	
-					<CollectionView.ItemTemplate>
-						<DataTemplate x:DataType="views:Directory">
-							<views:FileSystemItemView
-								HorizontalOptions="Fill"
-								Focused="SourceFileCollectionViewItem_OnFocus"/>
-						</DataTemplate>
-					</CollectionView.ItemTemplate>
-				</CollectionView>
-
-				<HorizontalStackLayout Spacing="10">
-
-					<Button
-						Text="Add Source Directory"
-						Clicked="AddSourceFileButton_OnClick"
-						HorizontalOptions="Start"/>
-
-					<Button
-						Text="Delete Source Directory"
-						Clicked="DeleteSourceFile_OnClick"
-						IsEnabled="{Binding Path=RemoveButtonEnabled}"
-						HorizontalOptions="Start"/>
-
-				</HorizontalStackLayout>
-
-			</VerticalStackLayout>
-
-			<Grid
-				Margin="10"
-				RowSpacing="5"
-				Grid.Row="2">
-
-				<Grid.RowDefinitions>
-					<RowDefinition Height="auto"/>
-					<RowDefinition Height="1*"/>
-				</Grid.RowDefinitions>
-
-				<Label
-					Text="Log"
-					Grid.Row="0"/>
-
+			<ScrollView Grid.Row="1">
 				<CollectionView
 					ItemsSource="{Binding Path=LogMessages}"
 					MinimumHeightRequest="100"
-					Margin="0"
-					Grid.Row="1">
+					Margin="0">
 
 					<CollectionView.ItemTemplate>
 						<DataTemplate x:DataType="system:String">
@@ -101,10 +99,10 @@
 					</CollectionView.ItemTemplate>
 
 				</CollectionView>
-
-			</Grid>
+			</ScrollView>
 
 		</Grid>
-	</ScrollView>
+
+	</Grid>
 
 </ContentPage>

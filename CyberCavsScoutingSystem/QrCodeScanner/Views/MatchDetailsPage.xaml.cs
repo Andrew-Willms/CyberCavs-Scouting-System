@@ -15,8 +15,8 @@ public partial class MatchDetailsPage : ContentPage, INotifyPropertyChanged {
 	public const string ScannedMatchNavigationParameterName = nameof(ScannedMatch);
 	public const string MatchDeleterNavigationParameterName = nameof(MatchDeleter);
 
-    private ScannedMatch _ScannedMatch;
-    public ScannedMatch ScannedMatch {
+    private string _ScannedMatch;
+    public string ScannedMatch {
         get => _ScannedMatch;
         set {
             _ScannedMatch = value;
@@ -24,7 +24,7 @@ public partial class MatchDetailsPage : ContentPage, INotifyPropertyChanged {
         }
     }
 
-    public Func<ScannedMatch, Task> MatchDeleter { get; init; } = null!;
+    public Func<string, Task> MatchDeleter { get; init; } = null!;
 
 	public MatchDetailsPage() {
 

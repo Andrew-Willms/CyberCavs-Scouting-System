@@ -17,17 +17,23 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	public Func<ScannedMatch, Task> ScanAdder { get; init; } = null!;
+	public Func<string, Task<bool>> ScanAdder { get; init; } = null!;
 
-	public bool CanSave => QrCodeData != "" && !QrCodeData.All(character => character is '0');
-
-	private string _QrCodeData = "";
-	public string QrCodeData {
-		get => _QrCodeData;
+	private int _QrCodeCount;
+	public int QrCodeCount {
+		get => _QrCodeCount;
 		set {
-			_QrCodeData = value;
-			OnPropertyChanged(nameof(QrCodeData));
-			OnPropertyChanged(nameof(CanSave));
+			_QrCodeCount = value;
+			OnPropertyChanged(nameof(QrCodeCount));
+		}
+	}
+
+	private string LastLastQrCodeScanned = "";
+	public string LastQrCodeScanned {
+		get => LastLastQrCodeScanned;
+		set {
+			LastLastQrCodeScanned = value;
+			OnPropertyChanged(nameof(LastQrCodeScanned));
 		}
 	}
 
@@ -48,20 +54,28 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	private void CameraBarcodeReaderView_OnBarcodesDetected(object? sender, BarcodeDetectionEventArgs e) {
+	private async void CameraBarcodeReaderView_OnBarcodesDetected(object? sender, BarcodeDetectionEventArgs e) {
 
-		QrCodeData = e.Results.First().Value;
+		string? data = e.Results.FirstOrDefault(IsValidQrCode)?.Value;
+
+		if (data is null) {
+			return;
+		}
+
+		if (!await ScanAdder(data)) {
+			return;
+		}
+
+		QrCodeCount++;
+		LastQrCodeScanned = data;
 	}
 
-	private async void Button_OnClicked(object? sender, EventArgs e) {
+	private static bool IsValidQrCode(BarcodeResult qrCode) {
 
-		ScannedMatch match = new() {
-			Name = $"{DateTime.Now:yyyy-MM-dd HH.mm.ss}",
-			Content = QrCodeData
-		};
+		return
+			!qrCode.Value.All(character => character is '0') &&
+			qrCode.Value.Length > 25;
 
-		QrCodeData = "";
-		await ScanAdder(match);
 	}
 
 

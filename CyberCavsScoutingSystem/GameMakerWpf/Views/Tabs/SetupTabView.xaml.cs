@@ -25,11 +25,10 @@ public partial class SetupTabView : AppManagerDependent, INotifyPropertyChanged 
 	[DependsOn(nameof(AppManager.GameEditor))]
 	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.SetupTabInputs;
 
-	private InputEditor? _SelectedInput;
 	public InputEditor? SelectedInput {
-		get => _SelectedInput;
+		get;
 		set {
-			_SelectedInput = value;
+			field = value;
 			OnPropertyChanged(nameof(SelectedInput));
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}

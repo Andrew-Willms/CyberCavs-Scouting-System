@@ -45,7 +45,7 @@ public class ReadOnlyList<T> : IEnumerable<T> {
 
 
 	private ReadOnlyList() {
-		Collection = Array.Empty<T>();
+		Collection = [];
 	}
 
 	public ReadOnlyList(IEnumerable<T> collection) {

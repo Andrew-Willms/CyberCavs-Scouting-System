@@ -12,7 +12,7 @@ public static class CollectionExtensions {
 
 	public static List<T> Listify<T>(this T item) {
 
-		return new() { item };
+		return [item];
 	}
 
 	public static ReadOnlyList<T> ToReadOnly<T>(this IEnumerable<T> enumerable) {

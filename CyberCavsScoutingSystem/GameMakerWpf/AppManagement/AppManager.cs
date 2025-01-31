@@ -45,22 +45,19 @@ public interface IAppManager : INotifyPropertyChanged {
 
 
 public class AppManager : IAppManager, INotifyPropertyChanged {
-
-	private GameEditor _GameEditor = null!;
 	public GameEditor GameEditor {
-		get => _GameEditor;
+		get;
 		private set {
 			value.AnythingChanged.Subscribe(() => ProjectIsSaved = false);
-			_GameEditor = value;
+			field = value;
 			OnPropertyChanged(nameof(GameEditor));
 		}
-	}
+	} = null!;
 
-	private DataFieldEditor? _SelectedDataField;
 	public DataFieldEditor? SelectedDataField {
-		get => _SelectedDataField;
+		get;
 		set {
-			_SelectedDataField = value;
+			field = value;
 			OnPropertyChanged(nameof(SelectedDataField));
 		}
 	}

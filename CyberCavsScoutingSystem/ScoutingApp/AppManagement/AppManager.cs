@@ -7,7 +7,6 @@ using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
-using QRCoder;
 using ScoutingApp.Views.Pages.Flyout;
 using UtilitiesLibrary.Results;
 using static ScoutingApp.IGameSpecRetrievalResult;
@@ -37,24 +36,22 @@ public interface IAppManager : INotifyPropertyChanged {
 
 public class AppManager : IAppManager, INotifyPropertyChanged {
 
-	private MatchDataCollector _ActiveMatchData = null!;
 	public MatchDataCollector ActiveMatchData {
-		get => _ActiveMatchData;
+		get;
 		private set {
-			_ActiveMatchData = value;
+			field = value;
 			OnPropertyChanged(nameof(ActiveMatchData));
 		}
-	}
+	} = null!;
 
-	private string _Scout = string.Empty;
 	public string Scout {
-		get => _Scout;
+		get;
 		set {
-			_Scout = value;
+			field = value;
 			OnPropertyChanged(nameof(Scout));
 			Task _ = WriteScoutToDisk();
 		}
-	}
+	} = string.Empty;
 
 	public string Event { get; set; } = string.Empty;
 

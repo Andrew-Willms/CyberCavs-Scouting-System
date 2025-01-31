@@ -26,11 +26,10 @@ public partial class AutoTabView : AppManagerDependent, INotifyPropertyChanged {
 	[DependsOn(nameof(AppManager.GameEditor))]
 	public ObservableList<InputEditor, InputEditingData> Inputs => GameEditor.AutoTabInputs;
 
-	private InputEditor? _SelectedInput;
 	public InputEditor? SelectedInput {
-		get => _SelectedInput;
+		get;
 		set {
-			_SelectedInput = value;
+			field = value;
 			OnPropertyChanged(nameof(SelectedInput));
 			OnPropertyChanged(nameof(RemoveButtonIsEnabled));
 		}
