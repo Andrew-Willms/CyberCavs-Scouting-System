@@ -10,8 +10,6 @@ namespace CCSSDomain.MatchData;
 
 
 
-
-
 public class MatchData {
 
 	public required GameSpec GameSpecification { get; init; }
