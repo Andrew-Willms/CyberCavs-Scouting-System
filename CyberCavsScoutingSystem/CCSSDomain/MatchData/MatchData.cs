@@ -5,6 +5,7 @@ using System.Linq;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
+using Version = CCSSDomain.GameSpecification.Version;
 
 namespace CCSSDomain.MatchData;
 
@@ -12,15 +13,19 @@ namespace CCSSDomain.MatchData;
 
 public class MatchData {
 
-	public required GameSpec GameSpecification { get; init; }
+	public string GameName { get; }
 
-	public required EventCode EventCode { get; init; }
+	public Version GameVersion { get; }
+
+	public HashCode GameHashCode { get; }
+
+	public required string? EventCode { get; init; }
 
 	public required Match Match { get; init; }
 
 	public required uint TeamNumber { get; init; }
 
-	public required AllianceColor AllianceColor { get; init; }
+	public required uint AllianceIndex { get; init; }
 
 	public required DateTime StartTime { get; init; }
 	public required DateTime EndTime { get; init; }
@@ -35,8 +40,8 @@ public class MatchData {
 	public static IResult<MatchData> Create(
 		out ReadOnlyList<DomainError> errors,
 		GameSpec gameSpecification,
-		EventCode eventCode,
-		EventInfo? eventInfo,
+		string? eventCode,
+		EventSchedule? eventSchedule,
 		Match match,
 		uint teamNumber,
 		AllianceColor allianceColor,
@@ -50,7 +55,7 @@ public class MatchData {
 		// todo validate match
 
 		// Validation that happens if there is event info
-		if (eventInfo is not null) {
+		if (eventSchedule is not null) {
 
 			// todo this will need to be updated to support other tournament formats
 			switch (match.Type) {
@@ -59,7 +64,7 @@ public class MatchData {
 					break;
 
 				case MatchType.Qualification:
-					if (match.MatchNumber > eventInfo.Matches.Count) {
+					if (match.MatchNumber > eventSchedule.Matches.Count) {
 						throw new NotImplementedException();
 					}
 					break;
@@ -80,7 +85,7 @@ public class MatchData {
 					throw new UnreachableException();
 			}
 
-			if (!eventInfo.Teams.Contains(teamNumber)) {
+			if (!eventSchedule.Teams.Contains(teamNumber)) {
 				throw new NotImplementedException();
 			}
 

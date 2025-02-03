@@ -6,13 +6,12 @@ namespace CCSSDomain.MatchData;
 
 
 public class DomainError {
-	
-	// todo make these required
 
-	public object DeviceId { get; init; } // todo figure out what type this should be
+	public /*required*/ string DeviceId { get; init; }
 
-	public string Message { get; init; }
+	public /*required*/ string DeviceName { get; init; }
 
+	public /*required*/ string Message { get; init; }
 }
 
 public class MatchNumberOutOfRange : DomainError {

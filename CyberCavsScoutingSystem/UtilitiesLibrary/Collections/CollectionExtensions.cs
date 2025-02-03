@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Results;
 
@@ -226,6 +227,54 @@ public static class CollectionExtensions {
 		}
 
 		return result;
+	}
+
+
+
+	public static bool ContainsDuplicates<T>(this IEnumerable<T> enumerable) {
+		throw new NotImplementedException();
+	}
+
+	public static List<T> Duplicates<T>(this IEnumerable<T> enumerable) {
+
+		List<T> duplicates = [];
+		T[] array = enumerable as T[] ?? enumerable.ToArray();
+
+		for (int i = 0; i < array.Length; i++) {
+
+			if (duplicates.Contains(array.ElementAt(i))) {
+				continue;
+			}
+
+			for (int j = i + 1; j < array.Length; j++) {
+
+				if (array[j]!.Equals(array[i])) {
+					duplicates.Add(array[i]);
+					break;
+				}
+			}
+		}
+
+		return duplicates;
+	}
+
+
+
+	public static string StringJoinDifferentLast<T>(this IEnumerable<T> enumerable, string separator, string lastSeparator) {
+
+		StringBuilder stringBuilder = new();
+		T[] array = enumerable as T[] ?? enumerable.ToArray();
+
+		for (int i = 0; i < array.Length - 1; i++) {
+
+			stringBuilder.Append(array[i]);
+			stringBuilder.Append(separator);
+		}
+
+		stringBuilder.Append(lastSeparator);
+		stringBuilder.Append(array[^1]);
+
+		return stringBuilder.ToString();
 	}
 
 }

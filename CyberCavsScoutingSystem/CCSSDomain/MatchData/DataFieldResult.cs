@@ -6,23 +6,13 @@ namespace CCSSDomain.MatchData;
 
 
 
-public abstract class DataFieldResult {
-
-	public DataFieldSpec DataFieldSpec { get; }
-
-	public string Name => DataFieldSpec.Name;
-
-	protected DataFieldResult(DataFieldSpec dataFieldSpec) {
-		DataFieldSpec = dataFieldSpec;
-	}
-
-}
+public abstract class DataFieldResult;
 
 public class TextDataFieldResult : DataFieldResult {
 
 	public string Text { get; }
 
-	private TextDataFieldResult(TextDataFieldSpec dataFieldSpec, string text) : base(dataFieldSpec) {
+	private TextDataFieldResult(string text) {
 		Text = text;
 	}
 
@@ -32,7 +22,7 @@ public class TextDataFieldResult : DataFieldResult {
 			return new IResult<TextDataFieldResult>.Error();
 		}
 
-		return new IResult<TextDataFieldResult>.Success(new (dataFieldSpec, text));
+		return new IResult<TextDataFieldResult>.Success(new(text));
 	}
 
 }
@@ -41,7 +31,7 @@ public class IntegerDataFieldResult : DataFieldResult {
 
 	public int Value { get; }
 
-	private IntegerDataFieldResult(IntegerDataFieldSpec dataFieldSpec, int value) : base(dataFieldSpec) {
+	private IntegerDataFieldResult(int value)  {
 		Value = value;
 	}
 
@@ -55,7 +45,7 @@ public class IntegerDataFieldResult : DataFieldResult {
 			return new IResult<IntegerDataFieldResult>.Error();
 		}
 
-		return new IResult<IntegerDataFieldResult>.Success { Value = new(dataFieldSpec, value) };
+		return new IResult<IntegerDataFieldResult>.Success { Value = new(value) };
 	}
 
 }
@@ -64,7 +54,7 @@ public class SelectionDataFieldResult : DataFieldResult {
 
 	public string SelectedOption { get; }
 
-	private SelectionDataFieldResult(SelectionDataFieldSpec dataFieldSpec, string selectedOption) : base(dataFieldSpec) {
+	private SelectionDataFieldResult(string selectedOption) {
 		SelectedOption = selectedOption;
 	}
 
@@ -74,7 +64,7 @@ public class SelectionDataFieldResult : DataFieldResult {
 			return new IResult<SelectionDataFieldResult>.Error();
 		}
 
-		return new IResult<SelectionDataFieldResult>.Success { Value = new(dataFieldSpec, selection) };
+		return new IResult<SelectionDataFieldResult>.Success { Value = new(selection) };
 	}
 
 }
