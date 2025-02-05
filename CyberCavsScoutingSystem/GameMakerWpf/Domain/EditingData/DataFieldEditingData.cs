@@ -1,11 +1,9 @@
-﻿using ExhaustiveMatching;
-using UtilitiesLibrary.Collections;
+﻿using UtilitiesLibrary.Collections;
 
 namespace GameMakerWpf.Domain.EditingData;
 
 
 
-[Closed(typeof(BooleanDataFieldEditingData), typeof(TextDataFieldEditingData), typeof(SelectionDataFieldEditingData), typeof(IntegerDataFieldEditingData))]
 public abstract class DataFieldEditingData {
 
 	public required string Name { get; init; }
@@ -37,6 +35,8 @@ public class TextDataFieldEditingData : DataFieldEditingData {
 public class SelectionDataFieldEditingData : DataFieldEditingData {
 
 	public required ReadOnlyList<string> OptionNames { get; init; }
+
+	public required bool RequiresValue { get; init; }
 
 }
 

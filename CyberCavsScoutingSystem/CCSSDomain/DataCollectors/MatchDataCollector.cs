@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using CCSSDomain.GameSpecification;
-using ExhaustiveMatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Optional;
@@ -76,7 +76,8 @@ public class MatchDataCollector {
 				case SelectionDataField selectionDataField:
 					matchData.Append($"{selectionDataField.SelectedOption.Value.ToCsvFriendly()},");
 					break;
-				default: throw ExhaustiveMatch.Failed(dataField);
+				default:
+					throw new UnreachableException();
 			}
 		}
 

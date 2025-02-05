@@ -11,10 +11,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="ExhaustiveMatching.Analyzer" Version="0.5.0" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
 	

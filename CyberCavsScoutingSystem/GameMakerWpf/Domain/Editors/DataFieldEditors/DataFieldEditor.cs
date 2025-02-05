@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using CCSSDomain.GameSpecification;
-using ExhaustiveMatching;
 using GameMakerWpf.Domain.Data;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
@@ -54,7 +53,6 @@ public class DataFieldEditor : INotifyPropertyChanged {
 			IntegerDataFieldEditingData => DataFieldTypes.Integer,
 			SelectionDataFieldEditingData => DataFieldTypes.Selection,
 			_ => throw new UnreachableException()
-			//_ => throw ExhaustiveMatch.Failed(initialValues)
 		};
 
 		DataFieldTypeEditor = initialValues switch {
@@ -62,7 +60,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 			TextDataFieldEditingData textDataFieldEditingData => new TextDataFieldEditor(GameEditor, textDataFieldEditingData),
 			IntegerDataFieldEditingData integerDataFieldEditingData => new IntegerDataFieldEditor(GameEditor, integerDataFieldEditingData),
 			SelectionDataFieldEditingData selectionDataFieldEditingData => new SelectionDataFieldEditor(GameEditor, selectionDataFieldEditingData),
-			_ => throw ExhaustiveMatch.Failed(initialValues)
+			_ => throw new UnreachableException()
 		};
 
 		Name = new SingleInputCreator<string, string, ErrorSeverity> {
@@ -125,10 +123,11 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldEditingData {
 				Name = Name.InputObject,
-				OptionNames = selectionDataFieldEditor.Options.Select(x => x.InputObject).ToReadOnly()
+				OptionNames = selectionDataFieldEditor.Options.Select(x => x.InputObject).ToReadOnly(),
+				RequiresValue = selectionDataFieldEditor.RequiresValue.InputObject
 			},
 
-			_ => throw ExhaustiveMatch.Failed(DataFieldTypeEditor)
+			_ => throw new UnreachableException()
 		};
 	}
 
@@ -173,10 +172,11 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldSpec {
 				Name = Name.InputObject,
+				RequiresValue = selectionDataFieldEditor.RequiresValue.OutputObject.Value,
 				OptionNames = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
 			},
 
-			_ => throw ExhaustiveMatch.Failed(DataFieldTypeEditor)
+			_ => throw new UnreachableException()
 		};
 	}
 

@@ -6,5 +6,9 @@
 		<Nullable>enable</Nullable>
 		<EnablePreviewFeatures>True</EnablePreviewFeatures>
 	</PropertyGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
+	</ItemGroup>
 
 </Project>

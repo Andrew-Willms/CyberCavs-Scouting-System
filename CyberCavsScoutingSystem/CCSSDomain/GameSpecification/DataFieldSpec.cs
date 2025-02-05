@@ -1,12 +1,10 @@
 ﻿using CCSSDomain.DataCollectors;
-using ExhaustiveMatching;
 using UtilitiesLibrary.Collections;
 
 namespace CCSSDomain.GameSpecification;
 
 
 
-[Closed(typeof(BooleanDataFieldSpec), typeof(TextDataFieldSpec), typeof(IntegerDataFieldSpec), typeof(SelectionDataFieldSpec))]
 public abstract class DataFieldSpec {
 
 	public required string Name { get; init; }
@@ -56,6 +54,8 @@ public class IntegerDataFieldSpec : DataFieldSpec {
 public class SelectionDataFieldSpec : DataFieldSpec {
 
 	public required ReadOnlyList<string> OptionNames { get; init; }
+
+	public required bool RequiresValue { get; init; }
 
 	public override DataField ToDataField() {
 		return new SelectionDataField(this);

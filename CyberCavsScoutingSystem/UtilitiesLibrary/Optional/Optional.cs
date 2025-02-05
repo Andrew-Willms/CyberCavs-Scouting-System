@@ -118,6 +118,14 @@ public class Optional<T> {
 		return !(left == right);
 	}
 
+
+	public override string ToString() {
+
+		return (HasValue
+			? $"Optional<{GetType().GetGenericArguments()[0].Name}> {{ {Value} }}"
+			: $"Optional<{GetType().GetGenericArguments()[0].Name}> {{ }}");
+	}
+
 }
 
 

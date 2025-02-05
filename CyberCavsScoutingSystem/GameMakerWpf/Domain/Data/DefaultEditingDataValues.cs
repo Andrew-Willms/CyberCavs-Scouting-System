@@ -41,6 +41,7 @@ public static class DefaultEditingDataValues {
 	public static readonly SelectionDataFieldEditingData DefaultSelectionDataFieldEditingData = new() {
 		Name = "New Data Field",
 		OptionNames = ReadOnlyList.Empty,
+		RequiresValue = true
 	};
 
 	public static readonly IntegerDataFieldEditingData DefaultIntegerDataFieldEditingData = new() {

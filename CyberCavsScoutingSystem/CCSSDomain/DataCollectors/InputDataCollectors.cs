@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using CCSSDomain.GameSpecification;
-using ExhaustiveMatching;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 
@@ -19,7 +19,7 @@ public abstract class InputDataCollector : INotifyPropertyChanged {
 			TextDataField textDataField => new TextInputDataCollector(textDataField) { Label = inputSpec.Label },
 			IntegerDataField integerDataField => new IntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
 			SelectionDataField selectionDataField => new SelectionInputDataCollector(selectionDataField) { Label = inputSpec.Label },
-			_ => throw ExhaustiveMatch.Failed(dataField)
+			_ => throw new UnreachableException()
 		};
 	}
 
