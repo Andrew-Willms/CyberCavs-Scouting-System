@@ -1,4 +1,4 @@
-﻿namespace CCSSDomain.GameSpecification;
+﻿namespace CCSSDomain.MatchData;
 
 
 

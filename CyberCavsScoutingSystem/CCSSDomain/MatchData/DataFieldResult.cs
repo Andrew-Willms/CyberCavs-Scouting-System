@@ -1,12 +1,25 @@
 ﻿using System.Linq;
 using CCSSDomain.GameSpecification;
+using ExhaustiveMatching;
 using UtilitiesLibrary.Results;
 
 namespace CCSSDomain.MatchData;
 
 
 
+[Closed(typeof(BooleanDataFieldResult), typeof(TextDataFieldResult), typeof(IntegerDataFieldResult), typeof(SelectionDataFieldResult))]
 public abstract class DataFieldResult;
+
+public class BooleanDataFieldResult : DataFieldResult {
+
+	public bool Value { get; private init; }
+
+	public static IResult<BooleanDataFieldResult> Create(bool value) {
+
+		return new IResult<BooleanDataFieldResult>.Success(new () { Value = value });
+	}
+
+}
 
 public class TextDataFieldResult : DataFieldResult {
 

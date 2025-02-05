@@ -14,9 +14,7 @@ namespace CCSSDomain.MatchData;
 public class MatchData {
 
 	public string GameName { get; }
-
 	public Version GameVersion { get; }
-
 	public HashCode GameHashCode { get; }
 
 	public required string? EventCode { get; init; }
@@ -32,10 +30,9 @@ public class MatchData {
 
 	public required ReadOnlyList<DataFieldResult> DataFields { get; init; }
 
-	public required ReadOnlyList<object> DataCollectionWarnings { get; init; } // todo figure out the type for this
+
 
 	private MatchData() { }
-
 
 	public static IResult<MatchData> Create(
 		out ReadOnlyList<DomainError> errors,
@@ -44,7 +41,7 @@ public class MatchData {
 		EventSchedule? eventSchedule,
 		Match match,
 		uint teamNumber,
-		AllianceColor allianceColor,
+		uint allianceIndex,
 		DateTime startTime,
 		DateTime endTime,
 		ReadOnlyList<DataFieldResult> data,
@@ -52,47 +49,22 @@ public class MatchData {
 
 		List<DomainError> domainErrors = [];
 
-		// todo validate match
+		if (eventSchedule is not null) {
 
+			if (eventCode is null) {
+				throw new NotImplementedException();
+				//domainErrors.Add();
+			}
+
+			domainErrors.AddRange(ValidateAgainstSchedule(match, teamNumber, eventSchedule));
+		}
+
+		// todo validate match
+		 
 		// Validation that happens if there is event info
 		if (eventSchedule is not null) {
 
-			// todo this will need to be updated to support other tournament formats
-			switch (match.Type) {
 
-				case MatchType.Practice:
-					break;
-
-				case MatchType.Qualification:
-					if (match.MatchNumber > eventSchedule.Matches.Count) {
-						throw new NotImplementedException();
-					}
-					break;
-
-				case MatchType.DoubleElimination:
-					if (match.MatchNumber > 13) {
-						throw new NotImplementedException();
-					}
-					break;
-
-				case MatchType.Final:
-					if (match.MatchNumber > 3) {
-						throw new NotImplementedException();
-					}
-					break;
-
-				default:
-					throw new UnreachableException();
-			}
-
-			if (!eventSchedule.Teams.Contains(teamNumber)) {
-				throw new NotImplementedException();
-			}
-
-			//if (match.MatchNumber < eventInfo.Matches.Count
-			//    && eventInfo.Matches[match.MatchNumber]) {
-			//	// idk what I was thinking here
-			//}
 
 		}
 
@@ -123,6 +95,52 @@ public class MatchData {
 				DataCollectionWarnings = dataCollectionWarnings
 			}
 		};
+	}
+
+	private static ReadOnlyList<DomainError> ValidateAgainstSchedule(Match match, uint teamNumber, EventSchedule eventSchedule) {
+
+		List<DomainError> domainErrors = [];
+
+
+
+		// todo this will need to be updated to support other tournament formats
+		switch (match.Type) {
+
+			case MatchType.Practice:
+				break;
+
+			case MatchType.Qualification:
+				if (match.MatchNumber > eventSchedule.Matches.Count) {
+					throw new NotImplementedException();
+				}
+				break;
+
+			case MatchType.DoubleElimination:
+				if (match.MatchNumber > 13) {
+					throw new NotImplementedException();
+				}
+				break;
+
+			case MatchType.Final:
+				if (match.MatchNumber > 3) {
+					throw new NotImplementedException();
+				}
+				break;
+
+			default:
+				throw new UnreachableException();
+		}
+
+		if (!eventSchedule.Teams.Contains(teamNumber)) {
+			throw new NotImplementedException();
+		}
+
+		//if (match.MatchNumber < eventInfo.Matches.Count
+		//    && eventInfo.Matches[match.MatchNumber]) {
+		//	// idk what I was thinking here
+		//}
+
+		return domainErrors.ToReadOnly();
 	}
 
 }
