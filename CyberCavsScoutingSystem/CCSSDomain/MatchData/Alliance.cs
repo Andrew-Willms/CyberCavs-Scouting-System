@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
@@ -16,13 +17,17 @@ public class Alliance {
 
 	public ReadOnlyList<uint>? Surrogates { get; }
 
-	private Alliance(uint allianceIndex, ReadOnlyList<uint> teams, ReadOnlyList<uint>? surrogates) {
+	private Alliance(out object errorSink, uint allianceIndex, ReadOnlyList<uint> teams, ReadOnlyList<uint>? surrogates) {
+
+
+
+
 		AllianceIndex = allianceIndex;
 		Teams = teams;
 		Surrogates = surrogates;
 	}
 
-	public static IResult<Alliance> Create(GameSpec gameSpec, uint allianceIndex, ReadOnlyList<uint> teams, ReadOnlyList<uint>? surrogates) {
+	public static IResult<Alliance> Create(GameSpec gameSpec, Action<DomainError> errorSink, uint allianceIndex, ReadOnlyList<uint> teams, ReadOnlyList<uint>? surrogates) {
 
 		if (allianceIndex >= gameSpec.AlliancesPerMatch) {
 			return new IResult<Alliance>.Error($"An AllianceIndex of {allianceIndex} was specified. The maximum allowed AllianceIndex is {gameSpec.AlliancesPerMatch - 1}.");
