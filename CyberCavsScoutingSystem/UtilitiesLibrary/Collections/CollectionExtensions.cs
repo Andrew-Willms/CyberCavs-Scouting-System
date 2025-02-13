@@ -260,10 +260,20 @@ public static class CollectionExtensions {
 
 
 
-	public static string StringJoinDifferentLast<T>(this IEnumerable<T> enumerable, string separator, string lastSeparator) {
+	public static string StringJoinCustom<T>(this IEnumerable<T> enumerable, string separator, string lastSeparator, string onlyTwoSeparator) {
+		
+		T[] array = enumerable as T[] ?? enumerable.ToArray();
+
+		switch (array.Length) {
+			case 0:
+				return "";
+			case 1:
+				return array[0]!.ToString()!;
+			case 2:
+				return $"{array[0]}{onlyTwoSeparator}{array[1]}";
+		}
 
 		StringBuilder stringBuilder = new();
-		T[] array = enumerable as T[] ?? enumerable.ToArray();
 
 		for (int i = 0; i < array.Length - 1; i++) {
 

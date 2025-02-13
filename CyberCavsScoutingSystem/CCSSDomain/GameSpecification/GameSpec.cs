@@ -110,7 +110,7 @@ public class GameSpec {
 		};
 	}
 
-
+	// todo probably move somewhere else
 	public string GetCsvHeaders() {
 
 		StringBuilder columnHeaders = new(

@@ -25,3 +25,21 @@ public class DbHelper {
 	}
 
 }
+
+
+// todo: enable the game maker to define migrations from one version of a game to another
+
+// errors column
+// error resolutions column
+// concurrent, conflicting, independent
+
+// Known Devices
+// ID (?), device name (string), record number (int)
+
+// Match Data (per game)
+// PK (?), record number (int), based on (?), previous (?), game fields...
+
+// Event Schedules
+
+// Games
+// 

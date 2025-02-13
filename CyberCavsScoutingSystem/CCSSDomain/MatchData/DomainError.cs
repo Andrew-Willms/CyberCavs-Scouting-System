@@ -1,32 +1,35 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CCSSDomain.GameSpecification;
 
 namespace CCSSDomain.MatchData;
 
 
 
+public class ErrorContext {
+
+	public required string DeviceId { get; init; }
+
+	public required string DeviceName { get; init; }
+
+}
+
 public class DomainError {
 
-	public /*required*/ string DeviceId { get; init; }
+	public required string DeviceId { get; init; }
 
-	public /*required*/ string DeviceName { get; init; }
+	public required string DeviceName { get; init; }
 
-	public /*required*/ string Message { get; init; }
-}
+	public required DateTime TimeCreated { get; init; }
 
-public class MatchNumberOutOfRange : DomainError {
+	public DomainError() { }
 
-	public required MatchType MatchType { get; init; }
-
-	public required MatchType MaxMatchNumber { get; init; }
-
-	public required MatchType MatchNumber { get; init; }
-
-}
-
-public class AllianceDoesNotMatch : DomainError {
-
-	public required AllianceColor AllianceColor { get; init; }
+	[SetsRequiredMembers]
+	public DomainError(ErrorContext errorContext) {
+		DeviceId = errorContext.DeviceId;
+		DeviceName = errorContext.DeviceName;
+		TimeCreated = DateTime.Now;
+	}
 
 }
 
@@ -36,4 +39,3 @@ public class StartTimeAfterEndTime : DomainError {
 
 	public required DateTime EndTime { get; init; }
 }
-

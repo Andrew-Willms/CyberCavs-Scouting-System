@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
-using Version = CCSSDomain.GameSpecification.Version;
 using UtilitiesLibrary.Optional;
+using Version = CCSSDomain.GameSpecification.Version;
 
 namespace CCSSDomain.MatchData;
 
@@ -38,6 +39,7 @@ public class MatchData {
 
 	public MatchData(
 		GameSpec gameSpecification,
+		ErrorContext errorContext,
 		string? eventCode,
 		EventSchedule? eventSchedule,
 		Match match,
@@ -50,7 +52,7 @@ public class MatchData {
 
 		List<DomainError> errors = [];
 
-		errors.AddRange(ValidateMatch(match, teamNumber, eventCode, eventSchedule));
+		ValidateMatch(errors.Add, errorContext, match, teamNumber, eventCode, eventSchedule);
 		errors.AddRange(ValidateAllianceIndex(gameSpecification, allianceIndex));
 		errors.AddRange(ValidateTimes(startTime, endTime));
 		errors.AddRange(ValidateDataFields(gameSpecification, dataFields, out ReadOnlyList<object?> dataFieldResults));
@@ -68,16 +70,20 @@ public class MatchData {
 		Errors = errors.ToReadOnly();
 	}
 
-	private static ReadOnlyList<DomainError> ValidateMatch(Match match, uint teamNumber, string? eventCode, EventSchedule? eventSchedule) {
-
-		List<DomainError> errors = [];
+	private static void ValidateMatch(
+		Action<DomainError> errorSink,
+		ErrorContext errorContext,
+		Match match,
+		uint teamNumber,
+		string? eventCode,
+		EventSchedule? eventSchedule) {
 
 		if (eventSchedule is null) {
-			return errors.ToReadOnly();
+			return;
 		}
 
 		if (eventCode is null) {
-			errors.Add(new() { Message = "EventSchedule but no event code" });
+			errorSink(new EventScheduleButNoEventCode(errorContext));
 		}
 
 		// todo this will need to be updated to support other tournament formats
@@ -87,20 +93,21 @@ public class MatchData {
 				break;
 
 			case MatchType.Qualification:
-				if (match.MatchNumber > eventSchedule.Matches.Count) {
-					errors.Add(new() { Message = "Match number too high" });
+				uint matchCount = (uint)eventSchedule.QualificationMatches.Count;
+				if (match.MatchNumber > matchCount) {
+					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, matchCount, MatchType.Qualification) );
 				}
 				break;
 
 			case MatchType.DoubleElimination:
 				if (match.MatchNumber > 13) {
-					errors.Add(new() { Message = "Elimination match number too high" });
+					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, 13, MatchType.DoubleElimination));
 				}
 				break;
 
 			case MatchType.Final:
 				if (match.MatchNumber > 3) {
-					errors.Add(new() { Message = "Final match number too high" });
+					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, 3, MatchType.DoubleElimination));
 				}
 				break;
 
@@ -111,18 +118,18 @@ public class MatchData {
 		// todo validate start time and end time against event?
 
 		if (!eventSchedule.Teams.Contains(teamNumber)) {
-			errors.Add(new() { Message = "Team not found in this match" });
+			errorSink(new TeamNotInMatch(errorContext, teamNumber));
 		}
-
-		return errors.ToReadOnly();
 	}
 
-	private static ReadOnlyList<DomainError> ValidateAllianceIndex(GameSpec gameSpecification, uint allianceIndex) {
-
-		List<DomainError> errors = [];
+	private static void ValidateAllianceIndex(
+		Action<DomainError> errorSink,
+		ErrorContext errorContext,
+		GameSpec gameSpecification,
+		uint allianceIndex) {
 
 		if (gameSpecification.Alliances.Count <= allianceIndex) {
-			errors.Add(new() { Message = "AllianceIndex too high" });
+			errorSink(new() { Message = "AllianceIndex too high" });
 		}
 
 		return errors.ToReadOnly();
@@ -264,6 +271,57 @@ public class MatchData {
 
 		dataFieldResults = results.ToReadOnly();
 		return errors.ToReadOnly();
+	}
+
+}
+
+
+
+public class EventScheduleButNoEventCode : DomainError {
+
+	public string Message { get; }
+
+	[SetsRequiredMembers]
+	public EventScheduleButNoEventCode(ErrorContext error) : base(error) {
+
+		Message = "EventSchedule but no event code";
+	}
+
+}
+
+public class MatchNumberOutOfRange : DomainError {
+
+	public uint MatchNumber { get; }
+
+	public uint MaxMatchNumber { get; }
+
+	public MatchType MatchType { get; }
+
+	public string Message { get; }
+
+	[SetsRequiredMembers]
+	public MatchNumberOutOfRange(ErrorContext error, uint matchNumber, uint maxMatchNumber, MatchType matchType) : base(error) {
+
+		MatchNumber = matchNumber;
+		MaxMatchNumber = maxMatchNumber;
+		MatchType = matchType;
+
+		Message = $"The specified match number {MatchNumber} is higher than the maximum match number {MaxMatchNumber}.";
+	}
+
+}
+
+public class TeamNotInMatch : DomainError {
+
+	public uint Team { get; }
+
+	public string Message { get; }
+
+	[SetsRequiredMembers]
+	public TeamNotInMatch(ErrorContext error, uint team) : base(error) {
+
+		Team = team;
+		Message = "Team not found in this match";
 	}
 
 }

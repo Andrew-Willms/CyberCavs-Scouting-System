@@ -17,7 +17,7 @@ public class EventSchedule {
 
 	public required ReadOnlyList<uint> Teams { get; init; }
 
-	public required ReadOnlyList<ScheduledMatch> Matches { get; init; }
+	public required ReadOnlyList<ScheduledMatch> QualificationMatches { get; init; }
 
 	// TODO add support for custom event formats, non-3v3s etc.
 	// maybe an enum with Regular, Old, and Custom values

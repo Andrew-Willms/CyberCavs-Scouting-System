@@ -49,6 +49,7 @@ public class MatchDataCollector {
 		EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
 	}
 
+	// todo move elsewhere
 	public string ConvertDataToCsv(string scout, string @event) {
 
 		StringBuilder matchData = new(
