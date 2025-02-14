@@ -21,7 +21,10 @@ public class DomainError {
 
 	public required DateTime TimeCreated { get; init; }
 
-	public DomainError() { }
+	public DomainError(string deviceId, string deviceName) {
+		DeviceId = deviceId;
+		DeviceName = deviceName;
+	}
 
 	[SetsRequiredMembers]
 	public DomainError(ErrorContext errorContext) {

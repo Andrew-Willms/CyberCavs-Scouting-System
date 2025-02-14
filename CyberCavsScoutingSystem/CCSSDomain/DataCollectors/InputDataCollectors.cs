@@ -63,8 +63,8 @@ public class TextInputDataCollector : InputDataCollector, INotifyPropertyChanged
 	}
 
 	public string Text {
-		get => DataField.Text;
-		set => DataField.Text = value;
+		get => DataField.Value;
+		set => DataField.Value = value;
 	}
 
 }

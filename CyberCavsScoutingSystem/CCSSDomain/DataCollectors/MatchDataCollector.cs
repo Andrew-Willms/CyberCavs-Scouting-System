@@ -69,7 +69,7 @@ public class MatchDataCollector {
 					matchData.Append($"{booleanDataField.Value.ToString().ToCsvFriendly()},");
 					break;
 				case TextDataField textDataField:
-					matchData.Append($"{textDataField.Text.ToCsvFriendly()},");
+					matchData.Append($"{textDataField.Value.ToCsvFriendly()},");
 					break;
 				case IntegerDataField integerDataField:
 					matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},");

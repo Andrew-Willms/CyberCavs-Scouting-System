@@ -1,5 +1,8 @@
-﻿using CCSSDomain.DataCollectors;
+﻿using System;
+using System.Linq;
+using CCSSDomain.DataCollectors;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 
 namespace CCSSDomain.GameSpecification;
 
@@ -12,7 +15,7 @@ public enum DataFieldType {
 	Selection
 }
 
-public abstract class DataFieldSpec {
+public abstract record DataFieldSpec {
 
 	public required string Name { get; init; }
 
@@ -20,7 +23,7 @@ public abstract class DataFieldSpec {
 
 }
 
-public class BooleanDataFieldSpec : DataFieldSpec {
+public record BooleanDataFieldSpec : DataFieldSpec {
 
 	public required bool InitialValue { get; init; }
 
@@ -30,7 +33,7 @@ public class BooleanDataFieldSpec : DataFieldSpec {
 
 }
 
-public class TextDataFieldSpec : DataFieldSpec {
+public record TextDataFieldSpec : DataFieldSpec {
 
 	public required string InitialValue { get; init; } = string.Empty;
 
@@ -44,7 +47,7 @@ public class TextDataFieldSpec : DataFieldSpec {
 
 }
 
-public class IntegerDataFieldSpec : DataFieldSpec {
+public record IntegerDataFieldSpec : DataFieldSpec {
 
 	public required int InitialValue { get; init; }
 
@@ -58,9 +61,11 @@ public class IntegerDataFieldSpec : DataFieldSpec {
 
 }
 
-public class SelectionDataFieldSpec : DataFieldSpec {
+public record SelectionDataFieldSpec : DataFieldSpec, IEquatable<SelectionDataFieldSpec> {
 
-	public required ReadOnlyList<string> OptionNames { get; init; }
+	public required ReadOnlyList<string> Options { get; init; }
+
+	public required Optional<string> InitialValue { get; init; }
 
 	public required bool RequiresValue { get; init; }
 
@@ -68,4 +73,20 @@ public class SelectionDataFieldSpec : DataFieldSpec {
 		return new SelectionDataField(this);
 	}
 
+	public virtual bool Equals(SelectionDataFieldSpec? other) {
+
+		if (other is null) {
+			return false;
+		}
+
+		if (ReferenceEquals(this, other)) {
+			return true;
+		}
+
+		return Options.SequenceEqual(other.Options) && RequiresValue == other.RequiresValue;
+	}
+
+	public override int GetHashCode() {
+		return HashCode.Combine(Options, RequiresValue);
+	}
 }

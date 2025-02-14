@@ -6,7 +6,6 @@ using System.Linq;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.Optional;
 using Version = CCSSDomain.GameSpecification.Version;
 
 namespace CCSSDomain.MatchData;
@@ -155,130 +154,19 @@ public class MatchData {
 
 		for (int index = 0; index < gameSpec.DataFields.Count; index++) {
 
-			DataFieldSpec dataFieldSpec = gameSpec.DataFields[index];
-			DataField dataField = dataFields[index];
+			DataFieldSpec expectedFieldSpec = gameSpec.DataFields[index];
 
-			switch (dataFieldSpec) {
+			DataField receivedField = dataFields[index];
+			DataFieldSpec receivedFieldSpec = receivedField.Specification;
 
-				case BooleanDataFieldSpec:
-
-					if (dataField is BooleanDataField booleanDataField) {
-						results.Add(booleanDataField);
-					} else {
-						errorSink(new DataFieldTypeMismatch(errorContext, dataFieldSpec.Name, ))
-					}
-
-					booleanDataField.
-
-
-					switch (dataField) {
-							case BooleanDataField booleanDataField:
-								results.Add(booleanDataField.Value);
-								continue;
-							case TextDataField textDataField:
-								errorSink(new DataFieldTypeMismatch(errorContext, DataFieldType.Boolean, DataFieldType.Text, textDataField.Text) { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a TextDataField '{textDataField.Name}' with the value '{textDataField.Text}' was received." });
-								results.Add(null);
-								continue;
-							case IntegerDataField integerDataField:
-								errors.Add(new() { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a IntegerDataField '{integerDataField.Name}' with the value '{integerDataField.Value}' was received." });
-								results.Add(null);
-								continue;
-							case SelectionDataField selectionDataField:
-								errors.Add(new() { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a SelectionDataField '{selectionDataField.Name}' with the value '{selectionDataField.SelectedOption}' was received." });
-								results.Add(null);
-								continue;
-							default:
-								throw new UnreachableException();
-						}
-
-				case TextDataFieldSpec textDataFieldSpec:
-					switch (dataField) {
-						case BooleanDataField booleanDataField:
-							errors.Add(new() { Message = $"Where the TextDataField '{dataField.Name}' was expected a BooleanDataField '{booleanDataField.Name}' with the value '{booleanDataField.Value}' was received." });
-							results.Add(null);
-							continue;
-						case TextDataField textDataField:
-							if (textDataFieldSpec.MustNotBeEmpty && string.IsNullOrEmpty(textDataField.Text)) {
-								errors.Add(new() { Message = $"The TextDataField '{dataField.Name}' is empty." });
-							}
-							results.Add(textDataField.Text);
-							continue;
-						case IntegerDataField integerDataField:
-							errors.Add(new() { Message = $"Where the TextDataField '{dataField.Name}' was expected a IntegerDataField '{integerDataField.Name}' with the value '{integerDataField.Value}' was received." });
-							results.Add(null);
-							continue;
-						case SelectionDataField selectionDataField:
-							errors.Add(new() { Message = $"Where the TextDataField '{dataField.Name}' was expected a SelectionDataField '{selectionDataField.Name}' with the value '{selectionDataField.SelectedOption}' was received." });
-							results.Add(null);
-							continue;
-						default:
-							throw new UnreachableException();
-					}
-
-				case IntegerDataFieldSpec integerDataFieldSpec:
-					switch (dataField) {
-						case BooleanDataField booleanDataField:
-							errors.Add(new() { Message = $"Where the IntegerDataField '{dataField.Name}' was expected a BooleanDataField '{booleanDataField.Name}' with the value '{booleanDataField.Value}' was received." });
-							results.Add(null);
-							continue;
-						case TextDataField textDataField:
-							errors.Add(new() { Message = $"Where the IntegerDataField '{dataField.Name}' was expected a TextDataField '{textDataField.Name}' with the value '{textDataField.Text}' was received." });
-							results.Add(null);
-							continue;
-						case IntegerDataField integerDataField:
-							errors.Add(new() { Message = $"Where the IntegerDataField '{dataField.Name}' was expected a IntegerDataField '{integerDataField.Name}' with the value '{integerDataField.Value}' was received." });
-
-							if (integerDataField.Value > integerDataField.MaxValue) {
-								errors.Add(new() { Message = $"The IntegerDataField '{dataField.Name}' has a value of {integerDataField.Value} when the maximum value is {integerDataFieldSpec.MaxValue}." });
-							}
-
-							if (integerDataField.Value < integerDataField.MinValue) {
-								errors.Add(new() { Message = $"The IntegerDataField '{dataField.Name}' has a value of {integerDataField.Value} when the minimum value is {integerDataFieldSpec.MinValue}." });
-							}
-
-							results.Add(integerDataField.Value);
-							continue;
-						case SelectionDataField selectionDataField:
-							errors.Add(new() { Message = $"Where the IntegerDataField '{dataField.Name}' was expected a SelectionDataField '{selectionDataField.Name}' with the value '{selectionDataField.SelectedOption}' was received." });
-							results.Add(null);
-							continue;
-						default:
-							throw new UnreachableException();
-					}
-
-				case SelectionDataFieldSpec selectionDataFieldSpec:
-					switch (dataField) {
-						case BooleanDataField booleanDataField:
-							errors.Add(new() { Message = $"Where the SelectionDataField '{dataField.Name}' was expected a BooleanDataField '{booleanDataField.Name}' with the value '{booleanDataField.Value}' was received." });
-							results.Add(null);
-							continue;
-						case TextDataField textDataField:
-							errors.Add(new() { Message = $"Where the SelectionDataField '{dataField.Name}' was expected a TextDataField '{textDataField.Name}' with the value '{textDataField.Text}' was received." });
-							results.Add(null);
-							continue;
-						case IntegerDataField integerDataField:
-							errors.Add(new() { Message = $"Where the SelectionDataField '{dataField.Name}' was expected a IntegerDataField '{integerDataField.Name}' with the value '{integerDataField.Value}' was received." });
-							results.Add(null);
-							continue;
-						case SelectionDataField selectionDataField:
-
-							if (selectionDataFieldSpec.RequiresValue && selectionDataField.SelectedOption == Optional<string>.NoValue) {
-								errors.Add(new() { Message = $"The SelectionDataField \"{dataField.Name}\" requires a value." });
-							}
-
-							if (selectionDataField.SelectedOption.HasValue && !selectionDataField.Options.Contains(selectionDataField.SelectedOption.Value)) {
-								errors.Add(new() { Message = $"The SelectionDataField \"{dataField.Name}\" does not contain the specified value '{selectionDataField.SelectedOption.Value}'." });
-							}
-
-							results.Add(selectionDataField.SelectedOption.HasValue ? selectionDataField.SelectedOption.Value : Optional.NoValue);
-							continue;
-						default:
-							throw new UnreachableException();
-					}
-
-				default:
-					throw new UnreachableException();
+			if (expectedFieldSpec == receivedFieldSpec) {
+				results.Add(receivedField.BaseValue);
+				continue;
 			}
+
+			errorSink(
+				DataFieldMismatch.Create(errorContext, expectedFieldSpec, receivedFieldSpec, receivedField.BaseValue) 
+				?? throw new UnreachableException());
 		}
 
 		dataFieldResults = results.ToReadOnly();
@@ -319,9 +207,7 @@ public class TeamNotInMatch : DomainError {
 
 	[SetsRequiredMembers]
 	public TeamNotInMatch(ErrorContext errorContext, uint team) : base(errorContext) {
-
 		Team = team;
-		Message = "Team not found in this match";
 	}
 
 }
@@ -337,7 +223,6 @@ public class AllianceIndexOutOfRangeError : DomainError {
 
 		AllianceIndex = allianceIndex;
 		MaxAllianceIndex = maxAllianceIndex;
-		Message = $"An AllianceIndex of {allianceIndex} was specified. The maximum allowed AllianceIndex is {maxAllianceIndex}.";
 	}
 
 }
@@ -353,12 +238,11 @@ public class StartTimeAfterEndTime : DomainError {
 
 		StartTime = startTime;
 		EndTime = endTime;
-		Message = $"The start time '{startTime}' is after the end time '{endTime}'";
 	}
 
 }
 
-public class DataFieldTypeMismatch : DomainError {
+public class DataFieldMismatch : DomainError {
 
 	public DataFieldSpec ExpectedDataField { get; }
 
@@ -367,11 +251,20 @@ public class DataFieldTypeMismatch : DomainError {
 	public object Value { get; }
 
 	[SetsRequiredMembers]
-	public DataFieldTypeMismatch(ErrorContext errorContext, BooleanDataFieldSpec expectedDataField, TextDataFieldSpec receivedDataField, object value) {
+	private DataFieldMismatch(ErrorContext errorContext, DataFieldSpec expectedDataField, DataFieldSpec receivedDataField, object value) : base(errorContext) {
 
 		ExpectedDataField = expectedDataField;
 		ReceivedDataField = receivedDataField;
 		Value = value;
+	}
+
+	public static DataFieldMismatch? Create(ErrorContext errorContext, DataFieldSpec expectedDataField, DataFieldSpec receivedDataField, object value) {
+
+		if (expectedDataField == receivedDataField) {
+			return null;
+		}
+
+		return new(errorContext, expectedDataField, receivedDataField, value);
 	}
 
 }

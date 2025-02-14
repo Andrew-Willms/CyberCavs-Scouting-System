@@ -173,7 +173,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldSpec {
 				Name = Name.InputObject,
 				RequiresValue = selectionDataFieldEditor.RequiresValue.OutputObject.Value,
-				OptionNames = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
+				Options = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
 			},
 
 			_ => throw new UnreachableException()

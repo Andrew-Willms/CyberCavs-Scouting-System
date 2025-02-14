@@ -8,6 +8,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
 	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
 
