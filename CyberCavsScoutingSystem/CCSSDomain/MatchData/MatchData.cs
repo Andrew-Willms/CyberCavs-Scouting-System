@@ -53,9 +53,9 @@ public class MatchData {
 		List<DomainError> errors = [];
 
 		ValidateMatch(errors.Add, errorContext, match, teamNumber, eventCode, eventSchedule);
-		errors.AddRange(ValidateAllianceIndex(gameSpecification, allianceIndex));
-		errors.AddRange(ValidateTimes(startTime, endTime));
-		errors.AddRange(ValidateDataFields(gameSpecification, dataFields, out ReadOnlyList<object?> dataFieldResults));
+		ValidateAllianceIndex(errors.Add, errorContext, gameSpecification, allianceIndex);
+		ValidateTimes(errors.Add, errorContext, startTime, endTime);
+		ValidateDataFields(errors.Add, errorContext, gameSpecification, dataFields, out ReadOnlyList<object?> dataFieldResults);
 
 		GameName = gameSpecification.Name;
 		GameVersion = gameSpecification.Version;
@@ -115,11 +115,11 @@ public class MatchData {
 				throw new UnreachableException();
 		}
 
-		// todo validate start time and end time against event?
-
 		if (!eventSchedule.Teams.Contains(teamNumber)) {
 			errorSink(new TeamNotInMatch(errorContext, teamNumber));
 		}
+
+		// todo validate start time and end time against event?
 	}
 
 	private static void ValidateAllianceIndex(
@@ -129,26 +129,28 @@ public class MatchData {
 		uint allianceIndex) {
 
 		if (gameSpecification.Alliances.Count <= allianceIndex) {
-			errorSink(new() { Message = "AllianceIndex too high" });
+			errorSink(new AllianceIndexOutOfRangeError(errorContext, allianceIndex, gameSpecification.AlliancesPerMatch - 1));
 		}
-
-		return errors.ToReadOnly();
 	}
 
-	private static ReadOnlyList<DomainError> ValidateTimes(DateTime startTime, DateTime endTime) {
-
-		List<DomainError> errors = [];
+	private static void ValidateTimes(
+		Action<DomainError> errorSink,
+		ErrorContext errorContext,
+		DateTime startTime,
+		DateTime endTime) {
 
 		if (endTime < startTime) {
-			errors.Add(new StartTimeAfterEndTime { StartTime = startTime, EndTime = endTime });
+			errorSink(new StartTimeAfterEndTime(errorContext, startTime, endTime));
 		}
-
-		return errors.ToReadOnly();
 	}
 
-	private static ReadOnlyList<DomainError> ValidateDataFields(GameSpec gameSpec, ReadOnlyList<DataField> dataFields, out ReadOnlyList<object?> dataFieldResults) {
+	private static void ValidateDataFields(
+		Action<DomainError> errorSink,
+		ErrorContext errorContext,
+		GameSpec gameSpec,
+		ReadOnlyList<DataField> dataFields,
+		out ReadOnlyList<object?> dataFieldResults) {
 
-		List<DomainError> errors = [];
 		List<object?> results = [];
 
 		for (int index = 0; index < gameSpec.DataFields.Count; index++) {
@@ -159,25 +161,35 @@ public class MatchData {
 			switch (dataFieldSpec) {
 
 				case BooleanDataFieldSpec:
-					switch (dataField) {
-						case BooleanDataField booleanDataField:
-							results.Add(booleanDataField.Value);
-							continue;
-						case TextDataField textDataField:
-							errors.Add(new() { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a TextDataField '{textDataField.Name}' with the value '{textDataField.Text}' was received." });
-							results.Add(null);
-							continue;
-						case IntegerDataField integerDataField:
-							errors.Add(new() { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a IntegerDataField '{integerDataField.Name}' with the value '{integerDataField.Value}' was received." });
-							results.Add(null);
-							continue;
-						case SelectionDataField selectionDataField:
-							errors.Add(new() { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a SelectionDataField '{selectionDataField.Name}' with the value '{selectionDataField.SelectedOption}' was received." });
-							results.Add(null);
-							continue;
-						default:
-							throw new UnreachableException();
+
+					if (dataField is BooleanDataField booleanDataField) {
+						results.Add(booleanDataField);
+					} else {
+						errorSink(new DataFieldTypeMismatch(errorContext, dataFieldSpec.Name, ))
 					}
+
+					booleanDataField.
+
+
+					switch (dataField) {
+							case BooleanDataField booleanDataField:
+								results.Add(booleanDataField.Value);
+								continue;
+							case TextDataField textDataField:
+								errorSink(new DataFieldTypeMismatch(errorContext, DataFieldType.Boolean, DataFieldType.Text, textDataField.Text) { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a TextDataField '{textDataField.Name}' with the value '{textDataField.Text}' was received." });
+								results.Add(null);
+								continue;
+							case IntegerDataField integerDataField:
+								errors.Add(new() { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a IntegerDataField '{integerDataField.Name}' with the value '{integerDataField.Value}' was received." });
+								results.Add(null);
+								continue;
+							case SelectionDataField selectionDataField:
+								errors.Add(new() { Message = $"Where the BooleanDataField '{dataField.Name}' was expected a SelectionDataField '{selectionDataField.Name}' with the value '{selectionDataField.SelectedOption}' was received." });
+								results.Add(null);
+								continue;
+							default:
+								throw new UnreachableException();
+						}
 
 				case TextDataFieldSpec textDataFieldSpec:
 					switch (dataField) {
@@ -270,7 +282,6 @@ public class MatchData {
 		}
 
 		dataFieldResults = results.ToReadOnly();
-		return errors.ToReadOnly();
 	}
 
 }
@@ -279,13 +290,8 @@ public class MatchData {
 
 public class EventScheduleButNoEventCode : DomainError {
 
-	public string Message { get; }
-
 	[SetsRequiredMembers]
-	public EventScheduleButNoEventCode(ErrorContext error) : base(error) {
-
-		Message = "EventSchedule but no event code";
-	}
+	public EventScheduleButNoEventCode(ErrorContext errorContext) : base(errorContext) { }
 
 }
 
@@ -297,16 +303,12 @@ public class MatchNumberOutOfRange : DomainError {
 
 	public MatchType MatchType { get; }
 
-	public string Message { get; }
-
 	[SetsRequiredMembers]
-	public MatchNumberOutOfRange(ErrorContext error, uint matchNumber, uint maxMatchNumber, MatchType matchType) : base(error) {
+	public MatchNumberOutOfRange(ErrorContext errorContext, uint matchNumber, uint maxMatchNumber, MatchType matchType) : base(errorContext) {
 
 		MatchNumber = matchNumber;
 		MaxMatchNumber = maxMatchNumber;
 		MatchType = matchType;
-
-		Message = $"The specified match number {MatchNumber} is higher than the maximum match number {MaxMatchNumber}.";
 	}
 
 }
@@ -315,13 +317,61 @@ public class TeamNotInMatch : DomainError {
 
 	public uint Team { get; }
 
-	public string Message { get; }
-
 	[SetsRequiredMembers]
-	public TeamNotInMatch(ErrorContext error, uint team) : base(error) {
+	public TeamNotInMatch(ErrorContext errorContext, uint team) : base(errorContext) {
 
 		Team = team;
 		Message = "Team not found in this match";
+	}
+
+}
+
+public class AllianceIndexOutOfRangeError : DomainError {
+
+	public uint AllianceIndex { get; }
+
+	public uint MaxAllianceIndex { get; }
+
+	[SetsRequiredMembers]
+	public AllianceIndexOutOfRangeError(ErrorContext errorContext, uint allianceIndex, uint maxAllianceIndex) : base(errorContext) {
+
+		AllianceIndex = allianceIndex;
+		MaxAllianceIndex = maxAllianceIndex;
+		Message = $"An AllianceIndex of {allianceIndex} was specified. The maximum allowed AllianceIndex is {maxAllianceIndex}.";
+	}
+
+}
+
+public class StartTimeAfterEndTime : DomainError {
+
+	public DateTime StartTime { get; }
+
+	public DateTime EndTime { get; }
+
+	[SetsRequiredMembers]
+	public StartTimeAfterEndTime(ErrorContext errorContext, DateTime startTime, DateTime endTime) : base(errorContext) {
+
+		StartTime = startTime;
+		EndTime = endTime;
+		Message = $"The start time '{startTime}' is after the end time '{endTime}'";
+	}
+
+}
+
+public class DataFieldTypeMismatch : DomainError {
+
+	public DataFieldSpec ExpectedDataField { get; }
+
+	public DataFieldSpec ReceivedDataField { get; }
+
+	public object Value { get; }
+
+	[SetsRequiredMembers]
+	public DataFieldTypeMismatch(ErrorContext errorContext, BooleanDataFieldSpec expectedDataField, TextDataFieldSpec receivedDataField, object value) {
+
+		ExpectedDataField = expectedDataField;
+		ReceivedDataField = receivedDataField;
+		Value = value;
 	}
 
 }

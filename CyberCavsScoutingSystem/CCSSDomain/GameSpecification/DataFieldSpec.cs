@@ -5,6 +5,13 @@ namespace CCSSDomain.GameSpecification;
 
 
 
+public enum DataFieldType {
+	Boolean,
+	Text,
+	Integer,
+	Selection
+}
+
 public abstract class DataFieldSpec {
 
 	public required string Name { get; init; }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using CCSSDomain.GameSpecification;
 
 namespace CCSSDomain.MatchData;
 
@@ -31,11 +30,4 @@ public class DomainError {
 		TimeCreated = DateTime.Now;
 	}
 
-}
-
-public class StartTimeAfterEndTime : DomainError {
-
-	public required DateTime StartTime { get; init; }
-
-	public required DateTime EndTime { get; init; }
 }
