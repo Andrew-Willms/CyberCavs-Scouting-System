@@ -37,7 +37,7 @@ public partial class App : Application {
 
 		services.AddTransient<IErrorPresenter, ErrorPresenter>();
 		services.AddTransient<ISavePrompter, SavePrompter>();
-		services.AddTransient<IPublisher, Publisher>();
+		services.AddTransient<IPublisher, FilePublisher>();
 
 		services.AddSingleton<ISaver, Saver>();
 		services.AddSingleton<IMainView, MainWindow>();
