@@ -94,7 +94,7 @@ public class SelectionInputDataCollector : InputDataCollector, INotifyPropertyCh
 
 	private readonly SelectionDataField DataField;
 
-	public ReadOnlyList<string> Options => DataField.Options;
+	public ReadOnlyList<string> Options => DataField.Specification.Options;
 
 	public SelectionInputDataCollector(SelectionDataField dataField) {
 

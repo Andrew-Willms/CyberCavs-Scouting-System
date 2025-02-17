@@ -11,7 +11,7 @@ namespace UtilitiesLibrary.Validation.Inputs;
 
 
 public interface ISingleInput<TSeverity> : IInput<TSeverity>
-	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> { }
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity>;
 
 public interface ISingleInput<TInput, TSeverity> : IInput<TSeverity>, ISingleInput<TSeverity>
 	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
@@ -20,8 +20,7 @@ public interface ISingleInput<TInput, TSeverity> : IInput<TSeverity>, ISingleInp
 }
 
 public interface ISingleInput<TOutput, TInput, TSeverity> : IInput<TOutput, TSeverity>, ISingleInput<TInput, TSeverity>
-	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity> {
-}
+	where TSeverity : ValidationErrorSeverityEnum<TSeverity>, IValidationErrorSeverityEnum<TSeverity>;
 
 
 

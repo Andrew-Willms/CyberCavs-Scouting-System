@@ -13,14 +13,22 @@ public class Program {
 
 		SelectionDataFieldSpec test1 = new() {
 			Name = "test",
-			Options = new List<string> { "1", "2" }.ToReadOnly(),
-			RequiresValue = false
+			Options = new List<string> {
+				"1",
+				"2"
+			}.ToReadOnly(),
+			RequiresValue = false,
+			InitialValue = "1"
 		};
 
 		SelectionDataFieldSpec test2 = new() {
 			Name = "test",
-			Options = new List<string> { "1", "2" }.ToReadOnly(),
-			RequiresValue = false
+			Options = new List<string> {
+				"1",
+				"2"
+			}.ToReadOnly(),
+			RequiresValue = false,
+			InitialValue = "2"
 		};
 
 		BooleanDataFieldSpec test3 = new() {

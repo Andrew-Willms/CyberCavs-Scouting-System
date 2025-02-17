@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.SimpleEvent;
 using UtilitiesLibrary.Validation.Errors;
 using UtilitiesLibrary.Validation.Inputs;
@@ -17,9 +17,13 @@ public class SelectionDataFieldEditor : DataFieldTypeEditor {
 
 	public ObservableList<SingleInput<string, string, ErrorSeverity>, string> Options { get; }
 
+	public SingleInput<string, string, ErrorSeverity> InitialValue { get; }
+
 	public SingleInput<bool, bool, ErrorSeverity> RequiresValue { get; }
 
 	private Event OptionNameChanged { get; } = new();
+
+
 
 	public SelectionDataFieldEditor(GameEditor gameEditor, SelectionDataFieldEditingData initialValues) {
 
@@ -52,6 +56,14 @@ public class SelectionDataFieldEditor : DataFieldTypeEditor {
 				GameEditor.AnythingChanged.Invoke();
 			}
 		};
+
+		InitialValue = new SingleInputCreator<string, string, ErrorSeverity> {
+			Converter = SelectionDataFieldValidator.InitialValueNameConverter,
+			Inverter = SelectionDataFieldValidator.InitialValueNameInverter,
+			InitialInput = initialValues.InitialValue
+		}.AddValidationRule<IEnumerable<SingleInput<string, string, ErrorSeverity>>>(
+			SelectionDataFieldValidator.InitialValueValidator, () => Options, false, OptionNameChanged)
+		.CreateSingleInput();
 
 		RequiresValue = new SingleInputCreator<bool, bool, ErrorSeverity> {
 			Converter = input => (input, ReadOnlyList<ValidationError<ErrorSeverity>>.Empty),

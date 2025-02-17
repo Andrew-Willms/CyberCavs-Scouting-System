@@ -159,7 +159,7 @@ public class SelectionDataField : DataField {
 			OnValueChange.Invoke();
 			OnPropertyChanged(nameof(SelectedOption));
 		}
-	} = Optional.NoValue;
+	}
 
 	public Optional<string> Value {
 		get;

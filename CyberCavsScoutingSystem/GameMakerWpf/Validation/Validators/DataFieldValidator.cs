@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Validation.Conversion;
 using GameMakerWpf.Validation.Data;
@@ -110,12 +111,31 @@ public static class SelectionDataFieldValidator {
 	public static ReadOnlyList<Error> OptionNameValidator_Length(string name) {
 
 		return name.Length switch {
-			<= DataFieldValidationData.Option.LowerErrorThreshold => DataFieldValidationData.Name.Length.TooShortError.ReadOnlyListify(),
-			>= DataFieldValidationData.Option.UpperErrorThreshold => DataFieldValidationData.Name.Length.TooLongError.ReadOnlyListify(),
-			>= DataFieldValidationData.Option.UpperWarningThreshold => DataFieldValidationData.Name.Length.TooLongWarning.ReadOnlyListify(),
-			>= DataFieldValidationData.Option.UpperAdvisoryThreshold => DataFieldValidationData.Name.Length.TooLongAdvisory.ReadOnlyListify(),
+			<= DataFieldValidationData.Option.LowerErrorThreshold => DataFieldValidationData.Option.TooShortError.ReadOnlyListify(),
+			>= DataFieldValidationData.Option.UpperErrorThreshold => DataFieldValidationData.Option.TooLongError.ReadOnlyListify(),
+			>= DataFieldValidationData.Option.UpperWarningThreshold => DataFieldValidationData.Option.TooLongWarning.ReadOnlyListify(),
+			>= DataFieldValidationData.Option.UpperAdvisoryThreshold => DataFieldValidationData.Option.TooLongAdvisory.ReadOnlyListify(),
 			_ => ReadOnlyList.Empty
 		};
+	}
+
+	public static (Optional<string>, ReadOnlyList<Error>) InitialValueNameConverter(string inputString) {
+
+		NullInputObjectInConverterException.ThrowIfNull(inputString);
+
+		return (inputString.Optionalize(), ReadOnlyList.Empty);
+	}
+
+	public static (Optional<string>, ReadOnlyList<Error>) InitialValueNameInverter(string initialValue) {
+
+		return (initialValue, ReadOnlyList.Empty);
+	}
+
+	public static ReadOnlyList<Error> InitialValueValidator(string name, IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
+
+		return optionNames.SelectIfHasValue(x => x.OutputObject).Contains(name)
+			? ReadOnlyList.Empty
+			: DataFieldValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify();
 	}
 
 }

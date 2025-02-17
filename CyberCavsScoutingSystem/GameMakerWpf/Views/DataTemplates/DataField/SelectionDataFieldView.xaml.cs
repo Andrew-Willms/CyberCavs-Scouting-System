@@ -34,6 +34,10 @@ public partial class SelectionDataFieldView : AppManagerDependent, INotifyProper
 
 	[DependsOn(nameof(AppManager.GameEditor))]
 	[DependsOn(nameof(AppManager.SelectedDataField))]
+	public SingleInput<string, string, ErrorSeverity>? InitialValue => Editor?.InitialValue;
+
+	[DependsOn(nameof(AppManager.GameEditor))]
+	[DependsOn(nameof(AppManager.SelectedDataField))]
 	public SingleInput<bool, bool, ErrorSeverity>? RequiresValue => Editor?.RequiresValue;
 
 	public SingleInput<string, string, ErrorSeverity>? SelectedOption {

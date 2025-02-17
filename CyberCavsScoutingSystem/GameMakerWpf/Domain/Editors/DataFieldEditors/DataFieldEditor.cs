@@ -124,6 +124,7 @@ public class DataFieldEditor : INotifyPropertyChanged {
 			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldEditingData {
 				Name = Name.InputObject,
 				OptionNames = selectionDataFieldEditor.Options.Select(x => x.InputObject).ToReadOnly(),
+				InitialValue = selectionDataFieldEditor.InitialValue.InputObject,
 				RequiresValue = selectionDataFieldEditor.RequiresValue.InputObject
 			},
 
@@ -172,8 +173,9 @@ public class DataFieldEditor : INotifyPropertyChanged {
 
 			SelectionDataFieldEditor selectionDataFieldEditor => new SelectionDataFieldSpec {
 				Name = Name.InputObject,
-				RequiresValue = selectionDataFieldEditor.RequiresValue.OutputObject.Value,
-				Options = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly()
+				Options = selectionDataFieldEditor.Options.Select(x => x.OutputObject.Value).ToReadOnly(),
+				InitialValue = selectionDataFieldEditor.InitialValue.OutputObject.Value,
+				RequiresValue = selectionDataFieldEditor.RequiresValue.OutputObject.Value
 			},
 
 			_ => throw new UnreachableException()

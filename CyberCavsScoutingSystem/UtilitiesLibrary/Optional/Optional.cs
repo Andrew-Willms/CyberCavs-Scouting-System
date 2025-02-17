@@ -15,7 +15,7 @@ public class Optional {
 
 
 
-public class Optional<T> {
+public class Optional<T> : IEquatable<Optional<T>> {
 
 	private readonly T _Value;
 	public T Value {
@@ -64,7 +64,18 @@ public class Optional<T> {
 
 
 
-	private bool Equals(Optional<T> other) {
+
+
+	public bool Equals(Optional<T>? other) {
+
+		if (other is null) {
+			return false;
+		}
+
+		if (ReferenceEquals(this, other)) {
+			return true;
+		}
+
 		return EqualityComparer<T>.Default.Equals(_Value, other._Value) && HasValue == other.HasValue;
 	}
 
@@ -117,6 +128,7 @@ public class Optional<T> {
 	public static bool operator !=(Optional<T> left, Optional<T> right) {
 		return !(left == right);
 	}
+
 
 
 	public override string ToString() {

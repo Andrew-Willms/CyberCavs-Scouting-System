@@ -20,6 +20,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
 			<RowDefinition Height="1*"/>
 		</Grid.RowDefinitions>
 
@@ -103,11 +104,28 @@
 		</StackPanel>
 
 		<TextBlock
-			Text="{Binding RequiresValueText, Source={StaticResource SelectionDataFieldData}}"
+			Text="{Binding InitialValueText, Source={StaticResource SelectionDataFieldData}}"
 			Margin="5,5,5,5"
 			Width="auto"
 			Grid.Column="0"
 			Grid.Row="2"/>
+
+		<TextBox
+			DataContext="{Binding Path=InitialValue}"
+			Style="{StaticResource StringInputStyle}"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Top"
+			TextWrapping="Wrap"
+			Margin="5"
+			Grid.Column="1"
+			Grid.Row="2"/>
+
+		<TextBlock
+			Text="{Binding RequiresValueText, Source={StaticResource SelectionDataFieldData}}"
+			Margin="5,5,5,5"
+			Width="auto"
+			Grid.Column="0"
+			Grid.Row="3"/>
 
 		<CheckBox
 			DataContext="{Binding Path=RequiresValue}"
@@ -116,7 +134,7 @@
 			VerticalAlignment="Top"
 			Margin="5"
 			Grid.Column="1"
-			Grid.Row="2"/>
+			Grid.Row="3"/>
 
 	</Grid>
 

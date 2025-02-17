@@ -58,6 +58,8 @@ public class SelectionDataFieldData {
 
 	public static string MoveDownText => "Move Down";
 
+	public static string InitialValueText => "Initial Value";
+
 	public static string RequiresValueText => "Requires Value";
 
 }

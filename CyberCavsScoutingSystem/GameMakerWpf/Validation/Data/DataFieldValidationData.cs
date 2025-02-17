@@ -54,8 +54,6 @@ public static class DataFieldValidationData {
 		public static readonly Error TooShortError =
 			new("Empty Name", ErrorSeverity.Error, "An option cannot have a blank name.");
 
-
-
 		public static readonly Error TooLongError
 			= new("Long Name", ErrorSeverity.Error, $"An option name cannot be more than {UpperErrorThreshold} characters.");
 

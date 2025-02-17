@@ -69,6 +69,8 @@ public class MatchData {
 		Errors = errors.ToReadOnly();
 	}
 
+
+
 	private static void ValidateMatch(
 		Action<DomainError> errorSink,
 		ErrorContext errorContext,

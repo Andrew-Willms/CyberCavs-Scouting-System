@@ -36,6 +36,8 @@ public class SelectionDataFieldEditingData : DataFieldEditingData {
 
 	public required ReadOnlyList<string> OptionNames { get; init; }
 
+	public required string InitialValue { get; init; }
+
 	public required bool RequiresValue { get; init; }
 
 }
