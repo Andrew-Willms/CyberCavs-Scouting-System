@@ -63,6 +63,15 @@ public static class DataFieldValidationData {
 		public static readonly Error TooLongAdvisory
 			= new("Long Name", ErrorSeverity.Advisory, "The option name is rather long.");
 
+		public static Error GetDuplicateNameError(string name) {
+
+			return new("Duplicate Name", ErrorSeverity.Error, $"Multiple selection options have the name {name}.");
+		}
+
+		public static Error GetInvalidInitialValueError(string name) {
+
+			return new("Invalid Initial Value", ErrorSeverity.Error, $"No selection option '{name}' exists. Enter a selection option or leave this field blank.");
+		}
 	}
 
 	public static class IntegerValue {

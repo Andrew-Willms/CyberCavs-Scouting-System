@@ -11,7 +11,7 @@ public static class InputValidationData {
 	public static class DataField {
 
 		public static readonly Error DataFieldDoesNotExistError =
-			new("Data Field Does not Exist", ErrorSeverity.Error, "An Integer type DataField of the given name does not exist.");
+			new("Data Field Does not Exist", ErrorSeverity.Error, "A DataField of the given name does not exist.");
 
 	}
 

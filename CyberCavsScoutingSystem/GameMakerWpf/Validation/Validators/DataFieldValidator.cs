@@ -8,6 +8,7 @@ using UtilitiesLibrary.Validation.Inputs;
 using UtilitiesLibrary.Collections;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using UtilitiesLibrary.Optional;
+using static System.String;
 using Error = UtilitiesLibrary.Validation.Errors.ValidationError<GameMakerWpf.Domain.ErrorSeverity>;
 
 namespace GameMakerWpf.Validation.Validators;
@@ -104,7 +105,7 @@ public static class SelectionDataFieldValidator {
 	public static ReadOnlyList<Error> OptionNameValidator_Uniqueness(string name, IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
 
 		return optionNames.Multiple(x => x.OutputObject.HasValue && x.OutputObject.Value == name)
-			? DataFieldValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify()
+			? DataFieldValidationData.Option.GetDuplicateNameError(name).ReadOnlyListify()
 			: ReadOnlyList.Empty;
 	}
 
@@ -131,11 +132,15 @@ public static class SelectionDataFieldValidator {
 		return (initialValue, ReadOnlyList.Empty);
 	}
 
-	public static ReadOnlyList<Error> InitialValueValidator(string name, IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
+	public static ReadOnlyList<Error> InitialValueValidator(string initialValue, IEnumerable<SingleInput<string, string, ErrorSeverity>> optionNames) {
 
-		return optionNames.SelectIfHasValue(x => x.OutputObject).Contains(name)
+		if (initialValue == Empty) {
+			return ReadOnlyList.Empty;
+		}
+
+		return optionNames.SelectIfHasValue(x => x.OutputObject).Contains(initialValue)
 			? ReadOnlyList.Empty
-			: DataFieldValidationData.Name.GetDuplicateNameError(name).ReadOnlyListify();
+			: DataFieldValidationData.Option.GetInvalidInitialValueError(initialValue).ReadOnlyListify();
 	}
 
 }

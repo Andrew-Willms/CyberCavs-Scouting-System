@@ -45,6 +45,7 @@ public interface IAppManager : INotifyPropertyChanged {
 
 
 public class AppManager : IAppManager, INotifyPropertyChanged {
+
 	public GameEditor GameEditor {
 		get;
 		private set {

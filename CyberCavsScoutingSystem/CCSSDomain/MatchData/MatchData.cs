@@ -46,8 +46,7 @@ public class MatchData {
 		uint allianceIndex,
 		DateTime startTime,
 		DateTime endTime,
-		ReadOnlyList<DataField> dataFields,
-		ReadOnlyList<object?> dataCollectionWarnings) {
+		ReadOnlyList<DataField> dataFields) {
 
 		List<DomainError> errors = [];
 

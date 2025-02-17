@@ -117,7 +117,7 @@
 				<ContentPresenter>
 
 					<ContentPresenter.Content>
-						<Binding Path="SelectedDataField.DataFieldTypeEditorBase">
+						<Binding Path="SelectedDataField.DataFieldTypeEditor">
 							<Binding.FallbackValue>
 								<Label
 									Content="Select a Data Field to view and edit it's properties."
