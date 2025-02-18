@@ -10,4 +10,8 @@
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
+  </ItemGroup>
+
 </Project>

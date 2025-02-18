@@ -1,4 +1,6 @@
 ﻿using System.Data.SQLite;
+using CCSSDomain.GameSpecification;
+using CCSSDomain.MatchData;
 
 namespace Database;
 
@@ -22,6 +24,34 @@ public class DbHelper {
 		string? version = command.ExecuteScalar()!.ToString();
 
 		Console.WriteLine($"SQLite version: {version}");
+	}
+
+	public List<GameSpec> GetGameSpecs() {
+		throw new NotImplementedException();
+	}
+
+	public bool AddGameSpec() {
+		throw new NotImplementedException();
+	}
+
+	public List<MatchData> GetMatchData() {
+		throw new NotImplementedException();
+	}
+
+	public bool AddMatchData(MatchData matchData) {
+		throw new NotImplementedException();
+	}
+
+	public bool AddMatchData(List<MatchData> matchData) {
+		throw new NotImplementedException();
+	}
+
+	public List<(string uuid, DateTime timeStamp)> GetMostRecentFromDevice() {
+		throw new NotImplementedException();
+	}
+
+	public List<DomainError> GetDomainErrors() {
+		throw new NotImplementedException();
 	}
 
 }
