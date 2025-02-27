@@ -1,31 +1,32 @@
-﻿using System.ComponentModel;
+﻿//using System.ComponentModel;
 
-namespace CCSSDomain.DataCollectors;
+//namespace CCSSDomain.DataCollectors;
 
 
 
-public class ButtonDataCollector : INotifyPropertyChanged {
+// todo this is in theory complete but is unused
+//public class ButtonDataCollector : INotifyPropertyChanged {
 
-	private readonly IntegerDataField DataField;
+//	private readonly IntegerDataField DataField;
 
-	public ButtonDataCollector(IntegerDataField dataField) {
+//	public ButtonDataCollector(IntegerDataField dataField) {
 
-		DataField = dataField;
-		DataField.OnValueChange.Subscribe(() => OnPropertyChanged(""));
-	}
+//		DataField = dataField;
+//		DataField.OnValueChange.Subscribe(() => OnPropertyChanged(""));
+//	}
 
-	public void Increment() {
-		DataField.Value += 1;
-	}
+//	public void Increment() {
+//		DataField.Value += 1;
+//	}
 
-	public void Decrement() {
-		DataField.Value -= 1;
-	}
+//	public void Decrement() {
+//		DataField.Value -= 1;
+//	}
 
-	public event PropertyChangedEventHandler? PropertyChanged;
+//	public event PropertyChangedEventHandler? PropertyChanged;
 
-	private void OnPropertyChanged(string propertyName) {
-		PropertyChanged?.Invoke(this, new(propertyName));
-	}
+//	private void OnPropertyChanged(string propertyName) {
+//		PropertyChanged?.Invoke(this, new(propertyName));
+//	}
 
-}
+//}

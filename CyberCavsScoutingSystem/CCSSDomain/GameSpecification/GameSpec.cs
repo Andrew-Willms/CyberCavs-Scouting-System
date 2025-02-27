@@ -13,7 +13,8 @@ namespace CCSSDomain.GameSpecification;
 public class GameSpec {
 
 	public required Version Version { get; init; } = new(1, 0, 0);
-	public DateTime VersionReleaseDate { get; } = DateTime.Now;
+	//public DateTime VersionReleaseDate { get; } = DateTime.Now;
+	//public HashCode Hash ????
 
 	public required string Name { get; init; }
 	public string Description { get; init; } = "";
