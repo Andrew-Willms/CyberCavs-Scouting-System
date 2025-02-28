@@ -152,15 +152,6 @@ public class SelectionDataField : DataField {
 
 	public new SelectionDataFieldSpec Specification { get; }
 
-	public Optional<string> SelectedOption {
-		get;
-		set {
-			field = value;
-			OnValueChange.Invoke();
-			OnPropertyChanged(nameof(SelectedOption));
-		}
-	}
-
 	public Optional<string> Value {
 		get;
 		set {
@@ -177,12 +168,12 @@ public class SelectionDataField : DataField {
 		get {
 			List<string> errors = [];
 
-			if (!Specification.RequiresValue && SelectedOption == Optional<string>.NoValue) {
+			if (!Specification.RequiresValue && Value == Optional<string>.NoValue) {
 				errors.Add($"The data field \"{Name}\" requires a value value.");
 			}
 
-			if (SelectedOption != Optional.NoValue && !Specification.Options.Contains(SelectedOption.Value)) {
-				errors.Add($"The data field \"{Name}\" does not contain the specified value '{SelectedOption.Value}'");
+			if (Value != Optional.NoValue && !Specification.Options.Contains(Value.Value)) {
+				errors.Add($"The data field \"{Name}\" does not contain the specified value '{Value.Value}'");
 			}
 
 			return errors;

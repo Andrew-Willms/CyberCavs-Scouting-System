@@ -103,8 +103,8 @@ public class SelectionInputDataCollector : InputDataCollector, INotifyPropertyCh
 	}
 
 	public string SelectedOption {
-		get => DataField.SelectedOption.HasValue ? DataField.SelectedOption.Value : "";
-		set => DataField.SelectedOption = value == "" ? Optional.NoValue : value.Optionalize();
+		get => DataField.Value.HasValue ? DataField.Value.Value : "";
+		set => DataField.Value = value == "" ? Optional.NoValue : value.Optionalize();
 	}
 
 }

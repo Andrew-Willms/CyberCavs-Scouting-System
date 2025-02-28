@@ -75,7 +75,7 @@ public class MatchDataCollector {
 					matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},");
 					break;
 				case SelectionDataField selectionDataField:
-					matchData.Append($"{selectionDataField.SelectedOption.Value.ToCsvFriendly()},");
+					matchData.Append($"{selectionDataField.Value.Value.ToCsvFriendly()},");
 					break;
 				default:
 					throw new UnreachableException();
