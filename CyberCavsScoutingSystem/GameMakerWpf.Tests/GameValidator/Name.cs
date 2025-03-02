@@ -61,9 +61,9 @@ public class Name {
 
 		public static IEnumerable<object[]> LongNameShouldAdviseTestData() {
 
-			yield return new object[] {
+			yield return [
 				"Some Really Long Name One Two Three"
-			};
+			];
 		}
 
 		[Fact]

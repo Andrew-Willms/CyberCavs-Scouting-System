@@ -4,7 +4,7 @@ namespace CCSSDomain.GameSpecification;
 
 
 
-public class AllianceColor {
+public record struct AllianceColor {
 
 	public required string Name { get; init; }
 

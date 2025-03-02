@@ -8,6 +8,36 @@
 	xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
 	FlyoutBehavior="Flyout">
 
+	<FlyoutItem
+		Title="Scout"
+		Route="{x:Static flyout:ScoutPage.Route}">
+
+		<ShellContent
+			Title ="Scout Name"
+			ContentTemplate="{DataTemplate flyout:ScoutPage}"/>
+
+	</FlyoutItem> 
+
+	<FlyoutItem
+		Title="Game"
+		Route="{x:Static flyout:EventPage.Route}">
+
+		<ShellContent
+			Title="Event"
+			ContentTemplate="{DataTemplate flyout:EventPage}"/>
+
+	</FlyoutItem>
+
+	<FlyoutItem
+		Title="Event"
+		Route="{x:Static flyout:EventPage.Route}">
+
+		<ShellContent
+			Title="Event"
+			ContentTemplate="{DataTemplate flyout:EventPage}"/>
+
+	</FlyoutItem>
+
 	<FlyoutItem Title="Match">
 
 		<Tab
@@ -63,27 +93,7 @@
 	</FlyoutItem>
 
 	<FlyoutItem
-		Title="Event"
-		Route="{x:Static flyout:EventPage.Route}">
-
-		<ShellContent
-			Title="Event"
-			ContentTemplate="{DataTemplate flyout:EventPage}"/>
-
-	</FlyoutItem>
-
-	<FlyoutItem
-		Title="Scout"
-		Route="{x:Static flyout:ScoutPage.Route}">
-
-		<ShellContent
-			Title ="Scout Name"
-			ContentTemplate="{DataTemplate flyout:ScoutPage}"/>
-
-	</FlyoutItem>
-
-	<FlyoutItem
-		Title="Qr Codes"
+		Title="Saved Matches"
 		Route="{x:Static flyout:SavedMatchesPage.Route}">
 
 		<ShellContent
@@ -91,5 +101,15 @@
 			ContentTemplate="{DataTemplate flyout:SavedMatchesPage}"/>
 
 	</FlyoutItem>
+
+	<!--<FlyoutItem
+		Title="Settings"
+		Route="{x:Static flyout:SavedMatchesPage.Route}">
+
+		<ShellContent
+			Title="QR Codes" 
+			ContentTemplate="{DataTemplate flyout:SavedMatchesPage}"/>
+
+	</FlyoutItem>-->
 
 </Shell>

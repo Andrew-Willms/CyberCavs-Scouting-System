@@ -19,24 +19,21 @@ public partial class MatchScannerPage : ContentPage, INotifyPropertyChanged {
 
 	public Func<string, Task<bool>> ScanAdder { get; init; } = null!;
 
-	private int _QrCodeCount;
 	public int QrCodeCount {
-		get => _QrCodeCount;
+		get;
 		set {
-			_QrCodeCount = value;
+			field = value;
 			OnPropertyChanged(nameof(QrCodeCount));
 		}
 	}
 
-	private string LastLastQrCodeScanned = "";
 	public string LastQrCodeScanned {
-		get => LastLastQrCodeScanned;
+		get;
 		set {
-			LastLastQrCodeScanned = value;
+			field = value;
 			OnPropertyChanged(nameof(LastQrCodeScanned));
 		}
-	}
-
+	} = "";
 
 
 	public MatchScannerPage() {

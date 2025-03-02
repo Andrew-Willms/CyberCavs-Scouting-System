@@ -15,16 +15,15 @@ public partial class MatchDetailsPage : ContentPage, INotifyPropertyChanged {
 	public const string ScannedMatchNavigationParameterName = nameof(ScannedMatch);
 	public const string MatchDeleterNavigationParameterName = nameof(MatchDeleter);
 
-    private string _ScannedMatch;
-    public string ScannedMatch {
-        get => _ScannedMatch;
-        set {
-            _ScannedMatch = value;
-            OnPropertyChanged(nameof(ScannedMatch));
-        }
-    }
+	public string ScannedMatch {
+		get;
+		set {
+			field = value;
+			OnPropertyChanged(nameof(ScannedMatch));
+		}
+	} = null!;
 
-    public Func<string, Task> MatchDeleter { get; init; } = null!;
+	public Func<string, Task> MatchDeleter { get; init; } = null!;
 
 	public MatchDetailsPage() {
 
@@ -34,6 +33,7 @@ public partial class MatchDetailsPage : ContentPage, INotifyPropertyChanged {
 
 
 
+	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
 	private async void DeleteButton_OnClicked(object? sender, EventArgs e) {
 		await MatchDeleter(ScannedMatch);
 		await Shell.Current.GoToAsync("..");

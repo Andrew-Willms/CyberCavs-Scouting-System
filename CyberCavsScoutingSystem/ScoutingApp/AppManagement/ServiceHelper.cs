@@ -16,7 +16,7 @@ public static class ServiceHelper {
 #elif ANDROID
 		MauiApplication.Current.Services;
 #elif IOS || MACCATALYST
-		MauiUIApplicationDelegate.Current.Services;
+		MauiUIApplicationDelegate.Current.Services; // todo figure this out
 #else
 		throw new NotSupportedException();
 #endif

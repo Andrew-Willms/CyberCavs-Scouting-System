@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CCSSDomain.DataCollectors;
@@ -10,15 +11,14 @@ namespace CCSSDomain.GameSpecification;
 
 
 
-public class GameSpec {
-
-	public required Version Version { get; init; } = new(1, 0, 0);
-	//public DateTime VersionReleaseDate { get; } = DateTime.Now;
-	//public HashCode Hash ????
+public class GameSpec : IEquatable<GameSpec> {
 
 	public required string Name { get; init; }
 	public string Description { get; init; } = "";
 	public required int Year { get; init; }
+
+	public required Version Version { get; init; } = new(1, 0, 0);
+	//public DateTime VersionReleaseDate { get; } = DateTime.Now;
 
 	public required uint RobotsPerAlliance { get; init; }
 	public required uint AlliancesPerMatch { get; init; }
@@ -50,11 +50,9 @@ public class GameSpec {
 		ReadOnlyList<InputSpec> teleTabInputs,
 		ReadOnlyList<InputSpec> endgameTabInputs) {
 
-		foreach (AllianceColor alliance in alliances) {
-
-			if (alliances.Where(x => x != alliance).Any(x => x.Name == alliance.Name)) {
-				return new IResult<GameSpec>.Error($"There are multiple alliances with the name '{nameof(alliance.Name)}'.");
-			}
+		List<string> duplicateNames = alliances.Select(x => x.Name).Duplicates();
+		foreach (string duplicate in duplicateNames) {
+			return new IResult<GameSpec>.Error($"There are multiple alliances with the name '{duplicate}'.");
 		}
 
 		foreach (InputSpec input in setupTabInputs) {
@@ -119,7 +117,7 @@ public class GameSpec {
 			$"{"Event".ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.MatchNumber).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.ReplayNumber).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.IsPlayoff).ToCsvFriendly()}," +
+			$"{nameof(MatchDataCollector.MatchType).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.Alliance).ToCsvFriendly()}," +
 			$"{nameof(MatchDataCollector.TeamNumber).ToCsvFriendly()},"// +
 			//$"{nameof(MatchDataCollector.Time).ToCsvFriendly()}," // todo figure this out
@@ -130,4 +128,64 @@ public class GameSpec {
 		return columnHeaders.ToString();
 	}
 
+
+
+	public bool Equals(GameSpec? other) {
+
+		if (other is null) {
+			return false;
+		}
+
+		if (ReferenceEquals(this, other)) {
+			return true;
+		}
+
+		return
+			Name == other.Name &&
+		    Description == other.Description &&
+		    Year == other.Year &&
+		    Version.Equals(other.Version) &&
+		    RobotsPerAlliance == other.RobotsPerAlliance &&
+		    AlliancesPerMatch == other.AlliancesPerMatch &&
+		    Alliances.SequenceEqual(other.Alliances) &&
+		    DataFields.SequenceEqual(other.DataFields) &&
+		    SetupTabInputs.SequenceEqual(other.SetupTabInputs) &&
+		    AutoTabInputs.SequenceEqual(other.AutoTabInputs) &&
+		    TeleTabInputs.SequenceEqual(other.TeleTabInputs) &&
+		    EndgameTabInputs.SequenceEqual(other.EndgameTabInputs);
+	}
+
+	public override bool Equals(object? obj) {
+
+		if (obj is null) {
+			return false;
+		}
+
+		if (ReferenceEquals(this, obj)) {
+			return true;
+		}
+
+		if (obj.GetType() != GetType()) {
+			return false;
+		}
+
+		return Equals((GameSpec) obj);
+	}
+
+	public override int GetHashCode() {
+		HashCode hashCode = new();
+		hashCode.Add(Name);
+		hashCode.Add(Description);
+		hashCode.Add(Year);
+		hashCode.Add(Version);
+		hashCode.Add(RobotsPerAlliance);
+		hashCode.Add(AlliancesPerMatch);
+		Alliances.Foreach(alliance => hashCode.Add(alliance));
+		DataFields.Foreach(dataField => hashCode.Add(dataField));
+		SetupTabInputs.Foreach(inputSpec => hashCode.Add(inputSpec));
+		AutoTabInputs.Foreach(inputSpec => hashCode.Add(inputSpec));
+		TeleTabInputs.Foreach(inputSpec => hashCode.Add(inputSpec));
+		EndgameTabInputs.Foreach(inputSpec => hashCode.Add(inputSpec));
+		return hashCode.ToHashCode();
+	}
 }

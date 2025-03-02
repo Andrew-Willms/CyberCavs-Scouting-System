@@ -5,7 +5,7 @@
 public enum MatchType {
 	Practice,
 	Qualification,
-	DoubleElimination,
+	Elimination,
 	//QuarterFinal, // Todo add support for old style playoffs and custom tournament formats
 	//SemiFinal,
 	Final

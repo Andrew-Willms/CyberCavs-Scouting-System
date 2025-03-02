@@ -20,6 +20,8 @@ public class MatchData {
 
 	public string? EventCode { get; init; }
 
+	public required string ScoutName { get; init; }
+
 	public required Match Match { get; init; }
 
 	public required uint TeamNumber { get; init; }
@@ -36,11 +38,13 @@ public class MatchData {
 
 
 
+	[SetsRequiredMembers]
 	public MatchData(
-		GameSpec gameSpecification,
 		ErrorContext errorContext,
+		GameSpec gameSpecification,
 		string? eventCode,
 		EventSchedule? eventSchedule,
+		string scoutName,
 		Match match,
 		uint teamNumber,
 		uint allianceIndex,
@@ -59,6 +63,7 @@ public class MatchData {
 		GameVersion = gameSpecification.Version;
 		GameHashCode = gameSpecification.GetHashCode();
 		EventCode = eventCode;
+		ScoutName = scoutName;
 		Match = match;
 		TeamNumber = teamNumber;
 		AllianceIndex = allianceIndex;
@@ -66,6 +71,36 @@ public class MatchData {
 		EndTime = endTime;
 		DataFields = dataFieldResults;
 		Errors = errors.ToReadOnly();
+	}
+
+	public static MatchData? FromDataCollector(
+		ErrorContext errorContext,
+		MatchDataCollector collector,
+		string eventCode,
+		EventSchedule? eventSchedule,
+		string scout) {
+
+		if (!collector.IsValid) {
+			throw new NotImplementedException();
+		}
+
+		return new(
+			errorContext,
+			collector.GameSpecification,
+			eventCode,
+			eventSchedule,
+			scout,
+			new() {
+				MatchNumber = collector.MatchNumber.Value,
+				ReplayNumber = collector.ReplayNumber.Value,
+				Type = collector.MatchType.Value
+			},
+			collector.TeamNumber.Value,
+			collector.Alliance.Value,
+			collector.StartTime,
+			DateTime.Now,
+			collector.DataFields
+		);
 	}
 
 
@@ -84,6 +119,9 @@ public class MatchData {
 
 		if (eventCode is null) {
 			errorSink(new EventScheduleButNoEventCode(errorContext));
+
+		} else if (eventCode != eventSchedule.EventCode) {
+			errorSink(new EventCodeAndScheduleDoNotMatch(errorContext, eventCode, eventSchedule.EventCode));
 		}
 
 		// todo this will need to be updated to support other tournament formats
@@ -99,15 +137,15 @@ public class MatchData {
 				}
 				break;
 
-			case MatchType.DoubleElimination:
+			case MatchType.Elimination:
 				if (match.MatchNumber > 13) {
-					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, 13, MatchType.DoubleElimination));
+					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, 13, MatchType.Elimination));
 				}
 				break;
 
 			case MatchType.Final:
 				if (match.MatchNumber > 3) {
-					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, 3, MatchType.DoubleElimination));
+					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, 3, MatchType.Elimination));
 				}
 				break;
 
@@ -181,6 +219,21 @@ public class EventScheduleButNoEventCode : DomainError {
 
 	[SetsRequiredMembers]
 	public EventScheduleButNoEventCode(ErrorContext errorContext) : base(errorContext) { }
+
+}
+
+public class EventCodeAndScheduleDoNotMatch : DomainError {
+
+	public string EventCode { get; }
+
+	public string ScheduleEventCode { get; }
+
+	[SetsRequiredMembers]
+	public EventCodeAndScheduleDoNotMatch(ErrorContext errorContext, string eventCode, string scheduleEventCode) : base(errorContext) {
+
+		EventCode = eventCode;
+		ScheduleEventCode = scheduleEventCode;
+	}
 
 }
 

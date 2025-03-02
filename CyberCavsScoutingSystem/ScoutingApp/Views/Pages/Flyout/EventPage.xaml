@@ -17,7 +17,7 @@
 
 		<Picker
 			ItemsSource="{Binding Path=Events, Converter={StaticResource ReadOnlyListOfStringsToIListConverter}}"
-			SelectedItem="{Binding Path=AppManager.Event}"/>
+			SelectedItem="{Binding Path=AppManager.EventCode}"/>
 
 	</VerticalStackLayout>
 

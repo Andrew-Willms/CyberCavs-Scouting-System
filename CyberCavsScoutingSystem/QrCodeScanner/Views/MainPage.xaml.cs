@@ -26,16 +26,15 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 	private static readonly Mutex RefreshMutex = new();
 	private bool IsActuallyRefreshing;
 
-	private bool _IsRefreshing;
 	public bool IsRefreshing {
-		get => _IsRefreshing;
+		get;
 		set {
-			_IsRefreshing = value;
+			field = value;
 			OnPropertyChanged(nameof(IsRefreshing));
 		}
 	}
 
-	public ObservableCollection<string> ScannedMatches { get; } = new();
+	public ObservableCollection<string> ScannedMatches { get; } = [];
 
 
 
@@ -134,7 +133,7 @@ public partial class MainPage : ContentPage, INotifyPropertyChanged {
 
 		if (!File.Exists(MatchFilePath)) {
 			File.Create(MatchFilePath).Close();
-			return Array.Empty<string>();
+			return [];
 		}
 
 		string[] lines = (await File.ReadAllTextAsync(MatchFilePath))

@@ -21,13 +21,13 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 	public ObservableCollection<string> Errors {
 		get {
 
-			ObservableCollection<string> errors = new();
+			ObservableCollection<string> errors = [];
 
 			if (AppManager.Scout == "") {
 				errors.Add("The scout name has not been set. Go to the Scout page in the flyout menu to set the scout name.");
 			}
 
-			if (AppManager.Event == "") {
+			if (AppManager.EventCode == "") {
 				errors.Add("The event has not been set. Go to the Event page in the flyout menu to set the event.");
 			}
 
@@ -39,7 +39,7 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 				errors.Add("The replay number has not been set.");
 			}
 
-			if (AppManager.ActiveMatchData.IsPlayoff == Optional.NoValue) {
+			if (AppManager.ActiveMatchData.MatchType == Optional.NoValue) {
 				errors.Add("Is playoff has not been set.");
 			}
 

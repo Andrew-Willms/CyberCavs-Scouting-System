@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CCSSDomain.DataCollectors;
+using CCSSDomain.MatchData;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;
@@ -37,14 +38,14 @@ public partial class SetupTab : ContentPage {
 			: Optional.NoValue;
 	}
 
-	public bool? IsPlayoff {
+	public MatchType? MatchType {
 
-		get => AppManager.ActiveMatchData.IsPlayoff.HasValue
-			? AppManager.ActiveMatchData.IsPlayoff.Value
+		get => AppManager.ActiveMatchData.MatchType.HasValue
+			? AppManager.ActiveMatchData.MatchType.Value
 			: null;
 
-		set => AppManager.ActiveMatchData.IsPlayoff = value is not null
-			? ((bool)value).Optionalize()
+		set => AppManager.ActiveMatchData.MatchType = value is not null
+			? ((MatchType)value).Optionalize()
 			: Optional.NoValue;
 	}
 
@@ -59,13 +60,13 @@ public partial class SetupTab : ContentPage {
 			: Optional.NoValue;
 	}
 
-	public string? Alliance {
+	public uint? Alliance {
 		get => AppManager.ActiveMatchData.Alliance.HasValue
-			? AppManager.ActiveMatchData.Alliance.Value.Name
+			? AppManager.ActiveMatchData.Alliance.Value
 			: null;
 
-		set => AppManager.ActiveMatchData.Alliance = Alliances.Contains(value) 
-			? AppManager.ActiveMatchData.GameSpecification.Alliances.First(x => x.Name == value).Optionalize() 
+		set => AppManager.ActiveMatchData.Alliance = value is not null && Alliances.Count >= value
+			? ((uint)value).Optionalize() 
 			: Optional.NoValue;
 	}
 
@@ -79,7 +80,7 @@ public partial class SetupTab : ContentPage {
 
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(MatchNumber)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(ReplayNumber)));
-		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(IsPlayoff)));
+		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(MatchType)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(TeamNumber)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliance)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliances)));

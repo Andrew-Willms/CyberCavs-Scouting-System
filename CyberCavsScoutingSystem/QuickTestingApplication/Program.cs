@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using CCSSDomain.GameSpecification;
-using UtilitiesLibrary.Collections;
 
 namespace QuickTestingApplication;
 
@@ -11,37 +9,31 @@ public class Program {
 
 	private static void Main(string[] args) {
 
-		SelectionDataFieldSpec test1 = new() {
-			Name = "test",
-			Options = new List<string> {
-				"1",
-				"2"
-			}.ToReadOnly(),
-			RequiresValue = false,
-			InitialValue = "1"
+		AllianceColor test = new() {
+			Name = "",
+			Color = default
 		};
 
-		SelectionDataFieldSpec test2 = new() {
-			Name = "test",
-			Options = new List<string> {
-				"1",
-				"2"
-			}.ToReadOnly(),
-			RequiresValue = false,
-			InitialValue = "2"
+		AllianceColor test2 = new() {
+			Name = "",
+			Color = default
 		};
 
-		BooleanDataFieldSpec test3 = new() {
-			Name = "test",
-			InitialValue = false,
-		};
-
-		BooleanDataFieldSpec test4 = new() {
-			Name = "test",
-			InitialValue = false,
-		};
-
-		Console.WriteLine(test1.Equals(test2));
-		Console.WriteLine(test3.Equals(test4));
+		Console.WriteLine(new B { Test = 1 }.GetHashCode());
+		Console.WriteLine(new A { Test = 1 }.GetHashCode());
+		Console.WriteLine(1.0.GetHashCode());
+		Console.WriteLine(2.0.GetHashCode());
+		Console.WriteLine(test);
+		Console.WriteLine(test2);
 	}
+}
+
+public class A {
+
+	public int Test { get; init; }
+}
+
+public class B {
+
+	public int Test { get; init; }
 }

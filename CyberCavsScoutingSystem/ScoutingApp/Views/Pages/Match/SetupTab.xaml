@@ -5,6 +5,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
 	xmlns:behaviors="clr-namespace:ScoutingApp.Views.Behaviors"
+	xmlns:matchData="clr-namespace:CCSSDomain.MatchData;assembly=CCSSDomain"
 	x:Class="ScoutingApp.Views.Pages.Match.SetupTab"
 	x:DataType="match:SetupTab">
 
@@ -74,8 +75,9 @@
 				VerticalOptions="Center"
 				Grid.Column="0"/>
 
-			<Switch 
-				IsToggled="{Binding Path=IsPlayoff}"
+			<Picker
+				SelectedItem="{Binding Path=MatchType}"
+				ItemsSource="{Binding Source=matchData.Type}"
 				Grid.Column="1"/>
 
 		</Grid>

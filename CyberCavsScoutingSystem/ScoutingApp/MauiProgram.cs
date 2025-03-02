@@ -34,8 +34,10 @@ public static class MauiProgram {
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
-
 		builder.Services.AddSingleton<IAppManager, AppManager>();
+
+		// todo figure out when new instances of the transient types are being created and if
+		// making them singleton would work and make things more performant.
 		builder.Services.AddTransient<SetupTab>();
 		builder.Services.AddTransient<AutoTab>();
 		builder.Services.AddTransient<TeleTab>();
@@ -43,7 +45,7 @@ public static class MauiProgram {
 		builder.Services.AddTransient<ConfirmTab>();
 		builder.Services.AddTransient<ScoutPage>();
 		builder.Services.AddTransient<EventPage>();
-		builder.Services.AddTransient<MatchDetailsPage>();
+		builder.Services.AddTransient<MatchQrCodePage>();
 		builder.Services.AddTransient<SavedMatchesPage>();
 
 		return builder.Build();

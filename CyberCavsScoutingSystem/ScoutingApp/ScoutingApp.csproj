@@ -77,6 +77,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
+		<ProjectReference Include="..\Database\Database.csproj" />
 		<ProjectReference Include="..\MauiUtilities\MauiUtilities.csproj" />
 		<ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
@@ -94,11 +95,14 @@
 	  <Compile Update="Views\DataTemplates\TextDataFieldInputView.xaml.cs">
 	    <DependentUpon>TextDataFieldInputView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Pages\Flyout\EditMatchPage.xaml.cs">
+	    <DependentUpon>EditMatchPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Pages\GameSpecCouldNotBeLoadedPage.xaml.cs">
 	    <DependentUpon>GameSpecCouldNotBeLoadedPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\Flyout\MatchDetailsPage.xaml.cs">
-	    <DependentUpon>MatchDetailsPage.xaml</DependentUpon>
+	  <Compile Update="Views\Pages\Flyout\MatchQrCodePage.xaml.cs">
+	    <DependentUpon>MatchQrCodePage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Pages\Flyout\SavedMatchesPage.xaml.cs">
 	    <DependentUpon>SavedMatchesPage.xaml</DependentUpon>
@@ -136,10 +140,13 @@
 	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Flyout\EditMatchPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\GameSpecCouldNotBeLoadedPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\Flyout\MatchDetailsPage.xaml">
+	  <MauiXaml Update="Views\Pages\Flyout\MatchQrCodePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Flyout\SavedMatchesPage.xaml">

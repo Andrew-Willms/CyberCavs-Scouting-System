@@ -5,9 +5,12 @@ using System.IO;
 using System.Threading.Tasks;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
+using CCSSDomain.MatchData;
+using Database;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Devices;
 using Microsoft.Maui.Storage;
-using ScoutingApp.Views.Pages.Flyout;
 using UtilitiesLibrary.Results;
 using static ScoutingApp.IGameSpecRetrievalResult;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
@@ -20,7 +23,7 @@ public interface IAppManager : INotifyPropertyChanged {
 
 	public MatchDataCollector ActiveMatchData { get; }
 	public string Scout { get; set; }
-	public string Event { get; set; }
+	public string EventCode { get; set; }
 
 	public Task ApplicationStartup();
 
@@ -29,6 +32,10 @@ public interface IAppManager : INotifyPropertyChanged {
 	public Task DiscardAndStartNewMatch();
 
 	public Event OnMatchStarted { get; }
+
+	public Event OnNewData { get; }
+
+	public IDataStore DataStore { get; }
 
 }
 
@@ -53,17 +60,21 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		}
 	} = string.Empty;
 
-	public string Event { get; set; } = string.Empty;
+	public string EventCode { get; set; } = string.Empty;
+
+	public EventSchedule? EventSchedule { get; set; }
 
 	public Event OnMatchStarted { get; } = new();
 
+	public Event OnNewData { get; } = new();
+
 	private static IErrorPresenter ErrorPresenter => ServiceHelper.GetService<IErrorPresenter>();
+
+	public IDataStore DataStore => ServiceHelper.GetService<IDataStore>();
 
 
 
 	public async Task ApplicationStartup() {
-
-		EnsureMatchDataDirectoryExists();
 
 		await StartNewMatch();
 
@@ -94,19 +105,36 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public async Task SaveMatchData() {
 
-		string csvData = ActiveMatchData.ConvertDataToCsv(Scout, Event);
-		string path = Path.Combine(SavedMatchesPage.MatchFileDirectoryPath, $"{DateTime.Now:yyyy-MM-dd HH.mm.ss}{SavedMatchesPage.FileExtension}");
+#if ANDROID
+		string deviceId = Android.Provider.Settings.Secure.GetString(
+			Platform.CurrentActivity!.ContentResolver, 
+			Android.Provider.Settings.Secure.AndroidId)!;
+#elif IOS
+		string deviceId = UIKit.UIDevice.CurrentDevice.IdentifierForVendor.ToString();
+#else
+		string deviceId = null as string ?? throw new NotSupportedException();
+#endif
 
-		try {
-			await File.WriteAllTextAsync(path, csvData);
+		ErrorContext errorContext = new() {
+			DeviceId = deviceId,
+			DeviceName = DeviceInfo.Current.Name,
+			Scout = Scout
+		};
 
-		} catch {
-			ErrorPresenter.DisplayError(
-				"Match Data Could Not Be Saved", 
-				"A file could not be created to store the scouting data.");
+		MatchData? matchData = MatchData.FromDataCollector(errorContext, ActiveMatchData, EventCode, EventSchedule, Scout);
+
+		if (matchData is null) {
+			throw new NotImplementedException();
 		}
 
-		await StartNewMatch();
+		bool success = await DataStore.AddMatchData(matchData);
+
+		if (success) {
+			await StartNewMatch();
+			return;
+		}
+
+		throw new NotImplementedException();
 	}
 
 	public async Task DiscardAndStartNewMatch() {
@@ -145,23 +173,6 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		await File.WriteAllTextAsync(scoutFilePath, Scout);
 	}
 
-	private static void EnsureMatchDataDirectoryExists() {
-
-		if (Directory.Exists(SavedMatchesPage.MatchFileDirectoryPath)) {
-			return;
-		}
-
-		try {
-			Directory.CreateDirectory(SavedMatchesPage.MatchFileDirectoryPath);
-
-		} catch {
-			ErrorPresenter.DisplayError(
-				"Match Data Directory Could Not Be Created", 
-				"For unknown reasons the directory for holding scouting data could not be created. " +
-				"Because of this match data will not be able to be saved. " +
-				"Contact the creators of the CCSS to alert them of this problem.");
-		}
-	}
 
 
 	public event PropertyChangedEventHandler? PropertyChanged;

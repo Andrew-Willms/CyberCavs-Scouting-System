@@ -6,7 +6,61 @@ namespace Database;
 
 
 
-public class DbHelper {
+public interface IDataStore {
+
+	public Task<List<GameSpec>> GetGameSpecs();
+
+	public Task<bool> AddGameSpec();
+
+	public Task<List<MatchData>> GetMatchData();
+
+	public Task <bool> AddMatchData(MatchData matchData);
+
+	public Task<bool> AddMatchData(List<MatchData> matchData);
+
+	public Task<List<EventSchedule>> GetEventSchedules();
+
+	public Task<bool> AddEventSchedule(EventSchedule eventSchedule);
+
+	public Task<List<DeviceSynchronization>> GetMostRecentFromDevice();
+
+	public Task<List<DomainError>> GetDomainErrors();
+
+}
+
+
+
+public record struct DeviceSynchronization {
+
+	public required string DeviceId { get; init; }
+
+	public required int LatestDataRecordId { get; init; }
+
+	public required int HashOfPrevious { get; init; }
+
+}
+
+public class DataRecord {
+
+	public required int Id { get; init; }
+
+	public required string TableName { get; init; }
+
+	public required int ForeignKey { get; init; }
+
+	public required DateTime TimeCreated { get; init; }
+
+	public required int HashOfPrevious { get; init; }
+
+	public override int GetHashCode() {
+		return HashCode.Combine(Id, TableName, ForeignKey, TimeCreated, HashOfPrevious);
+	}
+
+}
+
+
+
+public class SqliteDataStore : IDataStore {
 
 	public void EnsureCreatedAndConnectToDb(string filePath) {
 
@@ -26,31 +80,39 @@ public class DbHelper {
 		Console.WriteLine($"SQLite version: {version}");
 	}
 
-	public List<GameSpec> GetGameSpecs() {
+	public Task<List<GameSpec>> GetGameSpecs() {
 		throw new NotImplementedException();
 	}
 
-	public bool AddGameSpec() {
+	public Task<bool> AddGameSpec() {
 		throw new NotImplementedException();
 	}
 
-	public List<MatchData> GetMatchData() {
+	public Task<List<MatchData>> GetMatchData() {
 		throw new NotImplementedException();
 	}
 
-	public bool AddMatchData(MatchData matchData) {
+	public Task<bool> AddMatchData(MatchData matchData) {
 		throw new NotImplementedException();
 	}
 
-	public bool AddMatchData(List<MatchData> matchData) {
+	public Task<bool> AddMatchData(List<MatchData> matchData) {
 		throw new NotImplementedException();
 	}
 
-	public List<(string uuid, DateTime timeStamp)> GetMostRecentFromDevice() {
+	public Task<List<EventSchedule>> GetEventSchedules() {
 		throw new NotImplementedException();
 	}
 
-	public List<DomainError> GetDomainErrors() {
+	public Task<bool> AddEventSchedule(EventSchedule eventSchedule) {
+		throw new NotImplementedException();
+	}
+
+	public Task<List<DeviceSynchronization>> GetMostRecentFromDevice() {
+		throw new NotImplementedException();
+	}
+
+	public Task<List<DomainError>> GetDomainErrors() {
 		throw new NotImplementedException();
 	}
 
