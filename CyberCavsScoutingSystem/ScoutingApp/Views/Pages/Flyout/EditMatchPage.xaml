@@ -19,7 +19,6 @@
 		<Border
 			HorizontalOptions="Fill"
 			HeightRequest="{Binding Source={RelativeSource Self}, Path=Width}">
-
 		</Border>
 
 		<!--<Label

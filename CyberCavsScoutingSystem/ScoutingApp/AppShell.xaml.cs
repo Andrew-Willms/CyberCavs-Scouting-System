@@ -9,7 +9,7 @@ public partial class AppShell : Shell {
 
 	public AppShell() {
 
-		Routing.RegisterRoute($"{SavedMatchesPage.Route}", typeof(SavedMatchesPage));
+		Routing.RegisterRoute($"{EditMatchPage.Route}", typeof(EditMatchPage));
 
 		InitializeComponent();
 	}

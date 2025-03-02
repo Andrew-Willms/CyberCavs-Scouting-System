@@ -17,7 +17,7 @@ public partial class EventPage : ContentPage {
 		"Test Event",
 		"Waterloo",
 		"Windsor",
-		"Ontario Champs"
+		"DCMP"
 	}.ToReadOnly();
 
 	public EventPage(IAppManager appManager) {
