@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.MatchData;
 using Microsoft.Maui.Controls;
@@ -37,6 +38,8 @@ public partial class SetupTab : ContentPage {
 			? ((uint)value).Optionalize()
 			: Optional.NoValue;
 	}
+
+	public MatchType[] MatchTypes { get; } = Enum.GetValues<MatchType>();
 
 	public MatchType? MatchType {
 
