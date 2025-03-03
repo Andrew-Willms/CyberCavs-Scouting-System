@@ -25,7 +25,7 @@ public partial class EventPage : ContentPage {
 		AppManager = appManager;
 
 		BindingContext = this;
-		InitializeComponent();
+		InitializeComponent(); 
 	}
 
 }
