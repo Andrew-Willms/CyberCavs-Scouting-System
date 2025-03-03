@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Android.Content;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using CCSSDomain.MatchData;
@@ -20,7 +21,10 @@ public interface IAppManager : INotifyPropertyChanged {
 	public GameSpec? GameSpecification { get; }
 
 	public MatchDataCollector ActiveMatchData { get; }
+
 	public string Scout { get; set; }
+	public string? ScoutError { get; }
+
 	public string EventCode { get; set; }
 
 	public Task ApplicationStartup();
@@ -63,9 +67,21 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 			}
 			field = value;
 			DataStore.SetLastScout(value);
+
+			var result = AsyncContext.Run(() => MyAsyncMethod());
+
+
 			OnPropertyChanged(nameof(Scout));
 		}
 	} = string.Empty;
+
+	public string? ScoutError {
+		get;
+		set {
+			field = value;
+			OnPropertyChanged(nameof(Scout));
+		}
+	}
 
 	public string EventCode { get; set; } = string.Empty;
 

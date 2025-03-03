@@ -17,6 +17,9 @@
 
 		<Entry Text="{Binding Path=AppManager.Scout}"/>
 
+		<Label
+			/>
+
 	</VerticalStackLayout>
 
 </ContentPage>
