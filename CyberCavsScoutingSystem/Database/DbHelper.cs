@@ -12,22 +12,45 @@ public interface IDataStore {
 
 	public Task<bool> AddGameSpec();
 
+
+
 	public Task<List<MatchData>> GetMatchData();
 
 	public Task <bool> AddMatchData(MatchData matchData);
 
 	public Task<bool> AddMatchData(List<MatchData> matchData);
 
+
+
 	public Task<List<EventSchedule>> GetEventSchedules();
 
 	public Task<bool> AddEventSchedule(EventSchedule eventSchedule);
+
+
 
 	public Task<List<DeviceSynchronization>> GetMostRecentFromDevice();
 
 	public Task<List<DomainError>> GetDomainErrors();
 
+
+
+	public Task<string> GetLastScout();
+
+	public Task<bool> SetLastScout(string scoutName);
+
 }
 
+
+
+public record struct DataToSend {
+
+	public required List<GameSpec> GameSpecifications { get; init; }
+
+	public required List<EventSchedule> EventSchedules { get; init; }
+
+	public required List<MatchData> MatchData { get; init; }
+
+}
 
 
 public record struct DeviceSynchronization {
@@ -39,6 +62,7 @@ public record struct DeviceSynchronization {
 	public required int HashOfPrevious { get; init; }
 
 }
+
 
 public class DataRecord {
 
@@ -113,6 +137,14 @@ public class SqliteDataStore : IDataStore {
 	}
 
 	public Task<List<DomainError>> GetDomainErrors() {
+		throw new NotImplementedException();
+	}
+
+	public Task<string> GetLastScout() {
+		throw new NotImplementedException();
+	}
+
+	public Task<bool> SetLastScout(string scoutName) {
 		throw new NotImplementedException();
 	}
 

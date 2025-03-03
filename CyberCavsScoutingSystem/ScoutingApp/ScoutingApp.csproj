@@ -98,17 +98,11 @@
 	  <Compile Update="Views\Pages\Flyout\EditMatchPage.xaml.cs">
 	    <DependentUpon>EditMatchPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\GameSpecCouldNotBeLoadedPage.xaml.cs">
-	    <DependentUpon>GameSpecCouldNotBeLoadedPage.xaml</DependentUpon>
-	  </Compile>
 	  <Compile Update="Views\Pages\Flyout\MatchQrCodePage.xaml.cs">
 	    <DependentUpon>MatchQrCodePage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Pages\Flyout\SavedMatchesPage.xaml.cs">
 	    <DependentUpon>SavedMatchesPage.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Views\Pages\LoadingGameSpecPage.xaml.cs">
-	    <DependentUpon>LoadingGameSpecPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Pages\Match\AutoTab.xaml.cs">
 	    <DependentUpon>AutoTab.xaml</DependentUpon>
@@ -141,9 +135,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Flyout\EditMatchPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\GameSpecCouldNotBeLoadedPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Flyout\MatchQrCodePage.xaml">

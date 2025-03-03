@@ -54,7 +54,7 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 		IsActuallyRefreshing = true;
 
 		SavedMatches.Clear();
-		foreach (MatchData match in await AppManager.DataStore.GetMatchData()) {
+		foreach (MatchData match in await AppManager.GetMatchData()) {
 			SavedMatches.Add(match);
 		}
 

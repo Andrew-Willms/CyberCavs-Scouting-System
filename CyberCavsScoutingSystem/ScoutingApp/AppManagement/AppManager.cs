@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
@@ -10,9 +9,6 @@ using Database;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
-using Microsoft.Maui.Storage;
-using UtilitiesLibrary.Results;
-using static ScoutingApp.IGameSpecRetrievalResult;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;
@@ -20,6 +16,8 @@ namespace ScoutingApp.AppManagement;
 
 
 public interface IAppManager : INotifyPropertyChanged {
+
+	public GameSpec? GameSpecification { get; }
 
 	public MatchDataCollector ActiveMatchData { get; }
 	public string Scout { get; set; }
@@ -35,13 +33,19 @@ public interface IAppManager : INotifyPropertyChanged {
 
 	public Event OnNewData { get; }
 
-	public IDataStore DataStore { get; }
+	public Task<List<MatchData>> GetMatchData();
+
+	public Task<string> GetLastScout();
+
+	public Task<bool> SetLastScout(string scoutName);
 
 }
 
 
 
 public class AppManager : IAppManager, INotifyPropertyChanged {
+
+	public GameSpec? GameSpecification { get; private set; }
 
 	public MatchDataCollector ActiveMatchData {
 		get;
@@ -54,9 +58,12 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 	public string Scout {
 		get;
 		set {
+			if (value == field) {
+				return;
+			}
 			field = value;
+			DataStore.SetLastScout(value);
 			OnPropertyChanged(nameof(Scout));
-			Task _ = WriteScoutToDisk();
 		}
 	} = string.Empty;
 
@@ -76,31 +83,24 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public async Task ApplicationStartup() {
 
+		Scout = await DataStore.GetLastScout();
+
 		await StartNewMatch();
 
-		await ReadScoutFromDisk();
+		await GetLastScout();
 	}
 
-	private async Task StartNewMatch() {
+	private Task StartNewMatch() {
 
-		IGameSpecRetrievalResult result = await App.GetGameSpec();
-
-		while (result is Loading) {
-
-			await Task.Delay(100);
-			result = await App.GetGameSpec();
+		if (GameSpecification is null) {
+			ErrorPresenter.DisplayError("Error ", "Select a Game before starting a match.");
+			return Task.CompletedTask;
 		}
 
-		if (result is Error error) {
-
-			ErrorPresenter.DisplayError("Error ", error.Message);
-		}
-
-		GameSpec gameSpec = (result as IResult<GameSpec>.Success)?.Value ?? throw new UnreachableException();
-
-		ActiveMatchData = new(gameSpec);
+		ActiveMatchData = new(GameSpecification);
 
 		OnMatchStarted.Invoke();
+		return Task.CompletedTask;
 	}
 
 	public async Task SaveMatchData() {
@@ -152,25 +152,20 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		await StartNewMatch();
 	}
 
-	private async Task ReadScoutFromDisk() {
 
-		string scoutFilePath = Path.Combine(FileSystem.Current.CacheDirectory, nameof(Scout));
 
-		try {
-
-			if (!File.Exists(scoutFilePath)) {
-				await File.WriteAllTextAsync(scoutFilePath, "");
-			}
-
-			Scout = await File.ReadAllTextAsync(scoutFilePath);
-		} catch { /*ignored*/ }
+	public Task<List<MatchData>> GetMatchData() {
+		throw new NotImplementedException();
 	}
 
-	private async Task WriteScoutToDisk() {
 
-		string scoutFilePath = Path.Combine(FileSystem.Current.CacheDirectory, nameof(Scout));
+	public async Task<string> GetLastScout() {
 
-		await File.WriteAllTextAsync(scoutFilePath, Scout);
+		return await DataStore.GetLastScout();
+	}
+
+	public async Task<bool> SetLastScout(string scoutName) {
+		return await DataStore.SetLastScout(scoutName);
 	}
 
 
