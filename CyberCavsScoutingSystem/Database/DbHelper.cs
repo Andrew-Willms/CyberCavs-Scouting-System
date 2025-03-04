@@ -1,5 +1,4 @@
 ﻿using System.Data.SQLite;
-using System.Diagnostics;
 using System.Drawing;
 using CCSSDomain.GameSpecification;
 using CCSSDomain.MatchData;
