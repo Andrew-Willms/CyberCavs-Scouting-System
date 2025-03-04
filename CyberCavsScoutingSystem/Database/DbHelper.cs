@@ -11,6 +11,10 @@ namespace Database;
 
 public interface IDataStore {
 
+	public bool ConnectAndEnsureTables();
+
+
+
 	public Task<List<GameSpec>> GetGameSpecs();
 
 	public Task<bool> AddGameSpec();
@@ -90,13 +94,19 @@ public class DataRecord {
 public class SqliteDataStore : IDataStore {
 
 
-	public SqliteDataStore() {
+	public bool ConnectAndEnsureTables() {
+		
+		using SQLiteConnection connection = new("Data Source=test.db");
 
-	}
+		SQLiteCommand command = connection.CreateCommand();
+		command.CommandText =
+			"""
+			CREATE TABLE IF NOT EXISTS (
+				scoutName TEXT NOT NULL,
+			);
+			""";
 
-
-	public void EnsureCreatedAndConnectToDb(string filePath) {
-
+		connection.Open();
 	}
 
 	public void CreateDb(string filePath) {
