@@ -19,16 +19,6 @@
 	</FlyoutItem> 
 
 	<FlyoutItem
-		Title="Game"
-		Route="{x:Static flyout:EventPage.Route}">
-
-		<ShellContent
-			Title="Event"
-			ContentTemplate="{DataTemplate flyout:EventPage}"/>
-
-	</FlyoutItem>
-
-	<FlyoutItem
 		Title="Event"
 		Route="{x:Static flyout:EventPage.Route}">
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
-using Android.Content;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using CCSSDomain.MatchData;
@@ -39,10 +39,6 @@ public interface IAppManager : INotifyPropertyChanged {
 
 	public Task<List<MatchData>> GetMatchData();
 
-	public Task<string> GetLastScout();
-
-	public Task<bool> SetLastScout(string scoutName);
-
 }
 
 
@@ -66,10 +62,18 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 				return;
 			}
 			field = value;
-			DataStore.SetLastScout(value);
 
-			var result = AsyncContext.Run(() => MyAsyncMethod());
+			Task.Run(async () => {
 
+				bool success = await DataStore.SetLastScout(value);
+
+				if (success) {
+					ScoutError = null;
+					return;
+				}
+
+				ScoutError = "There was an error saving the scout to the data store.";
+			});
 
 			OnPropertyChanged(nameof(Scout));
 		}
@@ -77,11 +81,13 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public string? ScoutError {
 		get;
-		set {
+		private set {
 			field = value;
 			OnPropertyChanged(nameof(Scout));
 		}
 	}
+
+
 
 	public string EventCode { get; set; } = string.Empty;
 
@@ -100,10 +106,11 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 	public async Task ApplicationStartup() {
 
 		Scout = await DataStore.GetLastScout();
+		// todo if (!success) { ScoutError = "Could not load the last scout from the data store." }
+
+		GameSpecification = (await DataStore.GetGameSpecs()).First();
 
 		await StartNewMatch();
-
-		await GetLastScout();
 	}
 
 	private Task StartNewMatch() {
@@ -172,16 +179,6 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public Task<List<MatchData>> GetMatchData() {
 		throw new NotImplementedException();
-	}
-
-
-	public async Task<string> GetLastScout() {
-
-		return await DataStore.GetLastScout();
-	}
-
-	public async Task<bool> SetLastScout(string scoutName) {
-		return await DataStore.SetLastScout(scoutName);
 	}
 
 

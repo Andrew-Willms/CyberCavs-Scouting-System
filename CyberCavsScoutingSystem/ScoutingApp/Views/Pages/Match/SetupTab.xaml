@@ -70,7 +70,7 @@
 			</Grid.ColumnDefinitions>
 
 			<Label 
-				Text="Is Playoff"
+				Text="Match Type"
 				VerticalOptions="Center"
 				Grid.Column="0"/>
 

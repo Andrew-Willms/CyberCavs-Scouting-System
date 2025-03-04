@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui;
+﻿using System.Threading.Tasks;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 
@@ -11,7 +12,11 @@ public partial class App : Application {
 	public App() {
 
 		InitializeComponent();
-		ServiceHelper.GetService<IAppManager>().ApplicationStartup();
+
+		//Task.Run(() => ServiceHelper.GetService<IAppManager>().ApplicationStartup());
+		
+		//ServiceHelper.GetService<IAppManager>().ApplicationStartup();
+		ServiceHelper.GetService<IAppManager>().ApplicationStartup().GetAwaiter().GetResult();
 	}
 
 	protected override Window CreateWindow(IActivationState? activationState) {

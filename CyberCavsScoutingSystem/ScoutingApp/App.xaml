@@ -42,6 +42,7 @@
 
 			<converters:ReadOnlyListOfStringsToIListConverter x:Key="ReadOnlyListOfStringsToIListConverter"/>
 			<converters:ReadOnlyListOfAlliancesToIListConverter x:Key="ReadOnlyListOfAlliancesToIListConverter"/>
+			<converters:StringNotNullToBoolConverter x:Key="StringNotNullToBoolConverter"/>
 
 		</ResourceDictionary>
 

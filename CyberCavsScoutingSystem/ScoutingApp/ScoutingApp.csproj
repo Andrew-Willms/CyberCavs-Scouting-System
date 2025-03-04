@@ -163,7 +163,6 @@
 	<ItemGroup>
 	  <Folder Include="AppManagement\" />
 	  <Folder Include="Views\DataTemplateSelectors\" />
-	  <Folder Include="Views\Converters\" />
 	</ItemGroup>
 
 	<ItemGroup>

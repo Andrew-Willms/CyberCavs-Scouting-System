@@ -1,6 +1,10 @@
 ﻿using System.Data.SQLite;
+using System.Diagnostics;
+using System.Drawing;
 using CCSSDomain.GameSpecification;
 using CCSSDomain.MatchData;
+using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Results;
 
 namespace Database;
 
@@ -42,7 +46,7 @@ public interface IDataStore {
 
 
 
-public record struct DataToSend {
+public readonly record struct DataToSend {
 
 	public required List<GameSpec> GameSpecifications { get; init; }
 
@@ -53,7 +57,7 @@ public record struct DataToSend {
 }
 
 
-public record struct DeviceSynchronization {
+public readonly record struct DeviceSynchronization {
 
 	public required string DeviceId { get; init; }
 
@@ -86,6 +90,12 @@ public class DataRecord {
 
 public class SqliteDataStore : IDataStore {
 
+
+	public SqliteDataStore() {
+
+	}
+
+
 	public void EnsureCreatedAndConnectToDb(string filePath) {
 
 	}
@@ -105,7 +115,74 @@ public class SqliteDataStore : IDataStore {
 	}
 
 	public Task<List<GameSpec>> GetGameSpecs() {
-		throw new NotImplementedException();
+
+		IResult<GameSpec> result = GameSpec.Create(
+			"ReefScape",
+			2025,
+			"",
+			new(1, 0, 0),
+			3u,
+			2u,
+			new List<AllianceColor> {
+				new() { Color = Color.Red, Name = "Red Alliance" },
+				new() { Color = Color.Blue, Name = "Blue Alliance" }
+			}.ToReadOnly(),
+			new List<DataFieldSpec> {
+				new IntegerDataFieldSpec { Name = "Auto L1 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
+				new IntegerDataFieldSpec { Name = "Auto L2 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
+				new IntegerDataFieldSpec { Name = "Auto L3 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
+				new IntegerDataFieldSpec { Name = "Auto L4 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
+				new IntegerDataFieldSpec { Name = "Auto Algae Net", InitialValue = 0, MinValue = 0, MaxValue = 255 },
+				new IntegerDataFieldSpec { Name = "Auto Algae Processor", InitialValue = 0, MinValue = 0, MaxValue = 255 },
+				new IntegerDataFieldSpec { Name = "Tele L1 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
+				new IntegerDataFieldSpec { Name = "Tele L2 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
+				new IntegerDataFieldSpec { Name = "Tele L3 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
+				new IntegerDataFieldSpec { Name = "Tele L4 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
+				new IntegerDataFieldSpec { Name = "Tele Algae Net", InitialValue = 0, MinValue = 0, MaxValue = 255 },
+				new IntegerDataFieldSpec { Name = "Tele Algae Processor", InitialValue = 0, MinValue = 0, MaxValue = 255 },
+				new SelectionDataFieldSpec {
+					Name = "Climb",
+					Options = new List<string> { "Deep", "Shallow", "None" }.ToReadOnly(),
+					InitialValue = "None", 
+					RequiresValue = true
+				},
+				new SelectionDataFieldSpec {
+					Name = "Disconnected",
+					Options = new List<string> { "None of match", "Some of match", "Most of match", "All of match" }.ToReadOnly(),
+					InitialValue = "None of match",
+					RequiresValue = true
+				},
+				new TextDataFieldSpec { Name = "Comments", InitialValue = "", MustNotBeEmpty = true, MustNotBeInitialValue = false }
+			}.ToReadOnly(),
+			new List<InputSpec> {
+
+			}.ToReadOnly(),
+			new List<InputSpec> {
+				new() { DataFieldName = "Auto L4 Coral", Label = "Auto L4 Coral" },
+				new() { DataFieldName = "Auto L4 Coral", Label = "Auto L4 Coral" },
+				new() { DataFieldName = "Auto L4 Coral", Label = "Auto L4 Coral" },
+				new() { DataFieldName = "Auto L4 Coral", Label = "Auto L4 Coral" }
+			}.ToReadOnly(),
+			new List<InputSpec> {
+				new() { DataFieldName = "Tele L4 Coral", Label = "Tele L4 Coral" },
+				new() { DataFieldName = "Tele L4 Coral", Label = "Tele L4 Coral" },
+				new() { DataFieldName = "Tele L4 Coral", Label = "Tele L4 Coral" },
+				new() { DataFieldName = "Tele L4 Coral", Label = "Tele L4 Coral" }
+			}.ToReadOnly(),
+			new List<InputSpec> {
+				new() { DataFieldName = "Climb", Label = "Climb" },
+				new() { DataFieldName = "Disconnected", Label = "Disconnected" },
+				new() { DataFieldName = "Comments", Label = "Comments" },
+			}.ToReadOnly());
+
+
+		if (result is not IResult<GameSpec>.Success success) {
+			throw new("Game specification was not successfully produced.");
+		}
+
+		return Task.FromResult(new List<GameSpec> {
+			success.Value
+		});
 	}
 
 	public Task<bool> AddGameSpec() {
@@ -141,11 +218,11 @@ public class SqliteDataStore : IDataStore {
 	}
 
 	public Task<string> GetLastScout() {
-		throw new NotImplementedException();
+		return Task.FromResult("test");
 	}
 
 	public Task<bool> SetLastScout(string scoutName) {
-		throw new NotImplementedException();
+		return Task.FromResult(true);
 	}
 
 }

@@ -65,6 +65,7 @@ public record SelectionDataFieldSpec : DataFieldSpec, IEquatable<SelectionDataFi
 
 	public required ReadOnlyList<string> Options { get; init; }
 
+	// Todo validate the initial value
 	public required Optional<string> InitialValue { get; init; }
 
 	public required bool RequiresValue { get; init; }

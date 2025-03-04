@@ -48,7 +48,7 @@ public partial class SetupTab : ContentPage {
 			: null;
 
 		set => AppManager.ActiveMatchData.MatchType = value is not null
-			? ((MatchType)value).Optionalize()
+			? ((MatchType) value).Optionalize()
 			: Optional.NoValue;
 	}
 
@@ -88,6 +88,8 @@ public partial class SetupTab : ContentPage {
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliance)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliances)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
+
+		MatchType = CCSSDomain.MatchData.MatchType.Qualification;
 
 		BindingContext = this;
 		InitializeComponent();
