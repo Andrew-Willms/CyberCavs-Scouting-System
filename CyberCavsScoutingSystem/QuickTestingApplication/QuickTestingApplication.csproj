@@ -9,6 +9,7 @@
 	
 	<ItemGroup>
 	  <ProjectReference Include="..\CCSSDomain\CCSSDomain.csproj" />
+	  <ProjectReference Include="..\Database\Database.csproj" />
 	  <ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
 	</ItemGroup>
 

@@ -6,6 +6,7 @@ using Microsoft.Maui.Hosting;
 using ScoutingApp.AppManagement;
 using ScoutingApp.Views.Pages.Flyout;
 using ScoutingApp.Views.Pages.Match;
+using SQLitePCL;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
 

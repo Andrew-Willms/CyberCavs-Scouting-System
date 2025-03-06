@@ -10,6 +10,7 @@ using Database;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Devices;
+using Microsoft.Maui.Storage;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;
@@ -105,8 +106,15 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public async Task ApplicationStartup() {
 
-		Scout = await DataStore.GetLastScout();
-		// todo if (!success) { ScoutError = "Could not load the last scout from the data store." }
+		string appDirectory = FileSystem.Current.AppDataDirectory;
+		string dbPath = System.IO.Path.Combine(appDirectory, "test.db");
+		await DataStore.ConnectAndEnsureTables(dbPath);
+
+		string? scoutResult = await DataStore.GetLastScout();
+		Scout = scoutResult ?? string.Empty;
+		if (scoutResult is null) {
+			ScoutError = "Could not load the last scout from the data store.";
+		}
 
 		GameSpecification = (await DataStore.GetGameSpecs()).First();
 

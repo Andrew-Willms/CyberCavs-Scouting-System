@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
-using Exception = Java.Lang.Exception;
 
 namespace ScoutingApp.AppManagement; 
 
@@ -9,7 +8,7 @@ namespace ScoutingApp.AppManagement;
 
 public static class ServiceHelper {
 
-	public static T GetService<T>() => Current.GetService<T>() ?? throw new Exception($"Could not resolve service {typeof(T).Name}");
+	public static T GetService<T>() => Current.GetService<T>() ?? throw new($"Could not resolve service {typeof(T).Name}");
 
 	private static IServiceProvider Current =>
 #if WINDOWS10_0_17763_0_OR_GREATER

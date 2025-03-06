@@ -9,7 +9,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
+	  <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.2" />
+	  <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
 	</ItemGroup>
 
 	<ItemGroup>

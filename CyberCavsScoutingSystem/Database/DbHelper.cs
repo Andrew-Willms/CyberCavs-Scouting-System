@@ -1,7 +1,7 @@
-﻿using System.Data.SQLite;
-using System.Drawing;
+﻿using System.Drawing;
 using CCSSDomain.GameSpecification;
 using CCSSDomain.MatchData;
+using Microsoft.Data.Sqlite;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 
@@ -11,7 +11,7 @@ namespace Database;
 
 public interface IDataStore {
 
-	public bool ConnectAndEnsureTables();
+	public Task<bool> ConnectAndEnsureTables(string dbPath);
 
 
 
@@ -41,7 +41,7 @@ public interface IDataStore {
 
 
 
-	public Task<string> GetLastScout();
+	public Task<string?> GetLastScout();
 
 	public Task<bool> SetLastScout(string scoutName);
 
@@ -93,20 +93,41 @@ public class DataRecord {
 
 public class SqliteDataStore : IDataStore {
 
+	private SqliteConnection Connection = null!;
 
-	public bool ConnectAndEnsureTables() {
-		
-		using SQLiteConnection connection = new("Data Source=test.db");
+	public Task<bool> ConnectAndEnsureTables(string dbPath) {
 
-		SQLiteCommand command = connection.CreateCommand();
-		command.CommandText =
+		try {
+			Connection = new($"Data Source={dbPath}");
+			Connection.Open();
+		} catch {
+			return Task.FromResult(false);
+		}
+
+		SqliteCommand createScoutTableCommand = new(
+			"CREATE TABLE IF NOT EXISTS 'scout' (name TEXT NOT NULL);",
+			Connection);
+
+		SqliteCommand createDataSynchronizationTableCommand = new(
 			"""
-			CREATE TABLE IF NOT EXISTS (
-				scoutName TEXT NOT NULL,
+			CREATE TABLE IF NOT EXISTS 'dataSynchronization' (
+				name TEXT NOT NULL
 			);
-			""";
+			""",
+			Connection);
 
-		connection.Open();
+		SqliteCommand checkIfTableExists2 = new(
+			"SELECT name FROM sqlite_master WHERE type='table';",
+			Connection);
+
+		createScoutTableCommand.ExecuteNonQuery();
+
+		SqliteDataReader reader2 = checkIfTableExists2.ExecuteReader();
+
+		reader2.Read();
+		string testResult = reader2.GetString(0);
+
+		return Task.FromResult(true);
 	}
 
 	public void CreateDb(string filePath) {
@@ -114,10 +135,10 @@ public class SqliteDataStore : IDataStore {
 		const string connectionString = "Data Source=:memory:";
 		const string commandText = "SELECT SQLITE_VERSION()";
 
-		using SQLiteConnection con = new(connectionString);
+		using SqliteConnection con = new(connectionString);
 		con.Open();
 
-		using SQLiteCommand command = new(commandText, con);
+		using SqliteCommand command = new(commandText, con);
 		string? version = command.ExecuteScalar()!.ToString();
 
 		Console.WriteLine($"SQLite version: {version}");
@@ -226,8 +247,8 @@ public class SqliteDataStore : IDataStore {
 		throw new NotImplementedException();
 	}
 
-	public Task<string> GetLastScout() {
-		return Task.FromResult("test");
+	public Task<string?> GetLastScout() {
+		return Task.FromResult("test")!;
 	}
 
 	public Task<bool> SetLastScout(string scoutName) {
