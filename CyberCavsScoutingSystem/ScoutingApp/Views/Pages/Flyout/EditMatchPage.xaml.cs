@@ -40,6 +40,12 @@ public partial class EditMatchPage : ContentPage, INotifyPropertyChanged {
 
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
 	private async void SaveButton_OnClicked(object? sender, EventArgs e) {
+		//await MatchDeleter(SavedMatch);
+		await Shell.Current.GoToAsync("..");
+	}
+
+	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
+	private async void CancelButton_OnClicked(object? sender, EventArgs e) {
 		await MatchDeleter(SavedMatch);
 		await Shell.Current.GoToAsync("..");
 	}

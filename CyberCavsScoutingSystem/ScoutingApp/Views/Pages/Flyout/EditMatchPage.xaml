@@ -9,6 +9,7 @@
 
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Save" Clicked="SaveButton_OnClicked"/>
+		<ToolbarItem Text="Cancel" Clicked="CancelButton_OnClicked"/>
 		<ToolbarItem Text="Delete" Clicked="DeleteButton_OnClicked"/>
 	</ContentPage.ToolbarItems>
 

@@ -17,7 +17,7 @@ public interface IDataStore {
 
 	public Task<List<GameSpec>> GetGameSpecs();
 
-	public Task<bool> AddGameSpec();
+	//public Task<bool> AddGameSpec();
 
 
 
@@ -29,9 +29,9 @@ public interface IDataStore {
 
 
 
-	public Task<List<EventSchedule>> GetEventSchedules();
+	//public Task<List<EventSchedule>> GetEventSchedules();
 
-	public Task<bool> AddEventSchedule(EventSchedule eventSchedule);
+	//public Task<bool> AddEventSchedule(EventSchedule eventSchedule);
 
 
 
@@ -64,9 +64,9 @@ public readonly record struct DeviceSynchronization {
 
 	public required string DeviceId { get; init; }
 
-	public required int LatestDataRecordId { get; init; }
+	public required int IdOfLatestDataRecord { get; init; }
 
-	public required int HashOfPrevious { get; init; }
+	public required int HashOfLatestDataRecord { get; init; }
 
 }
 
@@ -128,20 +128,6 @@ public class SqliteDataStore : IDataStore {
 		string testResult = reader2.GetString(0);
 
 		return Task.FromResult(true);
-	}
-
-	public void CreateDb(string filePath) {
-
-		const string connectionString = "Data Source=:memory:";
-		const string commandText = "SELECT SQLITE_VERSION()";
-
-		using SqliteConnection con = new(connectionString);
-		con.Open();
-
-		using SqliteCommand command = new(commandText, con);
-		string? version = command.ExecuteScalar()!.ToString();
-
-		Console.WriteLine($"SQLite version: {version}");
 	}
 
 	public Task<List<GameSpec>> GetGameSpecs() {
