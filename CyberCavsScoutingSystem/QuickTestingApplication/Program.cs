@@ -13,6 +13,8 @@ public class Program {
 
 		dataStore.ConnectAndEnsureTables("test.db");
 
+		dataStore.GetLastScout();
+
 	}
 
 }

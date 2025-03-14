@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using CCSSDomain.GameSpecification;
 using CCSSDomain.MatchData;
 using Microsoft.Data.Sqlite;
@@ -23,7 +24,7 @@ public interface IDataStore {
 
 	public Task<List<MatchData>> GetMatchData();
 
-	public Task <bool> AddMatchData(MatchData matchData);
+	public Task <bool> AddNewMatchData(MatchData matchData);
 
 	public Task<bool> AddMatchData(List<MatchData> matchData);
 
@@ -35,9 +36,11 @@ public interface IDataStore {
 
 
 
+	public Task<DataToSend> GetDataToSend();
+
 	public Task<List<DeviceSynchronization>> GetMostRecentFromDevice();
 
-	public Task<List<DomainError>> GetDomainErrors();
+	//public Task<List<DomainError>> GetDomainErrors();
 
 
 
@@ -66,8 +69,6 @@ public readonly record struct DeviceSynchronization {
 
 	public required int IdOfLatestDataRecord { get; init; }
 
-	public required int HashOfLatestDataRecord { get; init; }
-
 }
 
 
@@ -75,23 +76,26 @@ public class DataRecord {
 
 	public required int Id { get; init; }
 
+	public required string OriginatingDeviceId { get; init; }
+
 	public required string TableName { get; init; }
 
 	public required int ForeignKey { get; init; }
 
 	public required DateTime TimeCreated { get; init; }
 
-	public required int HashOfPrevious { get; init; }
-
-	public override int GetHashCode() {
-		return HashCode.Combine(Id, TableName, ForeignKey, TimeCreated, HashOfPrevious);
-	}
-
 }
 
 
 
 public class SqliteDataStore : IDataStore {
+
+	private const string ScoutTableName = "Scouts";
+	private const string ScoutTableColumn = "Name";
+
+	private const string DeviceSynchronizationTableName = "DeviceSynchroniation";
+	private const string DeviceSynchronizationDeviceIdColumn = "DeviceId";
+	private const string DeviceSynchronizationRecordIdColumn = "IdOfLatestDataRecord";
 
 	private SqliteConnection Connection = null!;
 
@@ -104,23 +108,30 @@ public class SqliteDataStore : IDataStore {
 			return Task.FromResult(false);
 		}
 
-		SqliteCommand createScoutTableCommand = new(
-			"CREATE TABLE IF NOT EXISTS 'scout' (name TEXT NOT NULL);",
-			Connection);
-
-		SqliteCommand createDataSynchronizationTableCommand = new(
-			"""
-			CREATE TABLE IF NOT EXISTS 'dataSynchronization' (
-				name TEXT NOT NULL
+		SqliteCommand createScoutTable = new(
+			$"""
+			CREATE TABLE IF NOT EXISTS '{ScoutTableName}' (
+				{ScoutTableColumn} TEXT NOT NULL
 			);
 			""",
 			Connection);
 
-		SqliteCommand checkIfTableExists2 = new(
-			"SELECT name FROM sqlite_master WHERE type='table';",
+		SqliteCommand createDeviceSynchronizationTable = new(
+			$"""
+			CREATE TABLE IF NOT EXISTS '{DeviceSynchronizationTableName}' (
+				{DeviceSynchronizationDeviceIdColumn} TEXT NOT NULL,
+				{DeviceSynchronizationRecordIdColumn} INTEGER NOT NULL,
+				PRIMARY KEY ({DeviceSynchronizationDeviceIdColumn}, {DeviceSynchronizationRecordIdColumn})
+			);
+			""",
 			Connection);
 
-		createScoutTableCommand.ExecuteNonQuery();
+		SqliteCommand checkIfTableExists2 = new() {
+			CommandText = "SELECT name FROM sqlite_master WHERE type='table';",
+			Connection = Connection
+		};
+
+		createScoutTable.ExecuteNonQuery();
 
 		SqliteDataReader reader2 = checkIfTableExists2.ExecuteReader();
 
@@ -201,15 +212,11 @@ public class SqliteDataStore : IDataStore {
 		});
 	}
 
-	public Task<bool> AddGameSpec() {
-		throw new NotImplementedException();
-	}
-
 	public Task<List<MatchData>> GetMatchData() {
 		throw new NotImplementedException();
 	}
 
-	public Task<bool> AddMatchData(MatchData matchData) {
+	public Task<bool> AddNewMatchData(MatchData matchData) {
 		throw new NotImplementedException();
 	}
 
@@ -217,11 +224,7 @@ public class SqliteDataStore : IDataStore {
 		throw new NotImplementedException();
 	}
 
-	public Task<List<EventSchedule>> GetEventSchedules() {
-		throw new NotImplementedException();
-	}
-
-	public Task<bool> AddEventSchedule(EventSchedule eventSchedule) {
+	public Task<DataToSend> GetDataToSend() {
 		throw new NotImplementedException();
 	}
 
@@ -229,16 +232,68 @@ public class SqliteDataStore : IDataStore {
 		throw new NotImplementedException();
 	}
 
-	public Task<List<DomainError>> GetDomainErrors() {
-		throw new NotImplementedException();
+	public async Task<string?> GetLastScout() {
+
+		SqliteCommand command = new(
+			$"SELECT '{ScoutTableColumn}' FROM '{ScoutTableName}' Where ROWID = 1;",
+			Connection
+		);
+
+		//SqliteCommand command = new(
+		//	$"""
+		//	SELECT '{ScoutTableColumn}' 
+		//	FROM (
+		//	    SELECT MAX(ROWID), '{ScoutTableColumn}' AS '{ScoutTableColumn}' 
+		//	    FROM '{ScoutTableName}'
+		//	);
+		//	""",
+		//	Connection
+		//);
+
+		//SqliteCommand command = new(
+		//	$"""
+		//	 SELECT '{ScoutTableColumn}'
+		//	 FROM '{ScoutTableName}' WHERE ROWID IN(
+		//	 	SELECT MAX(ROWID) FROM '{ScoutTableName}'
+		//	 );
+		//	 """,
+		//	Connection
+		//);
+
+		try {
+			object? result = await command.ExecuteScalarAsync();
+
+			return result is DBNull
+				? string.Empty
+				: result as string ?? throw new UnreachableException();
+
+		} catch {
+			return null;
+		}
 	}
 
-	public Task<string?> GetLastScout() {
-		return Task.FromResult("test")!;
-	}
+	public async Task<bool> SetLastScout(string scoutName) {
 
-	public Task<bool> SetLastScout(string scoutName) {
-		return Task.FromResult(true);
+		if (scoutName.Contains('\'')) {
+			scoutName = scoutName.Replace("'", "''");
+		}
+
+		SqliteCommand command = new() {
+			CommandText =
+				$"""
+				 INSERT OR REPLACE INTO '{ScoutTableName}' (ROWID, '{ScoutTableColumn}')
+				 VALUES (1, '{scoutName}');
+				 """,
+			Connection = Connection
+		};
+
+		try {
+			int result = await command.ExecuteNonQueryAsync();
+			return result == 1;
+
+		} catch {
+			return false;
+		}
 	}
 
 }

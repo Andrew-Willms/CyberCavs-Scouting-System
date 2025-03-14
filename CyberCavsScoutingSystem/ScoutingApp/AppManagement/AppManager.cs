@@ -158,7 +158,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 			throw new NotImplementedException();
 		}
 
-		bool success = await DataStore.AddMatchData(matchData);
+		bool success = true;//await DataStore.AddMatchData(matchData);
 
 		if (success) {
 			await StartNewMatch();
