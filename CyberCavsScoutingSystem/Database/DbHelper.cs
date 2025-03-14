@@ -67,7 +67,7 @@ public readonly record struct DeviceSynchronization {
 
 	public required string DeviceId { get; init; }
 
-	public required int IdOfLatestDataRecord { get; init; }
+	public required int IdOfLatestRecord { get; init; }
 
 }
 
@@ -76,7 +76,7 @@ public class DataRecord {
 
 	public required int Id { get; init; }
 
-	public required string OriginatingDeviceId { get; init; }
+	public required string OriginatingDevice { get; init; }
 
 	public required string TableName { get; init; }
 
@@ -93,68 +93,100 @@ public class SqliteDataStore : IDataStore {
 	private const string ScoutTableName = "Scouts";
 	private const string ScoutTableColumn = "Name";
 
-	private const string DeviceSynchronizationTableName = "DeviceSynchroniation";
-	private const string DeviceSynchronizationDeviceIdColumn = "DeviceId";
-	private const string DeviceSynchronizationRecordIdColumn = "IdOfLatestDataRecord";
+	private const string UnifiedRecordTableName = "UnifiedRecords";
+	private const string UnifiedRecordIdColumn = "Id";
+	private const string UnifiedRecordDeviceColumn = "OriginatingDevice";
+	private const string UnifiedRecordTableColumn = "TableName";
+	private const string UnifiedRecordForeignKeyColumn = "ForeignKey";
+	private const string UnifiedRecordDateColumn = "TimeCreated";
+
+	private const string SynchronizationTableName = "DeviceSynchroniation";
+	private const string SynchronizationDeviceIdColumn = "DeviceId";
+	private const string SynchronizationRecordIdColumn = "IdOfLatestRecord";
+
+	private const string MatchDataTableName = "MatchData";
+	private const string MatchDataIdColumn = "Id";
+	private const string MatchDataDataColumn = "Data";
 
 	private SqliteConnection Connection = null!;
 
-	public Task<bool> ConnectAndEnsureTables(string dbPath) {
+	public async Task<bool> ConnectAndEnsureTables(string dbPath) {
 
 		try {
 			Connection = new($"Data Source={dbPath}");
 			Connection.Open();
 		} catch {
-			return Task.FromResult(false);
+			return false;
 		}
 
 		SqliteCommand createScoutTable = new(
 			$"""
-			CREATE TABLE IF NOT EXISTS '{ScoutTableName}' (
-				{ScoutTableColumn} TEXT NOT NULL
+			CREATE TABLE IF NOT EXISTS '{UnifiedRecordTableName}' (
+				{UnifiedRecordDeviceColumn} TEXT NOT NULL,
+				{UnifiedRecordIdColumn} INTEGER NOT NULL,
+				{UnifiedRecordTableColumn} TEXT NOT NULL,
+				{UnifiedRecordForeignKeyColumn} INTEGER NOT NULL,
+				{UnifiedRecordDateColumn} TEXT NOT NULL,
+				PRIMARY KEY ({UnifiedRecordDeviceColumn}, {UnifiedRecordIdColumn})
 			);
 			""",
 			Connection);
 
+		int scoutTableResult = await createScoutTable.ExecuteNonQueryAsync();
+
 		SqliteCommand createDeviceSynchronizationTable = new(
 			$"""
-			CREATE TABLE IF NOT EXISTS '{DeviceSynchronizationTableName}' (
-				{DeviceSynchronizationDeviceIdColumn} TEXT NOT NULL,
-				{DeviceSynchronizationRecordIdColumn} INTEGER NOT NULL,
-				PRIMARY KEY ({DeviceSynchronizationDeviceIdColumn}, {DeviceSynchronizationRecordIdColumn})
+			CREATE TABLE IF NOT EXISTS '{SynchronizationTableName}' (
+				{SynchronizationDeviceIdColumn} TEXT NOT NULL PRIMARY KEY,
+				{SynchronizationRecordIdColumn} INTEGER NOT NULL,
 			);
 			""",
 			Connection);
+
+		int deviceSynchronizationTableResult = createDeviceSynchronizationTable.ExecuteNonQuery();
 
 		SqliteCommand checkIfTableExists2 = new() {
 			CommandText = "SELECT name FROM sqlite_master WHERE type='table';",
 			Connection = Connection
 		};
 
-		createScoutTable.ExecuteNonQuery();
+		SqliteCommand createMatchDataTable = new(
+			$"""
+			 CREATE TABLE IF NOT EXISTS '{MatchDataTableName}' (
+			 	{MatchDataIdColumn} INTEGER NOT NULL PRIMARY KEY,
+			 	{MatchDataDataColumn} TEXT NOT NULL,
+			 	FOREIGN KEY ('{MatchDataIdColumn}')
+			 		REFERENCES '{UnifiedRecordTableName}' ('{UnifiedRecordIdColumn}')
+			 			ON UPDATE RESTRICT
+			 			ON DELETE RESTRICT
+			 );
+			 """,
+			Connection);
 
-		SqliteDataReader reader2 = checkIfTableExists2.ExecuteReader();
+		int matchDataTableResult = createMatchDataTable.ExecuteNonQuery();
+
+		SqliteDataReader reader2 = await checkIfTableExists2.ExecuteReaderAsync();
 
 		reader2.Read();
 		string testResult = reader2.GetString(0);
 
-		return Task.FromResult(true);
+		return true;
 	}
 
 	public Task<List<GameSpec>> GetGameSpecs() {
 
 		IResult<GameSpec> result = GameSpec.Create(
-			"ReefScape",
-			2025,
-			"",
-			new(1, 0, 0),
-			3u,
-			2u,
-			new List<AllianceColor> {
+			name: "ReefScape",
+			year: 2025,
+			description: "",
+			version: new(1, 0, 0),
+			robotsPerAlliance: 3u,
+			alliancesPerMatch: 2u,
+			alliances: new List<AllianceColor> {
 				new() { Color = Color.Red, Name = "Red Alliance" },
 				new() { Color = Color.Blue, Name = "Blue Alliance" }
 			}.ToReadOnly(),
-			new List<DataFieldSpec> {
+			dataFields: new List<DataFieldSpec> {
 				new IntegerDataFieldSpec { Name = "Auto L1 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
 				new IntegerDataFieldSpec { Name = "Auto L2 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
 				new IntegerDataFieldSpec { Name = "Auto L3 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
@@ -179,26 +211,31 @@ public class SqliteDataStore : IDataStore {
 					InitialValue = "None of match",
 					RequiresValue = true
 				},
+				new SelectionDataFieldSpec {
+					Name = "Defense",
+					Options = new List<string> { "N/A", "1", "2", "3", "4", "5" }.ToReadOnly(),
+					InitialValue = "N/A",
+					RequiresValue = true
+				},
 				new TextDataFieldSpec { Name = "Comments", InitialValue = "", MustNotBeEmpty = true, MustNotBeInitialValue = false }
 			}.ToReadOnly(),
-			new List<InputSpec> {
-
-			}.ToReadOnly(),
-			new List<InputSpec> {
+			setupTabInputs: new List<InputSpec>().ToReadOnly(),
+			autoTabInputs: new List<InputSpec> {
 				new() { DataFieldName = "Auto L4 Coral", Label = "Auto L4 Coral" },
 				new() { DataFieldName = "Auto L4 Coral", Label = "Auto L4 Coral" },
 				new() { DataFieldName = "Auto L4 Coral", Label = "Auto L4 Coral" },
 				new() { DataFieldName = "Auto L4 Coral", Label = "Auto L4 Coral" }
 			}.ToReadOnly(),
-			new List<InputSpec> {
+			teleTabInputs: new List<InputSpec> {
 				new() { DataFieldName = "Tele L4 Coral", Label = "Tele L4 Coral" },
 				new() { DataFieldName = "Tele L4 Coral", Label = "Tele L4 Coral" },
 				new() { DataFieldName = "Tele L4 Coral", Label = "Tele L4 Coral" },
 				new() { DataFieldName = "Tele L4 Coral", Label = "Tele L4 Coral" }
 			}.ToReadOnly(),
-			new List<InputSpec> {
+			endgameTabInputs: new List<InputSpec> {
 				new() { DataFieldName = "Climb", Label = "Climb" },
 				new() { DataFieldName = "Disconnected", Label = "Disconnected" },
+				new() { DataFieldName = "Defense", Label = "Defense Effectiveness" },
 				new() { DataFieldName = "Comments", Label = "Comments" },
 			}.ToReadOnly());
 
