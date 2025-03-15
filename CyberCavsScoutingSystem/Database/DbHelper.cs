@@ -24,7 +24,7 @@ public interface IDataStore {
 
 	public Task<List<MatchData>> GetMatchData();
 
-	public Task <bool> AddNewMatchData(string matchData);
+	public Task <bool> AddNewMatchData(string deviceId, string matchData);
 
 	public Task<bool> AddMatchDataFromOtherDevice(List<MatchData> matchData);
 
@@ -102,6 +102,7 @@ public class SqliteDataStore : IDataStore {
 	private const string SynchronizationRecordIdColumn = "IdOfLatestRecord";
 
 	private const string MatchDataTableName = "MatchData";
+	private const string MatchDataDeviceColumn = "OriginatingDevice";
 	private const string MatchDataIdColumn = "Id";
 	private const string MatchDataDataColumn = "Data";
 
@@ -124,17 +125,18 @@ public class SqliteDataStore : IDataStore {
 				{UnifiedRecordTableColumn} TEXT NOT NULL,
 				{UnifiedRecordDateColumn} TEXT NOT NULL,
 				PRIMARY KEY ({UnifiedRecordDeviceColumn}, {UnifiedRecordIdColumn}),
-				FOREIGN KEY ('{UnifiedRecordIdColumn}')
-					REFERENCES '{MatchDataTableName}' ('{MatchDataIdColumn}')
+				FOREIGN KEY ('{UnifiedRecordDeviceColumn}', '{UnifiedRecordIdColumn}')
+					REFERENCES '{MatchDataTableName}' ('{MatchDataDeviceColumn}', '{MatchDataIdColumn}')
 						ON UPDATE RESTRICT
 						ON DELETE RESTRICT
+					DEFERRABLE INITIALLY DEFERRED
 			);
 			""",
 			Connection);
 
 		try {
 			await createScoutTable.ExecuteNonQueryAsync();
-		} catch {
+		} catch (Exception exception) {
 			return false;
 		}
 
@@ -156,12 +158,15 @@ public class SqliteDataStore : IDataStore {
 		SqliteCommand createMatchDataTable = new(
 			$"""
 			 CREATE TABLE IF NOT EXISTS '{MatchDataTableName}' (
-			 	{MatchDataIdColumn} INTEGER NOT NULL PRIMARY KEY,
+			 	{MatchDataDeviceColumn} TEXT NOT NULL,
+			 	{MatchDataIdColumn} INTEGER NOT NULL,
 			 	{MatchDataDataColumn} TEXT NOT NULL,
-			 	FOREIGN KEY ('{MatchDataIdColumn}')
-			 		REFERENCES '{UnifiedRecordTableName}' ('{UnifiedRecordIdColumn}')
+			 	PRIMARY KEY ({MatchDataDeviceColumn}, {MatchDataIdColumn}),
+			 	FOREIGN KEY ('{MatchDataDeviceColumn}', '{MatchDataIdColumn}')
+			 		REFERENCES '{UnifiedRecordTableName}' ('{UnifiedRecordDeviceColumn}','{UnifiedRecordIdColumn}')
 			 			ON UPDATE RESTRICT
 			 			ON DELETE RESTRICT
+			 		DEFERRABLE INITIALLY DEFERRED
 			 );
 			 """,
 			Connection);
@@ -269,24 +274,41 @@ public class SqliteDataStore : IDataStore {
 		throw new NotImplementedException();
 	}
 
-	public async Task<bool> AddNewMatchData(string matchData) {
+	public async Task<bool> AddNewMatchData(string deviceId, string matchData) {
+
+		//SqliteCommand get
 
 		SqliteCommand addMatchDataCommand = new(
 			$"""
+			 BEGIN TRANSACTION;
 			 INSERT INTO '{MatchDataTableName}' (
+			     '{MatchDataDeviceColumn}',
 			     '{MatchDataIdColumn}',
 			     '{MatchDataDataColumn}'
 			 )
 			 VALUES (
+			     '{deviceId}',
 			     1,
-			     'Data'
+			     '{matchData}'
 			 );
-			 
+			 INSERT INTO '{UnifiedRecordTableName}' (
+			     '{UnifiedRecordDeviceColumn}',
+			     '{UnifiedRecordIdColumn}',
+			     '{UnifiedRecordTableColumn}',
+			     '{UnifiedRecordDateColumn}'
+			 )
+			 VALUES (
+			     '{deviceId}',
+			     1,
+			     '{MatchDataTableName}',
+			     'TimeCreated'
+			 );
+			 COMMIT;
 			 """,
 			Connection);
 
 		try {
-			int result = await addMatchDataCommand.ExecuteNonQueryAsync();
+			await addMatchDataCommand.ExecuteNonQueryAsync();
 		} catch (Exception exception) {
 			return false;
 		}

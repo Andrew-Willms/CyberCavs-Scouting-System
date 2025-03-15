@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Database;
 
@@ -22,7 +21,7 @@ public class Program {
 		string? lastScout = await dataStore.GetLastScout();
 		bool success = await dataStore.SetLastScout("test");
 
-		dataStore.AddNewMatchData();
+		await dataStore.AddNewMatchData("testDeviceId", "test");
 
 	}
 
