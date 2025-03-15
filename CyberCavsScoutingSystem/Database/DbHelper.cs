@@ -24,9 +24,9 @@ public interface IDataStore {
 
 	public Task<List<MatchData>> GetMatchData();
 
-	public Task <bool> AddNewMatchData(MatchData matchData);
+	public Task <bool> AddNewMatchData(string matchData);
 
-	public Task<bool> AddMatchData(List<MatchData> matchData);
+	public Task<bool> AddMatchDataFromOtherDevice(List<MatchData> matchData);
 
 
 
@@ -80,8 +80,6 @@ public class DataRecord {
 
 	public required string TableName { get; init; }
 
-	public required int ForeignKey { get; init; }
-
 	public required DateTime TimeCreated { get; init; }
 
 }
@@ -94,10 +92,9 @@ public class SqliteDataStore : IDataStore {
 	private const string ScoutTableColumn = "Name";
 
 	private const string UnifiedRecordTableName = "UnifiedRecords";
-	private const string UnifiedRecordIdColumn = "Id";
 	private const string UnifiedRecordDeviceColumn = "OriginatingDevice";
+	private const string UnifiedRecordIdColumn = "Id";
 	private const string UnifiedRecordTableColumn = "TableName";
-	private const string UnifiedRecordForeignKeyColumn = "ForeignKey";
 	private const string UnifiedRecordDateColumn = "TimeCreated";
 
 	private const string SynchronizationTableName = "DeviceSynchroniation";
@@ -125,30 +122,36 @@ public class SqliteDataStore : IDataStore {
 				{UnifiedRecordDeviceColumn} TEXT NOT NULL,
 				{UnifiedRecordIdColumn} INTEGER NOT NULL,
 				{UnifiedRecordTableColumn} TEXT NOT NULL,
-				{UnifiedRecordForeignKeyColumn} INTEGER NOT NULL,
 				{UnifiedRecordDateColumn} TEXT NOT NULL,
-				PRIMARY KEY ({UnifiedRecordDeviceColumn}, {UnifiedRecordIdColumn})
+				PRIMARY KEY ({UnifiedRecordDeviceColumn}, {UnifiedRecordIdColumn}),
+				FOREIGN KEY ('{UnifiedRecordIdColumn}')
+					REFERENCES '{MatchDataTableName}' ('{MatchDataIdColumn}')
+						ON UPDATE RESTRICT
+						ON DELETE RESTRICT
 			);
 			""",
 			Connection);
 
-		int scoutTableResult = await createScoutTable.ExecuteNonQueryAsync();
+		try {
+			await createScoutTable.ExecuteNonQueryAsync();
+		} catch {
+			return false;
+		}
 
 		SqliteCommand createDeviceSynchronizationTable = new(
 			$"""
 			CREATE TABLE IF NOT EXISTS '{SynchronizationTableName}' (
 				{SynchronizationDeviceIdColumn} TEXT NOT NULL PRIMARY KEY,
-				{SynchronizationRecordIdColumn} INTEGER NOT NULL,
+				{SynchronizationRecordIdColumn} INTEGER NOT NULL
 			);
 			""",
 			Connection);
 
-		int deviceSynchronizationTableResult = createDeviceSynchronizationTable.ExecuteNonQuery();
-
-		SqliteCommand checkIfTableExists2 = new() {
-			CommandText = "SELECT name FROM sqlite_master WHERE type='table';",
-			Connection = Connection
-		};
+		try {
+			await createDeviceSynchronizationTable.ExecuteNonQueryAsync();
+		} catch {
+			return false;
+		}
 
 		SqliteCommand createMatchDataTable = new(
 			$"""
@@ -163,14 +166,27 @@ public class SqliteDataStore : IDataStore {
 			 """,
 			Connection);
 
-		int matchDataTableResult = createMatchDataTable.ExecuteNonQuery();
+		try {
+			await createMatchDataTable.ExecuteNonQueryAsync();
+		} catch {
+			return false;
+		}
 
-		SqliteDataReader reader2 = await checkIfTableExists2.ExecuteReaderAsync();
+		SqliteCommand checkIfTableExists = new() {
+			CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type='table';",
+			Connection = Connection
+		};
 
-		reader2.Read();
-		string testResult = reader2.GetString(0);
+		try {
+			SqliteDataReader reader = await checkIfTableExists.ExecuteReaderAsync();
+			reader.Read();
+			int tableCount = reader.GetInt32(0);
+			return tableCount == 3;
 
-		return true;
+		} catch {
+			return false;
+		}
+
 	}
 
 	public Task<List<GameSpec>> GetGameSpecs() {
@@ -253,11 +269,32 @@ public class SqliteDataStore : IDataStore {
 		throw new NotImplementedException();
 	}
 
-	public Task<bool> AddNewMatchData(MatchData matchData) {
-		throw new NotImplementedException();
+	public async Task<bool> AddNewMatchData(string matchData) {
+
+		SqliteCommand addMatchDataCommand = new(
+			$"""
+			 INSERT INTO '{MatchDataTableName}' (
+			     '{MatchDataIdColumn}',
+			     '{MatchDataDataColumn}'
+			 )
+			 VALUES (
+			     1,
+			     'Data'
+			 );
+			 
+			 """,
+			Connection);
+
+		try {
+			int result = await addMatchDataCommand.ExecuteNonQueryAsync();
+		} catch (Exception exception) {
+			return false;
+		}
+
+		return true;
 	}
 
-	public Task<bool> AddMatchData(List<MatchData> matchData) {
+	public Task<bool> AddMatchDataFromOtherDevice(List<MatchData> matchData) {
 		throw new NotImplementedException();
 	}
 

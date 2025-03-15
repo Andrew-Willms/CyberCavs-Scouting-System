@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using Database;
 
 namespace QuickTestingApplication;
@@ -7,13 +9,20 @@ namespace QuickTestingApplication;
 
 public class Program {
 
-	private static void Main(string[] args) {
+	private static async Task Main(string[] args) {
 
 		SqliteDataStore dataStore = new();
 
-		dataStore.ConnectAndEnsureTables("test.db");
+		try {
+			await dataStore.ConnectAndEnsureTables("test.db");
+		} catch (Exception exception) {
+			throw;
+		}
 
-		dataStore.GetLastScout();
+		string? lastScout = await dataStore.GetLastScout();
+		bool success = await dataStore.SetLastScout("test");
+
+		dataStore.AddNewMatchData();
 
 	}
 
