@@ -2,6 +2,7 @@
 using System.Drawing;
 using CCSSDomain.Data;
 using CCSSDomain.GameSpecification;
+using CCSSDomain.Protocols;
 using Microsoft.Data.Sqlite;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
@@ -274,7 +275,9 @@ public class SqliteDataStore : IDataStore {
 		throw new NotImplementedException();
 	}
 
-	public async Task<bool> AddNewMatchData(string deviceId, string matchData) {
+	public async Task<bool> AddNewMatchData(string deviceId, MatchData matchData) {
+
+		string data = MatchDataProtocolV1.Serialize(matchData).Replace("\'", "\'\'");
 
 		// it's scuffed that I have to call WITH AS twice but I can't find a workaround
 		// CTEs can only be consumed by a singled query.
@@ -292,7 +295,7 @@ public class SqliteDataStore : IDataStore {
 			 VALUES (
 			     '{deviceId}',
 			     (SELECT lastId FROM temp) + 1,
-			     '{matchData}'
+			     '{data}'
 			 );
 			 WITH temp AS (
 			     SELECT COUNT(*) AS lastId FROM '{UnifiedRecordTableName}'
@@ -322,7 +325,7 @@ public class SqliteDataStore : IDataStore {
 		return true;
 	}
 
-	public Task<bool> AddMatchDataFromOtherDevice(List<MatchData> matchData) {
+	public Task<bool> AddMatchDataFromOtherDevice(MatchData matchData) {
 		throw new NotImplementedException();
 	}
 
