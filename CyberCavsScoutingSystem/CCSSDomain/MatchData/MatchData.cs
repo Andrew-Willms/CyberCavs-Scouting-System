@@ -33,7 +33,7 @@ public class MatchData {
 
 	public required ReadOnlyList<object?> DataFields { get; init; }
 
-	// database should have a "has errors" column, errors themselves are stored in a separate table
+	// database should have a "has errors" column, errors themselves are stored in a separate table... ???
 	public required ReadOnlyList<DomainError> Errors { get; init; } // todo figure out if this is the right type
 
 

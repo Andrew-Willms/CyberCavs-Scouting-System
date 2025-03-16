@@ -24,9 +24,9 @@ public interface IDataStore {
 
 	public Task<List<MatchData>> GetMatchData();
 
-	public Task <bool> AddNewMatchData(string deviceId, string matchData);
+	public Task <bool> AddNewMatchData(string deviceId, MatchData matchData);
 
-	public Task<bool> AddMatchDataFromOtherDevice(List<MatchData> matchData);
+	public Task<bool> AddMatchDataFromOtherDevice(MatchData matchData);
 
 
 
@@ -97,7 +97,7 @@ public class SqliteDataStore : IDataStore {
 	private const string UnifiedRecordTableColumn = "TableName";
 	private const string UnifiedRecordDateColumn = "TimeCreated";
 
-	private const string SynchronizationTableName = "DeviceSynchroniation";
+	private const string SynchronizationTableName = "DeviceSynchronization";
 	private const string SynchronizationDeviceIdColumn = "DeviceId";
 	private const string SynchronizationRecordIdColumn = "IdOfLatestRecord";
 
@@ -276,11 +276,14 @@ public class SqliteDataStore : IDataStore {
 
 	public async Task<bool> AddNewMatchData(string deviceId, string matchData) {
 
-		//SqliteCommand get
-
+		// it's scuffed that I have to call WITH AS twice but I can't find a workaround
+		// CTEs can only be consumed by a singled query.
 		SqliteCommand addMatchDataCommand = new(
 			$"""
 			 BEGIN TRANSACTION;
+			 WITH temp AS (
+			     SELECT COUNT(*) AS lastId FROM '{UnifiedRecordTableName}'
+			 )
 			 INSERT INTO '{MatchDataTableName}' (
 			     '{MatchDataDeviceColumn}',
 			     '{MatchDataIdColumn}',
@@ -288,9 +291,12 @@ public class SqliteDataStore : IDataStore {
 			 )
 			 VALUES (
 			     '{deviceId}',
-			     1,
+			     (SELECT lastId FROM temp) + 1,
 			     '{matchData}'
 			 );
+			 WITH temp AS (
+			     SELECT COUNT(*) AS lastId FROM '{UnifiedRecordTableName}'
+			 )
 			 INSERT INTO '{UnifiedRecordTableName}' (
 			     '{UnifiedRecordDeviceColumn}',
 			     '{UnifiedRecordIdColumn}',
@@ -299,7 +305,7 @@ public class SqliteDataStore : IDataStore {
 			 )
 			 VALUES (
 			     '{deviceId}',
-			     1,
+			 (SELECT lastId FROM temp) + 1,
 			     '{MatchDataTableName}',
 			     'TimeCreated'
 			 );
