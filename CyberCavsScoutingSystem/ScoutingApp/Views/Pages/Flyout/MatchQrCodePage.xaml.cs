@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using CCSSDomain.MatchData;
+using CCSSDomain.Data;
 using Microsoft.Maui.Controls;
 
 namespace ScoutingApp.Views.Pages.Flyout;

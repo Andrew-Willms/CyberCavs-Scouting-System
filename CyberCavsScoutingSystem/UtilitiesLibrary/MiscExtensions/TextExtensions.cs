@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using UtilitiesLibrary.Collections;
 
 namespace UtilitiesLibrary.MiscExtensions;
 
@@ -51,6 +54,71 @@ public static class TextExtensions {
 		text = text.Replace("\"", "\"\"");
 		text = "\"" + text + "\"";
 		return text;
+	}
+
+	public static List<string> SplitTextToCsvColumns(this string text) {
+
+		if (text.IsEmpty()) {
+			return [];
+		}
+
+		List<string> columns = [];
+
+		bool columnHasQuotes = false;
+		bool outsideOfQuotes = true;
+		int startOfColumn = 0;
+
+		for (int i = 1; i < text.Length; i++) {
+
+			if (startOfColumn == i) {
+				columnHasQuotes = text[i] is '\"';
+				outsideOfQuotes = !columnHasQuotes;
+				continue;
+			}
+
+			if (text[i] is ',' && outsideOfQuotes) {
+
+				columns.Add(columnHasQuotes
+					? text[(startOfColumn + 1)..(i - 1)].Replace("\"\"", "\"")
+					: text[startOfColumn..i]);
+
+				startOfColumn = i + 1;
+				continue;
+			}
+
+			if (text[i] is '\"') {
+
+				// invalid quote placement
+				if (!columnHasQuotes) {
+					throw new ArgumentException("Quote in CSV column that is not enclosed by quotes.", nameof(text));
+				}
+
+				// end of the current column
+				if (text.Length == i + 1 || text[i + 1] is ',') {
+					outsideOfQuotes = true;
+					continue;
+				}
+
+				// skip over double quotes
+				if (text[i + 1] is '\"') {
+					i++;
+					continue;
+				}
+
+				throw new ArgumentException("Single quote not at start or end of column", nameof(text));
+			}
+
+		}
+
+		if (columnHasQuotes && !outsideOfQuotes) {
+			throw new ArgumentException("Missing closing quote in last column.", nameof(text));
+		}
+
+		columns.Add(columnHasQuotes
+			? text[(startOfColumn + 1)..].Replace("\"\"", "\"")
+			: text[startOfColumn..]);
+
+		return columns;
 	}
 
 }

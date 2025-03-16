@@ -1,4 +1,4 @@
-﻿namespace CCSSDomain.MatchData;
+﻿namespace CCSSDomain.Data;
 
 
 

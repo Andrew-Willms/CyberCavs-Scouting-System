@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using CCSSDomain.MatchData;
+using CCSSDomain.Data;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
 using ScoutingApp.AppManagement;

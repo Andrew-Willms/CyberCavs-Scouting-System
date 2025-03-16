@@ -8,7 +8,7 @@ using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using Version = CCSSDomain.GameSpecification.Version;
 
-namespace CCSSDomain.MatchData;
+namespace CCSSDomain.Data;
 
 
 

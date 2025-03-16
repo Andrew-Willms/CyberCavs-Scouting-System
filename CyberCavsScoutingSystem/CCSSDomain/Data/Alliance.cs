@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UtilitiesLibrary.Collections;
 
-namespace CCSSDomain.MatchData;
+namespace CCSSDomain.Data;
 
 
 

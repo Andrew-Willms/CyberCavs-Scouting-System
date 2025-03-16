@@ -1,7 +1,7 @@
 ﻿using System;
 using UtilitiesLibrary.Collections;
 
-namespace CCSSDomain.MatchData;
+namespace CCSSDomain.Data;
 
 
 

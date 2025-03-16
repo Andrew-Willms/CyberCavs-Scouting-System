@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using CCSSDomain.Data;
 using CCSSDomain.DataCollectors;
-using CCSSDomain.MatchData;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;
@@ -89,7 +89,7 @@ public partial class SetupTab : ContentPage {
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliances)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
 
-		MatchType = CCSSDomain.MatchData.MatchType.Qualification;
+		MatchType = CCSSDomain.Data.MatchType.Qualification;
 
 		BindingContext = this;
 		InitializeComponent();
