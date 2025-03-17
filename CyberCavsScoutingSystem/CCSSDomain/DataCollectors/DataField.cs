@@ -152,6 +152,7 @@ public class SelectionDataField : DataField {
 
 	public new SelectionDataFieldSpec Specification { get; }
 
+	// TODO rework this to use an integer index instead???
 	public Optional<string> Value {
 		get;
 		set {
@@ -168,8 +169,8 @@ public class SelectionDataField : DataField {
 		get {
 			List<string> errors = [];
 
-			if (!Specification.RequiresValue && Value == Optional<string>.NoValue) {
-				errors.Add($"The data field \"{Name}\" requires a value value.");
+			if (Specification.RequiresValue && Value == Optional<string>.NoValue) {
+				errors.Add($"The data field \"{Name}\" requires a value.");
 			}
 
 			if (Value != Optional.NoValue && !Specification.Options.Contains(Value.Value)) {

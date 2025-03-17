@@ -6,7 +6,6 @@ using System.Linq;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
-using Version = CCSSDomain.GameSpecification.Version;
 
 namespace CCSSDomain.Data;
 
@@ -14,9 +13,7 @@ namespace CCSSDomain.Data;
 
 public class MatchData {
 
-	public required string GameName { get; init; }
-	public required Version GameVersion { get; init; }
-	public required int GameHashCode { get; init; }
+	public required GameSpec GameSpecification { get; init; }
 
 	public string? EventCode { get; init; }
 
@@ -59,9 +56,7 @@ public class MatchData {
 		ValidateTimes(errors.Add, errorContext, startTime, endTime);
 		ValidateDataFields(errors.Add, errorContext, gameSpecification, dataFields, out ReadOnlyList<object?> dataFieldResults);
 
-		GameName = gameSpecification.Name;
-		GameVersion = gameSpecification.Version;
-		GameHashCode = gameSpecification.GetHashCode();
+		GameSpecification = gameSpecification;
 		EventCode = eventCode;
 		ScoutName = scoutName;
 		Match = match;

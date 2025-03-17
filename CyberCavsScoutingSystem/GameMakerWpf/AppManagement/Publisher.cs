@@ -17,7 +17,7 @@ public interface IPublisher {
 
 	public interface IPublishResult : IResult {
 
-		public class Success : IResult.Success, IPublishResult;
+		public new class Success : IResult.Success, IPublishResult;
 
 		public class Aborted : Error, IPublishResult;
 

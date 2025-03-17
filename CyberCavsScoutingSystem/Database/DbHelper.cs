@@ -137,7 +137,7 @@ public class SqliteDataStore : IDataStore {
 
 		try {
 			await createScoutTable.ExecuteNonQueryAsync();
-		} catch (Exception exception) {
+		} catch {
 			return false;
 		}
 
@@ -223,7 +223,7 @@ public class SqliteDataStore : IDataStore {
 				new IntegerDataFieldSpec { Name = "Tele Algae Processor", InitialValue = 0, MinValue = 0, MaxValue = 255 },
 				new SelectionDataFieldSpec {
 					Name = "Climb",
-					Options = new List<string> { "Deep", "Shallow", "None" }.ToReadOnly(),
+					Options = new List<string> { "None", "Deep", "Shallow" }.ToReadOnly(),
 					InitialValue = "None", 
 					RequiresValue = true
 				},
