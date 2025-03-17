@@ -11,96 +11,20 @@ namespace Database;
 
 
 
-public interface IDataStore {
-
-	public Task<bool> ConnectAndEnsureTables(string dbPath);
-
-
-
-	public Task<List<GameSpec>> GetGameSpecs();
-
-	//public Task<bool> AddGameSpec();
-
-
-
-	public Task<List<MatchData>> GetMatchData();
-
-	public Task <bool> AddNewMatchData(string deviceId, MatchData matchData);
-
-	public Task<bool> AddMatchDataFromOtherDevice(MatchData matchData);
-
-
-
-	//public Task<List<EventSchedule>> GetEventSchedules();
-
-	//public Task<bool> AddEventSchedule(EventSchedule eventSchedule);
-
-
-
-	public Task<DataToSend> GetDataToSend();
-
-	public Task<List<DeviceSynchronization>> GetMostRecentFromDevice();
-
-	//public Task<List<DomainError>> GetDomainErrors();
-
-
-
-	public Task<string?> GetLastScout();
-
-	public Task<bool> SetLastScout(string scoutName);
-
-}
-
-
-
-public readonly record struct DataToSend {
-
-	public required List<GameSpec> GameSpecifications { get; init; }
-
-	public required List<EventSchedule> EventSchedules { get; init; }
-
-	public required List<MatchData> MatchData { get; init; }
-
-}
-
-
-public readonly record struct DeviceSynchronization {
-
-	public required string DeviceId { get; init; }
-
-	public required int IdOfLatestRecord { get; init; }
-
-}
-
-
-public class DataRecord {
-
-	public required int Id { get; init; }
-
-	public required string OriginatingDevice { get; init; }
-
-	public required string TableName { get; init; }
-
-	public required DateTime TimeCreated { get; init; }
-
-}
-
-
-
 public class SqliteDataStore : IDataStore {
 
 	private const string ScoutTableName = "Scouts";
 	private const string ScoutTableColumn = "Name";
+
+	private const string KnownDevicesTableName = "KnownDevices";
+	private const string KnownDevicesIdColumn = "DeviceId";
+	private const string KnownDevicesRecordIdColumn = "IdOfLatestRecord";
 
 	private const string UnifiedRecordTableName = "UnifiedRecords";
 	private const string UnifiedRecordDeviceColumn = "OriginatingDevice";
 	private const string UnifiedRecordIdColumn = "Id";
 	private const string UnifiedRecordTableColumn = "TableName";
 	private const string UnifiedRecordDateColumn = "TimeCreated";
-
-	private const string SynchronizationTableName = "DeviceSynchronization";
-	private const string SynchronizationDeviceIdColumn = "DeviceId";
-	private const string SynchronizationRecordIdColumn = "IdOfLatestRecord";
 
 	private const string MatchDataTableName = "MatchData";
 	private const string MatchDataDeviceColumn = "OriginatingDevice";
@@ -114,6 +38,21 @@ public class SqliteDataStore : IDataStore {
 		try {
 			Connection = new($"Data Source={dbPath}");
 			Connection.Open();
+		} catch {
+			return false;
+		}
+
+		SqliteCommand createKnownDeviceTable = new(
+			$"""
+			 CREATE TABLE IF NOT EXISTS '{KnownDevicesTableName}' (
+			 	{KnownDevicesIdColumn} TEXT NOT NULL PRIMARY KEY,
+			 	{KnownDevicesRecordIdColumn} INTEGER NOT NULL
+			 );
+			 """,
+			Connection);
+
+		try {
+			await createKnownDeviceTable.ExecuteNonQueryAsync();
 		} catch {
 			return false;
 		}
@@ -137,21 +76,6 @@ public class SqliteDataStore : IDataStore {
 
 		try {
 			await createScoutTable.ExecuteNonQueryAsync();
-		} catch {
-			return false;
-		}
-
-		SqliteCommand createDeviceSynchronizationTable = new(
-			$"""
-			CREATE TABLE IF NOT EXISTS '{SynchronizationTableName}' (
-				{SynchronizationDeviceIdColumn} TEXT NOT NULL PRIMARY KEY,
-				{SynchronizationRecordIdColumn} INTEGER NOT NULL
-			);
-			""",
-			Connection);
-
-		try {
-			await createDeviceSynchronizationTable.ExecuteNonQueryAsync();
 		} catch {
 			return false;
 		}
@@ -192,7 +116,6 @@ public class SqliteDataStore : IDataStore {
 		} catch {
 			return false;
 		}
-
 	}
 
 	public Task<List<GameSpec>> GetGameSpecs() {
@@ -318,7 +241,7 @@ public class SqliteDataStore : IDataStore {
 
 		try {
 			await addMatchDataCommand.ExecuteNonQueryAsync();
-		} catch (Exception exception) {
+		} catch {
 			return false;
 		}
 
@@ -333,7 +256,7 @@ public class SqliteDataStore : IDataStore {
 		throw new NotImplementedException();
 	}
 
-	public Task<List<DeviceSynchronization>> GetMostRecentFromDevice() {
+	public Task<List<KnownDevice>> GetMostRecentFromDevice() {
 		throw new NotImplementedException();
 	}
 
