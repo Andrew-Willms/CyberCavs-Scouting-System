@@ -90,18 +90,33 @@ public class SampleData : IEnumerable<object[]> {
 
 		[ 
 			MatchData.FromRaw(
-			gameSpecification: GameSpec, 
-			eventCode: null,
-			eventSchedule: null,
-			scoutName: "ScoutName",
-			match: new() { MatchNumber = 1, Type = MatchType.Qualification, ReplayNumber = 0 },
-			teamNumber: 0,
-			allianceIndex: 0,
-			startTime: DateTime.Now,
-			endTime: DateTime.Now,
-			dataFieldValues: new object[] {
-				0,0,0,0,0,0,true,0,0,0,0,0,0,"None".Optionalize(),"None of match".Optionalize(),"N/A".Optionalize(),"Comments"
-			}.ToReadOnly())!
+				gameSpecification: GameSpec, 
+				eventCode: null,
+				eventSchedule: null,
+				scoutName: "ScoutName",
+				match: new() { MatchNumber = 1, Type = MatchType.Qualification, ReplayNumber = 0 },
+				teamNumber: 0,
+				allianceIndex: 0,
+				startTime: DateTime.Now,
+				endTime: DateTime.Now,
+				dataFieldValues: new object[] {
+					0,0,0,0,0,0,true,0,0,0,0,0,0,"None".Optionalize(),"None of match".Optionalize(),"N/A".Optionalize(),"Comments"
+				}.ToReadOnly())!
+		],
+		[
+			MatchData.FromRaw(
+				gameSpecification: GameSpec,
+				eventCode: "Waterloo",
+				eventSchedule: null,
+				scoutName: "Scoutty McScoutface",
+				match: new() { MatchNumber = 3, Type = MatchType.Elimination, ReplayNumber = 1 },
+				teamNumber: 4678,
+				allianceIndex: 1,
+				startTime: DateTime.Now,
+				endTime: DateTime.Now.AddSeconds(180),
+				dataFieldValues: new object[] {
+					12,1,4,2,255,0,false,12,12,12,12,9,2,"Failed".Optionalize(),"Most of match".Optionalize(),"2".Optionalize(),"things move things"
+				}.ToReadOnly())!
 		],
 
 	];
