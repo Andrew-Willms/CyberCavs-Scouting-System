@@ -19,9 +19,16 @@ public static class MatchDataToCsv {
 
 	public static string GetCsvHeaders(GameSpec gameSpecification) {
 
-		// todo
-		return """ScoutName,EventCode,MatchNumber,MatchType,ReplayNumber,AllianceIndex,TeamNumber,StartTime,EndTime,"Auto L1 Coral","Auto L2 Coral","Auto L3 Coral","Auto L4 Coral","Auto Algae Net","Auto Algae Processor","Tele L1 Coral","Tele L2 Coral","Tele L3 Coral","Tele L4 Coral","Tele Algae Net","Tele Algae Processor","Climb","Disconnected","Defense","Comments""";
-	}
+		StringBuilder stringBuilder = new("ScoutName, EventCode, MatchNumber, MatchType, ReplayNumber, AllianceIndex, TeamNumber, StartTime, EndTime,");
+
+		stringBuilder.AppendJoin(",", gameSpecification.DataFields.Select(x => x.Name));
+
+		foreach (DataFieldSpec dataField in gameSpecification.DataFields) {
+			stringBuilder.Append(dataField.Name.ToCsvFriendly());
+			stringBuilder.Append(',');
+		}
+
+		return stringBuilder.ToString(); }
 
 	public static string Serialize(MatchData matchData) {
 
