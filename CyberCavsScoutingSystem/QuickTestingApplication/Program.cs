@@ -21,7 +21,7 @@ public class Program {
 		string? lastScout = await dataStore.GetLastScout();
 		bool success = await dataStore.SetLastScout("test");
 
-		await dataStore.AddNewMatchData("testDeviceId", "test");
+		//await dataStore.AddNewMatchData("testDeviceId", "test");
 
 	}
 

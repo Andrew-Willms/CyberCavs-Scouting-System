@@ -100,7 +100,25 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	private static IErrorPresenter ErrorPresenter => ServiceHelper.GetService<IErrorPresenter>();
 
-	public IDataStore DataStore => ServiceHelper.GetService<IDataStore>();
+	private static IDataStore DataStore => ServiceHelper.GetService<IDataStore>();
+
+
+
+	public AppManager() {
+
+		if (DateTime.Now >= new DateTime(2025, 3, 21) && DateTime.Now <= new DateTime(2025, 3, 22)) {
+			EventCode = "Waterloo";
+
+		} else if (DateTime.Now >= new DateTime(2025, 3, 28) && DateTime.Now <= new DateTime(2025, 3, 29)) {
+			EventCode = "Windsor";
+
+		} else if (DateTime.Now >= new DateTime(2025, 4, 4) && DateTime.Now <= new DateTime(2025, 4, 5)) {
+			EventCode = "DCMP";
+
+		} else {
+			EventCode = "Test Event";
+		}
+	}
 
 
 

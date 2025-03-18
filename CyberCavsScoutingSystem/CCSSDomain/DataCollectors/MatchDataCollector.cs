@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using CCSSDomain.Data;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Optional;
 
 namespace CCSSDomain.DataCollectors; 
@@ -87,44 +83,6 @@ public class MatchDataCollector {
 		AutoTabInputs = GameSpecification.AutoTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
 		TeleTabInputs = GameSpecification.TeleTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
 		EndgameTabInputs = GameSpecification.EndgameTabInputs.Select(x => InputDataCollector.FromDataField(x, DataFields.Single(xx => xx.Name == x.DataFieldName))).ToReadOnly();
-	}
-
-
-
-	// todo move elsewhere
-	public string ConvertDataToCsv(string scout, string @event) {
-
-		StringBuilder matchData = new(
-			$"{scout.ToCsvFriendly()}," +
-			$"{@event.ToCsvFriendly()}," +
-			$"{MatchNumber.Value.ToString().ToCsvFriendly()}," +
-			$"{ReplayNumber.Value.ToString().ToCsvFriendly()}," +
-			$"{MatchType.Value.ToString().ToCsvFriendly()}," +
-			$"{Alliance.Value.ToString()}," +
-			$"{TeamNumber.Value.ToString().ToCsvFriendly()}," +
-			$"{StartTime.ToString(CultureInfo.InvariantCulture).ToCsvFriendly()},");
-
-		foreach (DataField dataField in DataFields) {
-
-			switch (dataField) {
-				case BooleanDataField booleanDataField:
-					matchData.Append($"{booleanDataField.Value.ToString().ToCsvFriendly()},");
-					break;
-				case TextDataField textDataField:
-					matchData.Append($"{textDataField.Value.ToCsvFriendly()},");
-					break;
-				case IntegerDataField integerDataField:
-					matchData.Append($"{integerDataField.Value.ToString().ToCsvFriendly()},");
-					break;
-				case SelectionDataField selectionDataField:
-					matchData.Append($"{selectionDataField.Value.ToString().ToCsvFriendly()},");
-					break;
-				default:
-					throw new UnreachableException();
-			}
-		}
-
-		return matchData.ToString();
 	}
 
 }

@@ -30,6 +30,7 @@ public class SqliteDataStore : IDataStore {
 	private const string MatchDataDeviceColumn = "OriginatingDevice";
 	private const string MatchDataIdColumn = "Id";
 	private const string MatchDataDataColumn = "Data";
+	private const string MatchDataEditOfColumn = "EditOfId";
 
 	private SqliteConnection Connection = null!;
 
@@ -42,11 +43,25 @@ public class SqliteDataStore : IDataStore {
 			return false;
 		}
 
+		SqliteCommand createScoutTable = new(
+			$"""
+			 CREATE TABLE IF NOT EXISTS '{ScoutTableName}' (
+			 	'{ScoutTableColumn}' TEXT NOT NULL
+			 );
+			 """,
+			Connection);
+
+		try {
+			await createScoutTable.ExecuteNonQueryAsync();
+		} catch {
+			return false;
+		}
+
 		SqliteCommand createKnownDeviceTable = new(
 			$"""
 			 CREATE TABLE IF NOT EXISTS '{KnownDevicesTableName}' (
-			 	{KnownDevicesIdColumn} TEXT NOT NULL PRIMARY KEY,
-			 	{KnownDevicesRecordIdColumn} INTEGER NOT NULL
+			 	'{KnownDevicesIdColumn}' TEXT NOT NULL PRIMARY KEY,
+			 	'{KnownDevicesRecordIdColumn}' INTEGER NOT NULL
 			 );
 			 """,
 			Connection);
@@ -57,25 +72,20 @@ public class SqliteDataStore : IDataStore {
 			return false;
 		}
 
-		SqliteCommand createScoutTable = new(
+		SqliteCommand createUnifiedRecordTable = new(
 			$"""
 			CREATE TABLE IF NOT EXISTS '{UnifiedRecordTableName}' (
-				{UnifiedRecordDeviceColumn} TEXT NOT NULL,
-				{UnifiedRecordIdColumn} INTEGER NOT NULL,
-				{UnifiedRecordTableColumn} TEXT NOT NULL,
-				{UnifiedRecordDateColumn} TEXT NOT NULL,
-				PRIMARY KEY ({UnifiedRecordDeviceColumn}, {UnifiedRecordIdColumn}),
-				FOREIGN KEY ('{UnifiedRecordDeviceColumn}', '{UnifiedRecordIdColumn}')
-					REFERENCES '{MatchDataTableName}' ('{MatchDataDeviceColumn}', '{MatchDataIdColumn}')
-						ON UPDATE RESTRICT
-						ON DELETE RESTRICT
-					DEFERRABLE INITIALLY DEFERRED
+				'{UnifiedRecordDeviceColumn}' TEXT NOT NULL,
+				'{UnifiedRecordIdColumn}' INTEGER NOT NULL,
+				'{UnifiedRecordTableColumn}' TEXT NOT NULL,
+				'{UnifiedRecordDateColumn}' TEXT NOT NULL,
+				PRIMARY KEY ('{UnifiedRecordDeviceColumn}', '{UnifiedRecordIdColumn}'),
 			);
 			""",
 			Connection);
 
 		try {
-			await createScoutTable.ExecuteNonQueryAsync();
+			await createUnifiedRecordTable.ExecuteNonQueryAsync();
 		} catch {
 			return false;
 		}
@@ -86,6 +96,7 @@ public class SqliteDataStore : IDataStore {
 			 	{MatchDataDeviceColumn} TEXT NOT NULL,
 			 	{MatchDataIdColumn} INTEGER NOT NULL,
 			 	{MatchDataDataColumn} TEXT NOT NULL,
+			 	{MatchDataEditOfColumn} TEXT,
 			 	PRIMARY KEY ({MatchDataDeviceColumn}, {MatchDataIdColumn}),
 			 	FOREIGN KEY ('{MatchDataDeviceColumn}', '{MatchDataIdColumn}')
 			 		REFERENCES '{UnifiedRecordTableName}' ('{UnifiedRecordDeviceColumn}','{UnifiedRecordIdColumn}')
@@ -102,16 +113,16 @@ public class SqliteDataStore : IDataStore {
 			return false;
 		}
 
-		SqliteCommand checkIfTableExists = new() {
+		SqliteCommand tableCountCommand = new() {
 			CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type='table';",
 			Connection = Connection
 		};
 
 		try {
-			SqliteDataReader reader = await checkIfTableExists.ExecuteReaderAsync();
+			SqliteDataReader reader = await tableCountCommand.ExecuteReaderAsync();
 			reader.Read();
 			int tableCount = reader.GetInt32(0);
-			return tableCount == 3;
+			return tableCount == 4;
 
 		} catch {
 			return false;
@@ -194,13 +205,49 @@ public class SqliteDataStore : IDataStore {
 		});
 	}
 
-	public Task<List<MatchData>> GetMatchData() {
-		throw new NotImplementedException();
+	public async Task<List<MatchDataDto>?> GetMatchData() {
+
+		SqliteCommand getMatchDataCommand = new(
+			$"SELECT (*) FROM '{MatchDataTableName}';",
+			Connection);
+
+		SqliteDataReader reader;
+		try {
+			reader = await getMatchDataCommand.ExecuteReaderAsync();
+		} catch {
+			return null;
+		}
+
+		GameSpec gameSpec = (await GetGameSpecs()).FirstOrDefault() ?? throw new UnreachableException(); // todo
+
+		List<MatchDataDto> matchData = [];
+		while (reader.Read()) {
+
+			string deviceId = reader.GetString(0);
+			int recordId = reader.GetInt32(1);
+			string serializedMatch = reader.GetString(2);
+			int editOfId = reader.GetInt32(3);
+
+			MatchData? data = MatchDataProtocolV1.Deserialize(serializedMatch, gameSpec);
+
+			if (data is null) {
+				return null; // todo
+			}
+
+			matchData.Add(new() {
+				MatchData = data, 
+				DeviceId = deviceId,
+				UnifiedRecordId = recordId,
+				EditBasedOn = editOfId
+			});
+		}
+
+		return matchData;
 	}
 
-	public async Task<bool> AddNewMatchData(string deviceId, MatchData matchData) {
+	public async Task<bool> AddNewMatchData(MatchDataDto matchData) {
 
-		string data = MatchDataProtocolV1.Serialize(matchData).Replace("\'", "\'\'");
+		string data = MatchDataProtocolV1.Serialize(matchData.MatchData).Replace("\'", "\'\'");
 
 		// it's scuffed that I have to call WITH AS twice but I can't find a workaround
 		// CTEs can only be consumed by a singled query.
@@ -216,7 +263,7 @@ public class SqliteDataStore : IDataStore {
 			     '{MatchDataDataColumn}'
 			 )
 			 VALUES (
-			     '{deviceId}',
+			     '{matchData.DeviceId}',
 			     (SELECT lastId FROM temp) + 1,
 			     '{data}'
 			 );
@@ -230,7 +277,7 @@ public class SqliteDataStore : IDataStore {
 			     '{UnifiedRecordDateColumn}'
 			 )
 			 VALUES (
-			     '{deviceId}',
+			     '{matchData.DeviceId}',
 			 (SELECT lastId FROM temp) + 1,
 			     '{MatchDataTableName}',
 			     'TimeCreated'
@@ -246,18 +293,6 @@ public class SqliteDataStore : IDataStore {
 		}
 
 		return true;
-	}
-
-	public Task<bool> AddMatchDataFromOtherDevice(MatchData matchData) {
-		throw new NotImplementedException();
-	}
-
-	public Task<DataToSend> GetDataToSend() {
-		throw new NotImplementedException();
-	}
-
-	public Task<List<KnownDevice>> GetMostRecentFromDevice() {
-		throw new NotImplementedException();
 	}
 
 	public async Task<string?> GetLastScout() {
