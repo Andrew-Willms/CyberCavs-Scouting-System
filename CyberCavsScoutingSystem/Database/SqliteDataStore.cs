@@ -149,11 +149,9 @@ public class SqliteDataStore : IDataStore {
 				new IntegerDataFieldSpec { Name = "Auto L4 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
 				new IntegerDataFieldSpec { Name = "Auto Algae Net", InitialValue = 0, MinValue = 0, MaxValue = 255 },
 				new IntegerDataFieldSpec { Name = "Auto Algae Processor", InitialValue = 0, MinValue = 0, MaxValue = 255 },
-				new SelectionDataFieldSpec {
+				new BooleanDataFieldSpec {
 					Name = "Auto Mobility",
-					Options = new List<string> { "Yes", "No", "" }.ToReadOnly(),
-					InitialValue = "None",
-					RequiresValue = true
+					InitialValue = false
 				},
 				new IntegerDataFieldSpec { Name = "Tele L1 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
 				new IntegerDataFieldSpec { Name = "Tele L2 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },

@@ -68,14 +68,15 @@ public static class TextExtensions {
 		bool outsideOfQuotes = true;
 		int startOfColumn = 0;
 
-		for (int i = 1; i < text.Length; i++) {
+		for (int i = 0; i < text.Length; i++) {
 
+			// start of new column
 			if (startOfColumn == i) {
 				columnHasQuotes = text[i] is '\"';
 				outsideOfQuotes = !columnHasQuotes;
-				continue;
 			}
 
+			// end of column
 			if (text[i] is ',' && outsideOfQuotes) {
 
 				columns.Add(columnHasQuotes
@@ -86,14 +87,14 @@ public static class TextExtensions {
 				continue;
 			}
 
-			if (text[i] is '\"') {
+			if (text[i] is '\"' && startOfColumn != i) {
 
 				// invalid quote placement
 				if (!columnHasQuotes) {
 					throw new ArgumentException("Quote in CSV column that is not enclosed by quotes.", nameof(text));
 				}
 
-				// end of the current column
+				// end of the string or the current column
 				if (text.Length == i + 1 || text[i + 1] is ',') {
 					outsideOfQuotes = true;
 					continue;
@@ -115,7 +116,7 @@ public static class TextExtensions {
 		}
 
 		columns.Add(columnHasQuotes
-			? text[(startOfColumn + 1)..].Replace("\"\"", "\"")
+			? text[(startOfColumn + 1)..^2].Replace("\"\"", "\"")
 			: text[startOfColumn..]);
 
 		return columns;

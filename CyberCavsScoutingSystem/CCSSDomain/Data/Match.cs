@@ -3,15 +3,15 @@
 
 
 public enum MatchType {
-	Practice,
-	Qualification,
-	Elimination,
+	Practice = 0,
+	Qualification = 1,
+	Elimination = 2,
 	//QuarterFinal, // Todo add support for old style playoffs and custom tournament formats
 	//SemiFinal,
-	Final
+	Final = 3
 }
 
-public class Match {
+public record Match {
 
 	public required uint MatchNumber { get; init; }
 

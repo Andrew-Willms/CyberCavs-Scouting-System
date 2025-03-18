@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using CCSSDomain.Data;
-using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
@@ -19,7 +18,7 @@ public static class MatchDataToCsv {
 
 	public static string GetCsvHeaders(GameSpec gameSpecification) {
 
-		StringBuilder stringBuilder = new("ScoutName, EventCode, MatchNumber, MatchType, ReplayNumber, AllianceIndex, TeamNumber, StartTime, EndTime,");
+		StringBuilder stringBuilder = new("ScoutName,EventCode,MatchNumber,MatchType,ReplayNumber,AllianceIndex,TeamNumber,StartTime,EndTime,");
 
 		stringBuilder.AppendJoin(",", gameSpecification.DataFields.Select(x => x.Name));
 
@@ -28,7 +27,8 @@ public static class MatchDataToCsv {
 			stringBuilder.Append(',');
 		}
 
-		return stringBuilder.ToString(); }
+		return stringBuilder.ToString();
+	}
 
 	public static string Serialize(MatchData matchData) {
 
@@ -38,7 +38,7 @@ public static class MatchDataToCsv {
 		stringBuilder.Append(',');
 		stringBuilder.Append(matchData.Match.MatchNumber);
 		stringBuilder.Append(',');
-		stringBuilder.Append(matchData.Match.Type);
+		stringBuilder.Append((int)matchData.Match.Type);
 		stringBuilder.Append(',');
 		stringBuilder.Append(matchData.Match.ReplayNumber);
 		stringBuilder.Append(',');
@@ -49,40 +49,38 @@ public static class MatchDataToCsv {
 		stringBuilder.Append(matchData.StartTime.ToString(CultureInfo.InvariantCulture).ToCsvFriendly());
 		stringBuilder.Append(',');
 		stringBuilder.Append(matchData.EndTime.ToString(CultureInfo.InvariantCulture).ToCsvFriendly());
-		stringBuilder.Append(',');
 
 		for (int i = 0; i < matchData.DataFields.Count; i++) {
 
-			if (matchData.GameSpecification.DataFields[i] is SelectionDataFieldSpec selectionDataFieldSpec) {
-
-				Optional<string> optional = matchData.DataFields[i] as Optional ?? throw new UnreachableException();
-
-				if (!optional.HasValue) {
+			switch (matchData.GameSpecification.DataFields[i], matchData.DataFields[i]) {
+				case (BooleanDataFieldSpec, bool value): {
+					stringBuilder.Append(value ? ",1" : ",0");
+					break;
+				}
+				case (TextDataFieldSpec, string value): {
 					stringBuilder.Append(",");
-					continue;
+					stringBuilder.Append(value.ToCsvFriendly());
+					break;
 				}
+				case (IntegerDataFieldSpec, int value): {
+					stringBuilder.Append(",");
+					stringBuilder.Append(value);
+					break;
+				}
+				case (SelectionDataFieldSpec selectionDataFieldSpec, Optional<string> optional): {
 
-				int j;
-				for (j = 0; j < selectionDataFieldSpec.Options.Count; j++) {
-					if (selectionDataFieldSpec.Options[j] == optional.Value) {
-						break;
+					if (!optional.HasValue) {
+						stringBuilder.Append(",");
+						continue;
 					}
+					stringBuilder.Append(",");
+					stringBuilder.Append(selectionDataFieldSpec.Options.ToList().IndexOf(optional.Value)); // todo lazy af
+					break;
 				}
-
-				if (j >= selectionDataFieldSpec.Options.Count) {
+				default:
 					throw new UnreachableException();
-				}
-
-				stringBuilder.Append(j);
-				stringBuilder.Append(",");
-				continue;
 			}
-
-			stringBuilder.Append(matchData.DataFields[i]?.ToString()?.ToCsvFriendly());
-			stringBuilder.Append(",");
 		}
-
-		stringBuilder.Remove(stringBuilder.Length - 1, 1);
 
 		return stringBuilder.ToString();
 	}
@@ -91,7 +89,7 @@ public static class MatchDataToCsv {
 
 		List<string> columns = matchData.SplitTextToCsvColumns();
 
-		if (columns.Count != 9 + gameSpecification.DataFields.Count) {
+		if (columns.Count != 11 + gameSpecification.DataFields.Count) {
 			return null;
 		}
 
@@ -103,63 +101,46 @@ public static class MatchDataToCsv {
 		success &= DateTime.TryParse(columns[7][1..^2], out DateTime startTime);
 		success &= DateTime.TryParse(columns[8][1..^2], out DateTime endTime);
 
-		List<DataField> dataFieldValues = [];
+		if (!success) {
+			return null;
+		}
+
+		List<object> dataFieldValues = [];
 		for (int i = 0; i < gameSpecification.DataFields.Count; i++) {
 
 			string value = columns[i + 9];
 
 			switch (gameSpecification.DataFields[i]) {
 
-				case BooleanDataFieldSpec booleanSpec: {
-
-					if (!bool.TryParse(value, out bool result)) {
-						return null;
+				case BooleanDataFieldSpec:
+					switch (value) {
+						case "1":
+							dataFieldValues.Add(true);
+							continue;
+						case "0":
+							dataFieldValues.Add(false);
+							continue;
+						default:
+							return null;
 					}
 
-					// TODO MatchData class should consume something like a DataFieldResult class?
-					// don't need to be checking if the data is valid once the match is over
-					BooleanDataField booleanDataField = new(booleanSpec) {
-						Value = result
-					};
-
-					if (booleanDataField.Errors.Any()) {
-						return null;
-					}
-
-					dataFieldValues.Add(booleanDataField);
+				case TextDataFieldSpec:
+					dataFieldValues.Add(value);
 					break;
-				}
-				case TextDataFieldSpec textSpec: {
 
-					TextDataField textDataField = new(textSpec) {
-						Value = value
-					};
-
-					if (textDataField.Errors.Any()) {
-						return null;
-					}
-
-					dataFieldValues.Add(textDataField);
-					break;
-				}
-				case IntegerDataFieldSpec integerSpec: {
-
+				case IntegerDataFieldSpec: {
 					if (!int.TryParse(value, out int result)) {
 						return null;
 					}
-
-					IntegerDataField integerDataField = new(integerSpec) {
-						Value = result
-					};
-
-					if (integerDataField.Errors.Any()) {
-						return null;
-					}
-
-					dataFieldValues.Add(integerDataField);
+					dataFieldValues.Add(result);
 					break;
 				}
 				case SelectionDataFieldSpec selectionSpec: {
+
+					if (value == string.Empty) {
+						dataFieldValues.Add(Optional.NoValue);
+						break;
+					}
 
 					if (!int.TryParse(value, out int result)) {
 						return null;
@@ -169,30 +150,15 @@ public static class MatchDataToCsv {
 						return null;
 					}
 
-					SelectionDataField selectionDataField = new(selectionSpec) {
-						Value = value == string.Empty ? Optional<string>.NoValue : selectionSpec.Options[result].Optionalize()
-					};
-
-					if (selectionDataField.Errors.Any()) {
-						return null;
-					}
-
-					dataFieldValues.Add(selectionDataField);
+					dataFieldValues.Add(selectionSpec.Options[result].Optionalize());
 					break;
 				}
 			}
 		}
 
-		ReadOnlyList<DataField> readOnlyDataFields = dataFieldValues.ToReadOnly();
-
-		if (!success) {
-			return null;
-		}
-
-		return new(
-			errorContext: null!,
+		return MatchData.FromRaw(
 			gameSpecification: gameSpecification,
-			eventCode: columns[1],
+			eventCode: columns[1] == string.Empty ? null : columns[1],
 			eventSchedule: null,
 			scoutName: columns[0],
 			match: new() {
@@ -204,7 +170,7 @@ public static class MatchDataToCsv {
 			allianceIndex,
 			startTime,
 			endTime,
-			readOnlyDataFields
+			dataFieldValues.ToReadOnly()
 		);
 	}
 

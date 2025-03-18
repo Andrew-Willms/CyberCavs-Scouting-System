@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
@@ -12,32 +11,28 @@ namespace CCSSDomain.Data;
 
 
 
-public class MatchData {
+public class MatchData : IEquatable<MatchData> {
 
-	public GameSpec GameSpecification { get; }
+	public GameSpec GameSpecification { get; private init; }
 
-	public string? EventCode { get; }
+	public string? EventCode { get; private init; }
 
-	public string ScoutName { get; }
+	public string ScoutName { get; private init; }
 
-	public Match Match { get; }
+	public Match Match { get; private init; }
 
-	public uint TeamNumber { get; }
+	public uint TeamNumber { get; private init; }
 
-	public uint AllianceIndex { get; }
+	public uint AllianceIndex { get; private init; }
 
-	public DateTime StartTime { get; }
-	public DateTime EndTime { get; }
+	public DateTime StartTime { get; private init; }
+	public DateTime EndTime { get; private init; }
 
-	public ReadOnlyList<object?> DataFields { get; }
-
-	// database should have a "has errors" column, errors themselves are stored in a separate table... ???
-	public ReadOnlyList<DomainError> Errors { get; } // todo figure out if this is the right type
+	public ReadOnlyList<object> DataFields { get; private init; }
 
 
 
-	public MatchData(
-		ErrorContext errorContext,
+	private MatchData(
 		GameSpec gameSpecification,
 		string? eventCode,
 		EventSchedule? eventSchedule,
@@ -47,14 +42,7 @@ public class MatchData {
 		uint allianceIndex,
 		DateTime startTime,
 		DateTime endTime,
-		ReadOnlyList<DataField> dataFields) {
-
-		List<DomainError> errors = [];
-
-		ValidateMatch(errors.Add, errorContext, match, teamNumber, eventCode, eventSchedule);
-		ValidateAllianceIndex(errors.Add, errorContext, gameSpecification, allianceIndex);
-		ValidateTimes(errors.Add, errorContext, startTime, endTime);
-		ValidateDataFields(errors.Add, errorContext, gameSpecification, dataFields, out ReadOnlyList<object?> dataFieldResults);
+		ReadOnlyList<object> dataFieldValues) {
 
 		GameSpecification = gameSpecification;
 		EventCode = eventCode;
@@ -64,12 +52,52 @@ public class MatchData {
 		AllianceIndex = allianceIndex;
 		StartTime = startTime;
 		EndTime = endTime;
-		DataFields = dataFieldResults;
-		Errors = errors.ToReadOnly();
+		DataFields = dataFieldValues;
 	}
 
-	public MatchData(
-		ErrorContext errorContext,
+	public static MatchData? FromDataCollector(
+		MatchDataCollector collector,
+		string eventCode,
+		EventSchedule? eventSchedule,
+		string scoutName) {
+
+		List<DomainError> errors = [];
+
+		DateTime endTime = DateTime.Now;
+		Match match = new() {
+			MatchNumber = collector.MatchNumber.Value,
+			ReplayNumber = collector.ReplayNumber.Value,
+			Type = collector.MatchType.Value
+		};
+
+		if (!collector.IsValid) {
+			errors.Add(new MatchDataCollectorInvalid { CollectorErrors = collector.Errors.ToReadOnly() });
+		}
+
+		ValidateMatch(errors.Add, match, collector.TeamNumber.Value, eventCode, eventSchedule);
+		ValidateAllianceIndex(errors.Add, collector.GameSpecification, collector.Alliance.Value);
+		ValidateTimes(errors.Add, collector.StartTime, endTime);
+		ValidateDataFields(errors.Add, collector.GameSpecification, collector.DataFields, out ReadOnlyList<object> dataFieldResults);
+
+		if (errors.Any()) {
+			return null;
+		}
+
+		return new(
+			collector.GameSpecification,
+			eventCode,
+			eventSchedule,
+			scoutName,
+			match,
+			collector.TeamNumber.Value,
+			collector.Alliance.Value,
+			collector.StartTime,
+			endTime,
+			dataFieldResults
+		);
+	}
+
+	public static MatchData? FromRaw(
 		GameSpec gameSpecification,
 		string? eventCode,
 		EventSchedule? eventSchedule,
@@ -83,50 +111,26 @@ public class MatchData {
 
 		List<DomainError> errors = [];
 
-		ValidateMatch(errors.Add, errorContext, match, teamNumber, eventCode, eventSchedule);
-		ValidateAllianceIndex(errors.Add, errorContext, gameSpecification, allianceIndex);
-		ValidateTimes(errors.Add, errorContext, startTime, endTime);
-		ValidateDataFieldValues(errors.Add, errorContext, gameSpecification, dataFieldValues, out ReadOnlyList<object?> dataFieldResults);
+		ValidateMatch(errors.Add, match, teamNumber, eventCode, eventSchedule);
+		ValidateAllianceIndex(errors.Add, gameSpecification, allianceIndex);
+		ValidateTimes(errors.Add, startTime, endTime);
+		ValidateDataFieldValues(errors.Add, gameSpecification, dataFieldValues, out ReadOnlyList<object> dataFieldResults);
 
-		GameSpecification = gameSpecification;
-		EventCode = eventCode;
-		ScoutName = scoutName;
-		Match = match;
-		TeamNumber = teamNumber;
-		AllianceIndex = allianceIndex;
-		StartTime = startTime;
-		EndTime = endTime;
-		DataFields = dataFieldResults;
-		Errors = errors.ToReadOnly();
-	}
-
-	public static MatchData? FromDataCollector(
-		ErrorContext errorContext,
-		MatchDataCollector collector,
-		string eventCode,
-		EventSchedule? eventSchedule,
-		string scout) {
-
-		if (!collector.IsValid) {
-			throw new NotImplementedException();
+		if (errors.Any()) {
+			return null;
 		}
 
 		return new(
-			errorContext,
-			collector.GameSpecification,
+			gameSpecification,
 			eventCode,
 			eventSchedule,
-			scout,
-			new() {
-				MatchNumber = collector.MatchNumber.Value,
-				ReplayNumber = collector.ReplayNumber.Value,
-				Type = collector.MatchType.Value
-			},
-			collector.TeamNumber.Value,
-			collector.Alliance.Value,
-			collector.StartTime,
-			DateTime.Now,
-			collector.DataFields
+			scoutName,
+			match,
+			teamNumber,
+			allianceIndex,
+			startTime,
+			endTime,
+			dataFieldResults
 		);
 	}
 
@@ -134,7 +138,6 @@ public class MatchData {
 
 	private static void ValidateMatch(
 		Action<DomainError> errorSink,
-		ErrorContext errorContext,
 		Match match,
 		uint teamNumber,
 		string? eventCode,
@@ -145,10 +148,10 @@ public class MatchData {
 		}
 
 		if (eventCode is null) {
-			errorSink(new EventScheduleButNoEventCode(errorContext));
+			errorSink(new EventScheduleButNoEventCode());
 
 		} else if (eventCode != eventSchedule.EventCode) {
-			errorSink(new EventCodeAndScheduleDoNotMatch(errorContext, eventCode, eventSchedule.EventCode));
+			errorSink(new EventCodeAndScheduleMismatch { EventCode = eventCode, ScheduleEventCode = eventSchedule.EventCode });
 		}
 
 		// todo this will need to be updated to support other tournament formats
@@ -160,19 +163,31 @@ public class MatchData {
 			case MatchType.Qualification:
 				uint matchCount = (uint)eventSchedule.QualificationMatches.Count;
 				if (match.MatchNumber > matchCount) {
-					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, matchCount, MatchType.Qualification) );
+					errorSink(new BadMatchNumberError {
+						MatchNumber = match.MatchNumber,
+						MaxMatchNumber = matchCount,
+						MatchType = MatchType.Qualification
+					});
 				}
 				break;
 
 			case MatchType.Elimination:
 				if (match.MatchNumber > 13) {
-					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, 13, MatchType.Elimination));
+					errorSink(new BadMatchNumberError {
+						MatchNumber = match.MatchNumber,
+						MaxMatchNumber = 13,
+						MatchType = MatchType.Elimination
+					});
 				}
 				break;
 
 			case MatchType.Final:
 				if (match.MatchNumber > 3) {
-					errorSink(new MatchNumberOutOfRange(errorContext, match.MatchNumber, 3, MatchType.Elimination));
+					errorSink(new BadMatchNumberError {
+						MatchNumber = match.MatchNumber,
+						MaxMatchNumber = 3,
+						MatchType = MatchType.Final
+					});
 				}
 				break;
 
@@ -181,7 +196,7 @@ public class MatchData {
 		}
 
 		if (!eventSchedule.Teams.Contains(teamNumber)) {
-			errorSink(new TeamNotInMatch(errorContext, teamNumber));
+			errorSink(new TeamNotInMatch { Team = teamNumber });
 		}
 
 		// todo validate start time and end time against event?
@@ -189,34 +204,34 @@ public class MatchData {
 
 	private static void ValidateAllianceIndex(
 		Action<DomainError> errorSink,
-		ErrorContext errorContext,
 		GameSpec gameSpecification,
 		uint allianceIndex) {
 
 		if (gameSpecification.Alliances.Count <= allianceIndex) {
-			errorSink(new AllianceIndexOutOfRangeError(errorContext, allianceIndex, gameSpecification.AlliancesPerMatch - 1));
+			errorSink(new BadAllianceIndex {
+				AllianceIndex = allianceIndex,
+				MaxAllianceIndex = gameSpecification.AlliancesPerMatch - 1
+			});
 		}
 	}
 
 	private static void ValidateTimes(
 		Action<DomainError> errorSink,
-		ErrorContext errorContext,
 		DateTime startTime,
 		DateTime endTime) {
 
 		if (endTime < startTime) {
-			errorSink(new StartTimeAfterEndTime(errorContext, startTime, endTime));
+			errorSink(new StartAfterEnd { StartTime = startTime, EndTime = endTime });
 		}
 	}
 
 	private static void ValidateDataFields(
 		Action<DomainError> errorSink,
-		ErrorContext errorContext,
 		GameSpec gameSpec,
 		ReadOnlyList<DataField> dataFields,
-		out ReadOnlyList<object?> dataFieldResults) {
+		out ReadOnlyList<object> dataFieldResults) {
 
-		List<object?> results = [];
+		List<object> results = [];
 
 		for (int index = 0; index < gameSpec.DataFields.Count; index++) {
 
@@ -225,14 +240,17 @@ public class MatchData {
 			DataField receivedField = dataFields[index];
 			DataFieldSpec receivedFieldSpec = receivedField.Specification;
 
-			if (expectedFieldSpec == receivedFieldSpec) {
-				results.Add(receivedField.BaseValue);
+			if (expectedFieldSpec != receivedFieldSpec) {
+				errorSink(DataFieldMismatch.Create(expectedFieldSpec, receivedFieldSpec, receivedField.BaseValue) ?? throw new UnreachableException());
 				continue;
 			}
 
-			errorSink(
-				DataFieldMismatch.Create(errorContext, expectedFieldSpec, receivedFieldSpec, receivedField.BaseValue) 
-				?? throw new UnreachableException());
+			if (receivedField.Errors.Any()) {
+				errorSink(DataFieldMismatch.Create(expectedFieldSpec, receivedFieldSpec, receivedField.BaseValue) ?? throw new UnreachableException());
+				continue;
+			}
+
+			results.Add(receivedField.BaseValue);
 		}
 
 		dataFieldResults = results.ToReadOnly();
@@ -240,12 +258,11 @@ public class MatchData {
 
 	private static void ValidateDataFieldValues(
 		Action<DomainError> errorSink,
-		ErrorContext errorContext,
 		GameSpec gameSpec,
 		ReadOnlyList<object> dataFieldValues,
-		out ReadOnlyList<object?> dataFieldResults) {
+		out ReadOnlyList<object> dataFieldResults) {
 
-		List<object?> results = [];
+		List<object> results = [];
 
 		for (int index = 0; index < gameSpec.DataFields.Count; index++) {
 
@@ -260,145 +277,65 @@ public class MatchData {
 				continue;
 			}
 
-			errorSink(
-				DataTypeMismatch.Create(errorContext, expectedFieldSpec, dataFieldValues[index].GetType(), dataFieldValues[index])
-				?? throw new UnreachableException());
+			errorSink(new DataTypeMismatch { ExpectedDataField = expectedFieldSpec, Value = dataFieldValues[index] });
 		}
 
 		dataFieldResults = results.ToReadOnly();
 	}
 
-}
 
 
+	public bool Equals(MatchData? other) {
 
-public class EventScheduleButNoEventCode : DomainError {
-
-	[SetsRequiredMembers]
-	public EventScheduleButNoEventCode(ErrorContext errorContext) : base(errorContext) { }
-
-}
-
-public class EventCodeAndScheduleDoNotMatch : DomainError {
-
-	public string EventCode { get; }
-
-	public string ScheduleEventCode { get; }
-
-	[SetsRequiredMembers]
-	public EventCodeAndScheduleDoNotMatch(ErrorContext errorContext, string eventCode, string scheduleEventCode) : base(errorContext) {
-
-		EventCode = eventCode;
-		ScheduleEventCode = scheduleEventCode;
-	}
-
-}
-
-public class MatchNumberOutOfRange : DomainError {
-
-	public uint MatchNumber { get; }
-
-	public uint MaxMatchNumber { get; }
-
-	public MatchType MatchType { get; }
-
-	[SetsRequiredMembers]
-	public MatchNumberOutOfRange(ErrorContext errorContext, uint matchNumber, uint maxMatchNumber, MatchType matchType) : base(errorContext) {
-
-		MatchNumber = matchNumber;
-		MaxMatchNumber = maxMatchNumber;
-		MatchType = matchType;
-	}
-
-}
-
-public class TeamNotInMatch : DomainError {
-
-	public uint Team { get; }
-
-	[SetsRequiredMembers]
-	public TeamNotInMatch(ErrorContext errorContext, uint team) : base(errorContext) {
-		Team = team;
-	}
-
-}
-
-public class AllianceIndexOutOfRangeError : DomainError {
-
-	public uint AllianceIndex { get; }
-
-	public uint MaxAllianceIndex { get; }
-
-	[SetsRequiredMembers]
-	public AllianceIndexOutOfRangeError(ErrorContext errorContext, uint allianceIndex, uint maxAllianceIndex) : base(errorContext) {
-
-		AllianceIndex = allianceIndex;
-		MaxAllianceIndex = maxAllianceIndex;
-	}
-
-}
-
-public class StartTimeAfterEndTime : DomainError {
-
-	public DateTime StartTime { get; }
-
-	public DateTime EndTime { get; }
-
-	[SetsRequiredMembers]
-	public StartTimeAfterEndTime(ErrorContext errorContext, DateTime startTime, DateTime endTime) : base(errorContext) {
-
-		StartTime = startTime;
-		EndTime = endTime;
-	}
-
-}
-
-public class DataFieldMismatch : DomainError {
-
-	public DataFieldSpec ExpectedDataField { get; }
-
-	public DataFieldSpec ReceivedDataField { get; }
-
-	public object Value { get; }
-
-	[SetsRequiredMembers]
-	private DataFieldMismatch(ErrorContext errorContext, DataFieldSpec expectedDataField, DataFieldSpec receivedDataField, object value) : base(errorContext) {
-
-		ExpectedDataField = expectedDataField;
-		ReceivedDataField = receivedDataField;
-		Value = value;
-	}
-
-	public static DataFieldMismatch? Create(ErrorContext errorContext, DataFieldSpec expectedDataField, DataFieldSpec receivedDataField, object value) {
-
-		if (expectedDataField == receivedDataField) {
-			return null;
+		if (other is null) {
+			return false;
 		}
 
-		return new(errorContext, expectedDataField, receivedDataField, value);
+		if (ReferenceEquals(this, other)) {
+			return true;
+		}
+
+		return 
+			GameSpecification.Equals(other.GameSpecification) &&
+		    EventCode == other.EventCode &&
+		    ScoutName == other.ScoutName &&
+		    Match.Equals(other.Match) &&
+		    TeamNumber == other.TeamNumber &&
+		    AllianceIndex == other.AllianceIndex &&
+		    StartTime.Equals(other.StartTime) &&
+		    EndTime.Equals(other.EndTime) &&
+		    DataFields.SequenceEqual(other.DataFields);
 	}
 
-}
+	public override bool Equals(object? @object) {
 
-public class DataTypeMismatch : DomainError {
+		if (@object is null) {
+			return false;
+		}
 
-	public DataFieldSpec ExpectedDataField { get; }
+		if (ReferenceEquals(this, @object)) {
+			return true;
+		}
 
-	public Type ReceivedType { get; }
+		if (@object.GetType() != GetType()) {
+			return false;
+		}
 
-	public object Value { get; }
-
-	[SetsRequiredMembers]
-	private DataTypeMismatch(ErrorContext errorContext, DataFieldSpec expectedDataField, Type receivedType, object value) : base(errorContext) {
-
-		ExpectedDataField = expectedDataField;
-		ReceivedType = receivedType;
-		Value = value;
+		return Equals((MatchData) @object);
 	}
 
-	public static DataTypeMismatch? Create(ErrorContext errorContext, DataFieldSpec expectedDataField, Type receivedType, object value) {
-
-		return new(errorContext, expectedDataField, receivedType, value);
+	public override int GetHashCode() {
+		HashCode hashCode = new();
+		hashCode.Add(GameSpecification);
+		hashCode.Add(EventCode);
+		hashCode.Add(ScoutName);
+		hashCode.Add(Match);
+		hashCode.Add(TeamNumber);
+		hashCode.Add(AllianceIndex);
+		hashCode.Add(StartTime);
+		hashCode.Add(EndTime);
+		hashCode.Add(DataFields);
+		return hashCode.ToHashCode();
 	}
 
 }

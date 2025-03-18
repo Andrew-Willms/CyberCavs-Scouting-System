@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using CCSSDomain.DataCollectors;
 using UtilitiesLibrary.Collections;
-using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Results;
 
 namespace CCSSDomain.GameSpecification;
@@ -169,4 +166,5 @@ public class GameSpec : IEquatable<GameSpec> {
 		EndgameTabInputs.Foreach(inputSpec => hashCode.Add(inputSpec));
 		return hashCode.ToHashCode();
 	}
+
 }

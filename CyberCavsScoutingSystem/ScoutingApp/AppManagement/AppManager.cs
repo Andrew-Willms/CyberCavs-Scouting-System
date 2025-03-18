@@ -164,13 +164,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		string deviceId = null as string ?? throw new NotSupportedException();
 #endif
 
-		ErrorContext errorContext = new() {
-			DeviceId = deviceId,
-			DeviceName = DeviceInfo.Current.Name,
-			Scout = Scout
-		};
-
-		MatchData? matchData = MatchData.FromDataCollector(errorContext, ActiveMatchData, EventCode, EventSchedule, Scout);
+		MatchData? matchData = MatchData.FromDataCollector(ActiveMatchData, EventCode, EventSchedule, Scout);
 
 		if (matchData is null) {
 			throw new NotImplementedException();

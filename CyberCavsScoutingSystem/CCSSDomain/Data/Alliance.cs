@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UtilitiesLibrary.Collections;
 
@@ -25,20 +24,19 @@ public class Alliance {
 
 	public static Alliance Create(
 		Action<DomainError> errorSink,
-		ErrorContext errorContext,
 		uint allianceIndex,
 		ReadOnlyList<uint> teams,
 		ReadOnlyList<uint>? surrogates) {
 
 		ReadOnlyList<uint> duplicates = teams.Duplicates().ToReadOnly();
 		if (duplicates.Any()) {
-			errorSink(DuplicateTeamInAlliance.Create(errorContext, duplicates) ?? throw new UnreachableException());
+			errorSink(DuplicateTeam.Create(duplicates) ?? throw new UnreachableException());
 		}
 
 		if (surrogates is not null) {
 			foreach (uint surrogate in surrogates) {
 				if (!teams.Contains(surrogate)) {
-					errorSink(new SurrogateNotPlayingInMatchError(errorContext, surrogate));
+					errorSink(new SurrogateNotInMatch { Surrogate = surrogate });
 				}
 			}
 		}
@@ -48,35 +46,24 @@ public class Alliance {
 
 }
 
-public class DuplicateTeamInAlliance : DomainError {
+public class DuplicateTeam : DomainError {
 
 	public ReadOnlyList<uint> Duplicates { get; }
 
-	[SetsRequiredMembers]
-	private DuplicateTeamInAlliance(ErrorContext errorContext, ReadOnlyList<uint> duplicates) : base(errorContext) {
+	private DuplicateTeam(ReadOnlyList<uint> duplicates) {
 
 		Duplicates = duplicates;
 	}
 
-	public static DuplicateTeamInAlliance? Create(ErrorContext errorContext, ReadOnlyList<uint> duplicates) {
+	public static DuplicateTeam? Create(ReadOnlyList<uint> duplicates) {
 
-		if (duplicates.Count == 0) {
-			return null;
-		}
-
-		return new(errorContext, duplicates);
+		return duplicates.Count == 0 ? null : new(duplicates);
 	}
 
 }
 
-public class SurrogateNotPlayingInMatchError : DomainError {
+public class SurrogateNotInMatch : DomainError {
 
-	public uint Surrogate { get; }
-
-	[SetsRequiredMembers]
-	public SurrogateNotPlayingInMatchError(ErrorContext error, uint surrogate) : base(error) {
-
-		Surrogate = surrogate;
-	}
+	public required uint Surrogate { get; init; }
 
 }
