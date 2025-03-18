@@ -163,7 +163,7 @@ public class SqliteDataStore : IDataStore {
 				new IntegerDataFieldSpec { Name = "Tele Algae Processor", InitialValue = 0, MinValue = 0, MaxValue = 255 },
 				new SelectionDataFieldSpec {
 					Name = "Climb",
-					Options = new List<string> { "None", "Deep", "Shallow" }.ToReadOnly(),
+					Options = new List<string> { "None", "Deep", "Shallow", "Failed" }.ToReadOnly(),
 					InitialValue = "None", 
 					RequiresValue = true
 				},
