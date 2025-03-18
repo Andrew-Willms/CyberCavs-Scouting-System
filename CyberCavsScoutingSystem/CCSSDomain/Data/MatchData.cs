@@ -6,6 +6,7 @@ using System.Linq;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
 using UtilitiesLibrary.Collections;
+using UtilitiesLibrary.Optional;
 
 namespace CCSSDomain.Data;
 
@@ -13,29 +14,28 @@ namespace CCSSDomain.Data;
 
 public class MatchData {
 
-	public required GameSpec GameSpecification { get; init; }
+	public GameSpec GameSpecification { get; }
 
-	public string? EventCode { get; init; }
+	public string? EventCode { get; }
 
-	public required string ScoutName { get; init; }
+	public string ScoutName { get; }
 
-	public required Match Match { get; init; }
+	public Match Match { get; }
 
-	public required uint TeamNumber { get; init; }
+	public uint TeamNumber { get; }
 
-	public required uint AllianceIndex { get; init; }
+	public uint AllianceIndex { get; }
 
-	public required DateTime StartTime { get; init; }
-	public required DateTime EndTime { get; init; }
+	public DateTime StartTime { get; }
+	public DateTime EndTime { get; }
 
-	public required ReadOnlyList<object?> DataFields { get; init; }
+	public ReadOnlyList<object?> DataFields { get; }
 
 	// database should have a "has errors" column, errors themselves are stored in a separate table... ???
-	public required ReadOnlyList<DomainError> Errors { get; init; } // todo figure out if this is the right type
+	public ReadOnlyList<DomainError> Errors { get; } // todo figure out if this is the right type
 
 
 
-	[SetsRequiredMembers]
 	public MatchData(
 		ErrorContext errorContext,
 		GameSpec gameSpecification,
@@ -55,6 +55,38 @@ public class MatchData {
 		ValidateAllianceIndex(errors.Add, errorContext, gameSpecification, allianceIndex);
 		ValidateTimes(errors.Add, errorContext, startTime, endTime);
 		ValidateDataFields(errors.Add, errorContext, gameSpecification, dataFields, out ReadOnlyList<object?> dataFieldResults);
+
+		GameSpecification = gameSpecification;
+		EventCode = eventCode;
+		ScoutName = scoutName;
+		Match = match;
+		TeamNumber = teamNumber;
+		AllianceIndex = allianceIndex;
+		StartTime = startTime;
+		EndTime = endTime;
+		DataFields = dataFieldResults;
+		Errors = errors.ToReadOnly();
+	}
+
+	public MatchData(
+		ErrorContext errorContext,
+		GameSpec gameSpecification,
+		string? eventCode,
+		EventSchedule? eventSchedule,
+		string scoutName,
+		Match match,
+		uint teamNumber,
+		uint allianceIndex,
+		DateTime startTime,
+		DateTime endTime,
+		ReadOnlyList<object> dataFieldValues) {
+
+		List<DomainError> errors = [];
+
+		ValidateMatch(errors.Add, errorContext, match, teamNumber, eventCode, eventSchedule);
+		ValidateAllianceIndex(errors.Add, errorContext, gameSpecification, allianceIndex);
+		ValidateTimes(errors.Add, errorContext, startTime, endTime);
+		ValidateDataFieldValues(errors.Add, errorContext, gameSpecification, dataFieldValues, out ReadOnlyList<object?> dataFieldResults);
 
 		GameSpecification = gameSpecification;
 		EventCode = eventCode;
@@ -206,6 +238,36 @@ public class MatchData {
 		dataFieldResults = results.ToReadOnly();
 	}
 
+	private static void ValidateDataFieldValues(
+		Action<DomainError> errorSink,
+		ErrorContext errorContext,
+		GameSpec gameSpec,
+		ReadOnlyList<object> dataFieldValues,
+		out ReadOnlyList<object?> dataFieldResults) {
+
+		List<object?> results = [];
+
+		for (int index = 0; index < gameSpec.DataFields.Count; index++) {
+
+			DataFieldSpec expectedFieldSpec = gameSpec.DataFields[index];
+
+			if (expectedFieldSpec is BooleanDataFieldSpec && dataFieldValues[index] is bool ||
+				expectedFieldSpec is TextDataFieldSpec && dataFieldValues[index] is string ||
+				expectedFieldSpec is IntegerDataFieldSpec && dataFieldValues[index] is int ||
+				expectedFieldSpec is SelectionDataFieldSpec && dataFieldValues[index] is Optional<string>) {
+
+				results.Add(dataFieldValues[index]);
+				continue;
+			}
+
+			errorSink(
+				DataTypeMismatch.Create(errorContext, expectedFieldSpec, dataFieldValues[index].GetType(), dataFieldValues[index])
+				?? throw new UnreachableException());
+		}
+
+		dataFieldResults = results.ToReadOnly();
+	}
+
 }
 
 
@@ -314,6 +376,29 @@ public class DataFieldMismatch : DomainError {
 		}
 
 		return new(errorContext, expectedDataField, receivedDataField, value);
+	}
+
+}
+
+public class DataTypeMismatch : DomainError {
+
+	public DataFieldSpec ExpectedDataField { get; }
+
+	public Type ReceivedType { get; }
+
+	public object Value { get; }
+
+	[SetsRequiredMembers]
+	private DataTypeMismatch(ErrorContext errorContext, DataFieldSpec expectedDataField, Type receivedType, object value) : base(errorContext) {
+
+		ExpectedDataField = expectedDataField;
+		ReceivedType = receivedType;
+		Value = value;
+	}
+
+	public static DataTypeMismatch? Create(ErrorContext errorContext, DataFieldSpec expectedDataField, Type receivedType, object value) {
+
+		return new(errorContext, expectedDataField, receivedType, value);
 	}
 
 }

@@ -11,11 +11,17 @@ using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Optional;
 
-namespace CCSSDomain.Protocols;
+namespace CCSSDomain.Serialization;
 
 
 
-public static class MatchDataProtocolV1 {
+public static class MatchDataToCsv {
+
+	public static string GetCsvHeaders(GameSpec gameSpecification) {
+
+		// todo
+		return """ScoutName,EventCode,MatchNumber,MatchType,ReplayNumber,AllianceIndex,TeamNumber,StartTime,EndTime,"Auto L1 Coral","Auto L2 Coral","Auto L3 Coral","Auto L4 Coral","Auto Algae Net","Auto Algae Processor","Tele L1 Coral","Tele L2 Coral","Tele L3 Coral","Tele L4 Coral","Tele Algae Net","Tele Algae Processor","Climb","Disconnected","Defense","Comments""";
+	}
 
 	public static string Serialize(MatchData matchData) {
 
@@ -25,9 +31,9 @@ public static class MatchDataProtocolV1 {
 		stringBuilder.Append(',');
 		stringBuilder.Append(matchData.Match.MatchNumber);
 		stringBuilder.Append(',');
-		stringBuilder.Append(matchData.Match.ReplayNumber);
-		stringBuilder.Append(',');
 		stringBuilder.Append(matchData.Match.Type);
+		stringBuilder.Append(',');
+		stringBuilder.Append(matchData.Match.ReplayNumber);
 		stringBuilder.Append(',');
 		stringBuilder.Append(matchData.AllianceIndex);
 		stringBuilder.Append(',');

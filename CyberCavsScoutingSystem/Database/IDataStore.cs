@@ -1,6 +1,6 @@
 ﻿using CCSSDomain.Data;
 using CCSSDomain.GameSpecification;
-using CCSSDomain.Protocols;
+using CCSSDomain.Serialization;
 
 namespace Database;
 

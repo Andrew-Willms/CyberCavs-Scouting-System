@@ -2,7 +2,7 @@
 using System.Drawing;
 using CCSSDomain.Data;
 using CCSSDomain.GameSpecification;
-using CCSSDomain.Protocols;
+using CCSSDomain.Serialization;
 using Microsoft.Data.Sqlite;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
@@ -220,7 +220,7 @@ public class SqliteDataStore : IDataStore {
 
 		GameSpec gameSpec = (await GetGameSpecs()).FirstOrDefault() ?? throw new UnreachableException(); // todo
 
-		List<MatchDataDto> matchData = [];
+		List<MatchDataDto> allMatchData = [];
 		while (reader.Read()) {
 
 			string deviceId = reader.GetString(0);
@@ -228,13 +228,13 @@ public class SqliteDataStore : IDataStore {
 			string serializedMatch = reader.GetString(2);
 			int editOfId = reader.GetInt32(3);
 
-			MatchData? data = MatchDataProtocolV1.Deserialize(serializedMatch, gameSpec);
+			MatchData? data = MatchDataToCsv.Deserialize(serializedMatch, gameSpec);
 
 			if (data is null) {
 				return null; // todo
 			}
 
-			matchData.Add(new() {
+			allMatchData.Add(new() {
 				MatchData = data, 
 				DeviceId = deviceId,
 				UnifiedRecordId = recordId,
@@ -242,12 +242,21 @@ public class SqliteDataStore : IDataStore {
 			});
 		}
 
-		return matchData;
+		allMatchData.Sort((left, right) => {
+
+			if (left.MatchData.EventCode != right.MatchData.EventCode) {
+
+			}
+			// todo
+			return 1;
+		});
+
+		return allMatchData;
 	}
 
 	public async Task<bool> AddNewMatchData(MatchDataDto matchData) {
 
-		string data = MatchDataProtocolV1.Serialize(matchData.MatchData).Replace("\'", "\'\'");
+		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
 
 		// it's scuffed that I have to call WITH AS twice but I can't find a workaround
 		// CTEs can only be consumed by a singled query.

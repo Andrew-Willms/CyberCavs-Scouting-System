@@ -109,25 +109,6 @@ public class GameSpec : IEquatable<GameSpec> {
 		};
 	}
 
-	// todo probably move somewhere else
-	public string GetCsvHeaders() {
-
-		StringBuilder columnHeaders = new(
-			$"{"Scout".ToCsvFriendly()}," +
-			$"{"Event".ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.MatchNumber).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.ReplayNumber).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.MatchType).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.Alliance).ToCsvFriendly()}," +
-			$"{nameof(MatchDataCollector.TeamNumber).ToCsvFriendly()},"// +
-			//$"{nameof(MatchDataCollector.Time).ToCsvFriendly()}," // todo figure this out
-		);
-
-		DataFields.Foreach(x => columnHeaders.Append($"{x.Name.ToCsvFriendly()},"));
-
-		return columnHeaders.ToString();
-	}
-
 
 
 	public bool Equals(GameSpec? other) {
