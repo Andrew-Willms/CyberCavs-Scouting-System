@@ -46,9 +46,9 @@ public static class MatchDataToCsv {
 		stringBuilder.Append(',');
 		stringBuilder.Append(matchData.TeamNumber);
 		stringBuilder.Append(',');
-		stringBuilder.Append(matchData.StartTime.ToString(CultureInfo.InvariantCulture).ToCsvFriendly());
+		stringBuilder.Append(matchData.StartTime.ToString("o").ToCsvFriendly());
 		stringBuilder.Append(',');
-		stringBuilder.Append(matchData.EndTime.ToString(CultureInfo.InvariantCulture).ToCsvFriendly());
+		stringBuilder.Append(matchData.EndTime.ToString("o").ToCsvFriendly());
 
 		for (int i = 0; i < matchData.DataFields.Count; i++) {
 
@@ -89,17 +89,17 @@ public static class MatchDataToCsv {
 
 		List<string> columns = matchData.SplitTextToCsvColumns();
 
-		if (columns.Count != 11 + gameSpecification.DataFields.Count) {
+		if (columns.Count != 9 + gameSpecification.DataFields.Count) {
 			return null;
 		}
 
-		bool success = Enum.TryParse(columns[4], out MatchType type);
+		bool success = Enum.TryParse(columns[3], out MatchType type);
 		success &= uint.TryParse(columns[2], out uint matchNumber);
-		success &= uint.TryParse(columns[3], out uint replayNumber);
+		success &= uint.TryParse(columns[4], out uint replayNumber);
 		success &= uint.TryParse(columns[6], out uint teamNumber);
 		success &= uint.TryParse(columns[5], out uint allianceIndex);
-		success &= DateTime.TryParse(columns[7][1..^2], out DateTime startTime);
-		success &= DateTime.TryParse(columns[8][1..^2], out DateTime endTime);
+		success &= DateTime.TryParse(columns[7], out DateTime startTime);
+		success &= DateTime.TryParse(columns[8], out DateTime endTime);
 
 		if (!success) {
 			return null;

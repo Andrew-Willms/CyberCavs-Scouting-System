@@ -14,7 +14,7 @@ public class MatchDataToCsvTests {
 		string serialized = MatchDataToCsv.Serialize(matchData);
 		MatchData? deserialized = MatchDataToCsv.Deserialize(serialized, SampleData.GameSpec);
 
-		Assert.Equal(matchData, deserialized);
+		Assert.True(matchData.Equals(deserialized));
 	}
 
 }

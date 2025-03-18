@@ -295,16 +295,55 @@ public class MatchData : IEquatable<MatchData> {
 			return true;
 		}
 
-		return 
+		if (DataFields.Count != other.DataFields.Count) {
+			return false;
+		}
+
+		for (int i = 0; i < DataFields.Count; i++) {
+
+			object value = DataFields[i];
+			object otherValue = other.DataFields[i];
+
+			switch (value) {
+
+				case Optional<string> optional:
+					if (otherValue is not Optional<string> otherOptional || optional != otherOptional) {
+						return false;
+					}
+					break;
+
+				case bool boolean:
+					if (otherValue is not bool otherBool || boolean != otherBool) {
+						return false;
+					}
+					break;
+
+				case string text:
+					if (otherValue is not string otherText || otherText != text) {
+						return false;
+					}
+					break;
+
+				case int integer:
+					if (otherValue is not int otherInt || integer != otherInt) {
+						return false;
+					}
+					break;
+
+				default:
+					throw new UnreachableException();
+			}
+		}
+
+		return
 			GameSpecification.Equals(other.GameSpecification) &&
-		    EventCode == other.EventCode &&
-		    ScoutName == other.ScoutName &&
-		    Match.Equals(other.Match) &&
-		    TeamNumber == other.TeamNumber &&
-		    AllianceIndex == other.AllianceIndex &&
-		    StartTime.Equals(other.StartTime) &&
-		    EndTime.Equals(other.EndTime) &&
-		    DataFields.SequenceEqual(other.DataFields);
+			EventCode == other.EventCode &&
+			ScoutName == other.ScoutName &&
+			Match.Equals(other.Match) &&
+			TeamNumber == other.TeamNumber &&
+			AllianceIndex == other.AllianceIndex &&
+			StartTime.Equals(other.StartTime) &&
+			EndTime.Equals(other.EndTime);
 	}
 
 	public override bool Equals(object? @object) {

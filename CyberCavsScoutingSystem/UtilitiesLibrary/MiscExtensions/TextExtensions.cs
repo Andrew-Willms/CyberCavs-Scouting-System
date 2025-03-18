@@ -116,7 +116,7 @@ public static class TextExtensions {
 		}
 
 		columns.Add(columnHasQuotes
-			? text[(startOfColumn + 1)..^2].Replace("\"\"", "\"")
+			? text[(startOfColumn + 1)..^1].Replace("\"\"", "\"")
 			: text[startOfColumn..]);
 
 		return columns;

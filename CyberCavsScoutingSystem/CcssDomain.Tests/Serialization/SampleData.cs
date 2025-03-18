@@ -91,7 +91,7 @@ public class SampleData : IEnumerable<object[]> {
 		[ 
 			MatchData.FromRaw(
 			gameSpecification: GameSpec, 
-			eventCode: "",
+			eventCode: null,
 			eventSchedule: null,
 			scoutName: "ScoutName",
 			match: new() { MatchNumber = 1, Type = MatchType.Qualification, ReplayNumber = 0 },
