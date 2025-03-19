@@ -3,6 +3,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
+			 xmlns:system="clr-namespace:System;assembly=System.Runtime"
+			 xmlns:behaviors="clr-namespace:ScoutingApp.Views.Behaviors"
 			 x:Class="ScoutingApp.Views.Pages.Flyout.EditMatchPage"
 			 x:DataType="flyout:EditMatchPage">
 
@@ -18,10 +20,99 @@
 		<ToolbarItem Text="Cancel" Clicked="CancelButton_OnClicked"/>
 	</ContentPage.ToolbarItems>
 
-	<VerticalStackLayout
-		Margin="10"
-		Spacing="10">
+	<ScrollView Orientation="Both" HorizontalOptions="Fill">
 
-	</VerticalStackLayout>
+		<VerticalStackLayout
+			Margin="10"
+			Spacing="10"
+			HorizontalOptions="Fill">
+
+			<Grid ColumnSpacing="10"
+			      HorizontalOptions="Fill">
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="1*"/>
+				</Grid.ColumnDefinitions>
+
+				<Label
+					Text="Match Number"
+					VerticalOptions="Center"
+					Grid.Column="0"/>
+
+				<Entry
+					Text="{Binding Path=MatchNumber}"
+					Keyboard="Numeric"
+					Grid.Column="1">
+
+					<Entry.Behaviors>
+						<behaviors:DigitOnlyBehavior/>
+					</Entry.Behaviors>
+
+				</Entry>
+
+			</Grid>
+
+			<Grid ColumnSpacing="10">
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="1*"/>
+				</Grid.ColumnDefinitions>
+
+				<Label
+					Text="Replay Number"
+					VerticalOptions="Center"
+					Grid.Column="0"/>
+
+				<Entry
+					Text="{Binding Path=ReplayNumber}"
+					Keyboard="Numeric"
+					Grid.Column="1">
+
+					<Entry.Behaviors>
+						<behaviors:DigitOnlyBehavior/>
+					</Entry.Behaviors>
+
+				</Entry>
+
+			</Grid>
+
+			<CollectionView
+				ItemsSource="{Binding Path=Inputs}"
+				ItemTemplate="{StaticResource InputDataTemplateSelector}">
+
+				<CollectionView.ItemsLayout>
+
+					<GridItemsLayout
+						Orientation="Vertical"
+						Span="1"
+						VerticalItemSpacing="10"/>
+
+				</CollectionView.ItemsLayout>
+
+			</CollectionView>
+
+			<CollectionView
+				ItemsSource="{Binding Path=Errors}">
+
+				<CollectionView.ItemsLayout>
+					<LinearItemsLayout Orientation="Vertical"
+									   ItemSpacing="10" />
+				</CollectionView.ItemsLayout>
+
+				<CollectionView.ItemTemplate>
+					<DataTemplate x:DataType="system:String">
+						<HorizontalStackLayout>
+							<Label Text="{Binding}"/>
+						</HorizontalStackLayout>
+					</DataTemplate>
+				</CollectionView.ItemTemplate>
+
+			</CollectionView>
+
+		</VerticalStackLayout>
+
+	</ScrollView>
 
 </ContentPage>

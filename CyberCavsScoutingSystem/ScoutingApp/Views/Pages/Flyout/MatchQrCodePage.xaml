@@ -16,7 +16,7 @@
 	</ContentPage.Title>
 
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="Edit" Clicked="EditButton_OnClick"/>
+		<!--<ToolbarItem Text="Edit" Clicked="EditButton_OnClick"/>-->
 		<ToolbarItem Text="Delete" Clicked="DeleteButton_OnClicked"/>
 	</ContentPage.ToolbarItems>
 
