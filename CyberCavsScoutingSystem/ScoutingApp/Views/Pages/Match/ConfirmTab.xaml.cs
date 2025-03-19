@@ -18,6 +18,8 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 	private IAppManager AppManager { get; }
 
+	private IErrorPresenter ErrorPresenter { get; }
+
 	public ObservableCollection<string> Errors {
 		get {
 
@@ -65,9 +67,10 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 
 
-	public ConfirmTab(IAppManager appManager) {
+	public ConfirmTab(IAppManager appManager, IErrorPresenter errorPresenter) {
 
 		AppManager = appManager;
+		ErrorPresenter = errorPresenter;
 
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(""));
 
@@ -83,12 +86,28 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 	private async void SaveButton_OnClicked(object? sender, EventArgs e) {
 
-		await AppManager.SaveMatchData();
+		bool success = await AppManager.SaveAndStartNewMatch();
+
+		if (!success) {
+			ErrorPresenter.DisplayError("Cannot Save Match", "Cannot Save Match"); // todo better error
+			return;
+		}
 
 		await Shell.Current.GoToAsync($"//{SavedMatchesPage.Route}");
 	}
 
-	private void DiscardButton_OnClicked(object? sender, EventArgs e) {
+	private async void DiscardButton_OnClicked(object? sender, EventArgs e) {
+
+		bool discard = await Shell.Current.DisplayAlert(
+			"Discard Current Match?",
+			"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
+			"Discard and start new match.",
+			"Continue with current match.");
+
+		if (!discard) {
+			return;
+		}
+
 		AppManager.DiscardAndStartNewMatch();
 	}
 

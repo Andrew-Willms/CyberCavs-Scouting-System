@@ -463,7 +463,6 @@ public class SqliteDataStore : IDataStore {
 
 }
 
-
 // todo: enable the game maker to define migrations from one version of a game to another
 
 // errors column

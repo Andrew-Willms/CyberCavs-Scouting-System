@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using CCSSDomain.Data;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
+using CCSSDomain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
@@ -29,15 +29,15 @@ public interface IAppManager : INotifyPropertyChanged {
 
 	public Task ApplicationStartup();
 
-	public Task SaveMatchData();
+	public Task<bool> SaveAndStartNewMatch();
 
-	public Task DiscardAndStartNewMatch();
+	public void DiscardAndStartNewMatch();
 
 	public Event OnMatchStarted { get; }
 
 	public Event OnNewData { get; }
 
-	public Task<List<MatchData>> GetMatchData();
+	public Task<List<MatchDataDto>?> GetMatchData();
 
 }
 
@@ -45,7 +45,7 @@ public interface IAppManager : INotifyPropertyChanged {
 
 public class AppManager : IAppManager, INotifyPropertyChanged {
 
-	public GameSpec? GameSpecification { get; private set; }
+	public GameSpec GameSpecification { get; private set; }
 
 	public MatchDataCollector ActiveMatchData {
 		get;
@@ -97,13 +97,13 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public Event OnNewData { get; } = new();
 
-	private static IErrorPresenter ErrorPresenter => ServiceHelper.GetService<IErrorPresenter>();
-
 	private static IDataStore DataStore => ServiceHelper.GetService<IDataStore>();
 
 
 
 	public AppManager() {
+
+		GameSpecification = null!; // todo fix hack
 
 		if (DateTime.Now >= new DateTime(2025, 3, 21) && DateTime.Now <= new DateTime(2025, 3, 22)) {
 			EventCode = "Waterloo";
@@ -135,23 +135,16 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 		GameSpecification = (await DataStore.GetGameSpecs()).First();
 
-		await StartNewMatch();
+		StartNewMatch();
 	}
 
-	private Task StartNewMatch() {
-
-		if (GameSpecification is null) {
-			ErrorPresenter.DisplayError("Error ", "Select a Game before starting a match.");
-			return Task.CompletedTask;
-		}
+	private void StartNewMatch() {
 
 		ActiveMatchData = new(GameSpecification);
-
 		OnMatchStarted.Invoke();
-		return Task.CompletedTask;
 	}
 
-	public async Task SaveMatchData() {
+	public async Task<bool> SaveAndStartNewMatch() {
 
 #if ANDROID
 		string deviceId = Android.Provider.Settings.Secure.GetString(
@@ -166,38 +159,31 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		MatchData? matchData = MatchData.FromDataCollector(ActiveMatchData, EventCode, EventSchedule, Scout);
 
 		if (matchData is null) {
-			throw new NotImplementedException();
+			return false; // todo better error type
 		}
 
-		bool success = await DataStore.AddNewMatchData(matchData);
+		CreateMatchDataDto createDto = new() {
+			MatchData = matchData,
+			DeviceId = deviceId,
+			EditBasedOn = null
+		};
 
-		if (success) {
-			await StartNewMatch();
-			return;
+		if (!await DataStore.AddNewMatchData(createDto)) {
+			return false; // todo better error type
 		}
 
-		throw new NotImplementedException();
+		StartNewMatch();
+		return true;
 	}
 
-	public async Task DiscardAndStartNewMatch() {
-
-		bool discard = await Shell.Current.DisplayAlert(
-			"Discard Current Match?",
-			"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
-			"Discard and start new match.",
-			"Continue with current match.");
-
-		if (!discard) {
-			return;
-		}
-
-		await StartNewMatch();
+	public void DiscardAndStartNewMatch() {
+		StartNewMatch();
 	}
 
 
 
-	public Task<List<MatchData>> GetMatchData() {
-		throw new NotImplementedException();
+	public async Task<List<MatchDataDto>?> GetMatchData() {
+		return await DataStore.GetMatchData();
 	}
 
 
