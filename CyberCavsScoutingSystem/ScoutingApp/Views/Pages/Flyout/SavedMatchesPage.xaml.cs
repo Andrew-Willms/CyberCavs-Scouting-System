@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using CCSSDomain.Serialization;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Dispatching;
 using ScoutingApp.AppManagement;
 
 namespace ScoutingApp.Views.Pages.Flyout; 
@@ -20,7 +19,6 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 	private IAppManager AppManager { get; }
 
-	private static readonly Mutex RefreshMutex = new();
 	private bool IsActuallyRefreshing;
 	public bool IsRefreshing {
 		get;
@@ -53,8 +51,6 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 	private async Task Refresh() {
 
-		//await Dispatcher.DispatchAsync(RefreshMutex.WaitOne);
-
 		if (IsActuallyRefreshing) {
 			return;
 		}
@@ -80,8 +76,6 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 		IsActuallyRefreshing = false;
 		MainThread.BeginInvokeOnMainThread(() => { IsRefreshing = false; });
-
-		//await Dispatcher.DispatchAsync(RefreshMutex.ReleaseMutex);
 	}
 
 	private static Task DeleteMatch(MatchDataDto matchData) {
