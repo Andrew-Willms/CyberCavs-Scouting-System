@@ -210,9 +210,9 @@ public class SqliteDataStore : IDataStore {
 				new() { DataFieldName = "Auto Mobility", Label = "Auto Mobility" }
 			}.ToReadOnly(),
 			teleTabInputs: new List<InputSpec> {
-				new() { DataFieldName = "Tele L1 Coral", Label = "L4 Coral" },
-				new() { DataFieldName = "Tele L2 Coral", Label = "L4 Coral" },
-				new() { DataFieldName = "Tele L3 Coral", Label = "L4 Coral" },
+				new() { DataFieldName = "Tele L1 Coral", Label = "L1 Coral" },
+				new() { DataFieldName = "Tele L2 Coral", Label = "L2 Coral" },
+				new() { DataFieldName = "Tele L3 Coral", Label = "L3 Coral" },
 				new() { DataFieldName = "Tele L4 Coral", Label = "L4 Coral" },
 				new() { DataFieldName = "Tele Algae Net", Label = "Algae Net" },
 				new() { DataFieldName = "Tele Algae Processor", Label = "Processor Algae" }
