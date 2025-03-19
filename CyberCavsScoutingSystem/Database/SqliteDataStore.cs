@@ -6,6 +6,7 @@ using CCSSDomain.Serialization;
 using Microsoft.Data.Sqlite;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Database;
 
@@ -121,8 +122,8 @@ public class SqliteDataStore : IDataStore {
 			 		DEFERRABLE INITIALLY DEFERRED,
 			    FOREIGN KEY ('{MatchDataEditOfDeviceColumn}', '{MatchDataEditOfRecordColumn}')
 			 		REFERENCES '{MatchDataTableName}' ('{MatchDataDeviceIdColumn}','{MatchDataRecordIdColumn}')
-			 			ON UPDATE SET NULL
-			 			ON DELETE SET NULL
+			 			ON UPDATE RESTRICT
+			 			ON DELETE RESTRICT
 			 );
 			 """,
 			Connection);
@@ -404,6 +405,31 @@ public class SqliteDataStore : IDataStore {
 
 		try {
 			await addMatchDataCommand.ExecuteNonQueryAsync();
+		} catch {
+			return false;
+		}
+
+		return true;
+	}
+
+	public async Task<bool> DeleteMatchData(MatchDataDto matchData) {
+
+		SqliteCommand deleteMatchDataCommand = new(
+			$"""
+			 BEGIN TRANSACTION;
+			 DELETE FROM {MatchDataTableName}
+			 WHERE {MatchDataDeviceIdColumn} = '{matchData.DeviceId}' AND
+			       {MatchDataRecordIdColumn} = '{matchData.RecordId}';
+			 DELETE FROM '{UnifiedRecordTableName}'
+			 WHERE {UnifiedRecordDeviceIdColumn} = '{matchData.DeviceId}' AND
+			       {UnifiedRecordRecordIdColumn} = '{matchData.RecordId}';
+			 COMMIT;
+			 """,
+			Connection);
+
+		try {
+			await deleteMatchDataCommand.ExecuteNonQueryAsync();
+
 		} catch {
 			return false;
 		}

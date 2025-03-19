@@ -9,6 +9,7 @@ using CCSSDomain.GameSpecification;
 using CCSSDomain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
+using ScoutingApp.Views.Pages.Flyout;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;
@@ -109,12 +110,15 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 		GameSpecification = (await DataStore.GetGameSpecs()).First();
 
+		Scout = await GetScoutName() ?? string.Empty; // todo cleanup
+
 		StartNewMatch();
 	}
 
 	private void StartNewMatch() {
 
 		ActiveMatchData = new(GameSpecification);
+
 		OnMatchStarted.Invoke();
 	}
 

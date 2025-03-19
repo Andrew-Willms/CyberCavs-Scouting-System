@@ -41,9 +41,10 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 				errors.Add("The replay number has not been set.");
 			}
 
-			if (AppManager.ActiveMatchData.MatchType == Optional.NoValue) {
-				errors.Add("MatchType has not been set.");
-			}
+			// todo figure out how to not have the default MatchType overridden
+			//if (AppManager.ActiveMatchData.MatchType == Optional.NoValue) {
+			//	errors.Add("MatchType has not been set.");
+			//}
 
 			if (AppManager.ActiveMatchData.Alliance == Optional.NoValue) {
 				errors.Add("An alliance has not been set.");

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
+using ScoutingApp.AppManagement;
 
 namespace ScoutingApp.Views.Pages.Flyout;
 
@@ -13,10 +15,12 @@ namespace ScoutingApp.Views.Pages.Flyout;
 public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 	public static string Route => $"{SavedMatchesPage.Route}/QrCode";
-	public static string RouteFromQrCodePage => "/QrCode";
+	public static string RouteFromSavedMatchesPage => "/QrCode";
 
 	public const string MatchDataNavigationParameterName = nameof(MatchDataDto);
 	public const string MatchDeleterNavigationParameterName = nameof(MatchDeleter);
+
+	private IErrorPresenter ErrorPresenter { get; }
 
 	public MatchDataDto SavedMatch {
 		get;
@@ -35,11 +39,13 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 		}
 	} = null!;
 
-	public Func<MatchDataDto, Task> MatchDeleter { get; init; } = null!;
+	public Func<MatchDataDto, Task<bool>> MatchDeleter { get; init; } = null!;
 
 
 
-	public MatchQrCodePage() {
+	public MatchQrCodePage(IErrorPresenter errorPresenter) {
+
+		ErrorPresenter = errorPresenter;
 
 		BindingContext = this;
 		InitializeComponent();
@@ -48,10 +54,27 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
-	//private async void DeleteButton_OnClicked(object? sender, EventArgs e) {
-	//	await MatchDeleter(SavedMatch);
-	//	await Shell.Current.GoToAsync("..");
-	//}
+	private async void DeleteButton_OnClicked(object? sender, EventArgs e) {
+
+		bool success = await MatchDeleter(SavedMatch);
+
+		if (success) {
+			await Shell.Current.GoToAsync("..");
+			return;
+		}
+
+		ErrorPresenter.DisplayError("Failed", "Could not delete match.");
+	}
+
+	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
+	private async void EditButton_OnClick(object? sender, EventArgs e) {
+
+		Dictionary<string, object> parameters = new() {
+			{ EditMatchPage.MatchDataNavigationParameterName, SavedMatch },
+		};
+
+		await Shell.Current.GoToAsync($"../{EditMatchPage.RouteFromSavedMatchesPage}", parameters);
+	}
 
 
 

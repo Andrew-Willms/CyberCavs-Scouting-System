@@ -6,12 +6,19 @@
 	xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
 	xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
 	x:Class="ScoutingApp.Views.Pages.Flyout.MatchQrCodePage"
-	x:DataType="flyout:MatchQrCodePage"
-	Title="{Binding Path=SavedMatch}">
+	x:DataType="flyout:MatchQrCodePage">
 
-	<!--<ContentPage.ToolbarItems>
+	<ContentPage.Title>
+		<MultiBinding StringFormat='{}{0} Match {1}'>
+			<Binding Path="SavedMatch.MatchData.TeamNumber" />
+			<Binding Path="SavedMatch.MatchData.Match.MatchNumber" />
+		</MultiBinding>
+	</ContentPage.Title>
+
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="Edit" Clicked="EditButton_OnClick"/>
 		<ToolbarItem Text="Delete" Clicked="DeleteButton_OnClicked"/>
-	</ContentPage.ToolbarItems>-->
+	</ContentPage.ToolbarItems>
 
 	<VerticalStackLayout
 		Margin="10"

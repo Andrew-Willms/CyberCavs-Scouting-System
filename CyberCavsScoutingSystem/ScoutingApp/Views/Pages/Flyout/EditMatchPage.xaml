@@ -4,26 +4,23 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
 			 x:Class="ScoutingApp.Views.Pages.Flyout.EditMatchPage"
-			 x:DataType="flyout:EditMatchPage"
-			 Title="{Binding Path=MatchTitle}">
+			 x:DataType="flyout:EditMatchPage">
+
+	<ContentPage.Title>
+		<MultiBinding StringFormat='{}{0} Match {1}'>
+			<Binding Path="SavedMatch.MatchData.TeamNumber" />
+			<Binding Path="SavedMatch.MatchData.Match.MatchNumber" />
+		</MultiBinding>
+	</ContentPage.Title>
 
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Save" Clicked="SaveButton_OnClicked"/>
 		<ToolbarItem Text="Cancel" Clicked="CancelButton_OnClicked"/>
-		<ToolbarItem Text="Delete" Clicked="DeleteButton_OnClicked"/>
 	</ContentPage.ToolbarItems>
 
 	<VerticalStackLayout
 		Margin="10"
 		Spacing="10">
-
-		<Border
-			HorizontalOptions="Fill"
-			HeightRequest="{Binding Source={RelativeSource Self}, Path=Width}">
-		</Border>
-
-		<!--<Label
-			Text="{Binding Path=SavedMatch.Content}"/>-->
 
 	</VerticalStackLayout>
 

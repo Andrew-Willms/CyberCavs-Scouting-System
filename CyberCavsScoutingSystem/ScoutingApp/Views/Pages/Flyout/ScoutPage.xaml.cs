@@ -57,10 +57,15 @@ public partial class ScoutPage : ContentPage {
 	private void SaveButton_Clicked(object? sender, EventArgs e) {
 
 		Task.Run(async () => {
-			if (!await AppManager.SetScoutName(ScoutName)) {
-				ErrorPresenter.DisplayError("Error", "There was an error saving the scout to the data store.");
-			}
+
+			bool success = await AppManager.SetScoutName(ScoutName);
+
+			MainThread.BeginInvokeOnMainThread(() => {
+				Error = success ? null : "There was an error saving the scout to the data store.";
+			});
 		});
+
+		OnPropertyChanged();
 	}
 
 } 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
-using CCSSDomain.Data;
+using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
 
 namespace ScoutingApp.Views.Pages.Flyout;
@@ -9,31 +8,26 @@ namespace ScoutingApp.Views.Pages.Flyout;
 
 
 [QueryProperty(nameof(SavedMatch), MatchDataNavigationParameterName)]
-[QueryProperty(nameof(MatchDeleter), MatchDeleterNavigationParameterName)]
 public partial class EditMatchPage : ContentPage, INotifyPropertyChanged {
 
-	public static string Route => $"{SavedMatchesPage.Route}/Details";
-	public static string RouteFromSavedMatchesPage => "/Details";
+	public static string Route => $"{SavedMatchesPage.Route}/Edit";
+	public static string RouteFromSavedMatchesPage => "/Edit";
 
-	public const string MatchDataNavigationParameterName = nameof(MatchData);
-	public const string MatchDeleterNavigationParameterName = nameof(MatchDeleter);
+	public const string MatchDataNavigationParameterName = nameof(MatchDataDto);
 
-	public string MatchTitle => $"{SavedMatch.TeamNumber} - {SavedMatch.Match.Type} Match {SavedMatch.Match.MatchNumber}";
-
-	public MatchData SavedMatch {
+	public MatchDataDto SavedMatch {
 		get;
 		set {
 			field = value;
 			OnPropertyChanged(nameof(SavedMatch));
-			OnPropertyChanged(nameof(MatchTitle));
 		}
 	} = null!;
-
-	public Func<MatchData, Task> MatchDeleter { get; init; } = null!;
 
 
 
 	public EditMatchPage() {
+
+		BindingContext = this;
 		InitializeComponent();
 	}
 
@@ -46,14 +40,7 @@ public partial class EditMatchPage : ContentPage, INotifyPropertyChanged {
 
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
 	private async void CancelButton_OnClicked(object? sender, EventArgs e) {
-		await MatchDeleter(SavedMatch);
-		await Shell.Current.GoToAsync("..");
-	}
-
-	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
-	private async void DeleteButton_OnClicked(object? sender, EventArgs e) {
-		await MatchDeleter(SavedMatch);
-		await Shell.Current.GoToAsync("..");
+		await Shell.Current.GoToAsync($"../{MatchQrCodePage.RouteFromSavedMatchesPage}");
 	}
 
 

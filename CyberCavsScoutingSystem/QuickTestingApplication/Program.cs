@@ -67,6 +67,12 @@ public class Program {
 		foreach (MatchDataDto matchDataDto in matchData) {
 			Console.WriteLine(matchDataDto);
 		}
+
+		success = await dataStore.DeleteMatchData(matchData[0]);
+
+		if (!success) {
+			throw new();
+		}
 	}
 
 	private static GameSpec GameSpec => (GameSpec.Create(

@@ -53,6 +53,10 @@
 			<CodesignKey>iPhone Developer</CodesignKey>
 		</PropertyGroup>
 
+		<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+		  <AndroidPackageFormat>apk</AndroidPackageFormat>
+		</PropertyGroup>
+
 	<ItemGroup>
 
 		<!-- App Icon -->

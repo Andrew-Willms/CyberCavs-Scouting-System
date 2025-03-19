@@ -23,6 +23,7 @@ public interface IDataStore {
 
 	public Task<bool> AddMatchDataFromOtherDevice(MatchDataDto matchData);
 
+	public Task<bool> DeleteMatchData(MatchDataDto matchData);
 
 
 	//public Task<List<EventSchedule>> GetEventSchedules();

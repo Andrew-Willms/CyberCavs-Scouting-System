@@ -63,7 +63,7 @@
 
 		</Grid>
 
-		<Grid ColumnSpacing="10">
+		<!--<Grid ColumnSpacing="10">
 
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="auto"/>
@@ -80,7 +80,7 @@
 				ItemsSource="{Binding Path=MatchTypes}"
 				Grid.Column="1"/>
 
-		</Grid>
+		</Grid>-->
 
 		<Grid ColumnSpacing="10">
 

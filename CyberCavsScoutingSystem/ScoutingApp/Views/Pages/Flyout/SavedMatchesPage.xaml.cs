@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using CCSSDomain.Serialization;
+using Database;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
@@ -17,6 +18,7 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 	public static string Route => "SavedMatches";
 
 	private IAppManager AppManager { get; }
+	private IDataStore DataStore { get; }
 
 	private bool IsActuallyRefreshing;
 	public bool IsRefreshing {
@@ -38,9 +40,10 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 	public ObservableCollection<MatchDataDto> SavedMatches { get; } = [];
 
 
-	public SavedMatchesPage(IAppManager appManager) {
+	public SavedMatchesPage(IAppManager appManager, IDataStore dataStore) {
 		
 		AppManager = appManager;
+		DataStore = dataStore;
 
 		BindingContext = this;
 		InitializeComponent();
@@ -77,9 +80,9 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 		MainThread.BeginInvokeOnMainThread(() => { IsRefreshing = false; });
 	}
 
-	private static Task DeleteMatch(MatchDataDto matchData) {
-		return Task.CompletedTask;
-		//throw new NotImplementedException();
+	private async Task<bool> DeleteMatch(MatchDataDto matchData) {
+
+		return await DataStore.DeleteMatchData(matchData);
 	}
 
 
@@ -106,7 +109,7 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 #pragma warning restore CS8974 // Converting method group to non-delegate type
 		};
 
-		await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromQrCodePage, parameters);
+		await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromSavedMatchesPage, parameters);
 	}
 
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
