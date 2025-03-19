@@ -42,11 +42,11 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 			}
 
 			if (AppManager.ActiveMatchData.MatchType == Optional.NoValue) {
-				errors.Add("Is playoff has not been set.");
+				errors.Add("MatchType has not been set.");
 			}
 
 			if (AppManager.ActiveMatchData.Alliance == Optional.NoValue) {
-				errors.Add("The Alliance has not been set.");
+				errors.Add("An alliance has not been set.");
 			}
 
 			if (AppManager.ActiveMatchData.TeamNumber == Optional.NoValue) {
