@@ -9,7 +9,6 @@ using CCSSDomain.GameSpecification;
 using Database;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices;
 using Microsoft.Maui.Storage;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
@@ -90,7 +89,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 
 
-	public string EventCode { get; set; } = string.Empty;
+	public string EventCode { get; set; }
 
 	public EventSchedule? EventSchedule { get; set; }
 
@@ -170,7 +169,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 			throw new NotImplementedException();
 		}
 
-		bool success = true;//await DataStore.AddMatchData(matchData);
+		bool success = await DataStore.AddNewMatchData(matchData);
 
 		if (success) {
 			await StartNewMatch();

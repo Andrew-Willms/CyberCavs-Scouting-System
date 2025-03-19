@@ -297,7 +297,6 @@ public class SqliteDataStore : IDataStore {
 	public async Task<bool> AddNewMatchData(CreateMatchDataDto matchData) {
 
 		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
-		
 
 		// todo right now it's possible for only one of the two edit columns to be null
 		// see if there is a way to restrict it so they both have to be null or not null together
@@ -335,7 +334,53 @@ public class SqliteDataStore : IDataStore {
 			 )
 			 VALUES (
 			     '{matchData.DeviceId}',
-			 (SELECT lastId FROM temp) + 1,
+			     (SELECT lastId FROM temp) + 1,
+			     '{MatchDataTableName}',
+			     'TimeCreated'
+			 );
+			 COMMIT;
+			 """,
+			Connection);
+
+		try {
+			await addMatchDataCommand.ExecuteNonQueryAsync();
+		} catch {
+			return false;
+		}
+
+		return true;
+	}
+
+	public async Task<bool> AddMatchDataFromOtherDevice(MatchDataDto matchData) {
+
+		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
+
+		SqliteCommand addMatchDataCommand = new(
+			$"""
+			 BEGIN TRANSACTION;
+			 INSERT INTO '{MatchDataTableName}' (
+			     '{MatchDataDeviceIdColumn}',
+			     '{MatchDataRecordIdColumn}',
+			     '{MatchDataDataColumn}',
+			     '{MatchDataEditOfDeviceColumn}',
+			     '{MatchDataEditOfRecordColumn}'
+			 )
+			 VALUES (
+			     '{matchData.DeviceId}',
+			     '{matchData.RecordId}',
+			     '{data}',
+			     {(matchData.EditBasedOn is null ? "NULL" : $"'{matchData.EditBasedOn?.DeviceId}'")},
+			     {(matchData.EditBasedOn is null ? "NULL" : $"'{matchData.EditBasedOn?.RecordId}'")}
+			 );
+			 INSERT INTO '{UnifiedRecordTableName}' (
+			     '{UnifiedRecordDeviceIdColumn}',
+			     '{UnifiedRecordRecordIdColumn}',
+			     '{UnifiedRecordTableColumn}',
+			     '{UnifiedRecordDateColumn}'
+			 )
+			 VALUES (
+			     '{matchData.DeviceId}',
+			     '{matchData.RecordId}',
 			     '{MatchDataTableName}',
 			     'TimeCreated'
 			 );

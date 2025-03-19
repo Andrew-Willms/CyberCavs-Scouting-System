@@ -69,7 +69,6 @@ public class Program {
 		}
 	}
 
-
 	private static GameSpec GameSpec => (GameSpec.Create(
 		name: "ReefScape",
 		year: 2025,

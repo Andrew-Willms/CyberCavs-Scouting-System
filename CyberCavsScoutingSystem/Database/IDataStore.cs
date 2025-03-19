@@ -1,5 +1,4 @@
-﻿using CCSSDomain.Data;
-using CCSSDomain.GameSpecification;
+﻿using CCSSDomain.GameSpecification;
 using CCSSDomain.Serialization;
 
 namespace Database;
@@ -22,7 +21,7 @@ public interface IDataStore {
 
 	public Task <bool> AddNewMatchData(CreateMatchDataDto matchData);
 
-	//public Task<bool> AddMatchDataFromOtherDevice(string deviceId, MatchData matchData);
+	public Task<bool> AddMatchDataFromOtherDevice(MatchDataDto matchData);
 
 
 
