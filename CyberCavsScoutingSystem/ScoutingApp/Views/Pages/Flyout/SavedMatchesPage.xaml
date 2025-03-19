@@ -47,7 +47,7 @@
 								<ColumnDefinition Width="auto"/>
 							</Grid.ColumnDefinitions>
 
-							<VerticalStackLayout
+							<HorizontalStackLayout
 								Margin="5"
 								Grid.Column="0"
 								HorizontalOptions="Fill">
@@ -63,11 +63,11 @@
 									HorizontalOptions="Start"/>
 
 								<Label
-									Text="{Binding Path=MatchData.Match.MatchNumber}"
+									Text="{Binding Path=MatchData.Match.MatchNumber, StringFormat=' {0}'}"
 									MaxLines="1"
 									HorizontalOptions="Start"/>
 
-							</VerticalStackLayout>
+							</HorizontalStackLayout>
 
 							<Button
 								Text="Show More"

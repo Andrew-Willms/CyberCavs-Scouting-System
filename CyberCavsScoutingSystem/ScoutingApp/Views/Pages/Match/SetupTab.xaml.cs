@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using CCSSDomain.Data;
 using CCSSDomain.DataCollectors;
@@ -88,8 +87,6 @@ public partial class SetupTab : ContentPage {
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliance)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliances)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
-
-		//MatchType = CCSSDomain.Data.MatchType.Qualification;
 
 		InitializeComponent();
 		BindingContext = this;
