@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using CCSSDomain.Data;
 using CCSSDomain.DataCollectors;
@@ -42,14 +43,13 @@ public partial class SetupTab : ContentPage {
 	public MatchType[] MatchTypes { get; } = Enum.GetValues<MatchType>();
 
 	public MatchType? MatchType {
-
 		get => AppManager.ActiveMatchData.MatchType.HasValue
 			? AppManager.ActiveMatchData.MatchType.Value
 			: null;
 
 		set => AppManager.ActiveMatchData.MatchType = value is not null
-			? ((MatchType) value).Optionalize()
-			: Optional.NoValue;
+				? ((MatchType) value).Optionalize()
+				: Optional.NoValue;
 	}
 
 	public uint? TeamNumber {
@@ -89,10 +89,13 @@ public partial class SetupTab : ContentPage {
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliances)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
 
-		MatchType = CCSSDomain.Data.MatchType.Qualification;
+		//MatchType = CCSSDomain.Data.MatchType.Qualification;
 
-		BindingContext = this;
 		InitializeComponent();
+		BindingContext = this;
 	}
 
+	private void SetupTab_OnNavigatedTo(object? sender, NavigatedToEventArgs e) {
+		//OnPropertyChanged("MatchType");
+	}
 }

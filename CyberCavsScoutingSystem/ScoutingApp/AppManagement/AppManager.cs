@@ -123,8 +123,14 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public async Task ApplicationStartup() {
 
+		string test = AppDomain.CurrentDomain.BaseDirectory;
+
+#if ANDROID
+		string docsDirectory = Android.App.Application.Context.GetExternalFilesDir(null)!.AbsoluteFile.Path;
+#endif
+
 		string appDirectory = FileSystem.Current.AppDataDirectory;
-		string dbPath = System.IO.Path.Combine(appDirectory, "test.db");
+		string dbPath = System.IO.Path.Combine(docsDirectory, "test.db");
 		await DataStore.ConnectAndEnsureTables(dbPath);
 
 		string? scoutResult = await DataStore.GetLastScout();

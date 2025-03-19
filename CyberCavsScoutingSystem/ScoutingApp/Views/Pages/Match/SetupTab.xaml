@@ -6,7 +6,8 @@
 	xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
 	xmlns:behaviors="clr-namespace:ScoutingApp.Views.Behaviors"
 	x:Class="ScoutingApp.Views.Pages.Match.SetupTab"
-	x:DataType="match:SetupTab">
+	x:DataType="match:SetupTab"
+	NavigatedTo="SetupTab_OnNavigatedTo">
 
 	<VerticalStackLayout
 		Margin="10"
@@ -94,7 +95,7 @@
 				Grid.Column="0"/>
 
 			<Picker
-				SelectedItem="{Binding Path=Alliance}"
+				SelectedIndex="{Binding Path=Alliance}"
 				ItemsSource="{Binding Path=Alliances, Converter={StaticResource ReadOnlyListOfStringsToIListConverter}}"
 				Grid.Column="1"/>
 
