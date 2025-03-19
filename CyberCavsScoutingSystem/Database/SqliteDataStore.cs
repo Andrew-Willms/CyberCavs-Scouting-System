@@ -223,7 +223,7 @@ public class SqliteDataStore : IDataStore {
 	public async Task<List<MatchDataDto>?> GetMatchData() {
 
 		SqliteCommand getMatchDataCommand = new(
-			$"SELECT (*) FROM '{MatchDataTableName}';",
+			$"SELECT * FROM '{MatchDataTableName}';",
 			Connection);
 
 		SqliteDataReader reader;
@@ -241,8 +241,8 @@ public class SqliteDataStore : IDataStore {
 			string deviceId = reader.GetString(0);
 			int recordId = reader.GetInt32(1);
 			string serializedMatch = reader.GetString(2);
-			string? editOfDeviceId = reader.GetString(3);
-			int? editOfRecordId = reader.GetInt32(4);
+			string? editOfDeviceId = reader[3] is DBNull ? null : reader.GetString(3);
+			int? editOfRecordId = reader[4] is DBNull ? null : reader.GetInt32(4);
 
 			MatchData? data = MatchDataToCsv.Deserialize(serializedMatch, gameSpec);
 
@@ -297,6 +297,10 @@ public class SqliteDataStore : IDataStore {
 	public async Task<bool> AddNewMatchData(CreateMatchDataDto matchData) {
 
 		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
+		
+
+		// todo right now it's possible for only one of the two edit columns to be null
+		// see if there is a way to restrict it so they both have to be null or not null together
 
 		// it's scuffed that I have to call WITH AS twice but I can't find a workaround
 		// CTEs can only be consumed by a singled query.
@@ -317,8 +321,8 @@ public class SqliteDataStore : IDataStore {
 			     '{matchData.DeviceId}',
 			     (SELECT lastId FROM temp) + 1,
 			     '{data}',
-			     '{matchData.EditBasedOn?.DeviceId}',
-			     '{matchData.EditBasedOn?.RecordId}'
+			     {(matchData.EditBasedOn is null ? "NULL" : $"'{matchData.EditBasedOn?.DeviceId}'")},
+			     {(matchData.EditBasedOn is null ? "NULL" : $"'{matchData.EditBasedOn?.RecordId}'")}
 			 );
 			 WITH temp AS (
 			     SELECT COUNT(*) AS lastId FROM '{UnifiedRecordTableName}'
@@ -341,7 +345,7 @@ public class SqliteDataStore : IDataStore {
 
 		try {
 			await addMatchDataCommand.ExecuteNonQueryAsync();
-		} catch (Exception exception) {
+		} catch {
 			return false;
 		}
 

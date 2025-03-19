@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using CCSSDomain.Data;
 using CCSSDomain.GameSpecification;
+using CCSSDomain.Serialization;
 using Database;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
@@ -55,6 +56,16 @@ public class Program {
 
 		if (!success) {
 			throw new();
+		}
+
+		List<MatchDataDto>? matchData = await dataStore.GetMatchData();
+
+		if (matchData is null) {
+			throw new();
+		}
+
+		foreach (MatchDataDto matchDataDto in matchData) {
+			Console.WriteLine(matchDataDto);
 		}
 	}
 
