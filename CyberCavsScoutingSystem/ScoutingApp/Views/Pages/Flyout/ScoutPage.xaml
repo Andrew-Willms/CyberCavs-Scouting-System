@@ -15,11 +15,17 @@
 			Text="Scout Name"
 			HorizontalTextAlignment="Start"/>
 
-		<Entry Text="{Binding Path=AppManager.Scout}"/>
+		<Entry Text="{Binding Path=ScoutName}"/>
 
 		<Label
-			Text="{Binding Path=AppManager.ScoutError}"
-			IsVisible="{Binding Path=AppManager.ScoutError, Converter={StaticResource StringNotNullToBoolConverter}}"/>
+			Text="{Binding Path=Error}"
+			IsVisible="{Binding Path=Error, Converter={StaticResource StringNotNullToBoolConverter}}"/>
+
+		<Button
+			Margin="10"
+			HorizontalOptions="End"
+			Text="Save to Database"
+			Clicked="SaveButton_Clicked"/>
 
 	</VerticalStackLayout>
 

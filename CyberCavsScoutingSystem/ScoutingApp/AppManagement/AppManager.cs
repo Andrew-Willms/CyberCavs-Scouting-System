@@ -9,7 +9,6 @@ using CCSSDomain.GameSpecification;
 using CCSSDomain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Storage;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;
@@ -23,7 +22,6 @@ public interface IAppManager : INotifyPropertyChanged {
 	public MatchDataCollector ActiveMatchData { get; }
 
 	public string Scout { get; set; }
-	public string? ScoutError { get; }
 
 	public string EventCode { get; set; }
 
@@ -38,6 +36,10 @@ public interface IAppManager : INotifyPropertyChanged {
 	public Event OnNewData { get; }
 
 	public Task<List<MatchDataDto>?> GetMatchData();
+
+	public Task<string?> GetScoutName();
+
+	public Task<bool> SetScoutName(string name);
 
 }
 
@@ -58,35 +60,10 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 	public string Scout {
 		get;
 		set {
-			if (value == field) {
-				return;
-			}
-			field = value;
-
-			Task.Run(async () => {
-
-				bool success = await DataStore.SetLastScout(value);
-
-				if (success) {
-					ScoutError = null;
-					return;
-				}
-
-				ScoutError = "There was an error saving the scout to the data store.";
-			});
-
-			OnPropertyChanged(nameof(Scout));
-		}
-	} = string.Empty;
-
-	public string? ScoutError {
-		get;
-		private set {
 			field = value;
 			OnPropertyChanged(nameof(Scout));
 		}
-	}
-
+	} = "";
 
 
 	public string EventCode { get; set; }
@@ -123,21 +100,12 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public async Task ApplicationStartup() {
 
-		string test = AppDomain.CurrentDomain.BaseDirectory;
-
 #if ANDROID
-		string docsDirectory = Android.App.Application.Context.GetExternalFilesDir(null)!.AbsoluteFile.Path;
+		string directory = Android.App.Application.Context.GetExternalFilesDir(null)!.AbsoluteFile.Path;
 #endif
 
-		string appDirectory = FileSystem.Current.AppDataDirectory;
-		string dbPath = System.IO.Path.Combine(docsDirectory, "test.db");
+		string dbPath = System.IO.Path.Combine(directory, "ScoutingApp.db");
 		await DataStore.ConnectAndEnsureTables(dbPath);
-
-		string? scoutResult = await DataStore.GetLastScout();
-		Scout = scoutResult ?? string.Empty;
-		if (scoutResult is null) {
-			ScoutError = "Could not load the last scout from the data store.";
-		}
 
 		GameSpecification = (await DataStore.GetGameSpecs()).First();
 
@@ -192,6 +160,13 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		return await DataStore.GetMatchData();
 	}
 
+	public async Task<string?> GetScoutName() {
+		return await DataStore.GetLastScout();
+	}
+
+	public async Task<bool> SetScoutName(string name) {
+		return await DataStore.SetLastScout(name);
+	}
 
 
 	public event PropertyChangedEventHandler? PropertyChanged;

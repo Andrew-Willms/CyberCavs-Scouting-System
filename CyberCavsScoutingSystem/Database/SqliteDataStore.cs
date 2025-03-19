@@ -44,6 +44,20 @@ public class SqliteDataStore : IDataStore {
 			return false;
 		}
 
+		SqliteCommand test = new() {
+			CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type='table';",
+			Connection = Connection
+		};
+
+		try {
+			SqliteDataReader reader = await test.ExecuteReaderAsync();
+			reader.Read();
+			int tableCount = reader.GetInt32(0);
+
+		} catch {
+			return false;
+		}
+
 		SqliteCommand createScoutTable = new(
 			$"""
 			 CREATE TABLE IF NOT EXISTS '{ScoutTableName}' (
@@ -400,37 +414,14 @@ public class SqliteDataStore : IDataStore {
 	public async Task<string?> GetLastScout() {
 
 		SqliteCommand command = new(
-			$"SELECT '{ScoutTableColumn}' FROM '{ScoutTableName}' Where ROWID = 1;",
+			$"SELECT {ScoutTableColumn} FROM '{ScoutTableName}' WHERE ROWID = 1;",
 			Connection
 		);
-
-		//SqliteCommand command = new(
-		//	$"""
-		//	SELECT '{ScoutTableColumn}' 
-		//	FROM (
-		//	    SELECT MAX(ROWID), '{ScoutTableColumn}' AS '{ScoutTableColumn}' 
-		//	    FROM '{ScoutTableName}'
-		//	);
-		//	""",
-		//	Connection
-		//);
-
-		//SqliteCommand command = new(
-		//	$"""
-		//	 SELECT '{ScoutTableColumn}'
-		//	 FROM '{ScoutTableName}' WHERE ROWID IN(
-		//	 	SELECT MAX(ROWID) FROM '{ScoutTableName}'
-		//	 );
-		//	 """,
-		//	Connection
-		//);
 
 		try {
 			object? result = await command.ExecuteScalarAsync();
 
-			return result is null
-				? string.Empty
-				: result as string ?? throw new UnreachableException();
+			return result as string;
 
 		} catch {
 			return null;

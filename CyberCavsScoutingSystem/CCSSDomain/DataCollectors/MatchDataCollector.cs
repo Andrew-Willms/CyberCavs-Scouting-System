@@ -18,7 +18,10 @@ public class MatchDataCollector {
 
 	public Optional<uint> MatchNumber { get; set; } = Optional.NoValue;
 	public Optional<uint> ReplayNumber { get; set; } = 0u.Optionalize();
-	public Optional<MatchType> MatchType { get; set; } = Data.MatchType.Qualification.Optionalize();
+	public Optional<MatchType> MatchType {
+		get; 
+		set => field = value;
+	} = Data.MatchType.Qualification.Optionalize();
 
 	public Optional<uint> TeamNumber { get; set; } = Optional.NoValue;
 
