@@ -9,9 +9,9 @@
 	x:DataType="flyout:MatchQrCodePage"
 	Title="{Binding Path=SavedMatch}">
 
-	<ContentPage.ToolbarItems>
+	<!--<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Delete" Clicked="DeleteButton_OnClicked"/>
-	</ContentPage.ToolbarItems>
+	</ContentPage.ToolbarItems>-->
 
 	<VerticalStackLayout
 		Margin="10"
@@ -21,14 +21,14 @@
 			HorizontalOptions="Fill"
 			HeightRequest="{Binding Source={RelativeSource Self}, Path=Width}">
 
-			<!--<controls:BarcodeGeneratorView
-				Value="{Binding Path=SavedMatch.Content}"
-				Format="QrCode"/>-->
+			<controls:BarcodeGeneratorView
+				Value="{Binding Path=QrCodeContent}"
+				Format="QrCode"/>
 
 		</Border>
 
-		<!--<Label
-			Text="{Binding Path=SavedMatch.Content}"/>-->
+		<Label
+			Text="{Binding Path=QrCodeContent}"/>
 
 	</VerticalStackLayout>
 

@@ -4,7 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using CCSSDomain.Data;
+using CCSSDomain.Serialization;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Dispatching;
 using ScoutingApp.AppManagement;
@@ -29,7 +30,15 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 		}
 	}
 
-	public ObservableCollection<MatchData> SavedMatches { get; } = [];
+	public string? GetMatchesError {
+		get;
+		set {
+			field = value;
+			OnPropertyChanged(nameof(GetMatchesError));
+		}
+	}
+
+	public ObservableCollection<MatchDataDto> SavedMatches { get; } = [];
 
 
 	public SavedMatchesPage(IAppManager appManager) {
@@ -44,28 +53,40 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 	private async Task Refresh() {
 
-		await Dispatcher.DispatchAsync(RefreshMutex.WaitOne);
+		//await Dispatcher.DispatchAsync(RefreshMutex.WaitOne);
 
 		if (IsActuallyRefreshing) {
 			return;
 		}
 
-		IsRefreshing = true;
+		MainThread.BeginInvokeOnMainThread(() => { IsRefreshing = true; });
 		IsActuallyRefreshing = true;
 
 		SavedMatches.Clear();
-		foreach (MatchData match in await AppManager.GetMatchData()) {
+
+		List<MatchDataDto>? matches = await AppManager.GetMatchData();
+
+		if (matches is null) {
+			GetMatchesError = "Could not fetch matches.";
+			matches = [];
+
+		} else {
+			GetMatchesError = null;
+		}
+
+		foreach (MatchDataDto match in matches) {
 			SavedMatches.Add(match);
 		}
 
-		IsRefreshing = false;
 		IsActuallyRefreshing = false;
+		MainThread.BeginInvokeOnMainThread(() => { IsRefreshing = false; });
 
-		await Dispatcher.DispatchAsync(RefreshMutex.ReleaseMutex);
+		//await Dispatcher.DispatchAsync(RefreshMutex.ReleaseMutex);
 	}
 
-	private static Task DeleteMatch() {
-		throw new NotImplementedException();
+	private static Task DeleteMatch(MatchDataDto matchData) {
+		return Task.CompletedTask;
+		//throw new NotImplementedException();
 	}
 
 
@@ -83,11 +104,13 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 	private async void ViewMatch_OnClicked(object? sender, EventArgs e) {
 
 		Button button = sender as Button ?? throw new ArgumentException("sender not valid");
-		MatchData matchData = button.BindingContext as MatchData ?? throw new ArgumentException("sender not valid");
+		MatchDataDto matchData = button.BindingContext as MatchDataDto ?? throw new ArgumentException("sender not valid");
 
 		Dictionary<string, object> parameters = new() {
 			{ MatchQrCodePage.MatchDataNavigationParameterName, matchData },
+#pragma warning disable CS8974 // Converting method group to non-delegate type
 			{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
+#pragma warning restore CS8974 // Converting method group to non-delegate type
 		};
 
 		await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromQrCodePage, parameters);

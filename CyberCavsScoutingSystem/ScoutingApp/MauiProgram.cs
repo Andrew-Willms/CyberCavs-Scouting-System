@@ -6,7 +6,6 @@ using Microsoft.Maui.Hosting;
 using ScoutingApp.AppManagement;
 using ScoutingApp.Views.Pages.Flyout;
 using ScoutingApp.Views.Pages.Match;
-using SQLitePCL;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
 
@@ -42,15 +41,15 @@ public static class MauiProgram {
 
 		// todo figure out when new instances of the transient types are being created and if
 		// making them singleton would work and make things more performant.
-		builder.Services.AddTransient<SetupTab>();
-		builder.Services.AddTransient<AutoTab>();
-		builder.Services.AddTransient<TeleTab>();
-		builder.Services.AddTransient<EndgameTab>();
-		builder.Services.AddTransient<ConfirmTab>();
-		builder.Services.AddTransient<ScoutPage>();
-		builder.Services.AddTransient<EventPage>();
-		builder.Services.AddTransient<MatchQrCodePage>();
-		builder.Services.AddTransient<SavedMatchesPage>();
+		builder.Services.AddSingleton<SetupTab>();
+		builder.Services.AddSingleton<AutoTab>();
+		builder.Services.AddSingleton<TeleTab>();
+		builder.Services.AddSingleton<EndgameTab>();
+		builder.Services.AddSingleton<ConfirmTab>();
+		builder.Services.AddSingleton<ScoutPage>();
+		builder.Services.AddSingleton<EventPage>();
+		builder.Services.AddSingleton<MatchQrCodePage>();
+		builder.Services.AddSingleton<SavedMatchesPage>();
 
 		return builder.Build();
 	}

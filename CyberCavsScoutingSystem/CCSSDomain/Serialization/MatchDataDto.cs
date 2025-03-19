@@ -4,6 +4,7 @@ namespace CCSSDomain.Serialization;
 
 
 
+// todo consider making IDs uints
 public record MatchDataDto {
 
 	public required MatchData MatchData { get; init; }

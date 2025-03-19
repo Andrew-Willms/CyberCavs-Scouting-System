@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using CCSSDomain.Data;
+using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
 
 namespace ScoutingApp.Views.Pages.Flyout;
@@ -12,21 +12,30 @@ namespace ScoutingApp.Views.Pages.Flyout;
 [QueryProperty(nameof(MatchDeleter), MatchDeleterNavigationParameterName)]
 public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
-	public static string Route => $"{SavedMatchesPage.Route}/Details";
-	public static string RouteFromQrCodePage => "/Details";
+	public static string Route => $"{SavedMatchesPage.Route}/QrCode";
+	public static string RouteFromQrCodePage => "/QrCode";
 
-	public const string MatchDataNavigationParameterName = nameof(MatchData);
+	public const string MatchDataNavigationParameterName = nameof(MatchDataDto);
 	public const string MatchDeleterNavigationParameterName = nameof(MatchDeleter);
 
-	public MatchData SavedMatch {
+	public MatchDataDto SavedMatch {
 		get;
 		set {
 			field = value;
+			QrCodeContent = MatchDataDtoToCsv.Serialize(value);
 			OnPropertyChanged(nameof(SavedMatch));
 		}
 	} = null!;
 
-	public Func<MatchData, Task> MatchDeleter { get; init; } = null!;
+	public string QrCodeContent {
+		get;
+		private set {
+			field = value;
+			OnPropertyChanged(nameof(QrCodeContent));
+		}
+	} = null!;
+
+	public Func<MatchDataDto, Task> MatchDeleter { get; init; } = null!;
 
 
 
@@ -39,10 +48,10 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
-	private async void DeleteButton_OnClicked(object? sender, EventArgs e) {
-		await MatchDeleter(SavedMatch);
-		await Shell.Current.GoToAsync("..");
-	}
+	//private async void DeleteButton_OnClicked(object? sender, EventArgs e) {
+	//	await MatchDeleter(SavedMatch);
+	//	await Shell.Current.GoToAsync("..");
+	//}
 
 
 

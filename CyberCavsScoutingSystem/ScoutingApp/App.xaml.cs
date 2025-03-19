@@ -11,15 +11,10 @@ public partial class App : Application {
 	public App() {
 
 		InitializeComponent();
-
-		//Task.Run(() => ServiceHelper.GetService<IAppManager>().ApplicationStartup());
-		
-		//ServiceHelper.GetService<IAppManager>().ApplicationStartup();
 		ServiceHelper.GetService<IAppManager>().ApplicationStartup().GetAwaiter().GetResult();
 	}
 
 	protected override Window CreateWindow(IActivationState? activationState) {
-
 		return new(new AppShell());
 	}
 

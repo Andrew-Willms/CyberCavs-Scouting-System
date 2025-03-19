@@ -4,7 +4,7 @@
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
-	xmlns:matchData="clr-namespace:CCSSDomain.Data;assembly=CCSSDomain"
+	xmlns:serialization="clr-namespace:CCSSDomain.Serialization;assembly=CCSSDomain"
 	x:Class="ScoutingApp.Views.Pages.Flyout.SavedMatchesPage"
 	x:DataType="flyout:SavedMatchesPage"
 	Loaded="SavedMatchesPage_OnLoaded"
@@ -16,6 +16,7 @@
 
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
 			<RowDefinition Height="1*"/>
 		</Grid.RowDefinitions>
 
@@ -23,17 +24,22 @@
 			Text="Saved Matches"
 			Grid.Row="0"/>
 
+		<Label
+			Text="{Binding Path=GetMatchesError}"
+			IsVisible="{Binding Path=GetMatchesError, Converter={StaticResource StringNotNullToBoolConverter}}"
+			Grid.Row="1"/>
+
 		<RefreshView
 			Refreshing="SavedMatchesView_OnRefreshing"
 			IsRefreshing="{Binding Path=IsRefreshing}"
-			Grid.Row="1">
+			Grid.Row="2">
 
 			<CollectionView
 				ItemsSource="{Binding Path=SavedMatches}"
 				ItemsLayout="VerticalGrid, 1">
 
 				<CollectionView.ItemTemplate>
-					<DataTemplate x:DataType="matchData:MatchData">
+					<DataTemplate x:DataType="serialization:MatchDataDto">
 						<Grid Margin="0">
 
 							<Grid.ColumnDefinitions>
@@ -47,17 +53,17 @@
 								HorizontalOptions="Fill">
 
 								<Label
-									Text="{Binding Path=TeamNumber}"
+									Text="{Binding Path=MatchData.TeamNumber}"
 									MaxLines="1"
 									HorizontalOptions="Start"/>
 
 								<Label
-									Text="{Binding Path=Match.Type, StringFormat=' - {0} Match'}"
+									Text="{Binding Path=MatchData.Match.Type, StringFormat=' - {0} Match'}"
 									MaxLines="1"
 									HorizontalOptions="Start"/>
 
 								<Label
-									Text="{Binding Path=Match.MatchNumber}"
+									Text="{Binding Path=MatchData.Match.MatchNumber}"
 									MaxLines="1"
 									HorizontalOptions="Start"/>
 
