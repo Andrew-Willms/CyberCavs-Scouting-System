@@ -41,7 +41,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 	public Func<MatchDataDto, Task<bool>> MatchDeleter { get; init; } = null!;
 
-
+	// todo add a button to go straight back to the match page in the auto tab
 
 	public MatchQrCodePage(IErrorPresenter errorPresenter) {
 

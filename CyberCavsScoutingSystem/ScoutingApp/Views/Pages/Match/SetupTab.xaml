@@ -6,8 +6,7 @@
 	xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
 	xmlns:behaviors="clr-namespace:ScoutingApp.Views.Behaviors"
 	x:Class="ScoutingApp.Views.Pages.Match.SetupTab"
-	x:DataType="match:SetupTab"
-	NavigatedTo="SetupTab_OnNavigatedTo">
+	x:DataType="match:SetupTab">
 
 	<VerticalStackLayout
 		Margin="10"

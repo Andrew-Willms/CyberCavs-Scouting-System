@@ -67,7 +67,7 @@ public partial class SetupTab : ContentPage {
 			? AppManager.ActiveMatchData.Alliance.Value
 			: null;
 
-		set => AppManager.ActiveMatchData.Alliance = value is not null && Alliances.Count >= value
+		set => AppManager.ActiveMatchData.Alliance = value is not null && Alliances.Count > value
 			? ((uint)value).Optionalize() 
 			: Optional.NoValue;
 	}
@@ -92,7 +92,4 @@ public partial class SetupTab : ContentPage {
 		BindingContext = this;
 	}
 
-	private void SetupTab_OnNavigatedTo(object? sender, NavigatedToEventArgs e) {
-		//OnPropertyChanged("MatchType");
-	}
 }
