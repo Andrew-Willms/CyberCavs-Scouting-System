@@ -21,16 +21,17 @@ public class SqliteDataStore : IDataStore {
 	private const string KnownDevicesRecordIdColumn = "IdOfLatestRecord";
 
 	private const string UnifiedRecordTableName = "UnifiedRecords";
-	private const string UnifiedRecordDeviceColumn = "OriginatingDevice";
-	private const string UnifiedRecordIdColumn = "Id";
+	private const string UnifiedRecordDeviceIdColumn = "OriginatingDevice";
+	private const string UnifiedRecordRecordIdColumn = "Id";
 	private const string UnifiedRecordTableColumn = "TableName";
 	private const string UnifiedRecordDateColumn = "TimeCreated";
 
 	private const string MatchDataTableName = "MatchData";
-	private const string MatchDataDeviceColumn = "OriginatingDevice";
-	private const string MatchDataIdColumn = "Id";
+	private const string MatchDataDeviceIdColumn = "OriginatingDevice";
+	private const string MatchDataRecordIdColumn = "Id";
 	private const string MatchDataDataColumn = "Data";
-	private const string MatchDataEditOfColumn = "EditOfId";
+	private const string MatchDataEditOfDeviceColumn = "EditOfDeviceId";
+	private const string MatchDataEditOfRecordColumn = "EditOfRecordId";
 
 	private SqliteConnection Connection = null!;
 
@@ -75,11 +76,11 @@ public class SqliteDataStore : IDataStore {
 		SqliteCommand createUnifiedRecordTable = new(
 			$"""
 			CREATE TABLE IF NOT EXISTS '{UnifiedRecordTableName}' (
-				'{UnifiedRecordDeviceColumn}' TEXT NOT NULL,
-				'{UnifiedRecordIdColumn}' INTEGER NOT NULL,
+				'{UnifiedRecordDeviceIdColumn}' TEXT NOT NULL,
+				'{UnifiedRecordRecordIdColumn}' INTEGER NOT NULL,
 				'{UnifiedRecordTableColumn}' TEXT NOT NULL,
 				'{UnifiedRecordDateColumn}' TEXT NOT NULL,
-				PRIMARY KEY ('{UnifiedRecordDeviceColumn}', '{UnifiedRecordIdColumn}'),
+				PRIMARY KEY ('{UnifiedRecordDeviceIdColumn}', '{UnifiedRecordRecordIdColumn}')
 			);
 			""",
 			Connection);
@@ -93,16 +94,21 @@ public class SqliteDataStore : IDataStore {
 		SqliteCommand createMatchDataTable = new(
 			$"""
 			 CREATE TABLE IF NOT EXISTS '{MatchDataTableName}' (
-			 	{MatchDataDeviceColumn} TEXT NOT NULL,
-			 	{MatchDataIdColumn} INTEGER NOT NULL,
+			 	{MatchDataDeviceIdColumn} TEXT NOT NULL,
+			 	{MatchDataRecordIdColumn} INTEGER NOT NULL,
 			 	{MatchDataDataColumn} TEXT NOT NULL,
-			 	{MatchDataEditOfColumn} TEXT,
-			 	PRIMARY KEY ({MatchDataDeviceColumn}, {MatchDataIdColumn}),
-			 	FOREIGN KEY ('{MatchDataDeviceColumn}', '{MatchDataIdColumn}')
-			 		REFERENCES '{UnifiedRecordTableName}' ('{UnifiedRecordDeviceColumn}','{UnifiedRecordIdColumn}')
+			 	{MatchDataEditOfDeviceColumn} TEXT,
+			 	{MatchDataEditOfRecordColumn} INTEGER,
+			 	PRIMARY KEY ({MatchDataDeviceIdColumn}, {MatchDataRecordIdColumn}),
+			 	FOREIGN KEY ('{MatchDataDeviceIdColumn}', '{MatchDataRecordIdColumn}')
+			 		REFERENCES '{UnifiedRecordTableName}' ('{UnifiedRecordDeviceIdColumn}','{UnifiedRecordRecordIdColumn}')
 			 			ON UPDATE RESTRICT
 			 			ON DELETE RESTRICT
-			 		DEFERRABLE INITIALLY DEFERRED
+			 		DEFERRABLE INITIALLY DEFERRED,
+			    FOREIGN KEY ('{MatchDataEditOfDeviceColumn}', '{MatchDataEditOfRecordColumn}')
+			 		REFERENCES '{MatchDataTableName}' ('{MatchDataDeviceIdColumn}','{MatchDataRecordIdColumn}')
+			 			ON UPDATE SET NULL
+			 			ON DELETE SET NULL
 			 );
 			 """,
 			Connection);
@@ -162,7 +168,7 @@ public class SqliteDataStore : IDataStore {
 				new SelectionDataFieldSpec {
 					Name = "Climb",
 					Options = new List<string> { "None", "Deep", "Shallow", "Failed" }.ToReadOnly(),
-					InitialValue = "None", 
+					InitialValue = "None",
 					RequiresValue = true
 				},
 				new SelectionDataFieldSpec {
@@ -229,13 +235,14 @@ public class SqliteDataStore : IDataStore {
 
 		GameSpec gameSpec = (await GetGameSpecs()).FirstOrDefault() ?? throw new UnreachableException(); // todo
 
-		List<MatchDataDto> allMatchData = [];
+		List<MatchDataDto> allMatchDtos = [];
 		while (reader.Read()) {
 
 			string deviceId = reader.GetString(0);
 			int recordId = reader.GetInt32(1);
 			string serializedMatch = reader.GetString(2);
-			int editOfId = reader.GetInt32(3);
+			string? editOfDeviceId = reader.GetString(3);
+			int? editOfRecordId = reader.GetInt32(4);
 
 			MatchData? data = MatchDataToCsv.Deserialize(serializedMatch, gameSpec);
 
@@ -243,27 +250,51 @@ public class SqliteDataStore : IDataStore {
 				return null; // todo
 			}
 
-			allMatchData.Add(new() {
-				MatchData = data, 
-				DeviceId = deviceId,
-				UnifiedRecordId = recordId,
-				EditBasedOn = editOfId
-			});
+			switch (editOfDeviceId is null, editOfRecordId is null) {
+
+				case (false, false):
+					allMatchDtos.Add(new() {
+						MatchData = data,
+						DeviceId = deviceId,
+						RecordId = recordId,
+						EditBasedOn = (editOfDeviceId!, (int)editOfRecordId!)
+					});
+					break;
+
+				case (true, true):
+					allMatchDtos.Add(new() {
+						MatchData = data,
+						DeviceId = deviceId,
+						RecordId = recordId,
+						EditBasedOn = null
+					});
+					break;
+
+				default:
+					return null; //todo
+			}
 		}
 
-		allMatchData.Sort((left, right) => {
+		List<List<MatchDataDto>> editChains = allMatchDtos
+			.Where(x => x.EditBasedOn is null)
+			.Select(x => new List<MatchDataDto> { x })
+			.ToList();
 
-			if (left.MatchData.EventCode != right.MatchData.EventCode) {
+		foreach (MatchDataDto editData in allMatchDtos.Where(x => x.EditBasedOn is not null)) {
 
+			List<MatchDataDto>? editChain = editChains.FirstOrDefault(x => x.Any(xx => (xx.DeviceId, xx.RecordId) == editData.EditBasedOn));
+
+			if (editChain is null) {
+				return null; // todo
 			}
-			// todo
-			return 1;
-		});
 
-		return allMatchData;
+			editChain.Insert(0, editData);
+		}
+
+		return editChains.Select(x => x.First()).ToList();
 	}
 
-	public async Task<bool> AddNewMatchData(MatchDataDto matchData) {
+	public async Task<bool> AddNewMatchData(CreateMatchDataDto matchData) {
 
 		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
 
@@ -276,21 +307,25 @@ public class SqliteDataStore : IDataStore {
 			     SELECT COUNT(*) AS lastId FROM '{UnifiedRecordTableName}'
 			 )
 			 INSERT INTO '{MatchDataTableName}' (
-			     '{MatchDataDeviceColumn}',
-			     '{MatchDataIdColumn}',
-			     '{MatchDataDataColumn}'
+			     '{MatchDataDeviceIdColumn}',
+			     '{MatchDataRecordIdColumn}',
+			     '{MatchDataDataColumn}',
+			     '{MatchDataEditOfDeviceColumn}',
+			     '{MatchDataEditOfRecordColumn}'
 			 )
 			 VALUES (
 			     '{matchData.DeviceId}',
 			     (SELECT lastId FROM temp) + 1,
-			     '{data}'
+			     '{data}',
+			     '{matchData.EditBasedOn?.DeviceId}',
+			     '{matchData.EditBasedOn?.RecordId}'
 			 );
 			 WITH temp AS (
 			     SELECT COUNT(*) AS lastId FROM '{UnifiedRecordTableName}'
 			 )
 			 INSERT INTO '{UnifiedRecordTableName}' (
-			     '{UnifiedRecordDeviceColumn}',
-			     '{UnifiedRecordIdColumn}',
+			     '{UnifiedRecordDeviceIdColumn}',
+			     '{UnifiedRecordRecordIdColumn}',
 			     '{UnifiedRecordTableColumn}',
 			     '{UnifiedRecordDateColumn}'
 			 )
@@ -306,7 +341,7 @@ public class SqliteDataStore : IDataStore {
 
 		try {
 			await addMatchDataCommand.ExecuteNonQueryAsync();
-		} catch {
+		} catch (Exception exception) {
 			return false;
 		}
 
@@ -344,7 +379,7 @@ public class SqliteDataStore : IDataStore {
 		try {
 			object? result = await command.ExecuteScalarAsync();
 
-			return result is DBNull
+			return result is null
 				? string.Empty
 				: result as string ?? throw new UnreachableException();
 

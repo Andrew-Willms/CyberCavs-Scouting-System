@@ -20,7 +20,7 @@ public interface IDataStore {
 
 	public Task<List<MatchDataDto>?> GetMatchData();
 
-	public Task <bool> AddNewMatchData(MatchDataDto matchData);
+	public Task <bool> AddNewMatchData(CreateMatchDataDto matchData);
 
 	//public Task<bool> AddMatchDataFromOtherDevice(string deviceId, MatchData matchData);
 
