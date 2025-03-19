@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading;
 using System.Threading.Tasks;
 using CCSSDomain.Serialization;
 using Microsoft.Maui.ApplicationModel;
