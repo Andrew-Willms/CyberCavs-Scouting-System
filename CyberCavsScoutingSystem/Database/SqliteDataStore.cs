@@ -6,7 +6,6 @@ using CCSSDomain.Serialization;
 using Microsoft.Data.Sqlite;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Database;
 

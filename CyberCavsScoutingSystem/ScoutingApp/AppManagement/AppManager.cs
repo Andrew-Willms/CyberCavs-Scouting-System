@@ -9,6 +9,7 @@ using CCSSDomain.GameSpecification;
 using CCSSDomain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Storage;
 using ScoutingApp.Views.Pages.Flyout;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
@@ -101,9 +102,10 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public async Task ApplicationStartup() {
 
-#if ANDROID
-		string directory = Android.App.Application.Context.GetExternalFilesDir(null)!.AbsoluteFile.Path;
-#endif
+//#if ANDROID
+//		string directory = Android.App.Application.Context.GetExternalFilesDir(null)!.AbsoluteFile.Path;
+//#endif
+		string directory = FileSystem.Current.AppDataDirectory;
 
 		string dbPath = System.IO.Path.Combine(directory, "ScoutingApp.db");
 		await DataStore.ConnectAndEnsureTables(dbPath);

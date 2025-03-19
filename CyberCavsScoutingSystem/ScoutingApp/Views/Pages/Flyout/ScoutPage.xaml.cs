@@ -13,7 +13,6 @@ public partial class ScoutPage : ContentPage {
 	public static string Route => "Scout";
 
 	private IAppManager AppManager { get; }
-	private IErrorPresenter ErrorPresenter { get; }
 
 	public string ScoutName {
 		get => AppManager.Scout;
@@ -33,10 +32,9 @@ public partial class ScoutPage : ContentPage {
 
 
 
-	public ScoutPage(IAppManager appManager, IErrorPresenter errorPresenter) {
+	public ScoutPage(IAppManager appManager) {
 
 		AppManager = appManager;
-		ErrorPresenter = errorPresenter;
 
 		Task.Run(async () => {
 			string? name = await AppManager.GetScoutName();

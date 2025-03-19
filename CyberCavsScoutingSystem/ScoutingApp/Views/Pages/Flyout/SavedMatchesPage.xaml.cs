@@ -86,6 +86,7 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 	}
 
 
+
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
 	private async void SavedMatchesPage_OnLoaded(object? sender, EventArgs e) {
 		await Refresh();
