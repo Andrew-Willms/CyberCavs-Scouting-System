@@ -37,6 +37,10 @@
 		<Label
 			Text="{Binding Path=QrCodeContent}"/>
 
+		<Button
+			Text="Return to Match"
+			Clicked="Button_OnClicked"/>
+
 	</VerticalStackLayout>
 
 </ContentPage>

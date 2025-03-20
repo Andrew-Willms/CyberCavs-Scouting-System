@@ -62,12 +62,12 @@ public partial class SetupTab : ContentPage {
 			: Optional.NoValue;
 	}
 
-	public uint? Alliance {
-		get => AppManager.ActiveMatchData.Alliance.HasValue
-			? AppManager.ActiveMatchData.Alliance.Value
-			: null;
+	public int Alliance {
+		get => AppManager.ActiveMatchData.Alliance is { HasValue: true, Value: var value } && value < Alliances.Count
+			? (int)value
+			: -1;
 
-		set => AppManager.ActiveMatchData.Alliance = value is not null && Alliances.Count > value
+		set => AppManager.ActiveMatchData.Alliance = value is not -1 && Alliances.Count > value
 			? ((uint)value).Optionalize() 
 			: Optional.NoValue;
 	}
@@ -80,19 +80,7 @@ public partial class SetupTab : ContentPage {
 
 		AppManager = appManager;
 
-		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(MatchNumber)));
-		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(ReplayNumber)));
-		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(MatchType)));
-		AppManager.OnMatchStarted.Subscribe(
-			() => {
-				OnPropertyChanged(nameof(TeamNumber));
-			});
-		AppManager.OnMatchStarted.Subscribe(
-			() => {
-				OnPropertyChanged(nameof(Alliance));
-			});
-		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliances)));
-		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
+		// ReSharper disable once ExplicitCallerInfoArgument - refresh all
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(""));
 
 		InitializeComponent();

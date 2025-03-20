@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
+using ScoutingApp.Views.Pages.Match;
 
 namespace ScoutingApp.Views.Pages.Flyout;
 
@@ -82,6 +83,10 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 	private new void OnPropertyChanged(string propertyName) {
 		PropertyChanged?.Invoke(this, new(propertyName));
+	}
+
+	private void Button_OnClicked(object? sender, EventArgs e) {
+		Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
 }
