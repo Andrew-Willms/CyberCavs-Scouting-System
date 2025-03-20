@@ -83,10 +83,17 @@ public partial class SetupTab : ContentPage {
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(MatchNumber)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(ReplayNumber)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(MatchType)));
-		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(TeamNumber)));
-		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliance)));
+		AppManager.OnMatchStarted.Subscribe(
+			() => {
+				OnPropertyChanged(nameof(TeamNumber));
+			});
+		AppManager.OnMatchStarted.Subscribe(
+			() => {
+				OnPropertyChanged(nameof(Alliance));
+			});
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Alliances)));
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(nameof(Inputs)));
+		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(""));
 
 		InitializeComponent();
 		BindingContext = this;
