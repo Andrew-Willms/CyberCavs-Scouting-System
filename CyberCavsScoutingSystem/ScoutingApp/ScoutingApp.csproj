@@ -111,6 +111,9 @@
 	  <Compile Update="Views\Pages\Flyout\MatchQrCodePage.xaml.cs">
 	    <DependentUpon>MatchQrCodePage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\Pages\Flyout\QrCodeScanner.xaml.cs">
+	    <DependentUpon>QrCodeScanner.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\Pages\Flyout\SavedMatchesPage.xaml.cs">
 	    <DependentUpon>SavedMatchesPage.xaml</DependentUpon>
 	  </Compile>
@@ -148,6 +151,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Flyout\MatchQrCodePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Flyout\QrCodeScanner.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Flyout\SavedMatchesPage.xaml">

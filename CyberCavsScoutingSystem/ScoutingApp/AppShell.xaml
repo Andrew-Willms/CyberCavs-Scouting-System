@@ -92,14 +92,14 @@
 
 	</FlyoutItem>
 
-	<!--<FlyoutItem
-		Title="Settings"
-		Route="{x:Static flyout:SavedMatchesPage.Route}">
+	<FlyoutItem
+		Title="QR Code Scanner"
+		Route="{x:Static flyout:QrCodeScanner.Route}">
 
 		<ShellContent
-			Title="QR Codes" 
-			ContentTemplate="{DataTemplate flyout:SavedMatchesPage}"/>
+			Title="QR Code Scanner" 
+			ContentTemplate="{DataTemplate flyout:QrCodeScanner}"/>
 
-	</FlyoutItem>-->
+	</FlyoutItem>
 
 </Shell>

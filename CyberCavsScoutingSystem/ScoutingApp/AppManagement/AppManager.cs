@@ -10,7 +10,6 @@ using CCSSDomain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Storage;
-using ScoutingApp.Views.Pages.Flyout;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;

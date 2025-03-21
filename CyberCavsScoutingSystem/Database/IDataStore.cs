@@ -21,7 +21,13 @@ public interface IDataStore {
 
 	public Task <bool> AddNewMatchData(CreateMatchDataDto matchData);
 
-	public Task<bool> AddMatchDataFromOtherDevice(MatchDataDto matchData);
+	public enum AddMatchDataResult {
+		Success,
+		Duplicate,
+		Other
+	}
+
+	public Task<AddMatchDataResult> AddMatchDataFromOtherDevice(MatchDataDto matchData);
 
 	public Task<bool> DeleteMatchData(MatchDataDto matchData);
 

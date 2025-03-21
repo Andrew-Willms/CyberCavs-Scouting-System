@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage 
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
+    xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+    x:Class="ScoutingApp.Views.Pages.Flyout.QrCodeScanner"
+	x:DataType="flyout:QrCodeScanner">
+
+	<Grid Margin="5">
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="60"/>
+			<RowDefinition Height="60"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+		</Grid.RowDefinitions>
+
+		<Label
+			Text="{Binding Path=QrCodeCount, StringFormat='Qr Code Count: {0}'}"
+			FontSize="24"
+			FontAttributes="Bold"
+			Margin="5"
+			Grid.Row="0"/>
+
+		<Label
+			Text="{Binding Path=LastQrCodeScanned}"
+			FontSize="12"
+			Margin="5"
+			Grid.Row="1"/>
+
+		<controls:CameraBarcodeReaderView
+			x:Name="QrCodeReader"
+			IsDetecting="true"
+			BarcodesDetected="CameraBarcodeReaderView_OnBarcodesDetected"
+			Margin="5, 50"
+			Grid.Row="2"/>
+
+		<Button
+			Text="Export to CSV"
+			Clicked="ExportButton_OnClicked"
+			Grid.Row="3"/>
+
+	</Grid>
+
+</ContentPage>

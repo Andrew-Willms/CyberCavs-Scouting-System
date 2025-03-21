@@ -65,10 +65,13 @@ public class Program {
 		}
 
 		foreach (MatchDataDto matchDataDto in matchData) {
+
+			IDataStore.AddMatchDataResult test = await dataStore.AddMatchDataFromOtherDevice(matchDataDto);
+
 			Console.WriteLine(matchDataDto);
 		}
 
-		success = await dataStore.DeleteMatchData(matchData[0]);
+		//success = await dataStore.DeleteMatchData(matchData[0]);
 
 		if (!success) {
 			throw new();

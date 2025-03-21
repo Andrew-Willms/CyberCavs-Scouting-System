@@ -365,7 +365,7 @@ public class SqliteDataStore : IDataStore {
 		return true;
 	}
 
-	public async Task<bool> AddMatchDataFromOtherDevice(MatchDataDto matchData) {
+	public async Task<IDataStore.AddMatchDataResult> AddMatchDataFromOtherDevice(MatchDataDto matchData) {
 
 		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
 
@@ -404,11 +404,14 @@ public class SqliteDataStore : IDataStore {
 
 		try {
 			await addMatchDataCommand.ExecuteNonQueryAsync();
-		} catch {
-			return false;
+		} catch (Exception exception) {
+
+			return exception.Message.Contains("UNIQUE")
+				? IDataStore.AddMatchDataResult.Duplicate
+				: IDataStore.AddMatchDataResult.Other;
 		}
 
-		return true;
+		return IDataStore.AddMatchDataResult.Success;
 	}
 
 	public async Task<bool> DeleteMatchData(MatchDataDto matchData) {
