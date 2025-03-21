@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 using CCSSDomain.DataCollectors;
+using CCSSDomain.Serialization;
+using Database;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using ScoutingApp.Views.Pages.Flyout;
@@ -17,6 +23,7 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 	public static string Route => "Confirm";
 
 	private IAppManager AppManager { get; }
+	private IDataStore DataStore { get; }
 
 	private IErrorPresenter ErrorPresenter { get; }
 
@@ -68,10 +75,11 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 
 
-	public ConfirmTab(IAppManager appManager, IErrorPresenter errorPresenter) {
+	public ConfirmTab(IAppManager appManager, IErrorPresenter errorPresenter, IDataStore dataStore) {
 
 		AppManager = appManager;
 		ErrorPresenter = errorPresenter;
+		DataStore = dataStore;
 
 		AppManager.OnMatchStarted.Subscribe(() => OnPropertyChanged(""));
 
@@ -94,7 +102,33 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 			return;
 		}
 
-		await Shell.Current.GoToAsync($"//{SavedMatchesPage.Route}");
+		// todo hacky as fuck way to navigate to the most recent match
+#if ANDROID
+		string deviceId = Android.Provider.Settings.Secure.GetString(
+			Platform.CurrentActivity!.ContentResolver,
+			Android.Provider.Settings.Secure.AndroidId)!;
+#elif IOS
+		string deviceId = UIKit.UIDevice.CurrentDevice.IdentifierForVendor.ToString();
+#else
+		string deviceId = null as string ?? throw new NotSupportedException();
+#endif
+
+		List<MatchDataDto>? allData = await DataStore.GetMatchData();
+		MatchDataDto? mostRecentMatch = allData?.Where(x => x.DeviceId == deviceId).MaxBy(x => x.RecordId);
+
+		if (mostRecentMatch is null) {
+			await Shell.Current.GoToAsync($"//{MatchQrCodePage.Route}");
+			return;
+		}
+
+		Dictionary<string, object> parameters = new() {
+			{ MatchQrCodePage.MatchDataNavigationParameterName, mostRecentMatch },
+#pragma warning disable CS8974 // Converting method group to non-delegate type
+			{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
+#pragma warning restore CS8974 // Converting method group to non-delegate type
+		};
+
+		await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromSavedMatchesPage, parameters);
 	}
 
 	private async void DiscardButton_OnClicked(object? sender, EventArgs e) {
@@ -110,6 +144,13 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 		}
 
 		AppManager.DiscardAndStartNewMatch();
+	}
+
+
+
+	private async Task<bool> DeleteMatch(MatchDataDto matchData) {
+
+		return await DataStore.DeleteMatchData(matchData);
 	}
 
 
