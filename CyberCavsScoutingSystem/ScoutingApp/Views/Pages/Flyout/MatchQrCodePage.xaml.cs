@@ -21,6 +21,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 	public const string MatchDataNavigationParameterName = nameof(MatchDataDto);
 	public const string MatchDeleterNavigationParameterName = nameof(MatchDeleter);
 
+	private IAppManager AppManager { get; }
 	private IErrorPresenter ErrorPresenter { get; }
 
 	public MatchDataDto SavedMatch {
@@ -44,8 +45,9 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 	// todo add a button to go straight back to the match page in the auto tab
 
-	public MatchQrCodePage(IErrorPresenter errorPresenter) {
+	public MatchQrCodePage(IAppManager appManager, IErrorPresenter errorPresenter) {
 
+		AppManager = appManager;
 		ErrorPresenter = errorPresenter;
 
 		BindingContext = this;
@@ -70,23 +72,29 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
 	private async void EditButton_OnClick(object? sender, EventArgs e) {
 
-		Dictionary<string, object> parameters = new() {
-			{ EditMatchPage.MatchDataNavigationParameterName, SavedMatch },
-		};
+		bool discard = await Shell.Current.DisplayAlert(
+			"Discard Current Match and Edit Selected Match",
+			"Do you want to discard the current match and start editing the selected One? Doing so will delete all data entered in this match",
+			"Discard and start editing.",
+			"Continue with current match.");
 
-		await Shell.Current.GoToAsync($"../{EditMatchPage.RouteFromSavedMatchesPage}", parameters);
+		if (!discard) {
+			return;
+		}
+
+		AppManager.DiscardAndStartEditingMatch(SavedMatch);
+		await Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
+	private void ReturnToMatch_Button_Clicked(object? sender, EventArgs e) {
+		Shell.Current.GoToAsync($"//{SetupTab.Route}");
+	}
 
 
 	public new event PropertyChangedEventHandler? PropertyChanged;
 
 	private new void OnPropertyChanged(string propertyName) {
 		PropertyChanged?.Invoke(this, new(propertyName));
-	}
-
-	private void Button_OnClicked(object? sender, EventArgs e) {
-		Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
 }

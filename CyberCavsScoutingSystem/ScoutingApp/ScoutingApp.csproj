@@ -105,9 +105,6 @@
 	  <Compile Update="Views\DataTemplates\TextDataFieldInputView.xaml.cs">
 	    <DependentUpon>TextDataFieldInputView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\Flyout\EditMatchPage.xaml.cs">
-	    <DependentUpon>EditMatchPage.xaml</DependentUpon>
-	  </Compile>
 	  <Compile Update="Views\Pages\Flyout\MatchQrCodePage.xaml.cs">
 	    <DependentUpon>MatchQrCodePage.xaml</DependentUpon>
 	  </Compile>
@@ -145,9 +142,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\Flyout\EditMatchPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Flyout\MatchQrCodePage.xaml">

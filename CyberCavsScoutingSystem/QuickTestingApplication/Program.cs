@@ -49,15 +49,15 @@ public class Program {
 			throw new();
 		}
 
-		//success = await dataStore.AddNewMatchData(new() {
-		//	MatchData = SampleData[0],
-		//	DeviceId = "testDeviceId",
-		//	EditBasedOn = ("testDeviceId", 1)
-		//});
+		success = await dataStore.AddNewMatchData(new() {
+			MatchData = SampleData[0],
+			DeviceId = "testDeviceId",
+			EditBasedOn = ("testDeviceId", 1)
+		});
 
-		//if (!success) {
-		//	throw new();
-		//}
+		if (!success) {
+			throw new();
+		}
 
 		List<MatchDataDto>? matchData = await dataStore.GetMatchData();
 
@@ -69,12 +69,6 @@ public class Program {
 
 			Console.WriteLine(matchDataDto);
 		}
-
-		MatchDataDto test = matchData.First();
-		IDataStore.AddMatchDataResult test2 = await dataStore.AddMatchDataFromOtherDevice(test);
-		IDataStore.AddMatchDataResult test3 = await dataStore.AddMatchDataFromOtherDevice(test);
-		IDataStore.AddMatchDataResult test4 = await dataStore.AddMatchDataFromOtherDevice(test);
-		IDataStore.AddMatchDataResult test5 = await dataStore.AddMatchDataFromOtherDevice(test);
 
 		//success = await dataStore.DeleteMatchData(matchData[0]);
 

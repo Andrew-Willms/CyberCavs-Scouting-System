@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using CCSSDomain.Serialization;
 using Database;
-using Java.Lang;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
@@ -111,12 +113,31 @@ public partial class QrCodeScanner : ContentPage {
 			qrCode.Value.Length > 25;
 	}
 
-	private void ExportButton_OnClicked(object? sender, EventArgs e) {
-		throw new NotImplementedException();
-	}
+	private async void ExportButton_OnClicked(object? sender, EventArgs e) {
 
-	private void QrCodeReader_OnBarcodesDetected(object? sender, BarcodeDetectionEventArgs e) {
-		Trace.WriteLine("detected");
+		if (AppManager.GameSpecification is null) {
+			ErrorPresenter.DisplayError("Game Specification Null",
+				"The GameSpecification is null, this shouldn't be the case.");
+			return;
+		}
+
+		List<MatchDataDto>? matchData = await DataStore.GetMatchData();
+
+		if (matchData is null) {
+			ErrorPresenter.DisplayError("Error Loading Match Data",
+				"Could not load the match data from the database while trying to export to CSV.");
+			return;
+		}
+
+		StringBuilder stringBuilder = new(MatchDataToCsv.GetCsvHeaders(AppManager.GameSpecification));
+		foreach (MatchDataDto matchDataDto in matchData) {
+			stringBuilder.Append('\n');
+			stringBuilder.Append(MatchDataToCsv.Serialize(matchDataDto.MatchData));
+		}
+
+		string saveDirectory = Android.App.Application.Context.GetExternalFilesDir(Android.OS.Environment.DirectoryDocuments)!.AbsolutePath;
+		string path = Path.Combine(saveDirectory, $"Match Data {DateTime.Now:yyyy-MM-dd HH_mm_ss}.csv");
+		await File.WriteAllTextAsync(path, stringBuilder.ToString());
 	}
 
 }

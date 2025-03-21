@@ -33,6 +33,8 @@ public class MatchDataCollector {
 	public ReadOnlyList<InputDataCollector> TeleTabInputs { get; }
 	public ReadOnlyList<InputDataCollector> EndgameTabInputs { get; }
 
+	public (string DeviceId, int RecordId)? EditOf { get; init; }
+
 	public bool IsValid =>
 		MatchNumber.HasValue &&
 		ReplayNumber.HasValue &&

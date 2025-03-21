@@ -50,7 +50,7 @@ public static class MauiProgram {
 		builder.Services.AddSingleton<EventPage>();
 		builder.Services.AddSingleton<MatchQrCodePage>();
 		builder.Services.AddSingleton<SavedMatchesPage>();
-		builder.Services.AddSingleton<QrCodeScanner>();
+		builder.Services.AddTransient<QrCodeScanner>();
 
 		return builder.Build();
 	}

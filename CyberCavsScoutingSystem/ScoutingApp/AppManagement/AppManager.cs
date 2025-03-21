@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Android.DeviceLock;
 using CCSSDomain.Data;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
@@ -10,6 +12,7 @@ using CCSSDomain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Storage;
+using UtilitiesLibrary.Optional;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;
@@ -31,6 +34,8 @@ public interface IAppManager : INotifyPropertyChanged {
 	public Task<bool> SaveAndStartNewMatch();
 
 	public void DiscardAndStartNewMatch();
+
+	public void DiscardAndStartEditingMatch(MatchDataDto matchData);
 
 	public Event OnMatchStarted { get; }
 
@@ -119,7 +124,6 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 	private void StartNewMatch() {
 
 		ActiveMatchData = new(GameSpecification);
-
 		OnMatchStarted.Invoke();
 	}
 
@@ -127,7 +131,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 #if ANDROID
 		string deviceId = Android.Provider.Settings.Secure.GetString(
-			Platform.CurrentActivity!.ContentResolver, 
+			Platform.CurrentActivity!.ContentResolver,
 			Android.Provider.Settings.Secure.AndroidId)!;
 #elif IOS
 		string deviceId = UIKit.UIDevice.CurrentDevice.IdentifierForVendor.ToString();
@@ -144,7 +148,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		CreateMatchDataDto createDto = new() {
 			MatchData = matchData,
 			DeviceId = deviceId,
-			EditBasedOn = null
+			EditBasedOn = ActiveMatchData.EditOf is null ? null : (ActiveMatchData.EditOf?.DeviceId!, (int)ActiveMatchData.EditOf?.RecordId!)
 		};
 
 		if (!await DataStore.AddNewMatchData(createDto)) {
@@ -157,6 +161,45 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 	public void DiscardAndStartNewMatch() {
 		StartNewMatch();
+	}
+
+	public void DiscardAndStartEditingMatch(MatchDataDto matchData) {
+
+		// todo fix this, the check is broken and returns false when it should return true I think
+		//if (!matchData.MatchData.GameSpecification.Equals(GameSpecification)) {
+		//	throw new NotImplementedException("Figure out how to handle the game specs being different.");
+		//}
+
+		ActiveMatchData = new(GameSpecification) {
+			MatchNumber = matchData.MatchData.Match.MatchNumber,
+			ReplayNumber = matchData.MatchData.Match.ReplayNumber,
+			MatchType = matchData.MatchData.Match.Type,
+			TeamNumber = matchData.MatchData.TeamNumber,
+			Alliance = matchData.MatchData.AllianceIndex,
+			EditOf = (matchData.DeviceId, matchData.RecordId)
+		};
+
+		for (int i = 0; i < GameSpecification.DataFields.Count; i++) {
+
+			switch (ActiveMatchData.DataFields[i], matchData.MatchData.DataFields[i]) {
+				case (BooleanDataField booleanDataField, bool boolValue):
+					booleanDataField.Value = boolValue;
+					break;
+				case (IntegerDataField integerDataField, int intValue):
+					integerDataField.Value = intValue;
+					break;
+				case (SelectionDataField selectionDataField, Optional<string> selection):
+					selectionDataField.Value = selection;
+					break;
+				case (TextDataField textDataField, string text):
+					textDataField.Value = text;
+					break;
+				default:
+					throw new NotImplementedException("Figure out how to hand data field type miss-matches");
+			}
+		}
+
+		OnMatchStarted.Invoke();
 	}
 
 
