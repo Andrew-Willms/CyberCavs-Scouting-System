@@ -52,7 +52,6 @@ public class SqliteDataStore : IDataStore {
 		try {
 			SqliteDataReader reader = await test.ExecuteReaderAsync();
 			reader.Read();
-			int tableCount = reader.GetInt32(0);
 
 		} catch {
 			return false;
@@ -398,17 +397,33 @@ public class SqliteDataStore : IDataStore {
 			     '{MatchDataTableName}',
 			     'TimeCreated'
 			 );
-			 COMMIT;
 			 """,
 			Connection);
 
 		try {
 			await addMatchDataCommand.ExecuteNonQueryAsync();
+
 		} catch (Exception exception) {
 
-			return exception.Message.Contains("UNIQUE")
-				? IDataStore.AddMatchDataResult.Duplicate
+			SqliteCommand rollbackCommand = new("ROLLBACK;", Connection);
+
+			try {
+				await rollbackCommand.ExecuteNonQueryAsync();
+			} catch {
+				return IDataStore.AddMatchDataResult.Other;
+			}
+
+			return exception.Message.Contains("UNIQUE") 
+				? IDataStore.AddMatchDataResult.Duplicate 
 				: IDataStore.AddMatchDataResult.Other;
+		}
+
+		SqliteCommand commitCommand = new("COMMIT;", Connection);
+
+		try {
+			await commitCommand.ExecuteNonQueryAsync();
+		} catch {
+			return IDataStore.AddMatchDataResult.Other;
 		}
 
 		return IDataStore.AddMatchDataResult.Success;

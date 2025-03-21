@@ -16,7 +16,7 @@ public class ErrorPresenter : IErrorPresenter {
 
 	public async void DisplayError(string caption, string message) {
 
-		await Application.Current!.MainPage!.DisplayAlert("test", "test", "test");
+		await Application.Current!.MainPage!.DisplayAlert(caption, message, "Okay");
 
 	}
 

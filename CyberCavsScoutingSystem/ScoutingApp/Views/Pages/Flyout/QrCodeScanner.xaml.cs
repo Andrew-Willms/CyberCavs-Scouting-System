@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Linq;
 using CCSSDomain.Serialization;
 using Database;
+using Java.Lang;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using ZXing.Net.Maui;
@@ -56,30 +58,32 @@ public partial class QrCodeScanner : ContentPage {
 
 
 
-	private async void CameraBarcodeReaderView_OnBarcodesDetected(object? sender, BarcodeDetectionEventArgs e) {
+	private void CameraBarcodeReaderView_OnBarcodesDetected(object? sender, BarcodeDetectionEventArgs e) {
 
-		try {
+		string? qrCodeString = e.Results.FirstOrDefault(IsValidQrCode)?.Value;
 
-			string? qrCodeString = e.Results.FirstOrDefault(IsValidQrCode)?.Value;
+		if (qrCodeString is null) {
+			return;
+		}
 
-			if (qrCodeString is null) {
-				return;
-			}
+		if (AppManager.GameSpecification is null) {
+			ErrorPresenter.DisplayError("Game Specification Null",
+				"The GameSpecification is null, this shouldn't be the case.");
+			return;
+		}
 
-			if (AppManager.GameSpecification is null) {
-				ErrorPresenter.DisplayError("Game Specification Null",
-					"The GameSpecification is null, this shouldn't be the case.");
-				return;
-			}
+		MatchDataDto? matchData = MatchDataDtoToCsv.Deserialize(qrCodeString, AppManager.GameSpecification);
 
-			MatchDataDto? matchData = MatchDataDtoToCsv.Deserialize(qrCodeString, AppManager.GameSpecification);
+		if (matchData is null) {
+			ErrorPresenter.DisplayError("Invalid QR Code", "The QR code data could not be converted into a match.");
+			return;
+		}
 
-			if (matchData is null) {
-				ErrorPresenter.DisplayError("Invalid QR Code", "The QR code data could not be converted into a match.");
-				return;
-			}
+		IDataStore.AddMatchDataResult safeResult = DataStore.AddMatchDataFromOtherDevice(matchData).Result;
 
-			switch (await DataStore.AddMatchDataFromOtherDevice(matchData)) {
+		MainThread.BeginInvokeOnMainThread(() => {
+
+			switch (safeResult) {
 
 				case IDataStore.AddMatchDataResult.Success:
 					QrCodeCount++;
@@ -97,10 +101,7 @@ public partial class QrCodeScanner : ContentPage {
 				default:
 					throw new UnreachableException();
 			}
-		} catch (Exception exception) {
-			// ignore
-		}
-
+		});
 	}
 
 	private static bool IsValidQrCode(BarcodeResult qrCode) {
@@ -112,6 +113,10 @@ public partial class QrCodeScanner : ContentPage {
 
 	private void ExportButton_OnClicked(object? sender, EventArgs e) {
 		throw new NotImplementedException();
+	}
+
+	private void QrCodeReader_OnBarcodesDetected(object? sender, BarcodeDetectionEventArgs e) {
+		Trace.WriteLine("detected");
 	}
 
 }
