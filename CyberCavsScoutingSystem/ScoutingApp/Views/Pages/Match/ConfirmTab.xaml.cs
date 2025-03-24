@@ -144,6 +144,8 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 		}
 
 		AppManager.DiscardAndStartNewMatch();
+
+		await Shell.Current.GoToAsync($"//{AutoTab.Route}");
 	}
 
 

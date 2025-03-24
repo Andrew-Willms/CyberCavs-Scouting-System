@@ -14,5 +14,6 @@ namespace ScoutingApp;
 	                       ConfigChanges.UiMode | 
 	                       ConfigChanges.ScreenLayout | 
 	                       ConfigChanges.SmallestScreenSize | 
-	                       ConfigChanges.Density)]
-public class MainActivity : MauiAppCompatActivity { }
+	                       ConfigChanges.Density,
+	ScreenOrientation = ScreenOrientation.Landscape)]
+public class MainActivity : MauiAppCompatActivity;

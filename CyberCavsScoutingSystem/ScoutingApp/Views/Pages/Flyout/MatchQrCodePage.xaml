@@ -37,9 +37,17 @@
 		<Label
 			Text="{Binding Path=QrCodeContent}"/>
 
-		<Button
-			Text="Return to Match"
-			Clicked="ReturnToMatch_Button_Clicked"/>
+		<HorizontalStackLayout>
+
+			<Button
+				Text="Return to Match"
+				Clicked="ReturnToMatch_ButtonClicked"/>
+
+			<Button
+				Text="Scan other Codes"
+				Clicked="ScanOtherCodes_ButtonClicked"/>
+
+		</HorizontalStackLayout>
 
 	</VerticalStackLayout>
 

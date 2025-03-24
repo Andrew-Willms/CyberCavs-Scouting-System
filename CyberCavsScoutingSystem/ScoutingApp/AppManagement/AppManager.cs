@@ -217,6 +217,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 	}
 
 
+
 	public event PropertyChangedEventHandler? PropertyChanged;
 
 	private void OnPropertyChanged(string propertyName) {

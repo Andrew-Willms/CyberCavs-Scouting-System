@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using CCSSDomain.Serialization;
@@ -62,7 +61,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 		bool success = await MatchDeleter(SavedMatch);
 
 		if (success) {
-			await Shell.Current.GoToAsync("..");
+			await Shell.Current.GoToAsync($"//{SavedMatchesPage.Route}");
 			return;
 		}
 
@@ -86,9 +85,20 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 		await Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
-	private void ReturnToMatch_Button_Clicked(object? sender, EventArgs e) {
-		Shell.Current.GoToAsync($"//{SetupTab.Route}");
+	private void ReturnToMatch_ButtonClicked(object? sender, EventArgs e) {
+		
+		//Shell.Current.GoToAsync($"//{SetupTab.Route}");
+
+		Shell.Current.GoToAsync($"../{SetupTab.Route}"); // try this
+
+		//Shell.Current.GoToAsync(".."); // and this
+		//Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
+
+	private void ScanOtherCodes_ButtonClicked(object? sender, EventArgs e) {
+		Shell.Current.GoToAsync($"//{QrCodeScanner.Route}");
+	}
+
 
 
 	public new event PropertyChangedEventHandler? PropertyChanged;
