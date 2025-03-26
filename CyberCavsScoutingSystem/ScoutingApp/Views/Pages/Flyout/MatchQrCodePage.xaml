@@ -37,7 +37,8 @@
 		<Label
 			Text="{Binding Path=QrCodeContent}"/>
 
-		<HorizontalStackLayout>
+		<HorizontalStackLayout
+			Spacing="10">
 
 			<Button
 				Text="Return to Match"

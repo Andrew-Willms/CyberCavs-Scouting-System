@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
@@ -86,13 +88,14 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 	}
 
 	private void ReturnToMatch_ButtonClicked(object? sender, EventArgs e) {
-		
-		//Shell.Current.GoToAsync($"//{SetupTab.Route}");
 
-		Shell.Current.GoToAsync($"../{SetupTab.Route}"); // try this
+		// I think there is a bug in Maui and navigating to ../Setup doesn't work, so I remove tabs manually.
+		Page[] stack = Shell.Current.Navigation.NavigationStack.ToArray();
+		for (int i = stack.Length - 1; i > 0; i--) {
+			Shell.Current.Navigation.RemovePage(stack[i]);
+		}
 
-		//Shell.Current.GoToAsync(".."); // and this
-		//Shell.Current.GoToAsync($"//{SetupTab.Route}");
+		Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
 	private void ScanOtherCodes_ButtonClicked(object? sender, EventArgs e) {
