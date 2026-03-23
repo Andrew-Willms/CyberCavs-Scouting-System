@@ -1,0 +1,341 @@
+{
+  "$type": "CCSSDomain.GameSpecification.GameSpec, CCSSDomain",
+  "Name": "Rebuilt",
+  "Description": "",
+  "Year": 2026,
+  "Version": {
+    "$type": "CCSSDomain.GameSpecification.Version, CCSSDomain",
+    "MajorNumber": 1,
+    "MinorNumber": 0,
+    "PatchNumber": 0,
+    "Name": "",
+    "Description": ""
+  },
+  "RobotsPerAlliance": 3,
+  "AlliancesPerMatch": 2,
+  "Alliances": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.AllianceColor, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.AllianceColor[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.AllianceColor, CCSSDomain",
+          "Name": "Red Alliance",
+          "Color": "255, 0, 0"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.AllianceColor, CCSSDomain",
+          "Name": "Blue Alliance",
+          "Color": "0, 0, 255"
+        }
+      ]
+    }
+  },
+  "DataFields": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.DataFieldSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.DataFieldSpec[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes - Early",
+                "Yes - Late",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Outpost"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes - Early",
+                "Yes - Late",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Depot"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "InitialValue": 0,
+          "MinValue": 0,
+          "MaxValue": 15,
+          "Name": "Auto Mid Trips"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "Attempted",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "No",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Auto Climb"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Passing",
+                "Scoring",
+                "Defending"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Primary Role"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Passing"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Scoring"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Defending"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.TextDataFieldSpec, CCSSDomain",
+          "InitialValue": "",
+          "MustNotBeEmpty": false,
+          "MustNotBeInitialValue": false,
+          "Name": "Effectiveness"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Climb"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "Options": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "25%",
+                "50%",
+                "75%",
+                "100%"
+              ]
+            }
+          },
+          "InitialValue": {
+            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Value": "",
+            "HasValue": true
+          },
+          "RequiresValue": true,
+          "Name": "Disconnected"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.TextDataFieldSpec, CCSSDomain",
+          "InitialValue": "",
+          "MustNotBeEmpty": false,
+          "MustNotBeInitialValue": false,
+          "Name": "Comments"
+        }
+      ]
+    }
+  },
+  "SetupTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": []
+    }
+  },
+  "AutoTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Outpost",
+          "Label": "Outpost"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Depot",
+          "Label": "Depot"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Auto Mid Trips",
+          "Label": "Mid Trips"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Auto Climb",
+          "Label": "L1 Climb"
+        }
+      ]
+    }
+  },
+  "TeleTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Primary Role",
+          "Label": "Primary Role"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Passing",
+          "Label": "Passing?"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Scoring",
+          "Label": "Scoring?"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Defending",
+          "Label": "Defending?"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Effectiveness",
+          "Label": "How effectively did they play their role?"
+        }
+      ]
+    }
+  },
+  "EndgameTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$values": [
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Climb",
+          "Label": "Climb"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Disconnected",
+          "Label": "Disconnected %"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Comments",
+          "Label": "Extra Comments"
+        }
+      ]
+    }
+  }
+}

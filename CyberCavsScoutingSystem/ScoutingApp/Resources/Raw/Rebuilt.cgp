@@ -1,0 +1,305 @@
+{
+  "$type": "GameMakerWpf.Domain.EditingData.GameEditingData, GameMakerWpf",
+  "Name": "Rebuilt",
+  "Year": "2026",
+  "Description": "",
+  "VersionMajorNumber": "1",
+  "VersionMinorNumber": "0",
+  "VersionPatchNumber": "0",
+  "VersionDescription": "",
+  "RobotsPerAlliance": "3",
+  "AlliancesPerMatch": "2",
+  "Alliances": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[GameMakerWpf.Domain.EditingData.AllianceEditingData, GameMakerWpf]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "GameMakerWpf.Domain.EditingData.AllianceEditingData[], GameMakerWpf",
+      "$values": [
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.AllianceEditingData, GameMakerWpf",
+          "Name": "Red Alliance",
+          "RedColorValue": "255",
+          "GreenColorValue": "0",
+          "BlueColorValue": "0"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.AllianceEditingData, GameMakerWpf",
+          "Name": "Blue Alliance",
+          "RedColorValue": "0",
+          "GreenColorValue": "0",
+          "BlueColorValue": "255"
+        }
+      ]
+    }
+  },
+  "DataFields": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[GameMakerWpf.Domain.EditingData.DataFieldEditingData, GameMakerWpf]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "GameMakerWpf.Domain.EditingData.DataFieldEditingData[], GameMakerWpf",
+      "$values": [
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes - Early",
+                "Yes - Late",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": "",
+          "RequiresValue": true,
+          "Name": "Outpost"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes - Early",
+                "Yes - Late",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": "",
+          "RequiresValue": true,
+          "Name": "Depot"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.IntegerDataFieldEditingData, GameMakerWpf",
+          "InitialValue": "0",
+          "MinValue": "0",
+          "MaxValue": "15",
+          "Name": "Auto Mid Trips"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "Attempted",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": "No",
+          "RequiresValue": true,
+          "Name": "Auto Climb"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Passing",
+                "Scoring",
+                "Defending"
+              ]
+            }
+          },
+          "InitialValue": "",
+          "RequiresValue": true,
+          "Name": "Primary Role"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": "",
+          "RequiresValue": true,
+          "Name": "Passing"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": "",
+          "RequiresValue": true,
+          "Name": "Scoring"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "Yes",
+                "No"
+              ]
+            }
+          },
+          "InitialValue": "",
+          "RequiresValue": true,
+          "Name": "Defending"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.TextDataFieldEditingData, GameMakerWpf",
+          "InitialValue": "",
+          "MustNotBeEmpty": false,
+          "MustNotBeInitialValue": false,
+          "Name": "Effectiveness"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          "InitialValue": "",
+          "RequiresValue": true,
+          "Name": "Climb"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
+          "OptionNames": {
+            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
+            "Collection": {
+              "$type": "System.String[], System.Private.CoreLib",
+              "$values": [
+                "25%",
+                "50%",
+                "75%",
+                "100%"
+              ]
+            }
+          },
+          "InitialValue": "",
+          "RequiresValue": true,
+          "Name": "Disconnected"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.TextDataFieldEditingData, GameMakerWpf",
+          "InitialValue": "",
+          "MustNotBeEmpty": false,
+          "MustNotBeInitialValue": false,
+          "Name": "Comments"
+        }
+      ]
+    }
+  },
+  "SetupTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "GameMakerWpf.Domain.EditingData.InputEditingData[], GameMakerWpf",
+      "$values": []
+    }
+  },
+  "AutoTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "GameMakerWpf.Domain.EditingData.InputEditingData[], GameMakerWpf",
+      "$values": [
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Outpost",
+          "Label": "Outpost"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Depot",
+          "Label": "Depot"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Auto Mid Trips",
+          "Label": "Mid Trips"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Auto Climb?",
+          "Label": "L1 Climb"
+        }
+      ]
+    }
+  },
+  "TeleTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "GameMakerWpf.Domain.EditingData.InputEditingData[], GameMakerWpf",
+      "$values": [
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Primary Role",
+          "Label": "Primary Role"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Passing",
+          "Label": "Passing?"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Scoring",
+          "Label": "Scoring?"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Defending",
+          "Label": "Defending?"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Effectiveness",
+          "Label": "How effectively did they play their role?"
+        }
+      ]
+    }
+  },
+  "EndgameTabInputs": {
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf]], UtilitiesLibrary",
+    "Collection": {
+      "$type": "GameMakerWpf.Domain.EditingData.InputEditingData[], GameMakerWpf",
+      "$values": [
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Climb",
+          "Label": "Climb"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Disconnected",
+          "Label": "Disconnected %"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Comments",
+          "Label": "Extra Comments"
+        }
+      ]
+    }
+  }
+}
