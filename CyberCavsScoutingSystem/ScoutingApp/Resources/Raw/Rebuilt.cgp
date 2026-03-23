@@ -112,51 +112,18 @@
           "Name": "Primary Role"
         },
         {
-          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
-          "OptionNames": {
-            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Collection": {
-              "$type": "System.String[], System.Private.CoreLib",
-              "$values": [
-                "Yes",
-                "No"
-              ]
-            }
-          },
-          "InitialValue": "",
-          "RequiresValue": true,
+          "$type": "GameMakerWpf.Domain.EditingData.BooleanDataFieldEditingData, GameMakerWpf",
+          "InitialValue": false,
           "Name": "Passing"
         },
         {
-          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
-          "OptionNames": {
-            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Collection": {
-              "$type": "System.String[], System.Private.CoreLib",
-              "$values": [
-                "Yes",
-                "No"
-              ]
-            }
-          },
-          "InitialValue": "",
-          "RequiresValue": true,
+          "$type": "GameMakerWpf.Domain.EditingData.BooleanDataFieldEditingData, GameMakerWpf",
+          "InitialValue": false,
           "Name": "Scoring"
         },
         {
-          "$type": "GameMakerWpf.Domain.EditingData.SelectionDataFieldEditingData, GameMakerWpf",
-          "OptionNames": {
-            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Collection": {
-              "$type": "System.String[], System.Private.CoreLib",
-              "$values": [
-                "Yes",
-                "No"
-              ]
-            }
-          },
-          "InitialValue": "",
-          "RequiresValue": true,
+          "$type": "GameMakerWpf.Domain.EditingData.BooleanDataFieldEditingData, GameMakerWpf",
+          "InitialValue": false,
           "Name": "Defending"
         },
         {
@@ -207,6 +174,11 @@
           "MustNotBeEmpty": false,
           "MustNotBeInitialValue": false,
           "Name": "Comments"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.BooleanDataFieldEditingData, GameMakerWpf",
+          "InitialValue": false,
+          "Name": "Score Preload"
         }
       ]
     }
@@ -240,8 +212,13 @@
         },
         {
           "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
-          "DataFieldName": "Auto Climb?",
+          "DataFieldName": "Auto Climb",
           "Label": "L1 Climb"
+        },
+        {
+          "$type": "GameMakerWpf.Domain.EditingData.InputEditingData, GameMakerWpf",
+          "DataFieldName": "Score Preload",
+          "Label": "Score Preload?"
         }
       ]
     }

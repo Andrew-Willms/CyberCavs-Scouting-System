@@ -128,63 +128,18 @@
           "Name": "Primary Role"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
-          "Options": {
-            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Collection": {
-              "$type": "System.String[], System.Private.CoreLib",
-              "$values": [
-                "Yes",
-                "No"
-              ]
-            }
-          },
-          "InitialValue": {
-            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Value": "",
-            "HasValue": true
-          },
-          "RequiresValue": true,
+          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "InitialValue": false,
           "Name": "Passing"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
-          "Options": {
-            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Collection": {
-              "$type": "System.String[], System.Private.CoreLib",
-              "$values": [
-                "Yes",
-                "No"
-              ]
-            }
-          },
-          "InitialValue": {
-            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Value": "",
-            "HasValue": true
-          },
-          "RequiresValue": true,
+          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "InitialValue": false,
           "Name": "Scoring"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
-          "Options": {
-            "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Collection": {
-              "$type": "System.String[], System.Private.CoreLib",
-              "$values": [
-                "Yes",
-                "No"
-              ]
-            }
-          },
-          "InitialValue": {
-            "$type": "UtilitiesLibrary.Optional.Optional`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
-            "Value": "",
-            "HasValue": true
-          },
-          "RequiresValue": true,
+          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "InitialValue": false,
           "Name": "Defending"
         },
         {
@@ -243,6 +198,11 @@
           "MustNotBeEmpty": false,
           "MustNotBeInitialValue": false,
           "Name": "Comments"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "InitialValue": false,
+          "Name": "Score Preload"
         }
       ]
     }
@@ -278,6 +238,11 @@
           "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
           "DataFieldName": "Auto Climb",
           "Label": "L1 Climb"
+        },
+        {
+          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "DataFieldName": "Score Preload",
+          "Label": "Score Preload?"
         }
       ]
     }
