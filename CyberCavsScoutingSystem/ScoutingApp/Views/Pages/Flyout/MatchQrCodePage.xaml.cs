@@ -53,6 +53,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 		BindingContext = this;
 		InitializeComponent();
+		Shell.SetTabBarIsVisible(this, false);
 	}
 
 
