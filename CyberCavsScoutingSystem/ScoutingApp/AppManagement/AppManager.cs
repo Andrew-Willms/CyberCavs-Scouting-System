@@ -88,14 +88,17 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 		GameSpecification = null!; // todo fix hack
 
-		if (DateTime.Now >= new DateTime(2025, 3, 21) && DateTime.Now <= new DateTime(2025, 3, 22)) {
+		if (DateTime.Now >= new DateTime(2026, 3, 27) && DateTime.Now <= new DateTime(2026, 3, 28)) {
 			EventCode = "Waterloo";
 
-		} else if (DateTime.Now >= new DateTime(2025, 3, 28) && DateTime.Now <= new DateTime(2025, 3, 29)) {
+		} else if (DateTime.Now >= new DateTime(2026, 4, 9) && DateTime.Now <= new DateTime(2026, 4, 11)) {
 			EventCode = "Windsor";
 
-		} else if (DateTime.Now >= new DateTime(2025, 4, 4) && DateTime.Now <= new DateTime(2025, 4, 5)) {
+		} else if (DateTime.Now >= new DateTime(2026, 4, 16) && DateTime.Now <= new DateTime(2025, 4, 19)) {
 			EventCode = "DCMP";
+
+		} else if (DateTime.Now >= new DateTime(2026, 4, 29) && DateTime.Now <= new DateTime(2026, 5, 2)) {
+			EventCode = "Worlds";
 
 		} else {
 			EventCode = "Test Event";
