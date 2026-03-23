@@ -151,8 +151,8 @@ public class SqliteDataStore : IDataStore {
 	public Task<List<GameSpec>> GetGameSpecs() {
 
 		IResult<GameSpec> result = GameSpec.Create(
-			name: "ReefScape",
-			year: 2025,
+			name: "Rebuilt",
+			year: 2026,
 			description: "",
 			version: new(1, 0, 0),
 			robotsPerAlliance: 3u,
@@ -162,65 +162,79 @@ public class SqliteDataStore : IDataStore {
 				new() { Color = Color.Blue, Name = "Blue Alliance" }
 			}.ToReadOnly(),
 			dataFields: new List<DataFieldSpec> {
-				new IntegerDataFieldSpec { Name = "Auto L1 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
-				new IntegerDataFieldSpec { Name = "Auto L2 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
-				new IntegerDataFieldSpec { Name = "Auto L3 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
-				new IntegerDataFieldSpec { Name = "Auto L4 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
-				new IntegerDataFieldSpec { Name = "Auto Algae Net", InitialValue = 0, MinValue = 0, MaxValue = 255 },
-				new IntegerDataFieldSpec { Name = "Auto Algae Processor", InitialValue = 0, MinValue = 0, MaxValue = 255 },
-				new BooleanDataFieldSpec {
-					Name = "Auto Mobility",
-					InitialValue = false
+				new SelectionDataFieldSpec {
+					Name = "Outpost",
+					Options = new List<string> { "Yes - Early", "Yes - Late", "No" }.ToReadOnly(),
+					InitialValue = "",
+					RequiresValue = true
 				},
-				new IntegerDataFieldSpec { Name = "Tele L1 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
-				new IntegerDataFieldSpec { Name = "Tele L2 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
-				new IntegerDataFieldSpec { Name = "Tele L3 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
-				new IntegerDataFieldSpec { Name = "Tele L4 Coral", InitialValue = 0, MinValue = 0, MaxValue = 12 },
-				new IntegerDataFieldSpec { Name = "Tele Algae Net", InitialValue = 0, MinValue = 0, MaxValue = 255 },
-				new IntegerDataFieldSpec { Name = "Tele Algae Processor", InitialValue = 0, MinValue = 0, MaxValue = 255 },
+				new SelectionDataFieldSpec {
+					Name = "Depot",
+					Options = new List<string> { "Yes - Early", "Yes - Late", "No" }.ToReadOnly(),
+					InitialValue = "",
+					RequiresValue = true
+				},
+				new IntegerDataFieldSpec { Name = "Mid Trips", InitialValue = 0, MinValue = 0, MaxValue = 15 },
+				new BooleanDataFieldSpec { Name = "Scored Preload", InitialValue = false },
+				new SelectionDataFieldSpec {
+					Name = "Auto Climb",
+					Options = new List<string> { "Yes", "Attempted", "No" }.ToReadOnly(),
+					InitialValue = "No",
+					RequiresValue = true
+				},
+				new SelectionDataFieldSpec {
+					Name = "Primary Role",
+					Options = new List<string> { "Passing", "Scoring", "Defending" }.ToReadOnly(),
+					InitialValue = "",
+					RequiresValue = true
+				},
+				new BooleanDataFieldSpec { Name = "Passing", InitialValue = false },
+				new BooleanDataFieldSpec { Name = "Scoring", InitialValue = false },
+				new BooleanDataFieldSpec { Name = "Defending", InitialValue = false },
+				new TextDataFieldSpec {
+					Name = "Effectiveness",
+					InitialValue = "",
+					MustNotBeEmpty = true,
+					MustNotBeInitialValue = false
+				},
 				new SelectionDataFieldSpec {
 					Name = "Climb",
-					Options = new List<string> { "None", "Deep", "Shallow", "Failed" }.ToReadOnly(),
-					InitialValue = "None",
+					Options = new List<string> { "L1", "L2", "L3" }.ToReadOnly(),
+					InitialValue = "",
 					RequiresValue = true
 				},
 				new SelectionDataFieldSpec {
 					Name = "Disconnected",
-					Options = new List<string> { "None of match", "Some of match", "Most of match", "All of match" }.ToReadOnly(),
-					InitialValue = "None of match",
+					Options = new List<string> { "0", "25", "50", "75", "100" }.ToReadOnly(),
+					InitialValue = "0",
 					RequiresValue = true
 				},
-				new SelectionDataFieldSpec {
-					Name = "Defense",
-					Options = new List<string> { "N/A", "1", "2", "3", "4", "5" }.ToReadOnly(),
-					InitialValue = "N/A",
-					RequiresValue = true
-				},
-				new TextDataFieldSpec { Name = "Comments", InitialValue = "", MustNotBeEmpty = true, MustNotBeInitialValue = false }
+				new TextDataFieldSpec {
+					Name = "Comments",
+					InitialValue = "",
+					MustNotBeEmpty = false,
+					MustNotBeInitialValue = false
+				}
 			}.ToReadOnly(),
 			setupTabInputs: new List<InputSpec>().ToReadOnly(),
 			autoTabInputs: new List<InputSpec> {
-				new() { DataFieldName = "Auto L1 Coral", Label = "L1 Coral" },
-				new() { DataFieldName = "Auto L2 Coral", Label = "L2 Coral" },
-				new() { DataFieldName = "Auto L3 Coral", Label = "L3 Coral" },
-				new() { DataFieldName = "Auto L4 Coral", Label = "L4 Coral" },
-				new() { DataFieldName = "Auto Algae Net", Label = "Algae Net" },
-				new() { DataFieldName = "Auto Algae Processor", Label = "Processor Algae" },
-				new() { DataFieldName = "Auto Mobility", Label = "Auto Mobility" }
+				new() { DataFieldName = "Outpost", Label = "Outpost" },
+				new() { DataFieldName = "Depot", Label = "Depot" },
+				new() { DataFieldName = "Mid Trips", Label = "Mid Trips" },
+				new() { DataFieldName = "Score Preload", Label = "Score Reload?" },
+				new() { DataFieldName = "Auto Climb", Label = "L1 Climb?" }
 			}.ToReadOnly(),
 			teleTabInputs: new List<InputSpec> {
-				new() { DataFieldName = "Tele L1 Coral", Label = "L1 Coral" },
-				new() { DataFieldName = "Tele L2 Coral", Label = "L2 Coral" },
-				new() { DataFieldName = "Tele L3 Coral", Label = "L3 Coral" },
-				new() { DataFieldName = "Tele L4 Coral", Label = "L4 Coral" },
-				new() { DataFieldName = "Tele Algae Net", Label = "Algae Net" },
-				new() { DataFieldName = "Tele Algae Processor", Label = "Processor Algae" }
+				new() { DataFieldName = "Primary Role", Label = "Primary Role" },
+				new() { DataFieldName = "Passing", Label = "Passing?" },
+				new() { DataFieldName = "Scoring", Label = "Scoring?" },
+				new() { DataFieldName = "Defending", Label = "Defending?" },
+				new() { DataFieldName = "Effectiveness", Label = "How effective did they play their role?" }
 			}.ToReadOnly(),
 			endgameTabInputs: new List<InputSpec> {
 				new() { DataFieldName = "Climb", Label = "Climb" },
-				new() { DataFieldName = "Disconnected", Label = "Disconnected" },
-				new() { DataFieldName = "Defense", Label = "Defense Effectiveness" },
-				new() { DataFieldName = "Comments", Label = "Comments" },
+				new() { DataFieldName = "Disconnected", Label = "Disconnected %" },
+				new() { DataFieldName = "Comments", Label = "Extra Comments" }
 			}.ToReadOnly());
 
 
