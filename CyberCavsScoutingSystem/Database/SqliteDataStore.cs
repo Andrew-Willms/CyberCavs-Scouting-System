@@ -221,7 +221,7 @@ public class SqliteDataStore : IDataStore {
 				new() { DataFieldName = "Outpost", Label = "Outpost" },
 				new() { DataFieldName = "Depot", Label = "Depot" },
 				new() { DataFieldName = "Mid Trips", Label = "Mid Trips" },
-				new() { DataFieldName = "Scored Preload", Label = "Score Reload?" },
+				new() { DataFieldName = "Scored Preload", Label = "Score Preload?" },
 				new() { DataFieldName = "Auto Climb", Label = "L1 Climb?" }
 			}.ToReadOnly(),
 			teleTabInputs: new List<InputSpec> {
