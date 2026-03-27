@@ -201,7 +201,7 @@ public class SqliteDataStore : IDataStore {
 					Name = "Climb",
 					Options = new List<string> { "L1", "L2", "L3" }.ToReadOnly(),
 					InitialValue = "",
-					RequiresValue = true
+					RequiresValue = false
 				},
 				new SelectionDataFieldSpec {
 					Name = "Disconnected",
