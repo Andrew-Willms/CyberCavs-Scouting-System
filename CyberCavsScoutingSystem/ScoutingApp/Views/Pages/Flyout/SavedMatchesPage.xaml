@@ -10,6 +10,11 @@
 	Loaded="SavedMatchesPage_OnLoaded"
 	NavigatedTo="SavedMatchesPage_OnNavigatedTo">
 
+
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="Delete" Clicked="DeleteAllButton_OnClicked"/>
+	</ContentPage.ToolbarItems>
+
 	<Grid
 		Margin="10"
 		RowSpacing="10">
