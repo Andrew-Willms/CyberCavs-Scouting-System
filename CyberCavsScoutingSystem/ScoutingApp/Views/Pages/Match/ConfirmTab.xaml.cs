@@ -106,6 +106,10 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 				ErrorPresenter.DisplayError("Cannot Save Match", "The match data is invalid.");
 			});
 
+		if (!result.IsT0) {
+			return;
+		}
+
 		// todo hacky as fuck way to navigate to the most recent match
 #if ANDROID
 		string deviceId = Android.Provider.Settings.Secure.GetString(

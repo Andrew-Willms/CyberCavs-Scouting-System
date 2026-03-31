@@ -12,7 +12,7 @@
 
 
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="Delete" Clicked="DeleteAllButton_OnClicked"/>
+		<ToolbarItem Text="Delete All" Clicked="DeleteAllButton_OnClicked"/>
 	</ContentPage.ToolbarItems>
 
 	<Grid
