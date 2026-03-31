@@ -117,7 +117,8 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 		string deviceId = null as string ?? throw new NotSupportedException();
 #endif
 
-		List<MatchDataDto>? allData = await DataStore.GetMatchData();
+		GetMatchDataResult getMatchDataResult = await DataStore.GetMatchData();
+		List<MatchDataDto>? allData = getMatchDataResult.IsT0 ? getMatchDataResult.AsT0 : null;
 		MatchDataDto? mostRecentMatch = allData?.Where(x => x.DeviceId == deviceId).MaxBy(x => x.RecordId);
 
 		if (mostRecentMatch is null) {

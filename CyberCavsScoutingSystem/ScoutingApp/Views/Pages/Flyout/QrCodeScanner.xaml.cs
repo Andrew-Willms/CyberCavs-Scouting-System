@@ -121,13 +121,28 @@ public partial class QrCodeScanner : ContentPage {
 			return;
 		}
 
-		List<MatchDataDto>? matchData = await DataStore.GetMatchData();
+		GetMatchDataResult matchDataResult = await DataStore.GetMatchData();
 
-		if (matchData is null) {
+		string? error = matchDataResult.Match<string?>(
+			success => null,
+			exception =>
+				$"An exception occured with the type '{exception.GetType()}' and message:\r\n\r\n {exception.Message} \r\n\r\n" +
+				$"There is an inner exception of type '{exception.InnerException?.GetType()}' and message:\r\n\r\n {exception.InnerException?.Message}",
+			matchDataDeserializationError => 
+				$"There was an error deserializing the match data. The serialized match data is:\r\n\r\n" +
+				$"{matchDataDeserializationError.SerializedMatchData}",
+			invalidEditIdsError => 
+				$"Edit IDs must both have values or must both be null. The EditDeviceId is '{invalidEditIdsError.EditOfRecord}' " +
+				$"but the EditRecordId is '{invalidEditIdsError.EditOfRecord}'."
+		);
+
+		if (error is not null) {
 			ErrorPresenter.DisplayError("Error Loading Match Data",
 				"Could not load the match data from the database while trying to export to CSV.");
 			return;
 		}
+
+		List<MatchDataDto> matchData = matchDataResult.AsT0;
 
 		StringBuilder stringBuilder = new(MatchDataToCsv.GetCsvHeaders(AppManager.GameSpecification));
 		foreach (MatchDataDto matchDataDto in matchData) {

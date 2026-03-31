@@ -62,19 +62,18 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 		SavedMatches.Clear();
 
-		List<MatchDataDto>? matches = await AppManager.GetMatchData();
+		GetMatchDataResult getMatchDataResult = await DataStore.GetMatchData();
 
-		if (matches is null) {
-			GetMatchesError = "Could not fetch matches.";
-			matches = [];
-
-		} else {
-			GetMatchesError = null;
-		}
-
-		foreach (MatchDataDto match in matches) {
-			SavedMatches.Add(match);
-		}
+		getMatchDataResult.Switch(
+			matchData => {
+				foreach (MatchDataDto match in matchData) {
+					SavedMatches.Add(match);
+				}
+			},
+			exception => GetMatchesError = "Could not fetch matches.",
+			matchDataDeserializationError => GetMatchesError = "Could not fetch matches.",
+			invalidEditIdsError => GetMatchesError = "Could not fetch matches."
+		);
 
 		IsActuallyRefreshing = false;
 		MainThread.BeginInvokeOnMainThread(() => { IsRefreshing = false; });

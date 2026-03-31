@@ -275,21 +275,21 @@ public class SqliteDataStore : IDataStore {
 			MatchData? data = MatchDataToCsv.Deserialize(serializedMatch, gameSpec);
 
 			if (data is null) {
-				return new MatchDataDeserializationError();
+				return new MatchDataDeserializationError { SerializedMatchData = serializedMatch };
 			}
 
-			switch (editOfDeviceId is null, editOfRecordId is null) {
+			switch (editOfDeviceId, editOfRecordId) {
 
-				case (false, false):
+				case ({ } originatingDeviceId, { } originalRecordId):
 					allMatchDtos.Add(new() {
 						MatchData = data,
 						DeviceId = deviceId,
 						RecordId = recordId,
-						EditBasedOn = (editOfDeviceId!, (int)editOfRecordId!)
+						EditBasedOn = (originatingDeviceId, originalRecordId)
 					});
 					break;
 
-				case (true, true):
+				case (null, null):
 					allMatchDtos.Add(new() {
 						MatchData = data,
 						DeviceId = deviceId,
@@ -298,16 +298,30 @@ public class SqliteDataStore : IDataStore {
 					});
 					break;
 
-				default:
-					return new InvalidEditIdsError();
+				case ({ } originatingDeviceId, null):
+					return new InvalidEditIdsError(originatingDeviceId);
+
+				case (null, { } originalRecordId):
+					return new InvalidEditIdsError(originalRecordId);
 			}
 		}
 
+		// Since editing match data isn't implemented yet and there is no conflict resolution implemented editing
+		// matches won't work and the below code is moot. Instead, just return the original match data.
+		return allMatchDtos.Where(x => x.EditBasedOn is null).ToList();
+
+		// Identify all the match data that are original (not edits of existing match data).
+		// Create an "Edit Chain" for each original match (starting with the original match itself).
 		List<List<MatchDataDto>> editChains = allMatchDtos
 			.Where(x => x.EditBasedOn is null)
 			.Select(x => new List<MatchDataDto> { x })
 			.ToList();
 
+		// Iterate over all match data that is an edit of prior match data.
+		// Ensure that all edits either directly or transitively (through one or more other edit match data records) point to original match data.
+		// The current implementation of this relies on lower degree edits being earlier in the list than higher degree edit.
+		// If the order the records appear in the allMatchDtos collection is the same order as they were added to the DB this should be fine.
+		// A first degree edit is an edit of the original data, a second degree edit is an edit of a first degree edit, etc.
 		foreach (MatchDataDto editData in allMatchDtos.Where(x => x.EditBasedOn is not null)) {
 
 			List<MatchDataDto>? editChain = editChains.FirstOrDefault(x => x.Any(xx => (xx.DeviceId, xx.RecordId) == editData.EditBasedOn));

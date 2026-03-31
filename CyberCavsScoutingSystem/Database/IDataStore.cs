@@ -13,9 +13,27 @@ public partial class AddNewMatchDataResult : OneOfBase<Success, Exception>;
 [GenerateOneOf]
 public partial class GetMatchDataResult : OneOfBase<List<MatchDataDto>, Exception, MatchDataDeserializationError, InvalidEditIdsError>;
 
-public class MatchDataDeserializationError;
+public class MatchDataDeserializationError {
+	public required string SerializedMatchData { get; init; }
+};
 
-public class InvalidEditIdsError;
+public class InvalidEditIdsError {
+
+	public string? EditOfRecordFromDevice { get; }
+
+	public int? EditOfRecord { get; }
+
+	public InvalidEditIdsError(string editOfRecordFromDevice) {
+		EditOfRecordFromDevice = editOfRecordFromDevice;
+		EditOfRecord = null;
+	}
+
+	public InvalidEditIdsError(int editOfRecord) {
+		EditOfRecordFromDevice = null;
+		EditOfRecord = editOfRecord;
+	}
+
+};
 
 
 public interface IDataStore {

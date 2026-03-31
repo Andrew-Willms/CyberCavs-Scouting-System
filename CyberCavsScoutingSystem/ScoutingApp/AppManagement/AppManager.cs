@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Android.DeviceLock;
 using CCSSDomain.Data;
 using CCSSDomain.DataCollectors;
 using CCSSDomain.GameSpecification;
@@ -14,7 +11,6 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Storage;
 using OneOf;
 using UtilitiesLibrary.Optional;
-using UtilitiesLibrary.Results;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;
@@ -50,8 +46,6 @@ public interface IAppManager : INotifyPropertyChanged {
 	public Event OnMatchStarted { get; }
 
 	public Event OnNewData { get; }
-
-	public Task<List<MatchDataDto>?> GetMatchData();
 
 	public Task<string?> GetScoutName();
 
@@ -220,9 +214,6 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 
 
-	public async Task<List<MatchDataDto>?> GetMatchData() {
-		return await DataStore.GetMatchData();
-	}
 
 	public async Task<string?> GetScoutName() {
 		return await DataStore.GetLastScout();
