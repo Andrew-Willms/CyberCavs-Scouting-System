@@ -95,12 +95,16 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 	private async void SaveButton_OnClicked(object? sender, EventArgs e) {
 
-		bool success = await AppManager.SaveAndStartNewMatch();
+		SaveAndStartNewMatchResult result = await AppManager.SaveAndStartNewMatch();
 
-		if (!success) {
-			ErrorPresenter.DisplayError("Cannot Save Match", "Cannot Save Match"); // todo better error
-			return;
-		}
+		result.Switch(
+			success => { },
+			exception => {
+				ErrorPresenter.DisplayError("Cannot Save Match", $"Exception: {exception.Message} \r\n\r\n Inner: {exception.InnerException?.Message}");
+			},
+			matchDataIsInvalid => {
+				ErrorPresenter.DisplayError("Cannot Save Match", "The match data is invalid.");
+			});
 
 		// todo hacky as fuck way to navigate to the most recent match
 #if ANDROID

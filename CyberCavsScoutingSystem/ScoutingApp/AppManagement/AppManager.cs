@@ -12,10 +12,20 @@ using CCSSDomain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Storage;
+using OneOf;
 using UtilitiesLibrary.Optional;
+using UtilitiesLibrary.Results;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
 namespace ScoutingApp.AppManagement;
+
+
+
+
+[GenerateOneOf]
+public partial class SaveAndStartNewMatchResult : OneOfBase<OneOf.Types.Success, Exception, MatchDataIsInvalid>;
+
+public class MatchDataIsInvalid;
 
 
 
@@ -31,7 +41,7 @@ public interface IAppManager : INotifyPropertyChanged {
 
 	public Task ApplicationStartup();
 
-	public Task<bool> SaveAndStartNewMatch();
+	public Task<SaveAndStartNewMatchResult> SaveAndStartNewMatch();
 
 	public void DiscardAndStartNewMatch();
 
@@ -130,7 +140,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		OnMatchStarted.Invoke();
 	}
 
-	public async Task<bool> SaveAndStartNewMatch() {
+	public async Task<SaveAndStartNewMatchResult> SaveAndStartNewMatch() {
 
 #if ANDROID
 		string deviceId = Android.Provider.Settings.Secure.GetString(
@@ -145,7 +155,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 		MatchData? matchData = MatchData.FromDataCollector(ActiveMatchData, EventCode, EventSchedule, Scout);
 
 		if (matchData is null) {
-			return false; // todo better error type
+			return new MatchDataIsInvalid();
 		}
 
 		CreateMatchDataDto createDto = new() {
@@ -154,12 +164,15 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 			EditBasedOn = ActiveMatchData.EditOf is null ? null : (ActiveMatchData.EditOf?.DeviceId!, (int)ActiveMatchData.EditOf?.RecordId!)
 		};
 
-		if (!await DataStore.AddNewMatchData(createDto)) {
-			return false; // todo better error type
-		}
 
-		StartNewMatch();
-		return true;
+		AddNewMatchDataResult result = await DataStore.AddNewMatchData(createDto);
+
+		return result.Match<SaveAndStartNewMatchResult>(
+			success => {
+				StartNewMatch();
+				return new OneOf.Types.Success();
+			},
+			exception => exception);
 	}
 
 	public void DiscardAndStartNewMatch() {

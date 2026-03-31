@@ -1,8 +1,21 @@
 ﻿using CCSSDomain.GameSpecification;
 using CCSSDomain.Serialization;
+using OneOf;
+using OneOf.Types;
 
 namespace Database;
 
+
+
+[GenerateOneOf]
+public partial class AddNewMatchDataResult : OneOfBase<Success, Exception>;
+
+[GenerateOneOf]
+public partial class GetMatchDataResult : OneOfBase<List<MatchDataDto>, Exception, MatchDataDeserializationError, InvalidEditIdsError>;
+
+public class MatchDataDeserializationError;
+
+public class InvalidEditIdsError;
 
 
 public interface IDataStore {
@@ -17,9 +30,9 @@ public interface IDataStore {
 
 
 
-	public Task<List<MatchDataDto>?> GetMatchData();
+	public Task<GetMatchDataResult> GetMatchData();
 
-	public Task <bool> AddNewMatchData(CreateMatchDataDto matchData);
+	public Task<AddNewMatchDataResult> AddNewMatchData(CreateMatchDataDto matchData);
 
 	public enum AddMatchDataResult {
 		Success,

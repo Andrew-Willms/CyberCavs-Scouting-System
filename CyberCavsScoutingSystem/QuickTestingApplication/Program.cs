@@ -39,33 +39,33 @@ public class Program {
 			throw new();
 		}
 
-		success = await dataStore.AddNewMatchData(new() {
+		success = (await dataStore.AddNewMatchData(new() {
 			MatchData = SampleData[0],
 			DeviceId = "testDeviceId",
 			EditBasedOn = null
-		});
+		})).IsT0;
 
 		if (!success) {
 			throw new();
 		}
 
-		success = await dataStore.AddNewMatchData(new() {
+		success = (await dataStore.AddNewMatchData(new() {
 			MatchData = SampleData[0],
 			DeviceId = "testDeviceId",
 			EditBasedOn = ("testDeviceId", 1)
-		});
+		})).IsT0;
 
 		if (!success) {
 			throw new();
 		}
 
-		List<MatchDataDto>? matchData = await dataStore.GetMatchData();
+		GetMatchDataResult matchData = await dataStore.GetMatchData();
 
-		if (matchData is null) {
+		if (!matchData.IsT0) {
 			throw new();
 		}
 
-		foreach (MatchDataDto matchDataDto in matchData) {
+		foreach (MatchDataDto matchDataDto in matchData.AsT0) {
 
 			Console.WriteLine(matchDataDto);
 		}

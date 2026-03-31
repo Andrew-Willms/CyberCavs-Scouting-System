@@ -6,6 +6,7 @@ using CCSSDomain.Serialization;
 using Microsoft.Data.Sqlite;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
+using Success = OneOf.Types.Success;
 
 namespace Database;
 
@@ -247,7 +248,7 @@ public class SqliteDataStore : IDataStore {
 		});
 	}
 
-	public async Task<List<MatchDataDto>?> GetMatchData() {
+	public async Task<GetMatchDataResult> GetMatchData() {
 
 		SqliteCommand getMatchDataCommand = new(
 			$"SELECT * FROM '{MatchDataTableName}';",
@@ -256,8 +257,8 @@ public class SqliteDataStore : IDataStore {
 		SqliteDataReader reader;
 		try {
 			reader = await getMatchDataCommand.ExecuteReaderAsync();
-		} catch {
-			return null;
+		} catch (Exception exception) {
+			return exception;
 		}
 
 		GameSpec gameSpec = (await GetGameSpecs()).FirstOrDefault() ?? throw new UnreachableException(); // todo
@@ -274,7 +275,7 @@ public class SqliteDataStore : IDataStore {
 			MatchData? data = MatchDataToCsv.Deserialize(serializedMatch, gameSpec);
 
 			if (data is null) {
-				return null; // todo
+				return new MatchDataDeserializationError();
 			}
 
 			switch (editOfDeviceId is null, editOfRecordId is null) {
@@ -298,7 +299,7 @@ public class SqliteDataStore : IDataStore {
 					break;
 
 				default:
-					return null; //todo
+					return new InvalidEditIdsError();
 			}
 		}
 
@@ -321,7 +322,7 @@ public class SqliteDataStore : IDataStore {
 		return editChains.Select(x => x.First()).ToList();
 	}
 
-	public async Task<bool> AddNewMatchData(CreateMatchDataDto matchData) {
+	public async Task<AddNewMatchDataResult> AddNewMatchData(CreateMatchDataDto matchData) {
 
 		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
 
@@ -371,11 +372,11 @@ public class SqliteDataStore : IDataStore {
 
 		try {
 			await addMatchDataCommand.ExecuteNonQueryAsync();
-		} catch {
-			return false;
+		} catch (Exception exception) {
+			return exception;
 		}
 
-		return true;
+		return new Success();
 	}
 
 	public async Task<IDataStore.AddMatchDataResult> AddMatchDataFromOtherDevice(MatchDataDto matchData) {
