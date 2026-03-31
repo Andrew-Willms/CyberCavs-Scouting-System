@@ -62,6 +62,7 @@ public interface IDataStore {
 
 	public Task<bool> DeleteMatchData(MatchDataDto matchData);
 
+	public Task<bool> DeleteAllMatchData();
 
 	//public Task<List<EventSchedule>> GetEventSchedules();
 

@@ -17,8 +17,8 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 	public static string Route => "SavedMatches";
 
-	private IAppManager AppManager { get; }
 	private IDataStore DataStore { get; }
+	private IErrorPresenter ErrorPresenter { get; }
 
 	private bool IsActuallyRefreshing;
 	public bool IsRefreshing {
@@ -40,10 +40,10 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 	public ObservableCollection<MatchDataDto> SavedMatches { get; } = [];
 
 
-	public SavedMatchesPage(IAppManager appManager, IDataStore dataStore) {
+	public SavedMatchesPage(IDataStore dataStore, IErrorPresenter errorPresenter) {
 		
-		AppManager = appManager;
 		DataStore = dataStore;
+		ErrorPresenter = errorPresenter;
 
 		BindingContext = this;
 		InitializeComponent();
@@ -70,9 +70,11 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 					SavedMatches.Add(match);
 				}
 			},
-			exception => GetMatchesError = "Could not fetch matches.",
-			matchDataDeserializationError => GetMatchesError = "Could not fetch matches.",
-			invalidEditIdsError => GetMatchesError = "Could not fetch matches."
+			exception => GetMatchesError = 
+				$"Could not fetch matches. Exception raised of type '{exception.GetType()}' with message:\r\n\r\n{exception.Message}",
+			matchDataDeserializationError => GetMatchesError = 
+				$"Could not fetch matches. Deserialization error. Serialized data:\r\n\r\n{matchDataDeserializationError.SerializedMatchData}",
+			invalidEditIdsError => GetMatchesError = "Could not fetch matches. There are invalid edit IDs."
 		);
 
 		IsActuallyRefreshing = false;
@@ -86,12 +88,12 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
+	// ReSharper disable once AsyncVoidEventHandlerMethod, async void needed for navigation
 	private async void SavedMatchesPage_OnLoaded(object? sender, EventArgs e) {
 		await Refresh();
 	}
 
-	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
+	// ReSharper disable once AsyncVoidEventHandlerMethod, async void needed for navigation
 	private async void SavedMatchesView_OnRefreshing(object? sender, EventArgs e) {
 		await Refresh();
 	}
@@ -112,9 +114,21 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 		await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromSavedMatchesPage, parameters);
 	}
 
-	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
+	// ReSharper disable once AsyncVoidEventHandlerMethod, async void needed for navigation
 	private async void SavedMatchesPage_OnNavigatedTo(object? sender, NavigatedToEventArgs e) {
 		await Refresh();
+	}
+
+	private async void DeleteAllButton_OnClicked(object? sender, EventArgs e) {
+
+		bool success = await DataStore.DeleteAllMatchData();
+
+		if (success) {
+			await Refresh();
+			return;
+		}
+
+		ErrorPresenter.DisplayError("Failed", "Could not delete all matches.");
 	}
 
 
