@@ -284,11 +284,13 @@ public class SqliteDataStore : IDataStore {
 			string? editOfDeviceId = reader[3] is DBNull ? null : reader.GetString(3);
 			int? editOfRecordId = reader[4] is DBNull ? null : reader.GetInt32(4);
 
-			MatchData? data = MatchDataToCsv.Deserialize(serializedMatch, gameSpec);
+			MatchDataDeserializationResult result = MatchDataToCsv.Deserialize(serializedMatch, gameSpec);
 
-			if (data is null) {
-				return new MatchDataDeserializationError { SerializedMatchData = serializedMatch };
+			if (result.IsT1) {
+				return result.AsT1;
 			}
+
+			MatchData data = result.AsT0;
 
 			switch (editOfDeviceId, editOfRecordId) {
 

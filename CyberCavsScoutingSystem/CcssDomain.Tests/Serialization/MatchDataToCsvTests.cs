@@ -12,9 +12,14 @@ public class MatchDataToCsvTests {
 	public void TestSerialization(MatchData matchData) {
 
 		string serialized = MatchDataToCsv.Serialize(matchData);
-		MatchData? deserialized = MatchDataToCsv.Deserialize(serialized, SampleData.GameSpec);
+		MatchDataDeserializationResult deserializationResult = MatchDataToCsv.Deserialize(serialized, SampleData.GameSpec);
 
-		Assert.True(matchData.Equals(deserialized));
+		if (deserializationResult.IsT1) {
+			Assert.Fail();
+		}
+
+
+		Assert.True(matchData.Equals(deserializationResult.AsT0));
 	}
 
 	[Theory]

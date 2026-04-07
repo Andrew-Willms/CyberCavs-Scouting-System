@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using CCSSDomain.Data;
 using CCSSDomain.GameSpecification;
+using OneOf;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Optional;
@@ -12,8 +13,64 @@ using UtilitiesLibrary.Optional;
 namespace CCSSDomain.Serialization;
 
 
+[GenerateOneOf]
+public partial class MatchDataDeserializationResult : OneOfBase<MatchData, MatchDataDeserializationError>;
+
+public abstract class MatchDataDeserializationError {
+
+	public required string SerializedMatchData { get; init; }
+
+	public required GameSpec GameSpecification { get; init; }
+
+}
+
+public class WrongNumberOfCsvColumnsError : MatchDataDeserializationError {
+
+	public required uint ExpectedColumnCount { get; init; }
+
+	public required ReadOnlyList<string> Columns { get; init; }
+
+}
+
+public class CouldNotParseValuesError : MatchDataDeserializationError {
+
+	public required ReadOnlyList<CoreValueError> CoreValueErrors { get; init; }
+
+	public required ReadOnlyList<DataFieldError> DataFieldErrors { get; init; }
+}
+
+public class CoreValueError {
+
+	public required int ColumnIndex { get; init; }
+
+	public required Type ExpectedType { get; init; }
+
+	public required string Text { get; init; }
+}
+
+public class DataFieldError {
+
+	public required DataFieldSpec DataField { get; init; }
+
+	public required string Text { get; init; }
+
+}
+
+
+
 
 public static class MatchDataToCsv {
+
+	private const int ScoutNameColumnIndex = 0;
+	private const int EventCodeColumnIndex = 1;
+	private const int MatchNumberColumnIndex = 2;
+	private const int MatchTypeColumnIndex = 3;
+	private const int ReplayNumberColumnIndex = 4;
+	private const int AllianceColumnIndex = 5;
+	private const int TeamNumberColumnIndex = 6;
+	private const int StartTimeColumnIndex = 7;
+	private const int EndTimeColumnIndex = 8;
+	private const int CountOfBuiltInFields = 9;
 
 	public static string GetCsvHeaders(GameSpec gameSpecification) {
 
@@ -52,22 +109,22 @@ public static class MatchDataToCsv {
 					break;
 				}
 				case (TextDataFieldSpec, string value): {
-					stringBuilder.Append(",");
+					stringBuilder.Append(',');
 					stringBuilder.Append(value.ToCsvFriendly());
 					break;
 				}
 				case (IntegerDataFieldSpec, int value): {
-					stringBuilder.Append(",");
+					stringBuilder.Append(',');
 					stringBuilder.Append(value);
 					break;
 				}
 				case (SelectionDataFieldSpec selectionDataFieldSpec, Optional<string> optional): {
 
 					if (!optional.HasValue) {
-						stringBuilder.Append(",");
+						stringBuilder.Append(',');
 						continue;
 					}
-					stringBuilder.Append(",");
+					stringBuilder.Append(',');
 					stringBuilder.Append(selectionDataFieldSpec.Options.ToList().IndexOf(optional.Value)); // todo lazy af
 					break;
 				}
@@ -79,75 +136,162 @@ public static class MatchDataToCsv {
 		return stringBuilder.ToString();
 	}
 
-	public static MatchData? Deserialize(string matchData, GameSpec gameSpecification) {
+	public static MatchDataDeserializationResult Deserialize(string matchData, GameSpec gameSpecification) {
 
 		List<string> columns = matchData.SplitTextToCsvColumns();
+		uint expectedColumnCount = CountOfBuiltInFields + (uint)gameSpecification.DataFields.Count;
 
-		if (columns.Count != 9 + gameSpecification.DataFields.Count) {
-			return null;
+		if (columns.Count != expectedColumnCount) {
+
+			return new WrongNumberOfCsvColumnsError {
+				SerializedMatchData = matchData,
+				GameSpecification = gameSpecification,
+				ExpectedColumnCount = expectedColumnCount,
+				Columns = columns.ToReadOnly(),
+			};
 		}
 
-		bool success = uint.TryParse(columns[2], out uint matchNumber);
-		success &= Enum.TryParse(columns[3], out MatchType type);
-		success &= uint.TryParse(columns[4], out uint replayNumber);
-		success &= uint.TryParse(columns[5], out uint allianceIndex);
-		success &= uint.TryParse(columns[6], out uint teamNumber);
-		success &= DateTime.TryParse(columns[7], out DateTime startTime);
-		success &= DateTime.TryParse(columns[8], out DateTime endTime);
-
-		if (!success) {
-			return null;
+		List<CoreValueError> coreValueErrors = [];
+		
+		if (uint.TryParse(columns[MatchNumberColumnIndex], out uint matchNumber)) {
+			coreValueErrors.Add(new() {
+				ColumnIndex = MatchNumberColumnIndex,
+				ExpectedType = typeof(uint),
+				Text = columns[MatchNumberColumnIndex]
+			});
 		}
+
+		if (Enum.TryParse(columns[MatchTypeColumnIndex], out MatchType type)) {
+			coreValueErrors.Add(new() {
+				ColumnIndex = MatchTypeColumnIndex,
+				ExpectedType = typeof(MatchType),
+				Text = columns[MatchTypeColumnIndex]
+			});
+		}
+
+		if (uint.TryParse(columns[ReplayNumberColumnIndex], out uint replayNumber)) {
+			coreValueErrors.Add(new() {
+				ColumnIndex = ReplayNumberColumnIndex,
+				ExpectedType = typeof(uint),
+				Text = columns[ReplayNumberColumnIndex]
+			});
+		}
+
+		if (uint.TryParse(columns[AllianceColumnIndex], out uint allianceIndex)) {
+			coreValueErrors.Add(new() {
+				ColumnIndex = AllianceColumnIndex,
+				ExpectedType = typeof(uint),
+				Text = columns[AllianceColumnIndex]
+			});
+		}
+
+		if (uint.TryParse(columns[TeamNumberColumnIndex], out uint teamNumber)) {
+			coreValueErrors.Add(new() {
+				ColumnIndex = TeamNumberColumnIndex,
+				ExpectedType = typeof(uint),
+				Text = columns[TeamNumberColumnIndex]
+			});
+		}
+
+		if (DateTime.TryParse(columns[StartTimeColumnIndex], out DateTime startTime)) {
+			coreValueErrors.Add(new() {
+				ColumnIndex = StartTimeColumnIndex,
+				ExpectedType = typeof(DateTime),
+				Text = columns[StartTimeColumnIndex]
+			});
+		}
+
+		if (DateTime.TryParse(columns[EndTimeColumnIndex], out DateTime endTime)) {
+			coreValueErrors.Add(new() {
+				ColumnIndex = EndTimeColumnIndex,
+				ExpectedType = typeof(DateTime),
+				Text = columns[EndTimeColumnIndex]
+			});
+		}
+
+		List<DataFieldError> dataFieldErrors = [];
 
 		List<object> dataFieldValues = [];
 		for (int i = 0; i < gameSpecification.DataFields.Count; i++) {
 
-			string value = columns[i + 9];
+			int csvColumnIndex = i + CountOfBuiltInFields;
+			string value = columns[csvColumnIndex];
 
 			switch (gameSpecification.DataFields[i]) {
 
-				case BooleanDataFieldSpec:
+				case BooleanDataFieldSpec dataFieldSpec: {
 					switch (value) {
 						case "1":
 							dataFieldValues.Add(true);
-							continue;
+							break;
 						case "0":
 							dataFieldValues.Add(false);
-							continue;
+							break;
 						default:
-							return null;
+							dataFieldErrors.Add(new() {
+								DataField = dataFieldSpec,
+								Text = value
+							});
+							break;
 					}
-
+					break;
+				}
 				case TextDataFieldSpec:
 					dataFieldValues.Add(value);
 					break;
 
-				case IntegerDataFieldSpec: {
-					if (!int.TryParse(value, out int result)) {
-						return null;
-					}
-					dataFieldValues.Add(result);
-					break;
-				}
-				case SelectionDataFieldSpec selectionSpec: {
+				case IntegerDataFieldSpec dataFieldSpec: {
 
-					if (value == string.Empty) {
-						dataFieldValues.Add(Optional.NoValue);
+					if (int.TryParse(value, out int result)) {
+						dataFieldValues.Add(result);
 						break;
 					}
 
-					if (!int.TryParse(value, out int result)) {
-						return null;
+					dataFieldErrors.Add(new() {
+						DataField = dataFieldSpec,
+						Text = value
+					});
+					break;
+				}
+				case SelectionDataFieldSpec dataFieldSpec: {
+
+					if (value == string.Empty) {
+
+						if (!dataFieldSpec.RequiresValue) {
+							dataFieldValues.Add(Optional.NoValue);
+							break;
+						}
+
+						dataFieldErrors.Add(new() {
+							DataField = dataFieldSpec,
+							Text = string.Empty
+						});
+
+						break;
 					}
 
-					if (result < 0 || result >= selectionSpec.Options.Count) {
-						return null;
+					if (!uint.TryParse(value, out uint result) || result >= dataFieldSpec.Options.Count) {
+
+						dataFieldErrors.Add(new() {
+							DataField = dataFieldSpec,
+							Text = value
+						});
+						break;
 					}
 
-					dataFieldValues.Add(selectionSpec.Options[result].Optionalize());
+					dataFieldValues.Add(dataFieldSpec.Options[(int)result].Optionalize());
 					break;
 				}
 			}
+		}
+
+		if (coreValueErrors.Count > 0) {
+			return new CouldNotParseValuesError {
+				SerializedMatchData = matchData,
+				GameSpecification = gameSpecification,
+				CoreValueErrors = coreValueErrors.ToReadOnly(),
+				DataFieldErrors = dataFieldErrors.ToReadOnly()
+			};
 		}
 
 		return MatchData.FromRaw(

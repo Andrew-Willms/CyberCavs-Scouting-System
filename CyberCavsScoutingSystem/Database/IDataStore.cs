@@ -13,10 +13,6 @@ public partial class AddNewMatchDataResult : OneOfBase<Success, Exception>;
 [GenerateOneOf]
 public partial class GetMatchDataResult : OneOfBase<List<MatchDataDto>, Exception, MatchDataDeserializationError, InvalidEditIdsError>;
 
-public class MatchDataDeserializationError {
-	public required string SerializedMatchData { get; init; }
-};
-
 public class InvalidEditIdsError {
 
 	public string? EditOfRecordFromDevice { get; }
