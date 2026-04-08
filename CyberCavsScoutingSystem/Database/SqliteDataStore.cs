@@ -258,10 +258,10 @@ public class SqliteDataStore : IDataStore {
 				new() { DataFieldName = "Passing", Label = "Passing?" },
 				new() { DataFieldName = "Scoring", Label = "Scoring?" },
 				new() { DataFieldName = "Defending", Label = "Defending?" },
-				new() { DataFieldName = "Shoveled", Label = "Shoveled Fuel?" },
 				new() { DataFieldName = "Accuracy", Label = "Accuracy %" },
 				new() { DataFieldName = "Aimlessness", Label = "Aimlessness %" },
 				new() { DataFieldName = "Effectiveness", Label = "Role Effectiveness" },
+				new() { DataFieldName = "Shoveled", Label = "Shoveled Fuel?" },
 				new() { DataFieldName = "Beached", Label = "Beached Multiple Times?" }
 			}.ToReadOnly(),
 			endgameTabInputs: new List<InputSpec> {
