@@ -215,14 +215,14 @@ public class SqliteDataStore : IDataStore {
 				new SelectionDataFieldSpec {
 					Name = "Aimlessness",
 					Options = new List<string> { "0", "25", "50", "75", "100" }.ToReadOnly(),
-					InitialValue = "",
+					InitialValue = "0",
 					RequiresValue = false
 				},
 				new SelectionDataFieldSpec {
 					Name = "Effectiveness",
 					Options = new List<string> { "1", "2", "3", "4", "5" }.ToReadOnly(),
 					InitialValue = "",
-					RequiresValue = false
+					RequiresValue = true
 				},
 				new BooleanDataFieldSpec { Name = "Beached", InitialValue = false },
 				new SelectionDataFieldSpec {

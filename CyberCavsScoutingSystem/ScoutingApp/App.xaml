@@ -42,6 +42,7 @@
 				BooleanDataFieldTemplate="{StaticResource BooleanDataFieldTemplate}"
 				TextDataFieldTemplate="{StaticResource TextDataFieldTemplate}"
 				IntegerDataFieldTemplate="{StaticResource IntegerDataFieldTemplate}"
+				MultiIntegerDataFieldTemplate="{StaticResource MultiIntegerDataFieldTemplate}"
 				SelectionDataFieldTemplate="{StaticResource SelectionDataFieldTemplate}"/>
 
 			<converters:ReadOnlyListOfStringsToIListConverter x:Key="ReadOnlyListOfStringsToIListConverter"/>

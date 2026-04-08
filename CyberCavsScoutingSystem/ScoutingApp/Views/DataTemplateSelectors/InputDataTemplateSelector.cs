@@ -11,6 +11,7 @@ public class InputDataTemplateSelector : DataTemplateSelector {
 	public DataTemplate BooleanDataFieldTemplate { get; set; } = null!;
 	public DataTemplate TextDataFieldTemplate { get; set; } = null!;
 	public DataTemplate IntegerDataFieldTemplate { get; set; } = null!;
+	public DataTemplate MultiIntegerDataFieldTemplate { get; set; } = null!;
 	public DataTemplate SelectionDataFieldTemplate { get; set; } = null!;
 
 	protected override DataTemplate OnSelectTemplate(object item, BindableObject container) {
@@ -19,6 +20,7 @@ public class InputDataTemplateSelector : DataTemplateSelector {
 			BooleanInputDataCollector => BooleanDataFieldTemplate,
 			TextInputDataCollector => TextDataFieldTemplate,
 			IntegerInputDataCollector => IntegerDataFieldTemplate,
+			MultiIntegerInputDataCollector => MultiIntegerDataFieldTemplate,
 			SelectionInputDataCollector => SelectionDataFieldTemplate,
 			_ => throw new UnreachableException()
 		};
