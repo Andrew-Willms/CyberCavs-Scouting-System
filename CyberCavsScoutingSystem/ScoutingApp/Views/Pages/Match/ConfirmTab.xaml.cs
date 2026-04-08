@@ -100,7 +100,13 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 		result.Switch(
 			success => { },
 			exception => {
-				ErrorPresenter.DisplayError("Cannot Save Match", $"Exception: {exception.Message} \r\n\r\n Inner: {exception.InnerException?.Message}");
+				ErrorPresenter.DisplayError(
+					"Cannot Save Match", 
+					$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+					$"{(exception.InnerException is null 
+						? string.Empty 
+						: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+						  $"with message:\r\n{exception.InnerException.Message}")}");
 			},
 			matchDataIsInvalid => {
 				ErrorPresenter.DisplayError("Cannot Save Match", "The match data is invalid.");

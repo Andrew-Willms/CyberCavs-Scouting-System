@@ -148,12 +148,6 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 	private async void DeleteAllButton_OnClicked(object? sender, EventArgs e) {
 
-		//bool discard = await Shell.Current.DisplayAlertAsync(
-		//	"Discard Current Match?",
-		//	"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
-		//	"Discard and start new match.",
-		//	"Continue with current match.");
-
 		int matchCount = SavedMatches.Count;
 
 		string confirmPrompt = matchCount == 1
