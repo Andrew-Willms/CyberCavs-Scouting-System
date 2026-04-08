@@ -19,6 +19,8 @@
 				<ColumnDefinition/>
 				<ColumnDefinition/>
 				<ColumnDefinition/>
+				<ColumnDefinition/>
+				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 
 			<Grid.RowDefinitions>
@@ -26,7 +28,7 @@
 			</Grid.RowDefinitions>
 
 			<Button
-				Text="-"
+				Text="-1"
 				Grid.Column="0"
 				Clicked="DecrementButton_OnClicked"/>
 
@@ -37,9 +39,19 @@
 				Grid.Column="1"/>
 
 			<Button
-				Text="+"
+				Text="+1"
 				Grid.Column="2"
-				Clicked="IncrementButton_OnClick"/>
+				Clicked="IncrementOneButton_OnClick"/>
+
+			<Button
+				Text="+5"
+				Grid.Column="3"
+				Clicked="IncrementFiveButton_OnClick"/>
+
+			<Button
+				Text="+10"
+				Grid.Column="4"
+				Clicked="IncrementTenButton_OnClick"/>
 
 		</Grid>
 

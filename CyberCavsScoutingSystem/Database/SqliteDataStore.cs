@@ -227,9 +227,9 @@ public class SqliteDataStore : IDataStore {
 				new BooleanDataFieldSpec { Name = "Beached", InitialValue = false },
 				new SelectionDataFieldSpec {
 					Name = "Climb",
-					Options = new List<string> { "L1", "L2", "L3" }.ToReadOnly(),
-					InitialValue = "",
-					RequiresValue = false
+					Options = new List<string> { "None", " L1", "L2", "L3" }.ToReadOnly(),
+					InitialValue = "None",
+					RequiresValue = true
 				},
 				new SelectionDataFieldSpec {
 					Name = "Disconnected",

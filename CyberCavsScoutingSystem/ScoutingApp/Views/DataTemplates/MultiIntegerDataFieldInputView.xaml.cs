@@ -12,10 +12,22 @@ public partial class MultiIntegerDataFieldInputView : ContentView {
 		InitializeComponent();
 	}
 
-	private void IncrementButton_OnClick(object? sender, EventArgs e) {
+	private void IncrementOneButton_OnClick(object? sender, EventArgs e) {
 
 		MultiIntegerInputDataCollector dataField = BindingContext as MultiIntegerInputDataCollector ?? throw new InvalidOperationException();
 		dataField.Value++;
+	}
+
+	private void IncrementFiveButton_OnClick(object? sender, EventArgs e) {
+
+		MultiIntegerInputDataCollector dataField = BindingContext as MultiIntegerInputDataCollector ?? throw new InvalidOperationException();
+		dataField.Value += 5;
+	}
+
+	private void IncrementTenButton_OnClick(object? sender, EventArgs e) {
+
+		MultiIntegerInputDataCollector dataField = BindingContext as MultiIntegerInputDataCollector ?? throw new InvalidOperationException();
+		dataField.Value += 10;
 	}
 
 	private void DecrementButton_OnClicked(object? sender, EventArgs e) {
