@@ -378,6 +378,21 @@ public class SqliteDataStore : IDataStore {
 		// todo right now it's possible for only one of the two edit columns to be null
 		// see if there is a way to restrict it so they both have to be null or not null together
 
+		await using SqliteCommand command = Connection.CreateCommand();
+		command.CommandText = $"SELECT COUNT(*) FROM '{Tables.UnifiedRecords.Name}'";
+		long count = (long)command.ExecuteScalar()!;
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}"); 
+
 		// it's scuffed that I have to call WITH AS twice but I can't find a workaround
 		// CTEs can only be consumed by a singled query.
 		SqliteCommand addMatchDataCommand = new(

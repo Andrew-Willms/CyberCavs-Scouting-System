@@ -401,10 +401,16 @@ public static class MatchDataDtoToCsv {
 
 					if (!optional.HasValue) {
 						stringBuilder.Append(',');
-						continue;
+						break;
 					}
 					stringBuilder.Append(',');
 					stringBuilder.Append(selectionDataFieldSpec.Options.ToList().IndexOf(optional.Value)); // todo lazy af
+					break;
+				}
+				// It's very unfortunate that Optional.NoValue is a different type like this. It breaks a lot of things
+				// Todo: consider changing the Optional<> type to own the NoValue thing
+				case (SelectionDataFieldSpec, Optional): {
+					stringBuilder.Append(',');
 					break;
 				}
 				default:

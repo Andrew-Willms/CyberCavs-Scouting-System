@@ -142,7 +142,7 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 	private async void DiscardButton_OnClicked(object? sender, EventArgs e) {
 
-		bool discard = await Shell.Current.DisplayAlert(
+		bool discard = await Shell.Current.DisplayAlertAsync(
 			"Discard Current Match?",
 			"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
 			"Discard and start new match.",

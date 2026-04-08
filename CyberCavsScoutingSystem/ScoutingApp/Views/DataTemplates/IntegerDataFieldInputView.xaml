@@ -13,7 +13,8 @@
 			HorizontalTextAlignment="Center"
 			VerticalTextAlignment="Center"/>
 
-		<Grid>
+		<Grid
+			ColumnSpacing="1">
 
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition/>

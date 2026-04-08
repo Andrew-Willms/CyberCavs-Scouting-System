@@ -268,17 +268,20 @@ public class MatchData : IEquatable<MatchData> {
 
 			DataFieldSpec expectedFieldSpec = gameSpec.DataFields[index];
 
-			if (expectedFieldSpec is BooleanDataFieldSpec && dataFieldValues[index] is bool ||
-				expectedFieldSpec is TextDataFieldSpec && dataFieldValues[index] is string ||
-				expectedFieldSpec is IntegerDataFieldSpec && dataFieldValues[index] is int ||
-				expectedFieldSpec is MultiIntegerDataFieldSpec && dataFieldValues[index] is int ||
-				expectedFieldSpec is SelectionDataFieldSpec && dataFieldValues[index] is Optional<string>) {
+			switch (expectedFieldSpec) {
+				case BooleanDataFieldSpec when dataFieldValues[index] is bool:
+				case TextDataFieldSpec when dataFieldValues[index] is string:
+				case IntegerDataFieldSpec when dataFieldValues[index] is int:
+				case MultiIntegerDataFieldSpec when dataFieldValues[index] is int:
+				case SelectionDataFieldSpec { RequiresValue: true } when dataFieldValues[index] is Optional<string>:
+				case SelectionDataFieldSpec { RequiresValue: false } when dataFieldValues[index] is Optional<string> or Optional:
+					results.Add(dataFieldValues[index]);
+					continue;
 
-				results.Add(dataFieldValues[index]);
-				continue;
+				default:
+					errorSink(new DataTypeMismatch { ExpectedDataField = expectedFieldSpec, Value = dataFieldValues[index] });
+					break;
 			}
-
-			errorSink(new DataTypeMismatch { ExpectedDataField = expectedFieldSpec, Value = dataFieldValues[index] });
 		}
 
 		dataFieldResults = results.ToReadOnly();

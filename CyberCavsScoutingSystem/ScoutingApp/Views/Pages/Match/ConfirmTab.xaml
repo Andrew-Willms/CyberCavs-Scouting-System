@@ -9,7 +9,7 @@
 	x:DataType="match:ConfirmTab"
 	NavigatedTo="ConfirmTab_OnNavigatedTo">
 
-	<ScrollView Orientation="Both">
+	<!--<ScrollView Orientation="Both">-->
 
 		<VerticalStackLayout
 			Margin="10"
@@ -46,6 +46,6 @@
 
 		</VerticalStackLayout>
 
-	</ScrollView>
+	<!--</ScrollView>-->
 
 </ContentPage>

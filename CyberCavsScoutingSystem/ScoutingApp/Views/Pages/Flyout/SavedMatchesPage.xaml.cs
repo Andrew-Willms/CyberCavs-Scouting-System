@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CCSSDomain.Serialization;
 using Database;
+using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
@@ -40,11 +41,18 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 	public ObservableCollection<MatchDataDto> SavedMatches { get; } = [];
 
+	public bool AnyMatches => SavedMatches.Any();
+
+
 
 	public SavedMatchesPage(IDataStore dataStore, IErrorPresenter errorPresenter) {
-		
+
 		DataStore = dataStore;
 		ErrorPresenter = errorPresenter;
+
+		SavedMatches.CollectionChanged += (sender, eventArgs) => {
+			OnPropertyChanged(nameof(AnyMatches));
+		};
 
 		BindingContext = this;
 		InitializeComponent();
@@ -139,6 +147,25 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 	}
 
 	private async void DeleteAllButton_OnClicked(object? sender, EventArgs e) {
+
+		//bool discard = await Shell.Current.DisplayAlertAsync(
+		//	"Discard Current Match?",
+		//	"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
+		//	"Discard and start new match.",
+		//	"Continue with current match.");
+
+		int matchCount = SavedMatches.Count;
+
+		string confirmPrompt = matchCount == 1
+			? "Type '1' and tap 'OK' if you want to delete the 1 saved match."
+			: $"Type '{matchCount}' and tap 'OK' if you want to delete all saved {matchCount} matches.";
+
+		string result = await DisplayPromptAsync(
+			"Are you sure you want to delete all matches?", confirmPrompt, maxLength: 20, keyboard: Keyboard.Numeric);
+
+		if (result != matchCount.ToString()) {
+			return;
+		}
 
 		bool success = await DataStore.DeleteAllMatchData();
 
