@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CCSSDomain.Serialization;
 using Database;
@@ -71,9 +72,27 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 				}
 			},
 			exception => GetMatchesError = 
-				$"Could not fetch matches. Exception raised of type '{exception.GetType()}' with message:\r\n\r\n{exception.Message}",
-			matchDataDeserializationError => GetMatchesError = 
-				$"Could not fetch matches. Deserialization error. Serialized data:\r\n\r\n{matchDataDeserializationError.SerializedMatchData}",
+				$"The Matches could not be loaded. An exception was raised of type '{exception.GetType()}' with the message:\r\n\r\n{exception.Message}",
+			matchDataDeserializationError => {
+				GetMatchesError = matchDataDeserializationError switch {
+					CouldNotParseValuesError couldNotParseValuesError => 
+						$"The matches could not be loaded because of a deserialization error.\r\n\r\n" +
+						$"The following values could not be parsed:" +
+						$"{string.Join(string.Empty, couldNotParseValuesError.CoreValueErrors.Select(x => 
+							$"\r\n  - Column {x.ColumnIndex} with the value '{x.Text}' could not be parsed as the type '{x.ExpectedType.Name}'")
+						)}" +
+						$"{string.Join(string.Empty, couldNotParseValuesError.DataFieldErrors.Select(x =>
+							$"\r\n  - The value '{x.Text}' could not be parsed for the data field '{x.DataField.Name}'")
+						)}\r\n\r\n" +
+						$"Serialized data:\r\n\r\n{matchDataDeserializationError.SerializedMatchData}",
+					WrongNumberOfCsvColumnsError wrongNumberOfCsvColumnsError =>
+						$"The matches could not be loaded because of a deserialization error.\r\n\r\n" +
+						$"{wrongNumberOfCsvColumnsError.ExpectedColumnCount} CSV columns were expected and " +
+						$"{wrongNumberOfCsvColumnsError.Columns.Count} were found.\r\n\r\n" +
+						$"Serialized data:\r\n\r\n{matchDataDeserializationError.SerializedMatchData}",
+					_ => throw new ArgumentOutOfRangeException(nameof(matchDataDeserializationError))
+				};
+			},
 			invalidEditIdsError => GetMatchesError = "Could not fetch matches. There are invalid edit IDs."
 		);
 

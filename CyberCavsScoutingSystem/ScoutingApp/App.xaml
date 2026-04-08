@@ -29,6 +29,10 @@
 				<dataTemplates:IntegerDataFieldInputView/>
 			</DataTemplate>
 
+			<DataTemplate x:Key="MultiIntegerDataFieldTemplate">
+				<dataTemplates:MultiIntegerDataFieldInputView/>
+			</DataTemplate>
+
 			<DataTemplate x:Key="SelectionDataFieldTemplate">
 				<dataTemplates:SelectionDataFieldInputView/>
 			</DataTemplate>

@@ -16,6 +16,8 @@ namespace CCSSDomain.Serialization;
 [GenerateOneOf]
 public partial class MatchDataDeserializationResult : OneOfBase<MatchData, MatchDataDeserializationError>;
 
+// TODO: Consider making this a OneOf<> to enforce exhaustive matching on switch
+// The SerializedMatchData and GameSpecification properties could be moved to an interface?
 public abstract class MatchDataDeserializationError {
 
 	public required string SerializedMatchData { get; init; }
@@ -118,6 +120,11 @@ public static class MatchDataToCsv {
 					stringBuilder.Append(value);
 					break;
 				}
+				case (MultiIntegerDataFieldSpec, int value): {
+					stringBuilder.Append(',');
+					stringBuilder.Append(value);
+					break;
+				}
 				case (SelectionDataFieldSpec selectionDataFieldSpec, Optional<string> optional): {
 
 					if (!optional.HasValue) {
@@ -153,7 +160,7 @@ public static class MatchDataToCsv {
 
 		List<CoreValueError> coreValueErrors = [];
 		
-		if (uint.TryParse(columns[MatchNumberColumnIndex], out uint matchNumber)) {
+		if (!uint.TryParse(columns[MatchNumberColumnIndex], out uint matchNumber)) {
 			coreValueErrors.Add(new() {
 				ColumnIndex = MatchNumberColumnIndex,
 				ExpectedType = typeof(uint),
@@ -161,7 +168,7 @@ public static class MatchDataToCsv {
 			});
 		}
 
-		if (Enum.TryParse(columns[MatchTypeColumnIndex], out MatchType type)) {
+		if (!Enum.TryParse(columns[MatchTypeColumnIndex], out MatchType type)) {
 			coreValueErrors.Add(new() {
 				ColumnIndex = MatchTypeColumnIndex,
 				ExpectedType = typeof(MatchType),
@@ -169,7 +176,7 @@ public static class MatchDataToCsv {
 			});
 		}
 
-		if (uint.TryParse(columns[ReplayNumberColumnIndex], out uint replayNumber)) {
+		if (!uint.TryParse(columns[ReplayNumberColumnIndex], out uint replayNumber)) {
 			coreValueErrors.Add(new() {
 				ColumnIndex = ReplayNumberColumnIndex,
 				ExpectedType = typeof(uint),
@@ -177,7 +184,7 @@ public static class MatchDataToCsv {
 			});
 		}
 
-		if (uint.TryParse(columns[AllianceColumnIndex], out uint allianceIndex)) {
+		if (!uint.TryParse(columns[AllianceColumnIndex], out uint allianceIndex)) {
 			coreValueErrors.Add(new() {
 				ColumnIndex = AllianceColumnIndex,
 				ExpectedType = typeof(uint),
@@ -185,7 +192,7 @@ public static class MatchDataToCsv {
 			});
 		}
 
-		if (uint.TryParse(columns[TeamNumberColumnIndex], out uint teamNumber)) {
+		if (!uint.TryParse(columns[TeamNumberColumnIndex], out uint teamNumber)) {
 			coreValueErrors.Add(new() {
 				ColumnIndex = TeamNumberColumnIndex,
 				ExpectedType = typeof(uint),
@@ -193,7 +200,7 @@ public static class MatchDataToCsv {
 			});
 		}
 
-		if (DateTime.TryParse(columns[StartTimeColumnIndex], out DateTime startTime)) {
+		if (!DateTime.TryParse(columns[StartTimeColumnIndex], out DateTime startTime)) {
 			coreValueErrors.Add(new() {
 				ColumnIndex = StartTimeColumnIndex,
 				ExpectedType = typeof(DateTime),
@@ -201,7 +208,7 @@ public static class MatchDataToCsv {
 			});
 		}
 
-		if (DateTime.TryParse(columns[EndTimeColumnIndex], out DateTime endTime)) {
+		if (!DateTime.TryParse(columns[EndTimeColumnIndex], out DateTime endTime)) {
 			coreValueErrors.Add(new() {
 				ColumnIndex = EndTimeColumnIndex,
 				ExpectedType = typeof(DateTime),
@@ -253,6 +260,21 @@ public static class MatchDataToCsv {
 					});
 					break;
 				}
+
+				case MultiIntegerDataFieldSpec dataFieldSpec: {
+
+					if (int.TryParse(value, out int result)) {
+						dataFieldValues.Add(result);
+						break;
+					}
+
+					dataFieldErrors.Add(new() {
+						DataField = dataFieldSpec,
+						Text = value
+					});
+					break;
+				}
+
 				case SelectionDataFieldSpec dataFieldSpec: {
 
 					if (value == string.Empty) {
@@ -361,22 +383,27 @@ public static class MatchDataDtoToCsv {
 					break;
 				}
 				case (TextDataFieldSpec, string value): {
-					stringBuilder.Append(",");
+					stringBuilder.Append(',');
 					stringBuilder.Append(value.ToCsvFriendly());
 					break;
 				}
 				case (IntegerDataFieldSpec, int value): {
-					stringBuilder.Append(",");
+					stringBuilder.Append(',');
+					stringBuilder.Append(value);
+					break;
+				}
+				case (MultiIntegerDataFieldSpec, int value): {
+					stringBuilder.Append(',');
 					stringBuilder.Append(value);
 					break;
 				}
 				case (SelectionDataFieldSpec selectionDataFieldSpec, Optional<string> optional): {
 
 					if (!optional.HasValue) {
-						stringBuilder.Append(",");
+						stringBuilder.Append(',');
 						continue;
 					}
-					stringBuilder.Append(",");
+					stringBuilder.Append(',');
 					stringBuilder.Append(selectionDataFieldSpec.Options.ToList().IndexOf(optional.Value)); // todo lazy af
 					break;
 				}
@@ -447,7 +474,8 @@ public static class MatchDataDtoToCsv {
 					dataFieldValues.Add(value);
 					break;
 
-				case IntegerDataFieldSpec: {
+				case IntegerDataFieldSpec:
+				case MultiIntegerDataFieldSpec: {
 					if (!int.TryParse(value, out int result)) {
 						return null;
 					}

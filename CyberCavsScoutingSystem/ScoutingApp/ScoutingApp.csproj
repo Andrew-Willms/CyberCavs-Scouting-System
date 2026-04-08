@@ -99,6 +99,9 @@
 	  <Compile Update="Views\DataTemplates\IntegerDataFieldInputView.xaml.cs">
 	    <DependentUpon>IntegerDataFieldInputView.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\DataTemplates\MultiIntegerDataFieldInputView.xaml.cs">
+	  	<DependentUpon>MultiIntegerDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\DataTemplates\SelectionDataFieldInputView.xaml.cs">
 	    <DependentUpon>SelectionDataFieldInputView.xaml</DependentUpon>
 	  </Compile>
@@ -139,6 +142,9 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\DataTemplates\IntegerDataFieldInputView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DataTemplates\MultiIntegerDataFieldInputView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">

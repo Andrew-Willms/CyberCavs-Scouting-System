@@ -18,6 +18,7 @@ public abstract class InputDataCollector : INotifyPropertyChanged {
 			BooleanDataField booleanDataField => new BooleanInputDataCollector(booleanDataField) { Label = inputSpec.Label },
 			TextDataField textDataField => new TextInputDataCollector(textDataField) { Label = inputSpec.Label },
 			IntegerDataField integerDataField => new IntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
+			MultiIntegerDataField integerDataField => new MultiIntegerInputDataCollector(integerDataField) { Label = inputSpec.Label },
 			SelectionDataField selectionDataField => new SelectionInputDataCollector(selectionDataField) { Label = inputSpec.Label },
 			_ => throw new UnreachableException()
 		};
@@ -76,6 +77,25 @@ public class IntegerInputDataCollector : InputDataCollector, INotifyPropertyChan
 	private readonly IntegerDataField DataField;
 
 	public IntegerInputDataCollector(IntegerDataField dataField) {
+
+		DataField = dataField;
+		DataField.OnValueChange.Subscribe(() => OnPropertyChanged(""));
+	}
+
+	public int Value {
+		get => DataField.Value;
+		set => DataField.Value = value;
+	}
+
+}
+
+
+
+public class MultiIntegerInputDataCollector : InputDataCollector, INotifyPropertyChanged {
+
+	private readonly MultiIntegerDataField DataField;
+
+	public MultiIntegerInputDataCollector(MultiIntegerDataField dataField) {
 
 		DataField = dataField;
 		DataField.OnValueChange.Subscribe(() => OnPropertyChanged(""));

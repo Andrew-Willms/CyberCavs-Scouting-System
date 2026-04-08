@@ -201,15 +201,30 @@ public class SqliteDataStore : IDataStore {
 					InitialValue = "",
 					RequiresValue = true
 				},
+				new MultiIntegerDataFieldSpec { Name = "Fuel", InitialValue = 0, MinValue = 0, MaxValue = 1000 },
 				new BooleanDataFieldSpec { Name = "Passing", InitialValue = false },
 				new BooleanDataFieldSpec { Name = "Scoring", InitialValue = false },
 				new BooleanDataFieldSpec { Name = "Defending", InitialValue = false },
-				new TextDataFieldSpec {
-					Name = "Effectiveness",
+				new BooleanDataFieldSpec { Name = "Shoveled", InitialValue = false },
+				new SelectionDataFieldSpec {
+					Name = "Accuracy",
+					Options = new List<string> { "<60", "70", "80", "90", "100" }.ToReadOnly(),
 					InitialValue = "",
-					MustNotBeEmpty = true,
-					MustNotBeInitialValue = false
+					RequiresValue = false
 				},
+				new SelectionDataFieldSpec {
+					Name = "Aimlessness",
+					Options = new List<string> { "0", "25", "50", "75", "100" }.ToReadOnly(),
+					InitialValue = "",
+					RequiresValue = false
+				},
+				new SelectionDataFieldSpec {
+					Name = "Effectiveness",
+					Options = new List<string> { "1", "2", "3", "4", "5" }.ToReadOnly(),
+					InitialValue = "",
+					RequiresValue = false
+				},
+				new BooleanDataFieldSpec { Name = "Beached", InitialValue = false },
 				new SelectionDataFieldSpec {
 					Name = "Climb",
 					Options = new List<string> { "L1", "L2", "L3" }.ToReadOnly(),
@@ -238,11 +253,16 @@ public class SqliteDataStore : IDataStore {
 				new() { DataFieldName = "Auto Climb", Label = "L1 Climb?" }
 			}.ToReadOnly(),
 			teleTabInputs: new List<InputSpec> {
+				new() { DataFieldName = "Fuel", Label = "Fuel Scored" },
 				new() { DataFieldName = "Primary Role", Label = "Primary Role" },
 				new() { DataFieldName = "Passing", Label = "Passing?" },
 				new() { DataFieldName = "Scoring", Label = "Scoring?" },
 				new() { DataFieldName = "Defending", Label = "Defending?" },
-				new() { DataFieldName = "Effectiveness", Label = "How effective did they play their role?" }
+				new() { DataFieldName = "Shoveled", Label = "Shoveled Fuel?" },
+				new() { DataFieldName = "Accuracy", Label = "Accuracy %" },
+				new() { DataFieldName = "Aimlessness", Label = "Aimlessness %" },
+				new() { DataFieldName = "Effectiveness", Label = "Role Effectiveness" },
+				new() { DataFieldName = "Beached", Label = "Beached Multiple Times?" }
 			}.ToReadOnly(),
 			endgameTabInputs: new List<InputSpec> {
 				new() { DataFieldName = "Climb", Label = "Climb" },

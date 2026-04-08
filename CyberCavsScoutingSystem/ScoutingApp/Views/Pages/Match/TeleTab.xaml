@@ -17,7 +17,7 @@
 
 				<GridItemsLayout
 					Orientation="Vertical"
-					Span="2"
+					Span="1"
 					VerticalItemSpacing="10"
 					HorizontalItemSpacing="10"/>
 

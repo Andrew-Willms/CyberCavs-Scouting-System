@@ -271,6 +271,7 @@ public class MatchData : IEquatable<MatchData> {
 			if (expectedFieldSpec is BooleanDataFieldSpec && dataFieldValues[index] is bool ||
 				expectedFieldSpec is TextDataFieldSpec && dataFieldValues[index] is string ||
 				expectedFieldSpec is IntegerDataFieldSpec && dataFieldValues[index] is int ||
+				expectedFieldSpec is MultiIntegerDataFieldSpec && dataFieldValues[index] is int ||
 				expectedFieldSpec is SelectionDataFieldSpec && dataFieldValues[index] is Optional<string>) {
 
 				results.Add(dataFieldValues[index]);
