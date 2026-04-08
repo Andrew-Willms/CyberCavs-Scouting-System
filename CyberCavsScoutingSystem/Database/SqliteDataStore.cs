@@ -378,42 +378,6 @@ public class SqliteDataStore : IDataStore {
 		// todo right now it's possible for only one of the two edit columns to be null
 		// see if there is a way to restrict it so they both have to be null or not null together
 
-		await using SqliteCommand command = Connection.CreateCommand();
-		command.CommandText = $"SELECT COUNT(*) FROM \"{Tables.UnifiedRecords.Name}\"";
-		long count = (long)command.ExecuteScalar()!;
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}");
-
-		await using SqliteCommand command2 = Connection.CreateCommand();
-		command.CommandText = $"SELECT COUNT(*) FROM \"{Tables.UnifiedRecords.Name}\" WHERE \"{Tables.UnifiedRecords.DeviceId}\" = '{matchData.DeviceId}'";
-		long count2 = (long)command.ExecuteScalar()!;
-
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-		Trace.WriteLine($"Row count: {count2}");
-
-		Trace.WriteLine($"Device ID: {matchData.DeviceId}"); 
-		Trace.WriteLine($"Device ID: {matchData.DeviceId}"); 
-		Trace.WriteLine($"Device ID: {matchData.DeviceId}"); 
-		Trace.WriteLine($"Device ID: {matchData.DeviceId}"); 
-
 		// it's scuffed that I have to call WITH AS twice but I can't find a workaround
 		// CTEs can only be consumed by a singled query.
 		SqliteCommand addMatchDataCommand = new(
@@ -443,7 +407,7 @@ public class SqliteDataStore : IDataStore {
 			     FROM "{Tables.UnifiedRecords.Name}"
 			     WHERE "{Tables.UnifiedRecords.DeviceId}" = '{matchData.DeviceId}'
 			 )
-			 INSERT INTO '{Tables.UnifiedRecords.Name}" (
+			 INSERT INTO "{Tables.UnifiedRecords.Name}" (
 			     "{Tables.UnifiedRecords.DeviceId}",
 			     "{Tables.UnifiedRecords.RecordId}",
 			     "{Tables.UnifiedRecords.TableNameColumn}",
