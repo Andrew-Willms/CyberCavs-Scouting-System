@@ -72,8 +72,8 @@ public class SqliteDataStore : IDataStore {
 
 		SqliteCommand createScoutTable = new(
 			$"""
-			 CREATE TABLE IF NOT EXISTS '{Tables.Scout.Name}' (
-			 	'{Tables.Scout.NameColumn}' TEXT NOT NULL
+			 CREATE TABLE IF NOT EXISTS "{Tables.Scout.Name}" (
+			 	"{Tables.Scout.NameColumn}" TEXT NOT NULL
 			 );
 			 """,
 			Connection);
@@ -86,9 +86,9 @@ public class SqliteDataStore : IDataStore {
 
 		SqliteCommand createKnownDeviceTable = new(
 			$"""
-			 CREATE TABLE IF NOT EXISTS '{Tables.KnownDevices.Name}' (
-			 	'{Tables.KnownDevices.DeviceId}' TEXT NOT NULL PRIMARY KEY,
-			 	'{Tables.KnownDevices.LatestRecordId}' INTEGER NOT NULL
+			 CREATE TABLE IF NOT EXISTS "{Tables.KnownDevices.Name}" (
+			 	"{Tables.KnownDevices.DeviceId}" TEXT NOT NULL PRIMARY KEY,
+			 	"{Tables.KnownDevices.LatestRecordId}" INTEGER NOT NULL
 			 );
 			 """,
 			Connection);
@@ -102,11 +102,11 @@ public class SqliteDataStore : IDataStore {
 		SqliteCommand createUnifiedRecordTable = new(
 			$"""
 			CREATE TABLE IF NOT EXISTS '{Tables.UnifiedRecords.Name}' (
-				'{Tables.UnifiedRecords.DeviceId}' TEXT NOT NULL,
-				'{Tables.UnifiedRecords.RecordId}' INTEGER NOT NULL,
-				'{Tables.UnifiedRecords.TableNameColumn}' TEXT NOT NULL,
-				'{Tables.UnifiedRecords.TimeCreated}' TEXT NOT NULL,
-				PRIMARY KEY ('{Tables.UnifiedRecords.DeviceId}', '{Tables.UnifiedRecords.RecordId}')
+				"{Tables.UnifiedRecords.DeviceId}" TEXT NOT NULL,
+				"{Tables.UnifiedRecords.RecordId}" INTEGER NOT NULL,
+				"{Tables.UnifiedRecords.TableNameColumn}" TEXT NOT NULL,
+				"{Tables.UnifiedRecords.TimeCreated}" TEXT NOT NULL,
+				PRIMARY KEY ("{Tables.UnifiedRecords.DeviceId}", "{Tables.UnifiedRecords.RecordId}")
 			);
 			""",
 			Connection);
@@ -119,20 +119,20 @@ public class SqliteDataStore : IDataStore {
 
 		SqliteCommand createMatchDataTable = new(
 			$"""
-			 CREATE TABLE IF NOT EXISTS '{Tables.MatchData.Name}' (
-			 	{Tables.MatchData.DeviceId} TEXT NOT NULL,
-			 	{Tables.MatchData.RecordId} INTEGER NOT NULL,
-			 	{Tables.MatchData.Data} TEXT NOT NULL,
-			 	{Tables.MatchData.OriginalDeviceId} TEXT,
-			 	{Tables.MatchData.OriginalRecordId} INTEGER,
-			 	PRIMARY KEY ({Tables.MatchData.DeviceId}, {Tables.MatchData.RecordId}),
-			 	FOREIGN KEY ('{Tables.MatchData.DeviceId}', '{Tables.MatchData.RecordId}')
-			 		REFERENCES '{Tables.UnifiedRecords.Name}' ('{Tables.UnifiedRecords.DeviceId}','{Tables.UnifiedRecords.RecordId}')
+			 CREATE TABLE IF NOT EXISTS "{Tables.MatchData.Name}" (
+			 	"{Tables.MatchData.DeviceId}" TEXT NOT NULL,
+			 	"{Tables.MatchData.RecordId}" INTEGER NOT NULL,
+			 	"{Tables.MatchData.Data}" TEXT NOT NULL,
+			 	"{Tables.MatchData.OriginalDeviceId}" TEXT,
+			 	"{Tables.MatchData.OriginalRecordId}" INTEGER,
+			 	PRIMARY KEY ("{Tables.MatchData.DeviceId}", "{Tables.MatchData.RecordId}"),
+			 	FOREIGN KEY ("{Tables.MatchData.DeviceId}", "{Tables.MatchData.RecordId}")
+			 		REFERENCES "{Tables.UnifiedRecords.Name}" ("{Tables.UnifiedRecords.DeviceId}","{Tables.UnifiedRecords.RecordId}")
 			 			ON UPDATE RESTRICT
 			 			ON DELETE RESTRICT
 			 		DEFERRABLE INITIALLY DEFERRED,
-			    FOREIGN KEY ('{Tables.MatchData.OriginalDeviceId}', '{Tables.MatchData.OriginalRecordId}')
-			 		REFERENCES '{Tables.MatchData.Name}' ('{Tables.MatchData.DeviceId}','{Tables.MatchData.RecordId}')
+			    FOREIGN KEY ("{Tables.MatchData.OriginalDeviceId}", "{Tables.MatchData.OriginalRecordId}")
+			 		REFERENCES "{Tables.MatchData.Name}" ("{Tables.MatchData.DeviceId}","{Tables.MatchData.RecordId}")
 			 			ON UPDATE RESTRICT
 			 			ON DELETE RESTRICT
 			 );
@@ -283,7 +283,7 @@ public class SqliteDataStore : IDataStore {
 	public async Task<GetMatchDataResult> GetMatchData() {
 
 		SqliteCommand getMatchDataCommand = new(
-			$"SELECT * FROM '{Tables.MatchData.Name}';",
+			$"SELECT * FROM \"{Tables.MatchData.Name}\";",
 			Connection);
 
 		SqliteDataReader reader;
@@ -379,7 +379,7 @@ public class SqliteDataStore : IDataStore {
 		// see if there is a way to restrict it so they both have to be null or not null together
 
 		await using SqliteCommand command = Connection.CreateCommand();
-		command.CommandText = $"SELECT COUNT(*) FROM '{Tables.UnifiedRecords.Name}'";
+		command.CommandText = $"SELECT COUNT(*) FROM \"{Tables.UnifiedRecords.Name}\"";
 		long count = (long)command.ExecuteScalar()!;
 		Trace.WriteLine($"Row count: {count}"); 
 		Trace.WriteLine($"Row count: {count}"); 
@@ -391,7 +391,28 @@ public class SqliteDataStore : IDataStore {
 		Trace.WriteLine($"Row count: {count}"); 
 		Trace.WriteLine($"Row count: {count}"); 
 		Trace.WriteLine($"Row count: {count}"); 
-		Trace.WriteLine($"Row count: {count}"); 
+		Trace.WriteLine($"Row count: {count}");
+
+		await using SqliteCommand command2 = Connection.CreateCommand();
+		command.CommandText = $"SELECT COUNT(*) FROM \"{Tables.UnifiedRecords.Name}\" WHERE \"{Tables.UnifiedRecords.DeviceId}\" = '{matchData.DeviceId}'";
+		long count2 = (long)command.ExecuteScalar()!;
+
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+		Trace.WriteLine($"Row count: {count2}");
+
+		Trace.WriteLine($"Device ID: {matchData.DeviceId}"); 
+		Trace.WriteLine($"Device ID: {matchData.DeviceId}"); 
+		Trace.WriteLine($"Device ID: {matchData.DeviceId}"); 
+		Trace.WriteLine($"Device ID: {matchData.DeviceId}"); 
 
 		// it's scuffed that I have to call WITH AS twice but I can't find a workaround
 		// CTEs can only be consumed by a singled query.
@@ -400,15 +421,15 @@ public class SqliteDataStore : IDataStore {
 			 BEGIN TRANSACTION;
 			 WITH temp AS (
 			     SELECT COUNT(*) AS lastId 
-			     FROM '{Tables.UnifiedRecords.Name}'
-			     WHERE '{Tables.UnifiedRecords.DeviceId}' = '{matchData.DeviceId}'
+			     FROM "{Tables.UnifiedRecords.Name}"
+			     WHERE "{Tables.UnifiedRecords.DeviceId}" = '{matchData.DeviceId}'
 			 )
-			 INSERT INTO '{Tables.MatchData.Name}' (
-			     '{Tables.MatchData.DeviceId}',
-			     '{Tables.MatchData.RecordId}',
-			     '{Tables.MatchData.Data}',
-			     '{Tables.MatchData.OriginalDeviceId}',
-			     '{Tables.MatchData.OriginalRecordId}'
+			 INSERT INTO "{Tables.MatchData.Name}" (
+			     "{Tables.MatchData.DeviceId}",
+			     "{Tables.MatchData.RecordId}",
+			     "{Tables.MatchData.Data}",
+			     "{Tables.MatchData.OriginalDeviceId}",
+			     "{Tables.MatchData.OriginalRecordId}"
 			 )
 			 VALUES (
 			     '{matchData.DeviceId}',
@@ -419,14 +440,14 @@ public class SqliteDataStore : IDataStore {
 			 );
 			 WITH temp AS (
 			     SELECT COUNT(*) AS lastId 
-			     FROM '{Tables.UnifiedRecords.Name}'
-			     WHERE '{Tables.UnifiedRecords.DeviceId}' = '{matchData.DeviceId}'
+			     FROM "{Tables.UnifiedRecords.Name}"
+			     WHERE "{Tables.UnifiedRecords.DeviceId}" = '{matchData.DeviceId}'
 			 )
-			 INSERT INTO '{Tables.UnifiedRecords.Name}' (
-			     '{Tables.UnifiedRecords.DeviceId}',
-			     '{Tables.UnifiedRecords.RecordId}',
-			     '{Tables.UnifiedRecords.TableNameColumn}',
-			     '{Tables.UnifiedRecords.TimeCreated}'
+			 INSERT INTO '{Tables.UnifiedRecords.Name}" (
+			     "{Tables.UnifiedRecords.DeviceId}",
+			     "{Tables.UnifiedRecords.RecordId}",
+			     "{Tables.UnifiedRecords.TableNameColumn}",
+			     "{Tables.UnifiedRecords.TimeCreated}"
 			 )
 			 VALUES (
 			     '{matchData.DeviceId}',
@@ -454,12 +475,12 @@ public class SqliteDataStore : IDataStore {
 		SqliteCommand addMatchDataCommand = new(
 			$"""
 			 BEGIN TRANSACTION;
-			 INSERT INTO '{Tables.MatchData.Name}' (
-			     '{Tables.MatchData.DeviceId}',
-			     '{Tables.MatchData.RecordId}',
-			     '{Tables.MatchData.Data}',
-			     '{Tables.MatchData.OriginalDeviceId}',
-			     '{Tables.MatchData.OriginalRecordId}'
+			 INSERT INTO "{Tables.MatchData.Name}" (
+			     "{Tables.MatchData.DeviceId}",
+			     "{Tables.MatchData.RecordId}",
+			     "{Tables.MatchData.Data}",
+			     "{Tables.MatchData.OriginalDeviceId}",
+			     "{Tables.MatchData.OriginalRecordId}"
 			 )
 			 VALUES (
 			     '{matchData.DeviceId}',
@@ -468,11 +489,11 @@ public class SqliteDataStore : IDataStore {
 			     {(matchData.EditBasedOn is null ? "NULL" : $"'{matchData.EditBasedOn?.DeviceId}'")},
 			     {(matchData.EditBasedOn is null ? "NULL" : $"'{matchData.EditBasedOn?.RecordId}'")}
 			 );
-			 INSERT INTO '{Tables.UnifiedRecords.Name}' (
-			     '{Tables.UnifiedRecords.DeviceId}',
-			     '{Tables.UnifiedRecords.RecordId}',
-			     '{Tables.UnifiedRecords.TableNameColumn}',
-			     '{Tables.UnifiedRecords.TimeCreated}'
+			 INSERT INTO "{Tables.UnifiedRecords.Name}" (
+			     "{Tables.UnifiedRecords.DeviceId}",
+			     "{Tables.UnifiedRecords.RecordId}",
+			     "{Tables.UnifiedRecords.TableNameColumn}",
+			     "{Tables.UnifiedRecords.TimeCreated}"
 			 )
 			 VALUES (
 			     '{matchData.DeviceId}',
@@ -517,9 +538,9 @@ public class SqliteDataStore : IDataStore {
 		SqliteCommand deleteMatchDataCommand = new(
 			$"""
 			 BEGIN TRANSACTION;
-			 DELETE FROM '{Tables.MatchData.Name}'
-			 WHERE {Tables.MatchData.DeviceId} = '{matchData.DeviceId}' AND
-			       {Tables.MatchData.RecordId} = '{matchData.RecordId}';
+			 DELETE FROM "{Tables.MatchData.Name}"
+			 WHERE "{Tables.MatchData.DeviceId}" = '{matchData.DeviceId}' AND
+			       "{Tables.MatchData.RecordId}" = '{matchData.RecordId}';
 			 COMMIT;
 			 """,
 			Connection);
@@ -539,7 +560,7 @@ public class SqliteDataStore : IDataStore {
 		SqliteCommand deleteMatchDataCommand = new(
 			$"""
 			 BEGIN TRANSACTION;
-			 DELETE FROM '{Tables.MatchData.Name}';
+			 DELETE FROM "{Tables.MatchData.Name}";
 			 COMMIT;
 			 """,
 			Connection);
@@ -557,7 +578,7 @@ public class SqliteDataStore : IDataStore {
 	public async Task<string?> GetLastScout() {
 
 		SqliteCommand command = new(
-			$"SELECT {Tables.Scout.NameColumn} FROM '{Tables.Scout.Name}' WHERE ROWID = 1;",
+			$"SELECT \"{Tables.Scout.NameColumn}\" FROM \"{Tables.Scout.Name}\" WHERE ROWID = 1;",
 			Connection
 		);
 
@@ -573,6 +594,7 @@ public class SqliteDataStore : IDataStore {
 
 	public async Task<bool> SetLastScout(string scoutName) {
 
+		// TODO better SQL sanitization (here and above)
 		if (scoutName.Contains('\'')) {
 			scoutName = scoutName.Replace("'", "''");
 		}
@@ -580,7 +602,7 @@ public class SqliteDataStore : IDataStore {
 		SqliteCommand command = new() {
 			CommandText =
 				$"""
-				 INSERT OR REPLACE INTO '{Tables.Scout.Name}' (ROWID, '{Tables.Scout.NameColumn}')
+				 INSERT OR REPLACE INTO "{Tables.Scout.Name}" (ROWID, "{Tables.Scout.NameColumn}")
 				 VALUES (1, '{scoutName}');
 				 """,
 			Connection = Connection
