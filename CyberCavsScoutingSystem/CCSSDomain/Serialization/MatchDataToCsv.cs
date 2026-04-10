@@ -125,11 +125,16 @@ public static class MatchDataToCsv {
 					stringBuilder.Append(value);
 					break;
 				}
+				// TODO: Optional doesn't match the Optional<T> type
+				case (SelectionDataFieldSpec, Optional): {
+					stringBuilder.Append(',');
+					break;
+				}
 				case (SelectionDataFieldSpec selectionDataFieldSpec, Optional<string> optional): {
 
 					if (!optional.HasValue) {
 						stringBuilder.Append(',');
-						continue;
+						break;
 					}
 					stringBuilder.Append(',');
 					stringBuilder.Append(selectionDataFieldSpec.Options.ToList().IndexOf(optional.Value)); // todo lazy af
