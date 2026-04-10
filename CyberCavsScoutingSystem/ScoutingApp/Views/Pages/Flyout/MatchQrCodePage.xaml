@@ -16,8 +16,8 @@
 	</ContentPage.Title>
 
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="Edit" Clicked="EditButton_OnClick"/>
-		<ToolbarItem Text="Delete" Clicked="DeleteButton_OnClicked"/>
+		<ToolbarItem Text="Edit" Clicked="EditButton_OnPressed"/>
+		<ToolbarItem Text="Delete" Clicked="DeleteButton_OnPressed"/>
 	</ContentPage.ToolbarItems>
 
 	<VerticalStackLayout
@@ -42,11 +42,11 @@
 
 			<Button
 				Text="Return to Match"
-				Clicked="ReturnToMatch_ButtonClicked"/>
+				Clicked="ReturnToMatch_ButtonPressed"/>
 
 			<Button
 				Text="Scan other Codes"
-				Clicked="ScanOtherCodes_ButtonClicked"/>
+				Clicked="ScanOtherCodes_ButtonPressed"/>
 
 		</HorizontalStackLayout>
 

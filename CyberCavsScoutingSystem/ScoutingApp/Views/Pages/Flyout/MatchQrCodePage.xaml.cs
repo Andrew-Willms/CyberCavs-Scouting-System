@@ -58,7 +58,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
-	private async void DeleteButton_OnClicked(object? sender, EventArgs e) {
+	private async void DeleteButton_OnPressed(object? sender, EventArgs e) {
 
 		bool success = await MatchDeleter(SavedMatch);
 
@@ -71,7 +71,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 	}
 
 	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
-	private async void EditButton_OnClick(object? sender, EventArgs e) {
+	private async void EditButton_OnPressed(object? sender, EventArgs e) {
 
 		bool discard = await Shell.Current.DisplayAlert(
 			"Discard Current Match and Edit Selected Match",
@@ -87,7 +87,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 		await Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
-	private void ReturnToMatch_ButtonClicked(object? sender, EventArgs e) {
+	private void ReturnToMatch_ButtonPressed(object? sender, EventArgs e) {
 
 		// I think there is a bug in Maui and navigating to ../Setup doesn't work, so I remove tabs manually.
 		Page[] stack = Shell.Current.Navigation.NavigationStack.ToArray();
@@ -98,7 +98,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 		Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
-	private void ScanOtherCodes_ButtonClicked(object? sender, EventArgs e) {
+	private void ScanOtherCodes_ButtonPressed(object? sender, EventArgs e) {
 		Shell.Current.GoToAsync($"//{QrCodeScanner.Route}");
 	}
 
