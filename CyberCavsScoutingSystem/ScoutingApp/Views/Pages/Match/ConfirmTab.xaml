@@ -41,6 +41,7 @@
 
 			<Button
 				Text="Discard Match"
+				IsEnabled="{Binding MatchIsDiscardable}"
 				HorizontalOptions="Start"
 				Clicked="DiscardButton_OnClicked"/>
 

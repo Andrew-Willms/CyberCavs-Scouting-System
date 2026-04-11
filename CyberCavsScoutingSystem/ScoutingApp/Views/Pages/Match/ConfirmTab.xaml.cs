@@ -17,7 +17,7 @@ using UtilitiesLibrary.Optional;
 namespace ScoutingApp.Views.Pages.Match; 
 
 
-
+// TODO: Fix scroll view in the xaml, make the errors wrap horizontally
 public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 	public static string Route => "Confirm";
@@ -26,6 +26,8 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 	private IDataStore DataStore { get; }
 
 	private IErrorPresenter ErrorPresenter { get; }
+
+	public bool MatchIsDiscardable => !AppManager.CurrentMatchIsUnedited();
 
 	public ObservableCollection<string> Errors {
 		get {
@@ -134,20 +136,20 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 			// TODO: This seems like bad error handling
 			if (mostRecentMatch is null) {
-				await Shell.Current.GoToAsync($"//{MatchQrCodePage.Route}");
+				await Shell.Current.GoToAsync($"//{MatchDetailsPage.Route}");
 				return;
 			}
 
 			Dictionary<string, object> parameters = new() {
-				{ MatchQrCodePage.MatchDataNavigationParameterName, mostRecentMatch },
+				{ MatchDetailsPage.MatchDataNavigationParameterName, mostRecentMatch },
 #pragma warning disable CS8974 // Converting method group to non-delegate type
-				{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
+				{ MatchDetailsPage.MatchDeleterNavigationParameterName, DeleteMatch }
 #pragma warning restore CS8974 // Converting method group to non-delegate type
 			};
 
 			await Shell.Current.GoToAsync($"//{AppShell.MatchRoute}/{SetupTab.Route}", false);
 			await Shell.Current.GoToAsync($"//{SavedMatchesPage.Route}", false);
-			await Shell.Current.GoToAsync($"{MatchQrCodePage.RouteFromSavedMatchesPage}", parameters);
+			await Shell.Current.GoToAsync($"{MatchDetailsPage.RouteFromSavedMatchesPage}", parameters);
 
 		} catch (Exception exception) {
 
@@ -164,19 +166,23 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 	private async void DiscardButton_OnClicked(object? sender, EventArgs e) {
 
 		try {
-			bool discard = await Shell.Current.DisplayAlertAsync(
-				"Discard Current Match?",
-				"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
-				"Discard and start new match.",
-				"Continue with current match.");
 
-			if (!discard) {
-				return;
+			// Make CurrentMatchIsUnedited a bindable property and link it to the discard button being enabled
+			if (!AppManager.CurrentMatchIsUnedited()) {
+
+				bool discard = await Shell.Current.DisplayAlertAsync(
+					"Discard Current Match?",
+					"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
+					"Discard and start new match.",
+					"Continue with current match.");
+
+				if (!discard) {
+					return;
+				}
 			}
 
 			AppManager.DiscardAndStartNewMatch();
-
-			await Shell.Current.GoToAsync($"//{AutoTab.Route}");
+			await Shell.Current.GoToAsync($"//{SetupTab.Route}");
 
 		} catch (Exception exception) {
 

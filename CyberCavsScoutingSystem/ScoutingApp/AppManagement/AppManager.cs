@@ -8,7 +8,6 @@ using CCSSDomain.GameSpecification;
 using CCSSDomain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Storage;
 using OneOf;
 using UtilitiesLibrary.Optional;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
@@ -38,6 +37,8 @@ public interface IAppManager : INotifyPropertyChanged {
 	public Task ApplicationStartup();
 
 	public Task<SaveAndStartNewMatchResult> SaveAndStartNewMatch();
+
+	public bool CurrentMatchIsUnedited();
 
 	public void DiscardAndStartNewMatch();
 
@@ -170,6 +171,63 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 			exception => exception);
 	}
 
+	// TODO: move to MatchDataCollector and make it implement IEquatable<>
+	public bool CurrentMatchIsUnedited() {
+
+		MatchDataCollector unedited = new(GameSpecification);
+
+		if (ActiveMatchData.MatchNumber != unedited.MatchNumber) {
+			return false;
+		}
+
+		if (ActiveMatchData.ReplayNumber != unedited.ReplayNumber) {
+			return false;
+		}
+
+		if (ActiveMatchData.MatchType != unedited.MatchType) {
+			return false;
+		}
+
+		if (ActiveMatchData.TeamNumber != unedited.TeamNumber) {
+			return false;
+		}
+
+		if (ActiveMatchData.Alliance != unedited.Alliance) {
+			return false;
+		}
+
+		for (int i = 0; i < ActiveMatchData.DataFields.Count; i++) {
+
+			switch (ActiveMatchData.DataFields[i], unedited.DataFields[i]) {
+
+				case (SelectionDataField { Value.HasValue: false}, SelectionDataField { Value.HasValue: true } uneditedField): {
+
+					if ((string)uneditedField.BaseValue != string.Empty) {
+						return false;
+					}
+
+					break;
+				}
+				case (SelectionDataField { Value.HasValue: true } activeField, SelectionDataField { Value.HasValue: false }): {
+
+					if ((string)activeField.BaseValue != string.Empty) {
+						return false;
+					}
+
+					break;
+				}
+				default: {
+					if (!ActiveMatchData.DataFields[i].BaseValue.Equals(unedited.DataFields[i].BaseValue)) {
+						return false;
+					}
+					break;
+				}
+			}
+		}
+
+		return true;
+	}
+
 	public void DiscardAndStartNewMatch() {
 		StartNewMatch();
 	}
@@ -204,6 +262,9 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 					break;
 				case (SelectionDataField selectionDataField, Optional<string> selection):
 					selectionDataField.Value = selection;
+					break;
+				case (SelectionDataField selectionDataField, Optional): // TODO: deal with this shit again
+					selectionDataField.Value = Optional.NoValue;
 					break;
 				case (TextDataField textDataField, string text):
 					textDataField.Value = text;

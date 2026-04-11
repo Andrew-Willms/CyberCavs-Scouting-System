@@ -134,8 +134,18 @@ public class SqliteDataStore : IDataStore {
 			    FOREIGN KEY ("{Tables.MatchData.OriginalDeviceId}", "{Tables.MatchData.OriginalRecordId}")
 			 		REFERENCES "{Tables.MatchData.Name}" ("{Tables.MatchData.DeviceId}","{Tables.MatchData.RecordId}")
 			 			ON UPDATE RESTRICT
-			 			ON DELETE RESTRICT
+			 			ON DELETE CASCADE
 			 );
+			 
+			 CREATE TRIGGER IF NOT EXISTS "{Tables.MatchData.Name}_DeleteParent"
+			 AFTER DELETE ON "{Tables.MatchData.Name}"
+			 FOR EACH ROW
+			 WHEN OLD."{Tables.MatchData.OriginalDeviceId}" IS NOT NULL AND OLD."{Tables.MatchData.OriginalRecordId}" IS NOT NULL
+			 BEGIN
+			     DELETE FROM "{Tables.MatchData.Name}"
+			     WHERE "{Tables.MatchData.DeviceId}" = OLD."{Tables.MatchData.OriginalDeviceId}"
+			       AND "{Tables.MatchData.RecordId}" = OLD."{Tables.MatchData.OriginalRecordId}";
+			 END;
 			 """,
 			Connection);
 
@@ -342,7 +352,7 @@ public class SqliteDataStore : IDataStore {
 
 		// Since editing match data isn't implemented yet and there is no conflict resolution implemented editing
 		// matches won't work and the below code is moot. Instead, just return the original match data.
-		return allMatchDtos.Where(x => x.EditBasedOn is null).ToList();
+		//return allMatchDtos.Where(x => x.EditBasedOn is null).ToList();
 
 		// Identify all the match data that are original (not edits of existing match data).
 		// Create an "Edit Chain" for each original match (starting with the original match itself).
@@ -357,18 +367,30 @@ public class SqliteDataStore : IDataStore {
 		// This order is not guaranteed but seems to be working, possibly because no one is actually editing data.
 		// A first degree edit is an edit of the original data, a second degree edit is an edit of a first degree edit, etc.
 		// This implementation also doesn't work with things like edit trees.
-		foreach (MatchDataDto editData in allMatchDtos.Where(x => x.EditBasedOn is not null)) {
 
-			List<MatchDataDto>? editChain = editChains.FirstOrDefault(x => x.Any(xx => (xx.DeviceId, xx.RecordId) == editData.EditBasedOn));
+		List<MatchDataDto> unlinkedEditData = allMatchDtos.Where(x => x.EditBasedOn is not null).ToList();
+		int lastCountOfUnlinkedEditData = unlinkedEditData.Count;
+		while (true) {
 
-			if (editChain is null) {
-				return null; // todo
+			foreach (MatchDataDto editData in unlinkedEditData) {
+
+				List<MatchDataDto>? activeEditChain = editChains.FirstOrDefault(x =>
+					x.Count > 0 && // should be guaranteed
+					(x.Last().DeviceId, x.Last().RecordId) == editData.EditBasedOn);
+
+				// The active edit chain will be null if the edit data is part of an edit branch that was not chosen.
+				activeEditChain?.Add(editData);
 			}
 
-			editChain.Insert(0, editData);
+			// If all the edit data has a home or if the remaining edit paths are not part of the branch that has been chosen, exit.
+			// If the edit history of a match has branched only pick on branch and ignore the edit data from the other branches.
+			// Whichever branch is returned by the database first will be chosen.
+			if (unlinkedEditData.Count == 0 || lastCountOfUnlinkedEditData == unlinkedEditData.Count) {
+				break;
+			}
 		}
 
-		return editChains.Select(x => x.First()).ToList();
+		return editChains.Select(x => x.Last()).ToList();
 	}
 
 	public async Task<AddNewMatchDataResult> AddNewMatchData(CreateMatchDataDto matchData) {

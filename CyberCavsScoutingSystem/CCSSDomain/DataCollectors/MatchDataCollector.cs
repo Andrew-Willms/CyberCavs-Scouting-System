@@ -9,7 +9,7 @@ using UtilitiesLibrary.Optional;
 namespace CCSSDomain.DataCollectors; 
 
 
-
+// TODO: make this equatable?
 public class MatchDataCollector {
 
 	public GameSpec GameSpecification { get; }
