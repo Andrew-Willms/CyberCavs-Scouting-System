@@ -115,60 +115,121 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 
 
 
-	// ReSharper disable once AsyncVoidEventHandlerMethod, async void needed for navigation
 	private async void SavedMatchesPage_OnLoaded(object? sender, EventArgs e) {
-		await Refresh();
+
+		try {
+			await Refresh();
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				$"Error loading '{nameof(SavedMatchesPage)}'.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
+		}
 	}
 
-	// ReSharper disable once AsyncVoidEventHandlerMethod, async void needed for navigation
 	private async void SavedMatchesView_OnRefreshing(object? sender, EventArgs e) {
-		await Refresh();
+
+		try {
+			await Refresh();
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				$"Error refreshing '{nameof(SavedMatchesPage)}'.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
+		}
 	}
 
-	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
 	private async void ViewMatch_OnClicked(object? sender, EventArgs e) {
 
-		Button button = sender as Button ?? throw new ArgumentException("sender not valid");
-		MatchDataDto matchData = button.BindingContext as MatchDataDto ?? throw new ArgumentException("sender not valid");
+		try {
+			Button button = sender as Button ?? throw new ArgumentException("sender not valid");
+			MatchDataDto matchData = button.BindingContext as MatchDataDto ??
+			                         throw new ArgumentException("sender not valid");
 
-		Dictionary<string, object> parameters = new() {
-			{ MatchQrCodePage.MatchDataNavigationParameterName, matchData },
+			Dictionary<string, object> parameters = new() {
+				{ MatchQrCodePage.MatchDataNavigationParameterName, matchData },
 #pragma warning disable CS8974 // Converting method group to non-delegate type
-			{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
+				{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
 #pragma warning restore CS8974 // Converting method group to non-delegate type
-		};
+			};
 
-		await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromSavedMatchesPage, parameters);
+			await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromSavedMatchesPage, parameters);
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				"Error viewing match details.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
+		}
 	}
 
-	// ReSharper disable once AsyncVoidEventHandlerMethod, async void needed for navigation
 	private async void SavedMatchesPage_OnNavigatedTo(object? sender, NavigatedToEventArgs e) {
-		await Refresh();
+
+		try {
+			await Refresh();
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				$"Error navigating to '{nameof(SavedMatchesPage)}'.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
+		}
 	}
 
 	private async void DeleteAllButton_OnClicked(object? sender, EventArgs e) {
 
-		int matchCount = SavedMatches.Count;
+		try {
+			int matchCount = SavedMatches.Count;
 
-		string confirmPrompt = matchCount == 1
-			? "Type '1' and tap 'OK' if you want to delete the 1 saved match."
-			: $"Type '{matchCount}' and tap 'OK' if you want to delete all saved {matchCount} matches.";
+			string confirmPrompt = matchCount == 1
+				? "Type '1' and tap 'OK' if you want to delete the 1 saved match."
+				: $"Type '{matchCount}' and tap 'OK' if you want to delete all saved {matchCount} matches.";
 
-		string result = await DisplayPromptAsync(
-			"Are you sure you want to delete all matches?", confirmPrompt, maxLength: 20, keyboard: Keyboard.Numeric);
+			string result = await DisplayPromptAsync(
+				"Are you sure you want to delete all matches?", confirmPrompt, maxLength: 20,
+				keyboard: Keyboard.Numeric);
 
-		if (result != matchCount.ToString()) {
-			return;
+			if (result != matchCount.ToString()) {
+				return;
+			}
+
+			bool success = await DataStore.DeleteAllMatchData();
+
+			if (success) {
+				await Refresh();
+				return;
+			}
+
+			ErrorPresenter.DisplayError("Failed", "Could not delete all matches.");
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				"Error deleting all data.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
 		}
-
-		bool success = await DataStore.DeleteAllMatchData();
-
-		if (success) {
-			await Refresh();
-			return;
-		}
-
-		ErrorPresenter.DisplayError("Failed", "Could not delete all matches.");
 	}
 
 

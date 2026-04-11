@@ -6,9 +6,12 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
 	xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
+	xmlns:local="clr-namespace:ScoutingApp"
 	FlyoutBehavior="Flyout">
 
-	<FlyoutItem Title="Match">
+	<FlyoutItem
+		Title="Match"
+		Route="{x:Static local:AppShell.MatchRoute}">
 
 		<Tab
 			Title="Setup"

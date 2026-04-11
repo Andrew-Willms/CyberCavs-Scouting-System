@@ -95,72 +95,99 @@ public partial class ConfirmTab : ContentPage, INotifyPropertyChanged {
 
 	private async void SaveButton_OnClicked(object? sender, EventArgs e) {
 
-		SaveAndStartNewMatchResult result = await AppManager.SaveAndStartNewMatch();
+		try {
+			SaveAndStartNewMatchResult result = await AppManager.SaveAndStartNewMatch();
 
-		result.Switch(
-			success => { },
-			exception => {
-				ErrorPresenter.DisplayError(
-					"Cannot Save Match", 
-					$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
-					$"{(exception.InnerException is null 
-						? string.Empty 
-						: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
-						  $"with message:\r\n{exception.InnerException.Message}")}");
-			},
-			matchDataIsInvalid => {
-				ErrorPresenter.DisplayError("Cannot Save Match", "The match data is invalid.");
-			});
+			result.Switch(
+				success => { },
+				exception => {
+					ErrorPresenter.DisplayError(
+						"Cannot Save Match",
+						$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+						$"{(exception.InnerException is null
+							? string.Empty
+							: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+							  $"with message:\r\n{exception.InnerException.Message}")}");
+				},
+				matchDataIsInvalid => {
+					ErrorPresenter.DisplayError("Cannot Save Match", "The match data is invalid.");
+				});
 
-		if (!result.IsT0) {
-			return;
-		}
+			if (!result.IsT0) {
+				return;
+			}
 
-		// todo hacky as fuck way to navigate to the most recent match
+			// todo hacky as fuck way to navigate to the most recent match
 #if ANDROID
-		string deviceId = Android.Provider.Settings.Secure.GetString(
-			Platform.CurrentActivity!.ContentResolver,
-			Android.Provider.Settings.Secure.AndroidId)!;
+			string deviceId = Android.Provider.Settings.Secure.GetString(
+				Platform.CurrentActivity!.ContentResolver,
+				Android.Provider.Settings.Secure.AndroidId)!;
 #elif IOS
 		string deviceId = UIKit.UIDevice.CurrentDevice.IdentifierForVendor.ToString();
 #else
 		string deviceId = null as string ?? throw new NotSupportedException();
 #endif
 
-		GetMatchDataResult getMatchDataResult = await DataStore.GetMatchData();
-		List<MatchDataDto>? allData = getMatchDataResult.IsT0 ? getMatchDataResult.AsT0 : null;
-		MatchDataDto? mostRecentMatch = allData?.Where(x => x.DeviceId == deviceId).MaxBy(x => x.RecordId);
+			GetMatchDataResult getMatchDataResult = await DataStore.GetMatchData();
+			List<MatchDataDto>? allData = getMatchDataResult.IsT0 ? getMatchDataResult.AsT0 : null;
+			MatchDataDto? mostRecentMatch = allData?.Where(x => x.DeviceId == deviceId).MaxBy(x => x.RecordId);
 
-		if (mostRecentMatch is null) {
-			await Shell.Current.GoToAsync($"//{MatchQrCodePage.Route}");
-			return;
-		}
+			// TODO: This seems like bad error handling
+			if (mostRecentMatch is null) {
+				await Shell.Current.GoToAsync($"//{MatchQrCodePage.Route}");
+				return;
+			}
 
-		Dictionary<string, object> parameters = new() {
-			{ MatchQrCodePage.MatchDataNavigationParameterName, mostRecentMatch },
+			Dictionary<string, object> parameters = new() {
+				{ MatchQrCodePage.MatchDataNavigationParameterName, mostRecentMatch },
 #pragma warning disable CS8974 // Converting method group to non-delegate type
-			{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
+				{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
 #pragma warning restore CS8974 // Converting method group to non-delegate type
-		};
+			};
 
-		await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromSavedMatchesPage, parameters);
+			await Shell.Current.GoToAsync($"//{AppShell.MatchRoute}/{SetupTab.Route}", false);
+			await Shell.Current.GoToAsync($"//{SavedMatchesPage.Route}", false);
+			await Shell.Current.GoToAsync($"{MatchQrCodePage.RouteFromSavedMatchesPage}", parameters);
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				"Error saving match.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
+		}
 	}
 
 	private async void DiscardButton_OnClicked(object? sender, EventArgs e) {
 
-		bool discard = await Shell.Current.DisplayAlertAsync(
-			"Discard Current Match?",
-			"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
-			"Discard and start new match.",
-			"Continue with current match.");
+		try {
+			bool discard = await Shell.Current.DisplayAlertAsync(
+				"Discard Current Match?",
+				"Do you want to discard the current match and start a new one? Doing so will delete all data entered in this match",
+				"Discard and start new match.",
+				"Continue with current match.");
 
-		if (!discard) {
-			return;
+			if (!discard) {
+				return;
+			}
+
+			AppManager.DiscardAndStartNewMatch();
+
+			await Shell.Current.GoToAsync($"//{AutoTab.Route}");
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				"Error discarding match.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
 		}
-
-		AppManager.DiscardAndStartNewMatch();
-
-		await Shell.Current.GoToAsync($"//{AutoTab.Route}");
 	}
 
 

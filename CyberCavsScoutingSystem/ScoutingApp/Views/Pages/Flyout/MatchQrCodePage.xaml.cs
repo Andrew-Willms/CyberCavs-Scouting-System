@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using CCSSDomain.Serialization;
 using Microsoft.Maui.Controls;
@@ -43,7 +42,7 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 	public Func<MatchDataDto, Task<bool>> MatchDeleter { get; init; } = null!;
 
-	// todo add a button to go straight back to the match page in the auto tab
+
 
 	public MatchQrCodePage(IAppManager appManager, IErrorPresenter errorPresenter) {
 
@@ -57,45 +56,77 @@ public partial class MatchQrCodePage : ContentPage, INotifyPropertyChanged {
 
 
 
-	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
 	private async void DeleteButton_OnPressed(object? sender, EventArgs e) {
 
-		bool success = await MatchDeleter(SavedMatch);
+		try {
+			bool success = await MatchDeleter(SavedMatch);
 
-		if (success) {
-			await Shell.Current.GoToAsync($"//{SavedMatchesPage.Route}");
-			return;
+			if (success) {
+				await Shell.Current.GoToAsync($"//{SavedMatchesPage.Route}");
+				return;
+			}
+
+			ErrorPresenter.DisplayError("Failed", "Could not delete match.");
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				"Error deleting match.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
 		}
-
-		ErrorPresenter.DisplayError("Failed", "Could not delete match.");
 	}
 
-	// ReSharper disable once AsyncVoidMethod, async void needed for navigation
 	private async void EditButton_OnPressed(object? sender, EventArgs e) {
 
-		bool discard = await Shell.Current.DisplayAlert(
-			"Discard Current Match and Edit Selected Match",
-			"Do you want to discard the current match and start editing the selected One? Doing so will delete all data entered in this match",
-			"Discard and start editing.",
-			"Continue with current match.");
+		try {
+			bool discard = await Shell.Current.DisplayAlertAsync(
+				"Discard Current Match and Edit Selected Match",
+				"Do you want to discard the current match and start editing the selected One? Doing so will delete all data entered in this match",
+				"Discard and start editing.",
+				"Continue with current match.");
 
-		if (!discard) {
-			return;
+			if (!discard) {
+				return;
+			}
+
+			AppManager.DiscardAndStartEditingMatch(SavedMatch);
+			await Shell.Current.GoToAsync($"//{SetupTab.Route}");
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				"Error editing match.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
 		}
-
-		AppManager.DiscardAndStartEditingMatch(SavedMatch);
-		await Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
-	private void ReturnToMatch_ButtonPressed(object? sender, EventArgs e) {
+	private async void ReturnToMatch_ButtonPressed(object? sender, EventArgs e) {
 
-		// I think there is a bug in Maui and navigating to ../Setup doesn't work, so I remove tabs manually.
-		Page[] stack = Shell.Current.Navigation.NavigationStack.ToArray();
-		for (int i = stack.Length - 1; i > 0; i--) {
-			Shell.Current.Navigation.RemovePage(stack[i]);
+		try {
+			// Because we first navigate back to the SavedMatchesPage when it animates navigating to the SetupTab
+			// it shows it coming from the SavedMatchesPage and so the SavedMatchesPage flashes on the screen for a tiny bit.
+			// This looks janky, but I can't find a way around it, and it still happens if I clear the navigation stack first.
+			await Shell.Current.GoToAsync($"//{SavedMatchesPage.Route}", false);
+			await Shell.Current.GoToAsync($"//{AppShell.MatchRoute}/{SetupTab.Route}");
+
+		} catch (Exception exception) {
+
+			ErrorPresenter.DisplayError(
+				"Error returning to match.",
+				$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+				$"{(exception.InnerException is null
+					? string.Empty
+					: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+					  $"with message:\r\n{exception.InnerException.Message}")}");
 		}
-
-		Shell.Current.GoToAsync($"//{SetupTab.Route}");
 	}
 
 	private void ScanOtherCodes_ButtonPressed(object? sender, EventArgs e) {
