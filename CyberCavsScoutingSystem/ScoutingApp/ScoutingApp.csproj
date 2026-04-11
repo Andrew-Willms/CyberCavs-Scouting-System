@@ -108,8 +108,8 @@
 	  <Compile Update="Views\DataTemplates\TextDataFieldInputView.xaml.cs">
 	    <DependentUpon>TextDataFieldInputView.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\Pages\Flyout\MatchQrCodePage.xaml.cs">
-	    <DependentUpon>MatchQrCodePage.xaml</DependentUpon>
+	  <Compile Update="Views\Pages\Flyout\MatchDetailsPage.xaml.cs">
+	    <DependentUpon>MatchDetailsPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\Pages\Flyout\QrCodeScanner.xaml.cs">
 	    <DependentUpon>QrCodeScanner.xaml</DependentUpon>
@@ -150,7 +150,7 @@
 	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\Pages\Flyout\MatchQrCodePage.xaml">
+	  <MauiXaml Update="Views\Pages\Flyout\MatchDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Pages\Flyout\QrCodeScanner.xaml">

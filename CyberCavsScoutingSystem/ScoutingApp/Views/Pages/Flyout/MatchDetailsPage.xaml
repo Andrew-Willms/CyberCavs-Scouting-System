@@ -5,8 +5,8 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 	xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
 	xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
-	x:Class="ScoutingApp.Views.Pages.Flyout.MatchQrCodePage"
-	x:DataType="flyout:MatchQrCodePage">
+	x:Class="ScoutingApp.Views.Pages.Flyout.MatchDetailsPage"
+	x:DataType="flyout:MatchDetailsPage">
 
 	<ContentPage.Title>
 		<MultiBinding StringFormat='{}{0} Match {1}'>

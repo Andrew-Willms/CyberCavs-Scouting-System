@@ -157,13 +157,13 @@ public partial class SavedMatchesPage : ContentPage, INotifyPropertyChanged {
 			                         throw new ArgumentException("sender not valid");
 
 			Dictionary<string, object> parameters = new() {
-				{ MatchQrCodePage.MatchDataNavigationParameterName, matchData },
+				{ MatchDetailsPage.MatchDataNavigationParameterName, matchData },
 #pragma warning disable CS8974 // Converting method group to non-delegate type
-				{ MatchQrCodePage.MatchDeleterNavigationParameterName, DeleteMatch }
+				{ MatchDetailsPage.MatchDeleterNavigationParameterName, DeleteMatch }
 #pragma warning restore CS8974 // Converting method group to non-delegate type
 			};
 
-			await Shell.Current.GoToAsync(MatchQrCodePage.RouteFromSavedMatchesPage, parameters);
+			await Shell.Current.GoToAsync(MatchDetailsPage.RouteFromSavedMatchesPage, parameters);
 
 		} catch (Exception exception) {
 

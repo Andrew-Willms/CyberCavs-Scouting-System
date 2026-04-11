@@ -48,7 +48,7 @@ public static class MauiProgram {
 		builder.Services.AddSingleton<ConfirmTab>();
 		builder.Services.AddSingleton<ScoutPage>();
 		builder.Services.AddSingleton<EventPage>();
-		builder.Services.AddSingleton<MatchQrCodePage>();
+		builder.Services.AddSingleton<MatchDetailsPage>();
 		builder.Services.AddSingleton<SavedMatchesPage>();
 		builder.Services.AddTransient<QrCodeScanner>();
 
