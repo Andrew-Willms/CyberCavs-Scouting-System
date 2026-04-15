@@ -211,14 +211,19 @@ public class SqliteDataStore : IDataStore {
 					InitialValue = "",
 					RequiresValue = true
 				},
-				new MultiIntegerDataFieldSpec { Name = "Fuel", InitialValue = 0, MinValue = 0, MaxValue = 1000 },
+				//new MultiIntegerDataFieldSpec { Name = "Fuel", InitialValue = 0, MinValue = 0, MaxValue = 1000 },
 				new BooleanDataFieldSpec { Name = "Passing", InitialValue = false },
 				new BooleanDataFieldSpec { Name = "Scoring", InitialValue = false },
-				new BooleanDataFieldSpec { Name = "Defending", InitialValue = false },
+				new SelectionDataFieldSpec {
+					Name = "Defending",
+					Options = new List<string> { "None", "Ramp", "Contact", "Ramp + Contact", "Idle" }.ToReadOnly(),
+					InitialValue = "None",
+					RequiresValue = true
+				},
 				new BooleanDataFieldSpec { Name = "Shoveled", InitialValue = false },
 				new SelectionDataFieldSpec {
 					Name = "Accuracy",
-					Options = new List<string> { "<60", "70", "80", "90", "100" }.ToReadOnly(),
+					Options = new List<string> { "<60", "70", "80", "90", "99" }.ToReadOnly(),
 					InitialValue = "",
 					RequiresValue = false
 				},
@@ -230,7 +235,7 @@ public class SqliteDataStore : IDataStore {
 				},
 				new SelectionDataFieldSpec {
 					Name = "Effectiveness",
-					Options = new List<string> { "1", "2", "3", "4", "5" }.ToReadOnly(),
+					Options = new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }.ToReadOnly(),
 					InitialValue = "",
 					RequiresValue = true
 				},
@@ -263,11 +268,11 @@ public class SqliteDataStore : IDataStore {
 				new() { DataFieldName = "Auto Climb", Label = "L1 Climb?" }
 			}.ToReadOnly(),
 			teleTabInputs: new List<InputSpec> {
-				new() { DataFieldName = "Fuel", Label = "Fuel Scored" },
+				//new() { DataFieldName = "Fuel", Label = "Fuel Scored" },
 				new() { DataFieldName = "Primary Role", Label = "Primary Role" },
 				new() { DataFieldName = "Passing", Label = "Passing?" },
 				new() { DataFieldName = "Scoring", Label = "Scoring?" },
-				new() { DataFieldName = "Defending", Label = "Defending?" },
+				new() { DataFieldName = "Defending", Label = "Defense" },
 				new() { DataFieldName = "Accuracy", Label = "Accuracy %" },
 				new() { DataFieldName = "Aimlessness", Label = "Aimlessness %" },
 				new() { DataFieldName = "Effectiveness", Label = "Role Effectiveness" },
