@@ -188,13 +188,13 @@ public class SqliteDataStore : IDataStore {
 				new SelectionDataFieldSpec {
 					Name = "Outpost",
 					Options = new List<string> { "Yes - Early", "Yes - Late", "No" }.ToReadOnly(),
-					InitialValue = "",
+					InitialValue = "No",
 					RequiresValue = true
 				},
 				new SelectionDataFieldSpec {
 					Name = "Depot",
 					Options = new List<string> { "Yes - Early", "Yes - Late", "No" }.ToReadOnly(),
-					InitialValue = "",
+					InitialValue = "No",
 					RequiresValue = true
 				},
 				new IntegerDataFieldSpec { Name = "Mid Trips", InitialValue = 0, MinValue = 0, MaxValue = 15 },
