@@ -459,7 +459,7 @@ public class SqliteDataStore : IDataStore {
 		return new Success();
 	}
 
-	public async Task<IDataStore.AddMatchDataResult> AddMatchDataFromOtherDevice(MatchDataDto matchData) {
+	public async Task<AddMatchDataFromOtherDeviceResult> AddMatchDataFromOtherDevice(MatchDataDto matchData) {
 
 		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
 
@@ -504,24 +504,27 @@ public class SqliteDataStore : IDataStore {
 
 			try {
 				await rollbackCommand.ExecuteNonQueryAsync();
-			} catch {
-				return IDataStore.AddMatchDataResult.Other;
+			} catch (Exception rollbackException) {
+				return new CouldNotRollBackError {
+					FirstException = exception,
+					RollbackException = rollbackException
+				};
 			}
 
 			return exception.Message.Contains("UNIQUE") 
-				? IDataStore.AddMatchDataResult.Duplicate 
-				: IDataStore.AddMatchDataResult.Other;
+				? new DuplicateMatchDataError() // TODO: check for this error better, this seems jank
+				: exception;
 		}
 
 		SqliteCommand commitCommand = new("COMMIT;", Connection);
 
 		try {
 			await commitCommand.ExecuteNonQueryAsync();
-		} catch {
-			return IDataStore.AddMatchDataResult.Other;
+		} catch (Exception exception) {
+			return exception;
 		}
 
-		return IDataStore.AddMatchDataResult.Success;
+		return new Success();
 	}
 
 	public async Task<bool> DeleteMatchData(MatchDataDto matchData) {

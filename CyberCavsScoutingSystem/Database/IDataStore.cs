@@ -11,6 +11,20 @@ namespace Database;
 public partial class AddNewMatchDataResult : OneOfBase<Success, Exception>;
 
 [GenerateOneOf]
+public partial class AddMatchDataFromOtherDeviceResult : OneOfBase<Success, DuplicateMatchDataError, CouldNotRollBackError, Exception>;
+
+public class DuplicateMatchDataError;
+
+public class CouldNotRollBackError {
+
+	public required Exception FirstException { get; init; }
+
+	public required Exception RollbackException { get; init; }
+
+}
+
+
+[GenerateOneOf]
 public partial class GetMatchDataResult : OneOfBase<List<MatchDataDto>, Exception, MatchDataDeserializationError, InvalidEditIdsError>;
 
 public class InvalidEditIdsError {
@@ -48,13 +62,7 @@ public interface IDataStore {
 
 	public Task<AddNewMatchDataResult> AddNewMatchData(CreateMatchDataDto matchData);
 
-	public enum AddMatchDataResult {
-		Success,
-		Duplicate,
-		Other
-	}
-
-	public Task<AddMatchDataResult> AddMatchDataFromOtherDevice(MatchDataDto matchData);
+	public Task<AddMatchDataFromOtherDeviceResult> AddMatchDataFromOtherDevice(MatchDataDto matchData);
 
 	public Task<bool> DeleteMatchData(MatchDataDto matchData);
 
