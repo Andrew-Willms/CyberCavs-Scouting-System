@@ -149,6 +149,11 @@ public class SqliteDataStore : IDataStore {
 			 """,
 			Connection);
 
+		// TODO: fix this major issue:
+		// when match data that has been edited has been shared it only shares the matchDataDto for the edited version and not the original version
+		// this means that the foreign key constraint on the scanning device always fails because only the edited version is shared and the
+		// original record isn't transferred.
+
 		try {
 			await createMatchDataTable.ExecuteNonQueryAsync();
 		} catch {
@@ -463,6 +468,11 @@ public class SqliteDataStore : IDataStore {
 
 		string data = MatchDataToCsv.Serialize(matchData.MatchData).Replace("\'", "\'\'");
 
+		// TODO: consider parameterized queries? less room for SQL injections??
+		// TODO: strings are wrapped in 'string' but ints shouldn't be????
+
+		// TODO: consider switching the order of the inserts. Not sure if that's strictly better, but it 
+		// wouldn't depend on the deferment of the constraints as much.
 		SqliteCommand addMatchDataCommand = new(
 			$"""
 			 BEGIN TRANSACTION;
@@ -492,6 +502,7 @@ public class SqliteDataStore : IDataStore {
 			     '{Tables.MatchData.Name}',
 			     'TimeCreated'
 			 );
+			 COMMIT;
 			 """,
 			Connection);
 
