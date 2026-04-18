@@ -511,8 +511,8 @@ public class SqliteDataStore : IDataStore {
 				};
 			}
 
-			return exception.Message.Contains("UNIQUE") 
-				? new DuplicateMatchDataError() // TODO: check for this error better, this seems jank
+			return exception.Message.Contains("UNIQUE") // TODO: check for this error better, this seems jank
+				? new DuplicateMatchDataError()
 				: exception;
 		}
 

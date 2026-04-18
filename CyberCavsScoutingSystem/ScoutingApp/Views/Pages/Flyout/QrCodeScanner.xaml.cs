@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -81,28 +80,39 @@ public partial class QrCodeScanner : ContentPage {
 			return;
 		}
 
-		IDataStore.AddMatchDataResult safeResult = DataStore.AddMatchDataFromOtherDevice(matchData).Result;
+		AddMatchDataFromOtherDeviceResult saveResult = DataStore.AddMatchDataFromOtherDevice(matchData).Result;
 
 		MainThread.BeginInvokeOnMainThread(() => {
 
-			switch (safeResult) {
-
-				case IDataStore.AddMatchDataResult.Success:
+			saveResult.Switch(
+				success => {
 					QrCodeCount++;
 					LastQrCodeScanned = qrCodeString;
-					break;
-
-				case IDataStore.AddMatchDataResult.Duplicate:
-					LastQrCodeScanned = "Duplicate";
-					break;
-
-				case IDataStore.AddMatchDataResult.Other:
-					ErrorPresenter.DisplayError("Unknown Error", "Uh-oh.");
-					break;
-
-				default:
-					throw new UnreachableException();
-			}
+				},
+				duplicate => LastQrCodeScanned = "Duplicate",
+				// TODO probably display this as an inline error instead of in the QR code text box
+				// doesn't need to be a popup error because it's not a serious error
+				rollbackError => ErrorPresenter.DisplayError(
+					"Error and roll-back failure",
+					$"Exception of type '{rollbackError.FirstException.GetType()}' with the message:\r\n{rollbackError.FirstException.Message}" +
+					$"{(rollbackError.FirstException.InnerException is null
+						? string.Empty
+						: $"\r\n\r\nInner exception of type '{rollbackError.FirstException.InnerException.GetType()}' " +
+						  $"with message:\r\n{rollbackError.FirstException.InnerException.Message}")}\r\n\r\n" +
+					$"A roll-back was attempted resulting in an exception of type" +
+					$"'{rollbackError.RollbackException.GetType()}' with the message:\r\n{rollbackError.RollbackException.Message}" +
+					$"{(rollbackError.RollbackException.InnerException is null
+						? string.Empty
+						: $"\r\n\r\nInner exception of type '{rollbackError.RollbackException.InnerException.GetType()}' " +
+						  $"with message:\r\n{rollbackError.RollbackException.InnerException.Message}")}"),
+				exception => ErrorPresenter.DisplayError(
+					"Error scanning match",
+					$"Exception of type '{exception.GetType()}' with the message:\r\n{exception.Message}" +
+					$"{(exception.InnerException is null
+							? string.Empty
+							: $"\r\n\r\nInner exception of type '{exception.InnerException.GetType()}' " +
+							  $"with message:\r\n{exception.InnerException.Message}")}")
+			);
 		});
 	}
 
