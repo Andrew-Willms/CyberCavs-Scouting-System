@@ -73,14 +73,14 @@ public partial class QrCodeScanner : ContentPage {
 			return;
 		}
 
-		MatchDataDto? matchData = MatchDataDtoToCsv.Deserialize(qrCodeString, AppManager.GameSpecification);
+		MatchDataDto? matchDataDto = MatchDataDtoToCsv.Deserialize(qrCodeString, AppManager.GameSpecification);
 
-		if (matchData is null) {
+		if (matchDataDto is null) {
 			ErrorPresenter.DisplayError("Invalid QR Code", "The QR code data could not be converted into a match.");
 			return;
 		}
 
-		AddMatchDataFromOtherDeviceResult saveResult = DataStore.AddMatchDataFromOtherDevice(matchData).Result;
+		AddMatchDataFromOtherDeviceResult saveResult = DataStore.AddMatchDataFromOtherDevice(matchDataDto).Result;
 
 		MainThread.BeginInvokeOnMainThread(() => {
 
