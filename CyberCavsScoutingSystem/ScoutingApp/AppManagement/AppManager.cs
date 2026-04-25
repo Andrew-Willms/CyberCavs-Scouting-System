@@ -200,9 +200,10 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 
 			switch (ActiveMatchData.DataFields[i], unedited.DataFields[i]) {
 
+				// TODO: this is another instance where Optional causes issues.
 				case (SelectionDataField { Value.HasValue: false}, SelectionDataField { Value.HasValue: true } uneditedField): {
 
-					if ((string)uneditedField.BaseValue != string.Empty) {
+					if (((Optional<string>)uneditedField.BaseValue).Value != string.Empty) {
 						return false;
 					}
 
@@ -210,7 +211,7 @@ public class AppManager : IAppManager, INotifyPropertyChanged {
 				}
 				case (SelectionDataField { Value.HasValue: true } activeField, SelectionDataField { Value.HasValue: false }): {
 
-					if ((string)activeField.BaseValue != string.Empty) {
+					if (((Optional<string>)activeField.BaseValue).Value != string.Empty) {
 						return false;
 					}
 

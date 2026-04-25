@@ -206,17 +206,17 @@ public class SelectionDataField : DataField {
 
 	public override List<string> Errors {
 		get {
-			List<string> errors = [];
-
-			if (Specification.RequiresValue && Value == Optional<string>.NoValue) {
-				errors.Add($"The data field \"{Name}\" requires a value.");
+			if (Specification.RequiresValue && (Value == Optional<string>.NoValue || Value.Value == string.Empty)) {
+				return [ $"The data field \"{Name}\" requires a value." ];
 			}
 
-			if (Value != Optional.NoValue && !Specification.Options.Contains(Value.Value)) {
-				errors.Add($"The data field \"{Name}\" does not contain the specified value '{Value.Value}'");
+			// TODO: I have to add these extra cases because somehow the value gets set to an empty string, maybe look into seeing
+			// if I can force the not set value to be Optional.NoValue
+			if (Value != Optional.NoValue && Value.Value != string.Empty && !Specification.Options.Contains(Value.Value)) {
+				return [$"The data field \"{Name}\" does not contain the specified value \"{Value.Value}\""];
 			}
 
-			return errors;
+			return [];
 		}
 	}
 
