@@ -516,6 +516,9 @@ public class SqliteDataStore : IDataStore {
 			try {
 				await rollbackCommand.ExecuteNonQueryAsync();
 			} catch (Exception rollbackException) {
+
+				// TODO if a rollback fails consider trying to close and reopen the connection
+				// also consider running something like a "PRAGMA integrity_check"
 				return new CouldNotRollBackError {
 					FirstException = exception,
 					RollbackException = rollbackException
@@ -525,14 +528,6 @@ public class SqliteDataStore : IDataStore {
 			return exception.Message.Contains("UNIQUE") // TODO: check for this error better, this seems jank
 				? new DuplicateMatchDataError()
 				: exception;
-		}
-
-		SqliteCommand commitCommand = new("COMMIT;", Connection);
-
-		try {
-			await commitCommand.ExecuteNonQueryAsync();
-		} catch (Exception exception) {
-			return exception;
 		}
 
 		return new Success();
