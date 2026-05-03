@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using CCSSDomain.Data;
-using CCSSDomain.DataCollectors;
+using Domain.Data;
+using Domain.DataCollectors;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;

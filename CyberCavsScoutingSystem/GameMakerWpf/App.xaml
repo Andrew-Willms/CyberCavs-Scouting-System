@@ -8,7 +8,7 @@
 	xmlns:wpf="clr-namespace:WPFUtilities;assembly=WPFUtilities"
 	xmlns:wpfConverters="clr-namespace:GameMakerWpf.WpfConverters"
 	xmlns:domain="clr-namespace:GameMakerWpf.Domain"
-	xmlns:gameSpecification="clr-namespace:CCSSDomain.GameSpecification;assembly=CCSSDomain"
+	xmlns:gameSpecification="clr-namespace:Domain.GameSpecification;assembly=CCSSDomain"
 	Startup="ApplicationStartup">
 
 	<Application.Resources>

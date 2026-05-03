@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using UtilitiesLibrary.Collections;
 
-namespace CCSSDomain.Data;
+namespace Domain.Data;
 
 
 

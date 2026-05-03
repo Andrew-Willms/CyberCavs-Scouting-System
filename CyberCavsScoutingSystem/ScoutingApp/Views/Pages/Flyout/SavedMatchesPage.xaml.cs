@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using CCSSDomain.Serialization;
+using Domain.Serialization;
 using Database;
 using Microsoft.Maui;
 using Microsoft.Maui.ApplicationModel;

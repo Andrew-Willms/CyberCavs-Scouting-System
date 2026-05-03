@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using CCSSDomain.DataCollectors;
+using Domain.DataCollectors;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using UtilitiesLibrary.Collections;

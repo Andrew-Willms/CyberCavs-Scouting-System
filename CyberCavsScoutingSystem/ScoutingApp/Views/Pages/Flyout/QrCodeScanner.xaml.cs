@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using CCSSDomain.Serialization;
+using Domain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;

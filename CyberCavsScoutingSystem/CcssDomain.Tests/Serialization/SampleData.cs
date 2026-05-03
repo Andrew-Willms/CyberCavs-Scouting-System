@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Drawing;
-using CCSSDomain.Data;
-using CCSSDomain.GameSpecification;
+using Domain.Data;
+using Domain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 using UtilitiesLibrary.Results;
-using MatchType = CCSSDomain.Data.MatchType;
+using MatchType = Domain.Data.MatchType;
 
-namespace CcssDomain.Tests.Serialization;
+namespace Domain.Tests.Serialization;
 
 
 

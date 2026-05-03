@@ -1,5 +1,5 @@
-﻿using CCSSDomain.Data;
-using CCSSDomain.GameSpecification;
+﻿using Domain.Data;
+using Domain.GameSpecification;
 
 namespace Database;
 

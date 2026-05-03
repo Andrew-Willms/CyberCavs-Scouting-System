@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CCSSDomain.Data;
-using CCSSDomain.GameSpecification;
+using Domain.Data;
+using Domain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 
-namespace CCSSDomain.DataCollectors; 
+namespace Domain.DataCollectors; 
 
 
 // TODO: make this equatable?

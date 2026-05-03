@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using CCSSDomain.GameSpecification;
+using Domain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 
-namespace CCSSDomain.DataCollectors;
+namespace Domain.DataCollectors;
 
 
 

@@ -5,7 +5,7 @@ VisualStudioVersion = 18.5.11723.231 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuickTestingApplication", "QuickTestingApplication\QuickTestingApplication.csproj", "{360B6DE3-E1B0-4692-8E66-F92D5422D893}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CCSSDomain", "CCSSDomain\CCSSDomain.csproj", "{17DAA2C2-87A1-4740-B68A-1FA063080659}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "CCSSDomain\Domain.csproj", "{17DAA2C2-87A1-4740-B68A-1FA063080659}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameMakerWpf", "GameMakerWpf\GameMakerWpf.csproj", "{34A7D979-6226-4C3C-AE82-93FA0DD7A354}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiUtilities", "MauiUtilit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{B4CD5D8D-DBE8-451F-9FA6-752C1F1D6756}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CcssDomain.Tests", "CcssDomain.Tests\CcssDomain.Tests.csproj", "{55BE5621-3A85-45AE-AADC-F54210D1012E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "CcssDomain.Tests\Domain.Tests.csproj", "{55BE5621-3A85-45AE-AADC-F54210D1012E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

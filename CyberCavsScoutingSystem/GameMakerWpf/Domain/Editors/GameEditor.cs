@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
-using CCSSDomain.GameSpecification;
+using Domain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Domain.Editors.DataFieldEditors;
 using GameMakerWpf.Validation.Validators;
@@ -8,7 +8,7 @@ using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 using UtilitiesLibrary.Validation.Inputs;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
-using Version = CCSSDomain.GameSpecification.Version;
+using Version = Domain.GameSpecification.Version;
 
 namespace GameMakerWpf.Domain.Editors;
 

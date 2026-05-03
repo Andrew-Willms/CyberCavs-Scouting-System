@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using CCSSDomain.Data;
-using CCSSDomain.GameSpecification;
+using Domain.Data;
+using Domain.GameSpecification;
 using OneOf;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.MiscExtensions;
 using UtilitiesLibrary.Optional;
 
-namespace CCSSDomain.Serialization;
+namespace Domain.Serialization;
 
 
 [GenerateOneOf]

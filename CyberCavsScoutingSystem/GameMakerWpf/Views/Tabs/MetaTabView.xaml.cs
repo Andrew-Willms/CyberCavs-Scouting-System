@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using CCSSDomain.GameSpecification;
+using Domain.GameSpecification;
 using GameMakerWpf.AppManagement;
 using GameMakerWpf.Domain;
 using GameMakerWpf.Domain.Editors;

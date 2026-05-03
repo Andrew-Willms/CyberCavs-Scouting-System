@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Windows.Media;
-using CCSSDomain.GameSpecification;
+using Domain.GameSpecification;
 using GameMakerWpf.Domain.EditingData;
 using GameMakerWpf.Validation.Validators;
 using UtilitiesLibrary.Validation.Inputs;

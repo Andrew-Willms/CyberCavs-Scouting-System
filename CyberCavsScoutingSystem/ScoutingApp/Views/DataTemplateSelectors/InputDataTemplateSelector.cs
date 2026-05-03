@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using CCSSDomain.DataCollectors;
+using Domain.DataCollectors;
 using Microsoft.Maui.Controls;
 
 namespace ScoutingApp.Views.DataTemplateSelectors;

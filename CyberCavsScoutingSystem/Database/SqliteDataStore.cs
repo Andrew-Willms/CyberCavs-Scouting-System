@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
-using CCSSDomain.Data;
-using CCSSDomain.GameSpecification;
-using CCSSDomain.Serialization;
+using Domain.Data;
+using Domain.GameSpecification;
+using Domain.Serialization;
 using Microsoft.Data.Sqlite;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;

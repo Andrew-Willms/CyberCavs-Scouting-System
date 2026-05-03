@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using CCSSDomain.DataCollectors;
-using CCSSDomain.GameSpecification;
+using Domain.DataCollectors;
+using Domain.GameSpecification;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 
-namespace CCSSDomain.Data;
+namespace Domain.Data;
 
 
 

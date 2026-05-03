@@ -1,5 +1,5 @@
-﻿using CCSSDomain.GameSpecification;
-using CCSSDomain.Serialization;
+﻿using Domain.GameSpecification;
+using Domain.Serialization;
 using OneOf;
 using OneOf.Types;
 

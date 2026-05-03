@@ -2,10 +2,10 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using CCSSDomain.Data;
-using CCSSDomain.DataCollectors;
-using CCSSDomain.GameSpecification;
-using CCSSDomain.Serialization;
+using Domain.Data;
+using Domain.DataCollectors;
+using Domain.GameSpecification;
+using Domain.Serialization;
 using Database;
 using Microsoft.Maui.ApplicationModel;
 using OneOf;

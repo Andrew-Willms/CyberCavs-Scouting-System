@@ -1,6 +1,6 @@
-﻿using CCSSDomain.Data;
+﻿using Domain.Data;
 
-namespace CCSSDomain.Serialization;
+namespace Domain.Serialization;
 
 
 

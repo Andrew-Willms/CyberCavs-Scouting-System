@@ -1,7 +1,7 @@
-﻿using CCSSDomain.Data;
-using CCSSDomain.Serialization;
+﻿using Domain.Data;
+using Domain.Serialization;
 
-namespace CcssDomain.Tests.Serialization;
+namespace Domain.Tests.Serialization;
 
 
 

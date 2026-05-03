@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using CCSSDomain.GameSpecification;
+using Domain.GameSpecification;
 using UtilitiesLibrary.Optional;
 using Event = UtilitiesLibrary.SimpleEvent.Event;
 
-namespace CCSSDomain.DataCollectors;
+namespace Domain.DataCollectors;
 
 
 

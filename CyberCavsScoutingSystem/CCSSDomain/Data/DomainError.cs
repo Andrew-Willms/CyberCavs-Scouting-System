@@ -1,8 +1,8 @@
 ﻿using System;
-using CCSSDomain.GameSpecification;
+using Domain.GameSpecification;
 using UtilitiesLibrary.Collections;
 
-namespace CCSSDomain.Data;
+namespace Domain.Data;
 
 
 

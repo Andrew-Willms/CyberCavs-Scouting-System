@@ -4,7 +4,7 @@ using System.Linq;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Results;
 
-namespace CCSSDomain.GameSpecification;
+namespace Domain.GameSpecification;
 
 
 

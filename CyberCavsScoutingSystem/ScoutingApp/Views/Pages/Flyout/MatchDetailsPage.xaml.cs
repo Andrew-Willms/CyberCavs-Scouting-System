@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using CCSSDomain.Serialization;
+using Domain.Serialization;
 using Microsoft.Maui.Controls;
 using ScoutingApp.AppManagement;
 using ScoutingApp.Views.Pages.Match;

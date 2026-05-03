@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace CCSSDomain.GameSpecification;
+namespace Domain.GameSpecification;
 
 
 

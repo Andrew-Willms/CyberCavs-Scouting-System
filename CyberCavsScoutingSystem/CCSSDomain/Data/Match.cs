@@ -1,4 +1,4 @@
-﻿namespace CCSSDomain.Data;
+﻿namespace Domain.Data;
 
 
 

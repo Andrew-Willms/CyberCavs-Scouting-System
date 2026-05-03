@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace CCSSDomain.GameSpecification;
+namespace Domain.GameSpecification;
 
 
 

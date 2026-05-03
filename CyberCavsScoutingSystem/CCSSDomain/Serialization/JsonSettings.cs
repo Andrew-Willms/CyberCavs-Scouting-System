@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CCSSDomain.Serialization; 
+namespace Domain.Serialization; 
 
 
 

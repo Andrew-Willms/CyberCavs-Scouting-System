@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using CCSSDomain.DataCollectors;
+using Domain.DataCollectors;
 using UtilitiesLibrary.Collections;
 using UtilitiesLibrary.Optional;
 
-namespace CCSSDomain.GameSpecification;
+namespace Domain.GameSpecification;
 
 
 

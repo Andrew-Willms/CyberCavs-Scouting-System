@@ -1,7 +1,7 @@
 ﻿using System;
 using UtilitiesLibrary.Collections;
 
-namespace CCSSDomain.Data;
+namespace Domain.Data;
 
 
 
