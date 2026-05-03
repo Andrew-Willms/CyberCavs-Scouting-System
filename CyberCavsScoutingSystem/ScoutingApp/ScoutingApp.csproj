@@ -86,7 +86,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CCSSDomain\Domain.csproj" />
+		<ProjectReference Include="..\Domain\Domain.csproj" />
 		<ProjectReference Include="..\Database\Database.csproj" />
 		<ProjectReference Include="..\MauiUtilities\MauiUtilities.csproj" />
 		<ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
