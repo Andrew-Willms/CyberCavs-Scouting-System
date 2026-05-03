@@ -15,7 +15,7 @@ public static class SaveErrors {
 		Caption = "Could Not Be Converted to Saving Format",
 		Message = "The Game Project could not be converted into the format it is saved in. " +
 		          "Try changing values in the Game Project and saving again. " +
-		          "Please contact the creators of the CCSS if you receive this error."
+		          "Please contact the creators of CyberScout if you receive this error."
 	};
 
 	public static ErrorDisplayData SaveLocationInaccessible(SaveLocationInaccessible error) => new() {

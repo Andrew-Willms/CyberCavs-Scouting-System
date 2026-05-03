@@ -39,7 +39,7 @@ public class FilePublisher : IPublisher {
 
 	private static SaveFileDialog SaveFileDialog => new() {
 		Title = "Select a file name and location for the published Game Specification.",
-		Filter = "CCSS Game Specification (*.cgs)|*.cgs"
+		Filter = "CyberScout Game Specification (*.cgs)|*.cgs"
 	};
 
 	public IPublishResult Publish(GameEditor gameEditor) {

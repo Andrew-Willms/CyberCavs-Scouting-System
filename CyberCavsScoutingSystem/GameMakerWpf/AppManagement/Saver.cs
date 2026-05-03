@@ -152,12 +152,12 @@ public class Saver : ISaver {
 
 	private static OpenFileDialog OpenFileDialog => new() {
 		Title = "Select a file to open.",
-		Filter = "CCSS Game Project (*.cgp)|*.cgp"
+		Filter = "CyberScout Game Project (*.cgp)|*.cgp"
 	};
 
 	private static SaveFileDialog SaveFileDialog => new() {
 		Title = "Select a file name and location for the project to be saved.",
-		Filter = "CCSS Game Project (*.cgp)|*.cgp"
+		Filter = "CyberScout Game Project (*.cgp)|*.cgp"
 	};
 
 }

@@ -3,7 +3,7 @@
 <ContentView
 	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-	xmlns:dataCollectors="clr-namespace:Domain.DataCollectors;assembly=CCSSDomain"
+	xmlns:dataCollectors="clr-namespace:Domain.DataCollectors;assembly=Domain"
 	x:Class="ScoutingApp.Views.DataTemplates.BooleanDataFieldInputView"
 	x:DataType="dataCollectors:BooleanInputDataCollector">
 	

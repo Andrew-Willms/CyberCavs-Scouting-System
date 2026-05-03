@@ -1,6 +1,6 @@
 ﻿//using System.ComponentModel;
 
-//namespace CCSSDomain.DataCollectors;
+//namespace Domain.DataCollectors;
 
 
 

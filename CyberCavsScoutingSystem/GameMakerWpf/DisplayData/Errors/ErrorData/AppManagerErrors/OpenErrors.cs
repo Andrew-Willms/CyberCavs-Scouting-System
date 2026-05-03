@@ -16,7 +16,7 @@ public static class OpenError {
 		Caption = "Saved Data Could not Be Converted",
 		Message = "The saved data could not be converted into a GameProject. Verify that you specified the correct save location. " +
 		          "Alternately, try opening a different GameProject using \"Open\". " +
-		          "Please contact the creators of the CCSS if you receive this error."
+		          "Please contact the creators of CyberScout if you receive this error."
 	};
 
 }

@@ -1,10 +1,10 @@
 {
-  "$type": "CCSSDomain.GameSpecification.GameSpec, CCSSDomain",
+  "$type": "Domain.GameSpecification.GameSpec, Domain",
   "Name": "Rebuilt",
   "Description": "",
   "Year": 2026,
   "Version": {
-    "$type": "CCSSDomain.GameSpecification.Version, CCSSDomain",
+    "$type": "Domain.GameSpecification.Version, Domain",
     "MajorNumber": 1,
     "MinorNumber": 0,
     "PatchNumber": 0,
@@ -14,17 +14,17 @@
   "RobotsPerAlliance": 3,
   "AlliancesPerMatch": 2,
   "Alliances": {
-    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.AllianceColor, CCSSDomain]], UtilitiesLibrary",
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[Domain.GameSpecification.AllianceColor, Domain]], UtilitiesLibrary",
     "Collection": {
-      "$type": "CCSSDomain.GameSpecification.AllianceColor[], CCSSDomain",
+      "$type": "Domain.GameSpecification.AllianceColor[], Domain",
       "$values": [
         {
-          "$type": "CCSSDomain.GameSpecification.AllianceColor, CCSSDomain",
+          "$type": "Domain.GameSpecification.AllianceColor, Domain",
           "Name": "Red Alliance",
           "Color": "255, 0, 0"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.AllianceColor, CCSSDomain",
+          "$type": "Domain.GameSpecification.AllianceColor, Domain",
           "Name": "Blue Alliance",
           "Color": "0, 0, 255"
         }
@@ -32,12 +32,12 @@
     }
   },
   "DataFields": {
-    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.DataFieldSpec, CCSSDomain]], UtilitiesLibrary",
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[Domain.GameSpecification.DataFieldSpec, Domain]], UtilitiesLibrary",
     "Collection": {
-      "$type": "CCSSDomain.GameSpecification.DataFieldSpec[], CCSSDomain",
+      "$type": "Domain.GameSpecification.DataFieldSpec[], Domain",
       "$values": [
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.SelectionDataFieldSpec, Domain",
           "Options": {
             "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
             "Collection": {
@@ -58,7 +58,7 @@
           "Name": "Outpost"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.SelectionDataFieldSpec, Domain",
           "Options": {
             "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
             "Collection": {
@@ -79,14 +79,14 @@
           "Name": "Depot"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.IntegerDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.IntegerDataFieldSpec, Domain",
           "InitialValue": 0,
           "MinValue": 0,
           "MaxValue": 15,
           "Name": "Auto Mid Trips"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.SelectionDataFieldSpec, Domain",
           "Options": {
             "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
             "Collection": {
@@ -107,7 +107,7 @@
           "Name": "Auto Climb"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.SelectionDataFieldSpec, Domain",
           "Options": {
             "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
             "Collection": {
@@ -128,29 +128,29 @@
           "Name": "Primary Role"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.BooleanDataFieldSpec, Domain",
           "InitialValue": false,
           "Name": "Passing"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.BooleanDataFieldSpec, Domain",
           "InitialValue": false,
           "Name": "Scoring"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.BooleanDataFieldSpec, Domain",
           "InitialValue": false,
           "Name": "Defending"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.TextDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.TextDataFieldSpec, Domain",
           "InitialValue": "",
           "MustNotBeEmpty": false,
           "MustNotBeInitialValue": false,
           "Name": "Effectiveness"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.SelectionDataFieldSpec, Domain",
           "Options": {
             "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
             "Collection": {
@@ -171,7 +171,7 @@
           "Name": "Climb"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.SelectionDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.SelectionDataFieldSpec, Domain",
           "Options": {
             "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[System.String, System.Private.CoreLib]], UtilitiesLibrary",
             "Collection": {
@@ -193,14 +193,14 @@
           "Name": "Disconnected"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.TextDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.TextDataFieldSpec, Domain",
           "InitialValue": "",
           "MustNotBeEmpty": false,
           "MustNotBeInitialValue": false,
           "Name": "Comments"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.BooleanDataFieldSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.BooleanDataFieldSpec, Domain",
           "InitialValue": false,
           "Name": "Score Preload"
         }
@@ -208,39 +208,39 @@
     }
   },
   "SetupTabInputs": {
-    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[Domain.GameSpecification.InputSpec, Domain]], UtilitiesLibrary",
     "Collection": {
-      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$type": "Domain.GameSpecification.InputSpec[], Domain",
       "$values": []
     }
   },
   "AutoTabInputs": {
-    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[Domain.GameSpecification.InputSpec, Domain]], UtilitiesLibrary",
     "Collection": {
-      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$type": "Domain.GameSpecification.InputSpec[], Domain",
       "$values": [
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Outpost",
           "Label": "Outpost"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Depot",
           "Label": "Depot"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Auto Mid Trips",
           "Label": "Mid Trips"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Auto Climb",
           "Label": "L1 Climb"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Score Preload",
           "Label": "Score Preload?"
         }
@@ -248,32 +248,32 @@
     }
   },
   "TeleTabInputs": {
-    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[Domain.GameSpecification.InputSpec, Domain]], UtilitiesLibrary",
     "Collection": {
-      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$type": "Domain.GameSpecification.InputSpec[], Domain",
       "$values": [
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Primary Role",
           "Label": "Primary Role"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Passing",
           "Label": "Passing?"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Scoring",
           "Label": "Scoring?"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Defending",
           "Label": "Defending?"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Effectiveness",
           "Label": "How effectively did they play their role?"
         }
@@ -281,22 +281,22 @@
     }
   },
   "EndgameTabInputs": {
-    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[CCSSDomain.GameSpecification.InputSpec, CCSSDomain]], UtilitiesLibrary",
+    "$type": "UtilitiesLibrary.Collections.ReadOnlyList`1[[Domain.GameSpecification.InputSpec, Domain]], UtilitiesLibrary",
     "Collection": {
-      "$type": "CCSSDomain.GameSpecification.InputSpec[], CCSSDomain",
+      "$type": "Domain.GameSpecification.InputSpec[], Domain",
       "$values": [
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Climb",
           "Label": "Climb"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Disconnected",
           "Label": "Disconnected %"
         },
         {
-          "$type": "CCSSDomain.GameSpecification.InputSpec, CCSSDomain",
+          "$type": "Domain.GameSpecification.InputSpec, Domain",
           "DataFieldName": "Comments",
           "Label": "Extra Comments"
         }
