@@ -1,0 +1,56 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+
+<Application
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:dataTemplates="clr-namespace:ScoutingApp.Views.DataTemplates"
+	xmlns:dataTemplateSelectors="clr-namespace:ScoutingApp.Views.DataTemplateSelectors"
+	xmlns:converters="clr-namespace:ScoutingApp.Views.Converters"
+	x:Class="ScoutingApp.App">
+
+	<Application.Resources>
+
+		<ResourceDictionary>
+
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+				<ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<DataTemplate x:Key="BooleanDataFieldTemplate">
+				<dataTemplates:BooleanDataFieldInputView/>
+			</DataTemplate>
+
+			<DataTemplate x:Key="TextDataFieldTemplate">
+				<dataTemplates:TextDataFieldInputView/>
+			</DataTemplate>
+
+			<DataTemplate x:Key="IntegerDataFieldTemplate">
+				<dataTemplates:IntegerDataFieldInputView/>
+			</DataTemplate>
+
+			<DataTemplate x:Key="MultiIntegerDataFieldTemplate">
+				<dataTemplates:MultiIntegerDataFieldInputView/>
+			</DataTemplate>
+
+			<DataTemplate x:Key="SelectionDataFieldTemplate">
+				<dataTemplates:SelectionDataFieldInputView/>
+			</DataTemplate>
+			
+			<dataTemplateSelectors:InputDataTemplateSelector
+				x:Key="InputDataTemplateSelector"
+				BooleanDataFieldTemplate="{StaticResource BooleanDataFieldTemplate}"
+				TextDataFieldTemplate="{StaticResource TextDataFieldTemplate}"
+				IntegerDataFieldTemplate="{StaticResource IntegerDataFieldTemplate}"
+				MultiIntegerDataFieldTemplate="{StaticResource MultiIntegerDataFieldTemplate}"
+				SelectionDataFieldTemplate="{StaticResource SelectionDataFieldTemplate}"/>
+
+			<converters:ReadOnlyListOfStringsToIListConverter x:Key="ReadOnlyListOfStringsToIListConverter"/>
+			<converters:ReadOnlyListOfAlliancesToIListConverter x:Key="ReadOnlyListOfAlliancesToIListConverter"/>
+			<converters:StringNotNullToBoolConverter x:Key="StringNotNullToBoolConverter"/>
+
+		</ResourceDictionary>
+
+	</Application.Resources>
+
+</Application>

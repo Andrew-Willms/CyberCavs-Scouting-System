@@ -1,0 +1,188 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+
+		<TargetFrameworks>net10.0-android</TargetFrameworks>
+		<!--<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>-->
+		
+		<OutputType>Exe</OutputType>
+		<RootNamespace>ScoutingApp</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<EnablePreviewFeatures>True</EnablePreviewFeatures>
+
+		<!-- Display name -->
+		<ApplicationTitle>ScoutingApp</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>CyberScout.ScoutingApp</ApplicationId>
+		<ApplicationIdGuid>68694624-d75b-41af-bda9-66a6e1d744b2</ApplicationIdGuid>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+		<RunAOTCompilation>False</RunAOTCompilation>
+		<PublishTrimmed>False</PublishTrimmed>
+
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		<AndroidKeyStore>False</AndroidKeyStore>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
+		  <AndroidKeyStore>False</AndroidKeyStore>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+		<CreatePackage>false</CreatePackage>
+		<CodesignKey>iPhone Developer</CodesignKey>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+		<CreatePackage>false</CreatePackage>
+		<CodesignProvision>Automatic</CodesignProvision>
+		<CodesignKey>iPhone Developer</CodesignKey>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	</PropertyGroup>
+
+	<ItemGroup>
+
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#4473A1" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.5" />
+		<PackageReference Include="QRCoder" Version="1.7.0" />
+		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
+		<PackageReference Include="ZXing.Net.Maui" Version="0.7.4" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.7.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Domain\Domain.csproj" />
+		<ProjectReference Include="..\Database\Database.csproj" />
+		<ProjectReference Include="..\MauiUtilities\MauiUtilities.csproj" />
+		<ProjectReference Include="..\UtilitiesLibrary\UtilitiesLibrary.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Views\DataTemplates\BooleanDataFieldTemplate.xaml.cs">
+	    <DependentUpon>BooleanDataFieldTemplate.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DataTemplates\IntegerDataFieldInputView.xaml.cs">
+	    <DependentUpon>IntegerDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DataTemplates\MultiIntegerDataFieldInputView.xaml.cs">
+	  	<DependentUpon>MultiIntegerDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DataTemplates\SelectionDataFieldInputView.xaml.cs">
+	    <DependentUpon>SelectionDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\DataTemplates\TextDataFieldInputView.xaml.cs">
+	    <DependentUpon>TextDataFieldInputView.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Flyout\MatchDetailsPage.xaml.cs">
+	    <DependentUpon>MatchDetailsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Flyout\QrCodeScanner.xaml.cs">
+	    <DependentUpon>QrCodeScanner.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Flyout\SavedMatchesPage.xaml.cs">
+	    <DependentUpon>SavedMatchesPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Match\AutoTab.xaml.cs">
+	    <DependentUpon>AutoTab.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Match\ConfirmTab.xaml.cs">
+	    <DependentUpon>ConfirmTab.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Match\EndgameTab.xaml.cs">
+	    <DependentUpon>EndgameTab.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Flyout\EventPage.xaml.cs">
+	    <DependentUpon>EventPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Flyout\ScoutPage.xaml.cs">
+	    <DependentUpon>ScoutPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Match\SetupTab.xaml.cs">
+	    <DependentUpon>SetupTab.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\Pages\Match\TeleTab.xaml.cs">
+	    <DependentUpon>TeleTab.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\DataTemplates\IntegerDataFieldInputView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DataTemplates\MultiIntegerDataFieldInputView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\DataTemplates\TextDataFieldInputView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Flyout\MatchDetailsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Flyout\QrCodeScanner.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Flyout\SavedMatchesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Match\AutoTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Match\EndgameTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Flyout\EventPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Flyout\ScoutPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\Pages\Match\SetupTab.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="AppManagement\" />
+	  <Folder Include="Views\DataTemplateSelectors\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="10.0.50" />
+	</ItemGroup>
+
+</Project>

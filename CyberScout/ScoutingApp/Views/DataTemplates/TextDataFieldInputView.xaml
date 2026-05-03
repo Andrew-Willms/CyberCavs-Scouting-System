@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:dataCollectors="clr-namespace:Domain.DataCollectors;assembly=Domain"
+	xmlns:behaviors="clr-namespace:ScoutingApp.Views.Behaviors"
+	x:Class="ScoutingApp.Views.DataTemplates.TextDataFieldInputView"
+	x:DataType="dataCollectors:TextInputDataCollector">
+	
+	<VerticalStackLayout>
+
+		<Label
+			Text="{Binding Path=Label}"
+			HorizontalTextAlignment="Center"
+			VerticalTextAlignment="Center"/>
+
+		<Editor
+			Text="{Binding Path=Text}"
+			HorizontalOptions="Fill"
+			MinimumHeightRequest="200">
+
+			<Editor.Behaviors>
+				<behaviors:CloseEditorOnNewLineBehavior/>
+			</Editor.Behaviors>
+
+		</Editor>
+
+	</VerticalStackLayout>
+
+</ContentView>

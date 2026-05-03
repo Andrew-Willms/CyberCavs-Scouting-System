@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Shell
+	x:Class="ScoutingApp.AppShell"
+	xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+	xmlns:match="clr-namespace:ScoutingApp.Views.Pages.Match"
+	xmlns:flyout="clr-namespace:ScoutingApp.Views.Pages.Flyout"
+	xmlns:local="clr-namespace:ScoutingApp"
+	FlyoutBehavior="Flyout">
+
+	<FlyoutItem
+		Title="Match"
+		Route="{x:Static local:AppShell.MatchRoute}">
+
+		<Tab
+			Title="Setup"
+			Route="{x:Static match:SetupTab.Route}">
+
+			<ShellContent
+				Title="Setup"
+				ContentTemplate="{DataTemplate match:SetupTab}"/>
+
+		</Tab>
+
+		<Tab
+			Title="Auto"
+			Route="{x:Static match:AutoTab.Route}">
+
+			<ShellContent
+				Title="Auto"
+				ContentTemplate="{DataTemplate match:AutoTab}"/>
+
+		</Tab>
+
+		<Tab 
+			Title="Tele"
+			Route="{x:Static match:TeleTab.Route}">
+
+			<ShellContent
+				Title="Tele"
+				ContentTemplate="{DataTemplate match:TeleTab}"/>
+
+		</Tab>
+
+		<Tab
+			Title="Endgame"
+			Route="{x:Static match:EndgameTab.Route}">
+
+			<ShellContent
+				Title="Endgame"
+				ContentTemplate="{DataTemplate match:EndgameTab}"/>
+
+		</Tab>
+
+		<Tab
+			Title="Confirm"
+			Route="{x:Static match:ConfirmTab.Route}">
+
+			<ShellContent
+				Title="Confirm"
+				ContentTemplate="{DataTemplate match:ConfirmTab}"/>
+
+		</Tab>
+
+	</FlyoutItem>
+
+	<FlyoutItem
+		Title="Scout"
+		Route="{x:Static flyout:ScoutPage.Route}">
+
+		<ShellContent
+			Title ="Scout Name"
+			ContentTemplate="{DataTemplate flyout:ScoutPage}"/>
+
+	</FlyoutItem>
+
+	<FlyoutItem
+		Title="Event"
+		Route="{x:Static flyout:EventPage.Route}">
+
+		<ShellContent
+			Title="Event"
+			ContentTemplate="{DataTemplate flyout:EventPage}"/>
+
+	</FlyoutItem>
+
+	<FlyoutItem
+		Title="Saved Matches"
+		Route="{x:Static flyout:SavedMatchesPage.Route}">
+
+		<ShellContent
+			Title="QR Codes" 
+			ContentTemplate="{DataTemplate flyout:SavedMatchesPage}"/>
+
+	</FlyoutItem>
+
+	<FlyoutItem
+		Title="QR Code Scanner"
+		Route="{x:Static flyout:QrCodeScanner.Route}">
+
+		<ShellContent
+			Title="QR Code Scanner" 
+			ContentTemplate="{DataTemplate flyout:QrCodeScanner}"/>
+
+	</FlyoutItem>
+
+</Shell>
